@@ -44,14 +44,14 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
  <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
 	<option value="">Sire Filter</option>
 	<option value="">All Sire</option>
 	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row[Sire].'</option>';
+  	    echo '<option>'.$row['Sire'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="elig"> 
