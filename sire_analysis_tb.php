@@ -58,7 +58,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
 	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row[Elig].'</option>';
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -98,20 +98,20 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
         setlocale(LC_MONETARY,"en_US");
 		foreach($resultFound as $row) {
     		    echo '<div class="sire-header">';
-    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row[Sire].'</u></B></h4>';
-    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row[Count].'</label> | 
-                        Total- <label style="color:#E74C3C";>$'.number_format($row[Total]).'</label> | 
-                        Average - <label style="color:#E74C3C";>$'.number_format($row[Avg]).'</label> | 
-                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row[Top]).'</label></B></h5>';
-    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row[CCount].'</label> | 
-                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row[CTotal]).'</label> | 
-                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row[CAvg]).'</label> | 
-                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row[CTop]).'</label>
+    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Sire'].'</u></B></h4>';
+    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row['Count'].'</label> | 
+                        Total- <label style="color:#E74C3C";>$'.number_format($row['Total']).'</label> | 
+                        Average - <label style="color:#E74C3C";>$'.number_format($row['Avg']).'</label> | 
+                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row['Top']).'</label></B></h5>';
+    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row['CCount'].'</label> | 
+                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row['CTotal']).'</label> | 
+                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row['CAvg']).'</label> | 
+                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row['CTop']).'</label>
                         </B></h5>
-                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row[FCount].'</label> | 
-                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row[FTotal]).'</label> | 
-                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row[FAvg]).'</label> | 
-                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row[FTop]).'</label></B></h5>';
+                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row['FCount'].'</label> | 
+                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row['FTotal']).'</label> | 
+                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row['FAvg']).'</label> | 
+                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
     		    echo '</div>';
     		    
 if ($year_param != "" or $sire_param != "" or $elig_param != "") {
@@ -190,7 +190,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $sireData = fetchSireData_tb($row[Sire],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
+            $sireData = fetchSireData_tb($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
             foreach($sireData as $row1) {
                   $elementCount = 0;
