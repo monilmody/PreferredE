@@ -252,6 +252,16 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
+      // Store selected values in localStorage
+    localStorage.setItem('selectedYear', year);
+    localStorage.setItem('selectedSire', sire);
+    localStorage.setItem('selectedElig', elig);
+    localStorage.setItem('selectedSort1', sort1);
+    localStorage.setItem('selectedSort2', sort2);
+    localStorage.setItem('selectedSort3', sort3);
+    localStorage.setItem('selectedSort4', sort4);
+    localStorage.setItem('selectedSort5', sort5);
+
     var link ="sire_analysis_tb.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
@@ -265,6 +275,21 @@ function getValues() {
   	window.open(link,"_self");
   	
 }
+
+// Function to set default selected values from localStorage
+function setDefaultValues() {
+    document.getElementById('year').value = localStorage.getItem('selectedYear') || '';
+    document.getElementById('sire').value = localStorage.getItem('selectedSire') || '';
+    document.getElementById('elig').value = localStorage.getItem('selectedElig') || '';
+    document.getElementById('sort1').value = localStorage.getItem('selectedSort1') || '';
+    document.getElementById('sort2').value = localStorage.getItem('selectedSort2') || '';
+    document.getElementById('sort3').value = localStorage.getItem('selectedSort3') || '';
+    document.getElementById('sort4').value = localStorage.getItem('selectedSort4') || '';
+    document.getElementById('sort5').value = localStorage.getItem('selectedSort5') || '';
+}
+
+// Call the function to set default values when the page loads
+setDefaultValues();
 </script>
 
 
