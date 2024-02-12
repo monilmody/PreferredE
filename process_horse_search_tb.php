@@ -21,7 +21,7 @@ $damName = getDamname($horseName);
 $damsOffspings = fetchOffsprings_tb($damName);
 $data = getTitleData_tb($horseName);
 
-$damofdamName= $data[damofdam];
+$damofdamName= $data['damofdam'];
 if (json_encode($resultFound)=="[]") {
     $damofdamName = getdamofdam_tb($damName);
 }
@@ -29,9 +29,9 @@ $damsofdamOffspings = fetchOffsprings_tb($damofdamName);
 
 
 if (json_encode($resultFound)=="[]") {
-    $titileData= $data[sireofdam]." - ".$data[damofdam]." - ".$damofdamName;
+    $titileData= $data['sireofdam']." - ".$data['damofdam']." - ".$damofdamName;
 }else
-    $titileData= $data[sire]." - ".$data[dam]." - ".$data[damofdam];
+    $titileData= $data['sire']." - ".$data['dam']." - ".$data['damofdam'];
     
 // $horseList = getHorseList();
 // $arrayHorseList="";
@@ -119,7 +119,7 @@ form.example::after {
           
           <?php
               $number =0;
-              $collapseID = collapse11;
+              $collapseID = 'collapse11';
               setlocale(LC_MONETARY,"en_US");
               foreach($resultFound as $row) {
                   $elementCount = 0;
@@ -147,7 +147,7 @@ form.example::after {
                           $elements= substr($elements, 0,4);
                       }
                       if ($elementCount == 1 or $elementCount == 3) {
-                          echo "<a data-toggle='collapse' href='#".collapse11.$number."'>";
+                          echo "<a data-toggle='collapse' href='#".'collapse11'.$number."'>";
                           echo "<div class='cell' >".$elements."</div>";
                           echo "</a>";
                       }else {
@@ -186,7 +186,7 @@ form.example::after {
           
           <?php
              $number =0;
-             $collapseID = collapse21;
+             $collapseID = 'collapse21';
              foreach($offspings as $row) {
                   $elementCount =0;
                   $number = $number+1;
@@ -250,7 +250,7 @@ form.example::after {
           <?php
           $number =0;
           $lastname1 = "";
-          $collapseID = collapse31;
+          $collapseID = 'collapse31';
           foreach($damsOffspings as $row) {
               $elementCount =0;
               $number = $number+1;
@@ -285,11 +285,11 @@ form.example::after {
                   }
               }echo "</div>";
               include("./buyer_collapse.php");
-              if ($lastname1 == $row[Horse]) {
+              if ($lastname1 == $row['Horse']) {
                   continue;
               }
-              $damOfDamOffspings = fetchOffsprings($row[Horse]);
-              $lastname1 =$row[Horse];
+              $damOfDamOffspings = fetchOffsprings($row['Horse']);
+              $lastname1 =$row['Horse'];
    
               $sequence2 = 0;
               $lastname2 = "";
@@ -328,11 +328,11 @@ form.example::after {
                       }
                   }echo "</div>";
                   include("./buyer_collapse2.php");
-                  if ($lastname2 == $row1[Horse]) {
+                  if ($lastname2 == $row1['Horse']) {
                       continue;
                   }
-                  $damOfDamOffspings1 = fetchOffsprings($row1[Horse]);
-                  $lastname2 =$row1[Horse];
+                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
+                  $lastname2 =$row1['Horse'];
                   $sequence3 = 0;
                   #3rd Generation
                   foreach($damOfDamOffspings1 as $row2) {
@@ -401,7 +401,7 @@ form.example::after {
           <?php
           $number =0;
           $lastname1 = "";
-          $collapseID = collapse41;
+          $collapseID = 'collapse41';
           foreach($damsofdamOffspings as $row) {
               $elementCount =0;
               $number = $number+1;
@@ -436,11 +436,11 @@ form.example::after {
                   }
               }echo "</div>";
               include("./buyer_collapse.php");
-              if ($lastname1 == $row[Horse]) {
+              if ($lastname1 == $row['Horse']) {
                   continue;
               }
-              $damOfDamOffspings = fetchOffsprings($row[Horse]);
-              $lastname1 =$row[Horse];
+              $damOfDamOffspings = fetchOffsprings($row['Horse']);
+              $lastname1 =$row['Horse'];
               
               $sequence2 = 0;
               $lastname2 = "";
@@ -479,11 +479,11 @@ form.example::after {
                       }
                   }echo "</div>";
                   include("./buyer_collapse2.php");
-                  if ($lastname2 == $row1[Horse]) {
+                  if ($lastname2 == $row1['Horse']) {
                       continue;
                   }
-                  $damOfDamOffspings1 = fetchOffsprings($row1[Horse]);
-                  $lastname2 =$row1[Horse];
+                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
+                  $lastname2 =$row1['Horse'];
                   $sequence3 = 0;
                   #3rd Generation
                   foreach($damOfDamOffspings1 as $row2) {

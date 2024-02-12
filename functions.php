@@ -271,7 +271,7 @@ function getDamname($horseName)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    if ($row[dam] == "") {
+    if ($row['dam'] == "") {
         $sql = 'SELECT
         b.damofdam as dam
         FROM sales a
@@ -287,7 +287,7 @@ function getDamname($horseName)
                 printf("Errormessage: %s\n", $mysqli->error);
             }
     }
-    return ($row[dam]);
+    return ($row['dam']);
 }
 
 function getDamname_tb($horseName)
@@ -307,7 +307,7 @@ function getDamname_tb($horseName)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    if ($row[dam] == "") {
+    if ($row['dam'] == "") {
         $sql = 'SELECT
         b.damofdam as dam
         FROM tsales a
@@ -323,7 +323,7 @@ function getDamname_tb($horseName)
             printf("Errormessage: %s\n", $mysqli->error);
         }
     }
-    return ($row[dam]);
+    return ($row['dam']);
 }
 
 function getTitleData($horseName)
@@ -346,7 +346,7 @@ function getTitleData($horseName)
         printf("Errormessage: %s\n", $mysqli->error);
     }
     //return ($row[sire]." - ".$row[dam]." - ".$row[damofdam]);
-    if ($row[dam] == "") {
+    if ($row['dam'] == "") {
         $sql = 'SELECT distinct
         b.sireofdam,
         b.damofdam
@@ -386,7 +386,7 @@ function getTitleData_tb($horseName)
         printf("Errormessage: %s\n", $mysqli->error);
     }
     //return ($row[sire]." - ".$row[dam]." - ".$row[damofdam]);
-    if ($row[dam] == "") {
+    if ($row['dam'] == "") {
         $sql = 'SELECT distinct
         b.sireofdam,
         b.damofdam
@@ -424,7 +424,7 @@ function getdamofdam($horseName)
         printf("Errormessage: %s\n", $mysqli->error);
     }
     
-    return $row[dam];
+    return $row['dam'];
 }
 
 function getdamofdam_tb($horseName)
@@ -445,7 +445,7 @@ function getdamofdam_tb($horseName)
         printf("Errormessage: %s\n", $mysqli->error);
     }
     
-    return $row[dam];
+    return $row['dam'];
 }
 
 
@@ -2471,7 +2471,7 @@ function getDamsireID($csire,$cdam)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID[damsire_ID];
+    return $damsire_ID['damsire_ID'];
 }
 
 function getTDamsireID($csire,$cdam)
@@ -2487,7 +2487,7 @@ function getTDamsireID($csire,$cdam)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID[damsire_ID];
+    return $damsire_ID['damsire_ID'];
 }
 
 function getLastDamsireID()
@@ -2503,7 +2503,7 @@ function getLastDamsireID()
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID[ID];
+    return $damsire_ID['ID'];
 }
 
 function getLastTDamsireID()
@@ -2519,7 +2519,7 @@ function getLastTDamsireID()
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID[ID];
+    return $damsire_ID['ID'];
 }
 
 function checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
@@ -2536,7 +2536,7 @@ function checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $salesExist[SALEID];
+    return $salesExist['SALEID'];
 }
 
 function checkSalesforUpdate($hip,$salecode,$datefoal)
@@ -2553,7 +2553,7 @@ function checkSalesforUpdate($hip,$salecode,$datefoal)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $salesExist[SALEID];
+    return $salesExist['SALEID'];
 }
 
 function checkSalesforETUpdate($tattoo,$salecode,$datefoal)
@@ -2570,7 +2570,7 @@ function checkSalesforETUpdate($tattoo,$salecode,$datefoal)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $salesExist[SALEID];
+    return $salesExist['SALEID'];
 }
 
 function checkTSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
@@ -2587,7 +2587,7 @@ function checkTSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $salesExist[SALEID];
+    return $salesExist['SALEID'];
 }
 
 function getUserID($user)
@@ -2603,7 +2603,7 @@ function getUserID($user)
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $user_ID[ID];
+    return $user_ID['ID'];
 }
 
 function fetchUserDetails($user)

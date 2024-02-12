@@ -55,14 +55,14 @@ echo '<h1 style="text-align:center;color:#D98880;">INDIVIDUAL HORSE SALES REPORT
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
  <select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
 	<option value="">Salecode Filter</option>
 	<option value="">All Salecode</option>
 	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row[Salecode].'</option>';
+  	    echo '<option>'.$row['Salecode'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="type"> 
@@ -88,14 +88,14 @@ echo '<h1 style="text-align:center;color:#D98880;">INDIVIDUAL HORSE SALES REPORT
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
 	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row[Elig].'</option>';
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="gait"> 
 	<option value="">Gait Filter</option>
 	<option value="">All Gait</option>
 	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row[Gait].'</option>';
+  	    echo '<option>'.$row['Gait'].'</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 

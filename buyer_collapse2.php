@@ -14,7 +14,7 @@
                               <div class="cell" style="width: 45%;">
                                   <i>
                                   <?php
-                                  echo $row1[Purlname].' '.$row1[Purfname];
+                                  echo $row1['Purlname'].' '.$row1['Purfname'];
                                   ?>
                                   </i>
                               </div>
@@ -26,7 +26,7 @@
                               <div class="cell" style="width: 45%;">
                                   <i>
                                   <?php
-                                  echo $row1[Sbcity].', '.$row1[Sbstate].', '.$row1[Sbcountry];
+                                  echo $row1['Sbcity'].', '.$row1['Sbstate'].', '.$row1['Sbcountry'];
                                   ?>
                                   </i>
                               </div>

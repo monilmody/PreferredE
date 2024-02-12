@@ -44,28 +44,28 @@ echo '<h1 style="text-align:center;color:#D98880;">CONSUMER ANALYSIS
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
  <select class="custom-select1" id="consno"> <!--onchange="location = this.value;" -->
 	<option value="">Consno Filter</option>
 	<option value="">All Consno</option>
 	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row[Consno].'</option>';
+  	    echo '<option>'.$row['Consno'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="elig"> 
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
 	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row[Elig].'</option>';
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="gait"> 
 	<option value="">Gait Filter</option>
 	<option value="">All Gait</option>
 	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row[Gait].'</option>';
+  	    echo '<option>'.$row['Gait'].'</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -105,11 +105,11 @@ echo '<h1 style="text-align:center;color:#D98880;">CONSUMER ANALYSIS
         setlocale(LC_MONETARY,"en_US");
 		foreach($resultFound as $row) {
     		    echo '<div class="sire-header">';
-    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row[Consno].'</u></B></h4>';
-    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row[Count].'</label> | 
-                        Total- <label style="color:#E74C3C";>$'.number_format($row[Total]).'</label> | 
-                        Average - <label style="color:#E74C3C";>$'.number_format($row[Avg]).'</label> | 
-                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row[Top]).'</label></B></h5>';
+    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Consno'].'</u></B></h4>';
+    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row['Count'].'</label> | 
+                        Total- <label style="color:#E74C3C";>$'.number_format($row['Total']).'</label> | 
+                        Average - <label style="color:#E74C3C";>$'.number_format($row['Avg']).'</label> | 
+                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row['Top']).'</label></B></h5>';
     		    
     		    echo '</div>';
     		    
@@ -186,7 +186,7 @@ if ($year_param != "" or $consno_param != "" or $elig_param != "" or $gait_param
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $consnoData = fetchConsnoData($row[Consno],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
+            $consnoData = fetchConsnoData($row['Consno'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
             foreach($consnoData as $row1) {
                   $elementCount = 0;

@@ -44,28 +44,28 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
  <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
 	<option value="">Sire Filter</option>
 	<option value="">All Sire</option>
 	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row[Sire].'</option>';
+  	    echo '<option>'.$row['Sire'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="elig"> 
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
 	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row[Elig].'</option>';
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="gait"> 
 	<option value="">Gait Filter</option>
 	<option value="">All Gait</option>
 	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row[Gait].'</option>';
+  	    echo '<option>'.$row['Gait'].'</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -105,20 +105,20 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
         setlocale(LC_MONETARY,"en_US");
 		foreach($resultFound as $row) {
     		    echo '<div class="sire-header">';
-    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row[Sire].'</u></B></h4>';
-    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row[Count].'</label> | 
-                        Total- <label style="color:#E74C3C";>$'.number_format($row[Total]).'</label> | 
-                        Average - <label style="color:#E74C3C";>$'.number_format($row[Avg]).'</label> | 
-                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row[Top]).'</label></B></h5>';
-    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row[CCount].'</label> | 
-                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row[CTotal]).'</label> | 
-                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row[CAvg]).'</label> | 
-                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row[CTop]).'</label>
+    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Sire'].'</u></B></h4>';
+    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row['Count'].'</label> | 
+                        Total- <label style="color:#E74C3C";>$'.number_format($row['Total']).'</label> | 
+                        Average - <label style="color:#E74C3C";>$'.number_format($row['Avg']).'</label> | 
+                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row['Top']).'</label></B></h5>';
+    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row['CCount'].'</label> | 
+                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row['CTotal']).'</label> | 
+                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row['CAvg']).'</label> | 
+                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row['CTop']).'</label>
                         </B></h5>
-                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row[FCount].'</label> | 
-                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row[FTotal]).'</label> | 
-                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row[FAvg]).'</label> | 
-                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row[FTop]).'</label></B></h5>';
+                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row['FCount'].'</label> | 
+                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row['FTotal']).'</label> | 
+                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row['FAvg']).'</label> | 
+                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
     		    echo '</div>';
     		    
 if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param != "") {
@@ -203,7 +203,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $sireData = fetchSireData($row[Sire],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
+            $sireData = fetchSireData($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
             foreach($sireData as $row1) {
                   $elementCount = 0;

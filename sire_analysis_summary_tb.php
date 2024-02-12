@@ -54,14 +54,14 @@ echo '<h1 style="text-align:center;color:#1C2833;">THOROUGHBRED SIRE ANALYSIS SU
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
 <select class="custom-select1" id="elig"> 
 	<option value="">Elig Filter</option>
 	<option value="">All Elig</option>
 	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row[Elig].'</option>';
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 

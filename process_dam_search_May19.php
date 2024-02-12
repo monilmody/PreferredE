@@ -229,7 +229,7 @@ echo "<br>";
                   
                   echo "<td class='cell'>".$elements."</td>";
               }echo "</tr>";
-              $damOfDamOffspings = fetchOffsprings($row[Horse]);
+              $damOfDamOffspings = fetchOffsprings($row['Horse']);
    
               $sequence2 = 0;
               #2nd generation
@@ -240,7 +240,7 @@ echo "<br>";
                   foreach($row1 as $elements) {
                       echo "<td class='cell'>".$elements."</td>";
                   }echo "</tr>";
-                  $damOfDamOffspings1 = fetchOffsprings($row1[Horse]);
+                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
              
                   $sequence3 = 0;
                   #3rd Generation

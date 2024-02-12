@@ -7,6 +7,6 @@ $year_param =$_GET['year'];
 $resultList = fetchSalecodeList($year_param);
 
 foreach($resultList as $row) {
-    echo '<option>'.$row[Salecode].'</option>';
+    echo '<option>'.$row['Salecode'].'</option>';
 }
 ?>
