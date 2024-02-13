@@ -22,11 +22,11 @@ class DataSource
     // when using above 7.1.0, declare the below constants as private
     const HOST = 'localhost';
 
-    const USERNAME = 'admin';
+    const USERNAME = 'david';
 
-    const PASSWORD = '1234';
+    const PASSWORD = '';
 
-    const DATABASENAME = 'horses';
+    const DATABASENAME = 'horse';
 
     private $conn;
 
