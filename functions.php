@@ -992,7 +992,7 @@ function fetchSireAnalysis($sire,$year,$elig,$gait)
 }
 
 
-function fetchSireAnalysis_tb($sire,$year,$elig,$gait)
+function fetchSireAnalysis_tb($sire,$year,$elig,$gait, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
     $sql = 'SELECT * FROM sire_sales_allyear_tb';
@@ -1026,6 +1026,24 @@ function fetchSireAnalysis_tb($sire,$year,$elig,$gait)
         $sql = 'SELECT * FROM sire_sales_tb WHERE `Year` = '.$year;
     }elseif ($elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Elig ="'.$elig.'"';
+    }
+
+    $orderby1 = ' ORDER BY '.$sort1;
+    $orderby2 = ', '.$sort2;
+    $orderby3 = ', '.$sort3;
+    $orderby4 = ', '.$sort4;
+    $orderby5 = ', '.$sort5;
+    
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
     }
     
     $result = mysqli_query($mysqli, $sql);
