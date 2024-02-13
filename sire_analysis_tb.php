@@ -15,11 +15,17 @@ include("./header.php");
 <?php
 
 include_once("config.php");
-$sire_param =$_GET['sire'];
-$year_param =$_GET['year'];
-$elig_param =$_GET['elig'];
-$gait_param =$_GET['gait'];
-$sort1_param =$_GET['sort1'];
+$sire = "sire";
+$year = "year";
+$elig = "elig";
+$gait = "gait";
+
+
+$sire_param =$_GET[$sire];
+$year_param =$_GET[$year];
+$elig_param =$_GET[$elig];
+$gait_param =$_GET[$gait];
+$sort1_param =$_GET["sort1"];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
