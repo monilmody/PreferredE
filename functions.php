@@ -879,6 +879,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         $sql = $sql.$orderby1;
     }
     
+    echo "Generated SQL Query: " . $sql;
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
