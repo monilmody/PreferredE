@@ -926,8 +926,8 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     $sql = 'SELECT A.Rank, A.Frank, A.CRank, A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
     FROM (
         SELECT A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
-        FROM Tsales A 
-        JOIN Tdamsire B ON A.Damsire_Id = B.Damsire_ID 
+        FROM tsales A 
+        JOIN tdamsire B ON A.damsire_id = B.damsire_id 
         WHERE A.`Type` = "Y" AND A.Price > 0 AND YEAR(A.Saledate) = "' . $year . '" AND B.Sire = "' . $sire . '"
     ) AS A';
 
