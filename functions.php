@@ -923,12 +923,12 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     }
 
     // Constructing the SQL query
-    $sql = 'SELECT Rank, Frank, CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, A.Price, Currency, Purlname, Purfname, Rating 
+    $sql = 'SELECT A.Rank, A.Frank, A.CRank, A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
     FROM (
-        SELECT HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, Price, Currency, Purlname, Purfname, Rating 
+        SELECT A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
         FROM Tsales A 
         JOIN Tdamsire B ON A.Damsire_Id = B.Damsire_ID 
-        WHERE `Type` = "Y" AND Price > 0 AND YEAR(Saledate) = "' . $year . '" AND B.Sire = "' . $sire . '"
+        WHERE A.`Type` = "Y" AND A.Price > 0 AND YEAR(A.Saledate) = "' . $year . '" AND B.Sire = "' . $sire . '"
     ) AS A';
 
     // Print out the SQL query for debugging
