@@ -952,19 +952,12 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
     $searchYear = ' AND YEAR(`SALEDATE`)="'.$year.'"';
     $searchElig = ' AND Elig= "'.$elig.'" ';
     
-    $orderby1 = ' ORDER BY '.$sort1;
-    $orderby2 = ', '.$sort2;
-    $orderby3 = ', '.$sort3;
-    $orderby4 = ', '.$sort4;
-    $orderby5 = ', '.$sort5;
-    
-    
     $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
     on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
             on a.price=c.P1 and a.Sex=c.S1 ';
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-            on a.price=d.P2 and a.Sex=d.S2 ';
+            on a.price=d.P2 and a.Sex=d.S2) ';
     
     if ($year != "" && $sire != "" && $elig != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.
@@ -989,6 +982,11 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
         $sql = $sql.$searchElig.$join.$searchElig.$join11.$join1.$searchElig.$join21.$join2.$searchElig.$join31;
     }
     
+    $orderby1 = ' ORDER BY '.$sort1;
+    $orderby2 = ', '.$sort2;
+    $orderby3 = ', '.$sort3;
+    $orderby4 = ', '.$sort4;
+    $orderby5 = ', '.$sort5;
     
     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
