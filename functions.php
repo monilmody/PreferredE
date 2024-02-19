@@ -758,7 +758,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
                      AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'") ';
     
     $sql =
-    'SELECT Rank,Frank,CRank, HIP, Horse, Sex, Color, "Type", Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, "Day", 
+    'SELECT Rank,Frank,CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
         a.Price,Currency, Purlname, Purfname, Rating FROM (
         SELECT
         HIP,
@@ -781,7 +781,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         Rating
         FROM tsales a
         JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
-        WHERE TYPE= "Y" AND PRICE>0 ';
+        WHERE TYPE= "Y" AND PRICE>0) AS a';
     
     $join = ') a LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
