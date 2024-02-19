@@ -923,13 +923,13 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     }
 
     // Constructing the SQL query
-    $sql = 'SELECT Rank, Frank, CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, a.Price, Currency, Purlname, Purfname, Rating 
-            FROM (
-                SELECT HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, Price, Currency, Purlname, Purfname, Rating 
-                FROM tsales a 
-                JOIN tdamsire b ON a.damsire_Id = b.damsire_ID 
-                WHERE `Type` = "Y" AND Price > 0 ' . $where . '
-            ) AS a' . $orderBy;
+    $sql = 'SELECT Rank, Frank, CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, A.Price, Currency, Purlname, Purfname, Rating 
+    FROM (
+        SELECT HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, Price, Currency, Purlname, Purfname, Rating 
+        FROM Tsales A 
+        JOIN Tdamsire B ON A.Damsire_Id = B.Damsire_ID 
+        WHERE `Type` = "Y" AND Price > 0 AND YEAR(Saledate) = "' . $year . '" AND B.Sire = "' . $sire . '"
+    ) AS A';
 
     // Print out the SQL query for debugging
     echo "Generated SQL Query: " . $sql;
