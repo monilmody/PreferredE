@@ -931,6 +931,9 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
                 WHERE `Type` = "Y" AND Price > 0 ' . $where . '
             ) AS a' . $orderBy;
 
+    // Print out the SQL query for debugging
+    echo "Generated SQL Query: " . $sql;
+
     // Execute the query
     $result = mysqli_query($mysqli, $sql);
 
@@ -943,6 +946,7 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
+
 
 
 function fetchConsAnalysis($consno,$year,$elig,$gait)
