@@ -20,18 +20,18 @@ include_once("config.php");
 $sire_param =$_GET["sire"];
 $year_param =$_GET["year"];
 $elig_param =$_GET["elig"];
-$gait_param =$_GET["gait"];
+//$gait_param =$_GET["gait"];
 $sort1_param =$_GET["sort1"];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSireAnalysis_tb($sire_param,$year_param,$elig_param,$gait_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
+$resultFound = fetchSireAnalysis_tb($sire_param,$year_param,$elig_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 $resultList = fetchSireList_tb($year_param);
 $yearList = getYearsList_tb();
 $eligList = getEligList_tb();
-$gaitList = getGaitList_tb();
+//$gaitList = getGaitList_tb();
 
 $sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
