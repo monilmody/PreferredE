@@ -903,7 +903,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
 function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
-    
+
     // Constructing the WHERE clause based on provided parameters
     $whereClause = [];
     if (!empty($year)) $whereClause[] = 'YEAR(Saledate) = "' . $year . '"';
@@ -914,34 +914,36 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     if (!empty($whereClause)) {
         $where = ' WHERE ' . implode(' AND ', $whereClause);
     }
-    
+
     // Constructing the ORDER BY clause based on provided parameters
     $orderBy = '';
     $sorts = array_filter([$sort1, $sort2, $sort3, $sort4, $sort5]);
     if (!empty($sorts)) {
         $orderBy = ' ORDER BY ' . implode(', ', $sorts);
     }
-    
+
     // Constructing the SQL query
     $sql = 'SELECT Rank, Frank, CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, a.Price, Currency, Purlname, Purfname, Rating 
             FROM (
-                SELECT HIP, Horse, Sex, Color, a.Type, Datefoal, Elig, b.Dam, Sireofdam, Salecode, Consno, Saledate, a.Day, Price, Currency, Purlname, Purfname, Rating 
+                SELECT HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, Price, Currency, Purlname, Purfname, Rating 
                 FROM tsales a 
                 JOIN tdamsire b ON a.damsire_Id = b.damsire_ID 
-                WHERE TYPE = "Y" AND PRICE > 0 ' . $where . '
+                WHERE `Type` = "Y" AND Price > 0 ' . $where . '
             ) AS a' . $orderBy;
-    
+
     // Execute the query
     $result = mysqli_query($mysqli, $sql);
-    
+
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
         echo $sql;
+        return false;
     }
-    
+
     $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
+
 
 function fetchConsAnalysis($consno,$year,$elig,$gait)
 {
