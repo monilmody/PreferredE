@@ -192,7 +192,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $sireData = fetchSireData_tb($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
+            $sireData = fetchSireData_tb($row['Sire'],$year_param,$elig_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
             foreach($sireData as $row1) {
                   $elementCount = 0;
