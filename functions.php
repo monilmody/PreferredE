@@ -923,7 +923,7 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     }
 
     // Constructing the SQL query
-    $sql = 'SELECT A.Rank, A.Frank, A.CRank, A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
+    $sql = 'SELECT Rank,Frank,CRank, A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
     FROM (
         SELECT A.HIP, A.Horse, A.Sex, A.Color, A.`Type`, A.Datefoal, A.Elig, B.Dam, B.Sireofdam, A.Salecode, A.Consno, A.Saledate, A.`Day`, A.Price, A.Currency, A.Purlname, A.Purfname, A.Rating 
         FROM tsales A 
