@@ -198,76 +198,37 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
             $number =0;
             $sireData = fetchSireData_tb($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
-            // foreach($sireData as $row1) {
-            //       $elementCount = 0;
-            //       $number = $number+1;
+            foreach($sireData as $row1) {
+                  $elementCount = 0;
+                  $number = $number+1;
                   
-            //       echo "<div class='row'>";
-            //       echo "<div class='cell'>".$number."</div>";
-            //       //echo "<div class='cell'>".$number."</div>";
-            //       #echo "</a>";
-            //       #echo $row[Price];
-            //       foreach($row1 as $elements) {
-            //           $elementCount =$elementCount+1;
-            //           if($elementCount == 17){
-            //               $elements = "$".number_format($elements);
-            //           }
-            //           if ($elements == "0000-00-00") {
-            //               $elements="";
-            //           }
-            //           if ($elementCount == 9 or $elementCount == 15) {
-            //               if ($elements != "") {
-            //                   $date=date_create($elements);
-            //                   $elements = date_format($date,"m/d/y");
-            //               }
-            //           }
-            //           if ($elementCount == 14) {
-            //               $elements= substr($elements, 0,4);
-            //           }
+                  echo "<div class='row'>";
+                  echo "<div class='cell'>".$number."</div>";
+                  //echo "<div class='cell'>".$number."</div>";
+                  #echo "</a>";
+                  #echo $row[Price];
+                  foreach($row1 as $elements) {
+                      $elementCount =$elementCount+1;
+                      if($elementCount == 17){
+                          $elements = "$".number_format($elements);
+                      }
+                      if ($elements == "0000-00-00") {
+                          $elements="";
+                      }
+                      if ($elementCount == 9 or $elementCount == 15) {
+                          if ($elements != "") {
+                              $date=date_create($elements);
+                              $elements = date_format($date,"m/d/y");
+                          }
+                      }
+                      if ($elementCount == 14) {
+                          $elements= substr($elements, 0,4);
+                      }
                       
-            //           echo "<div class='cell'>".$elements."</div>";
+                      echo "<div class='cell'>".$elements."</div>";
                       
-            //       }echo "</div>";
-            // }
-
-            $number = 0;
-            $sireData = fetchSireData_tb($row['Sire'], $year_param, $elig_param, $gait_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
-
-            foreach ($sireData as $row1) {
-                $elementCount = 0;
-                $number++;
-
-                echo "<div class='row'>";
-                echo "<div class='cell'>" . $number . "</div>";
-
-                // Loop through each element in the row
-                foreach ($row1 as $elements) {
-                    $elementCount++;
-
-                    // Formatting logic for specific elements
-                    switch ($elementCount) {
-                        case 17: // Price formatting
-                            $elements = "$" . number_format($elements);
-                            break;
-                        case 9: // Date formatting
-                        case 15: // Date formatting
-                            if (!empty($elements) && $elements != "0000-00-00") {
-                                $date = date_create($elements);
-                                $elements = date_format($date, "m/d/y");
-                            } else {
-                                $elements = "";
-                            }
-                            break;
-                        case 14: // Year formatting
-                            $elements = substr($elements, 0, 4);
-                            break;
-                        default:
-                            // No special formatting for other elements
-                    }
-
-                    // Output the formatted element
-                    echo "<div class='cell'>" . $elements . "</div>";
-                }
+                  }echo "</div>";
+            }
                   echo "</div>";
               }
 		}
