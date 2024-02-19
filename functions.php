@@ -933,7 +933,7 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
         Rating
         FROM tsales a
         JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
-        WHERE TYPE= "Y" AND PRICE>0';
+        WHERE TYPE= "Y" AND PRICE>0)';
     
     $join = ') a LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
