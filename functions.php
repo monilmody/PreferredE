@@ -1026,7 +1026,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
 {
     global $mysqli;
     $sql = 
-    'SELECT Rank,FRank,CRank, HIP, Horse, Sex, Color, Gait, `Type`, ET,Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
+    'SELECT `Rank`,`FRank`,`CRank`, HIP, Horse, Sex, Color, Gait, `Type`, ET,Datefoal, Elig, b.Dam, b.Sireofdam, Salecode, Consno, Saledate, `Day`, 
         a.Price, Currency, Purlname, Purfname, Rating FROM (
         SELECT        
         HIP,
@@ -1039,7 +1039,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         Datefoal,
         Elig,
         b.Dam,
-        Sireofdam,
+        b.Sireofdam,
         Salecode,
         Consno,
         Saledate,
@@ -1049,22 +1049,22 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         Purlname,
         Purfname,
         Rating
-        FROM sales a
-        JOIN damsire b ON a.damsire_Id=b.damsire_ID
+        FROM tsales a
+        JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
         WHERE TYPE= "Y" AND PRICE>0 ';
     
     $join = ') a LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
-    SELECT Price FROM sales a 
-    JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0 ';
+    SELECT Price FROM tsales a 
+    JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0 ';
     $join1 = 'LEFT JOIN
     (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
-             SELECT price, sex FROM sales a
-             JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
+             SELECT price, sex FROM tsales a
+             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
     $join2 = 'LEFT JOIN
     (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
-             SELECT price, sex FROM sales a
-             JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0 ';
+             SELECT price, sex FROM tsales a
+             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0 ';
     $searchSire = ' AND b.Sire="'.$sire.'"';
     $searchYear = ' AND YEAR(`SALEDATE`)="'.$year.'"';
     $searchElig = ' AND Elig= "'.$elig.'" ';
@@ -1082,7 +1082,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
              on a.price=c.P1 and a.Sex=c.S1 '; 
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2 '; 
+             on a.price=d.P2 and a.Sex=d.S2; '; 
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.$searchGait.
