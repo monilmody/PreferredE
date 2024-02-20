@@ -1054,15 +1054,15 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         WHERE TYPE= "Y" AND PRICE>0 ';
     
     $join = ') a LEFT JOIN
-    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
+    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS `Rank` from (
     SELECT Price FROM tsales a 
     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0 ';
     $join1 = 'LEFT JOIN
-    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
+    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS `FRank` from (
              SELECT price, sex FROM tsales a
              JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
     $join2 = 'LEFT JOIN
-    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
+    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS `CRank` from (
              SELECT price, sex FROM tsales a
              JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0 ';
     $searchSire = ' AND b.Sire="'.$sire.'"';
