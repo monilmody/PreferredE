@@ -901,6 +901,127 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
 //     //             on a.price=b.price  ORDER BY A.SaleCode;'
 // }
 
+// function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $sort5)
+// {
+//     global $mysqli;
+    
+//     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+//                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
+//                     AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")';
+    
+//     $sql =
+//     'SELECT Rank,FRank,CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
+//         a.Price,Currency, Purlname, Purfname, Rating FROM (
+//         SELECT
+//         HIP,
+//         Horse,
+//         Sex,
+//         Color,
+//         a.Type,
+//         Datefoal,
+//         Elig,
+//         b.Dam,
+//         Sireofdam,
+//         Salecode,
+//         Consno,
+//         Saledate,
+//         a.Day,
+//         Price,
+//         Currency,
+//         Purlname,
+//         Purfname,
+//         Rating
+//         FROM tsales a
+//         JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
+//         WHERE TYPE= "Y" AND PRICE>0) a';
+    
+//     $join = ' LEFT JOIN
+//     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
+//     SELECT Price FROM tsales a
+//     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0';
+//     $join1 = ' LEFT JOIN
+//     (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
+//             SELECT price, sex FROM tsales a
+//             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
+//     $join2 = ' LEFT JOIN
+//     (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
+//             SELECT price, sex FROM tsales a
+//             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0';
+   
+//     $searchSire = ' AND b.Sire="'.$sire.'"';
+//     $searchYear = ' AND YEAR(`SALEDATE`)="'.$year.'"';
+//     $searchElig = ' AND Elig= "'.$elig.'" ';
+    
+//     $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
+//     on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
+//     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
+//             on a.price=c.P1 and a.Sex=c.S1 ';
+//     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
+//             on a.price=d.P2 and a.Sex=d.S2; ';
+    
+//     if ($year != "" && $sire != "" && $elig != "") {
+//         $sql = $sql.$searchSire.$searchElig.$searchYear.
+//         $join.$searchSire.$searchElig.$searchYear.$join11.
+//         $join1.$searchSire.$searchElig.$searchYear.$join21.
+//         $join2.$searchSire.$searchElig.$searchYear.$join31;
+//     } elseif ($year != "" && $sire != "") {
+//         $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join11.
+//         $join1.$searchSire.$searchYear.$join21.$join2.$searchSire.$searchYear.$join31;
+//     } elseif ($sire != "" && $elig != "") {
+//         $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join11.
+//         $join1.$searchSire.$searchElig.$join21.$join2.$searchSire.$searchElig.$join31;
+//     } elseif ($year != "" && $elig != "") {
+//         $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join11.
+//         $join1.$searchElig.$searchYear.$join21.$join2.$searchElig.$searchYear.$join31;
+//     } elseif ($sire != "") {
+//         $sql = $sql.$searchSire.$join.$searchSire.$join11.
+//         $join1.$searchSire.$join21.$join2.$searchSire.$join31;
+//     } elseif ($year != "") {
+//         $sql = $sql.$searchYear.$join.$searchYear.$join11.$join1.$searchYear.$join21.$join2.$searchYear.$join31;
+//     } elseif ($elig != "") {
+//         $sql = $sql.$searchElig.$join.$searchElig.$join11.$join1.$searchElig.$join21.$join2.$searchElig.$join31;
+//     }
+    
+//     $orderby1 = ' ORDER BY '.$sort1;
+//     $orderby2 = ', '.$sort2;
+//     $orderby3 = ', '.$sort3;
+//     $orderby4 = ', '.$sort4;
+//     $orderby5 = ', '.$sort5;
+    
+//     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+//         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+//     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+//         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+//     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+//         $sql = $sql.$orderby1.$orderby2.$orderby3;
+//     }elseif ($sort1 !="" && $sort2 !=""){
+//         $sql = $sql.$orderby1.$orderby2;
+//     }elseif ($sort1 !=""){
+//         $sql = $sql.$orderby1;
+//     }
+    
+//     echo "Generated SQL Query: " . $sql;
+//     //echo $sql;
+//     $result = mysqli_query($mysqli, $sql);
+    
+//     if (!$result) {
+//         printf("Errormessage: %s\n", $mysqli->error);
+//         echo $sql;
+//     }
+//     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+//     return $json;
+    
+//     //Sample query above
+//     //     'SELECT * FROM (
+//     //         SELECT HIP, Horse, Sex, Color, Gait, A.Type, ET, Elig, B.Dam, Sireofdam, Salecode, Consno, Saledate, A.Day, Price, CONCAT (Purlname," " ,Purfname) As Buyer, Rating FROM Sales A JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0 AND B.Sire="A GO GO LAUXMONT"
+//     //         ) a left join
+//     //         (select price ,(@curRank := @curRank + 1) AS Ranking from (
+//         //             SELECT price FROM Sales A
+//         //             JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0
+//         //             AND B.Sire="A GO GO LAUXMONT" group by price ORDER BY price desc) as a,(SELECT @curRank := 0) r) b
+//     //             on a.price=b.price  ORDER BY A.SaleCode;'
+// }
+
 function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
@@ -938,48 +1059,43 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
     $join = ' LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
     SELECT Price FROM tsales a
-    JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0';
+    JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0) as subquery1) b
+    on a.price=b.Rankprice '; //in order to do ranking because rank function doesn't work on server.
     $join1 = ' LEFT JOIN
     (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
             SELECT price, sex FROM tsales a
-            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
+            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0) as subquery2) c
+            on a.price=c.P1 and a.Sex=c.S1 ';
     $join2 = ' LEFT JOIN
     (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
             SELECT price, sex FROM tsales a
-            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0';
+            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0) as subquery3) d
+            on a.price=d.P2 and a.Sex=d.S2; ';
    
     $searchSire = ' AND b.Sire="'.$sire.'"';
     $searchYear = ' AND YEAR(`SALEDATE`)="'.$year.'"';
     $searchElig = ' AND Elig= "'.$elig.'" ';
     
-    $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
-    on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
-    $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
-            on a.price=c.P1 and a.Sex=c.S1 ';
-    $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-            on a.price=d.P2 and a.Sex=d.S2; ';
-    
     if ($year != "" && $sire != "" && $elig != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.
-        $join.$searchSire.$searchElig.$searchYear.$join11.
-        $join1.$searchSire.$searchElig.$searchYear.$join21.
-        $join2.$searchSire.$searchElig.$searchYear.$join31;
+        $join.$searchSire.$searchElig.$searchYear.$join1.
+        $join1.$searchSire.$searchElig.$searchYear.$join2;
     } elseif ($year != "" && $sire != "") {
-        $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join11.
-        $join1.$searchSire.$searchYear.$join21.$join2.$searchSire.$searchYear.$join31;
+        $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join1.
+        $join1.$searchSire.$searchYear.$join2;
     } elseif ($sire != "" && $elig != "") {
-        $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join11.
-        $join1.$searchSire.$searchElig.$join21.$join2.$searchSire.$searchElig.$join31;
+        $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join1.
+        $join1.$searchSire.$searchElig.$join2;
     } elseif ($year != "" && $elig != "") {
-        $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join11.
-        $join1.$searchElig.$searchYear.$join21.$join2.$searchElig.$searchYear.$join31;
+        $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join1.
+        $join1.$searchElig.$searchYear.$join2;
     } elseif ($sire != "") {
-        $sql = $sql.$searchSire.$join.$searchSire.$join11.
-        $join1.$searchSire.$join21.$join2.$searchSire.$join31;
+        $sql = $sql.$searchSire.$join.$searchSire.$join1.
+        $join1.$searchSire.$join2;
     } elseif ($year != "") {
-        $sql = $sql.$searchYear.$join.$searchYear.$join11.$join1.$searchYear.$join21.$join2.$searchYear.$join31;
+        $sql = $sql.$searchYear.$join.$searchYear.$join1.$searchYear.$join2;
     } elseif ($elig != "") {
-        $sql = $sql.$searchElig.$join.$searchElig.$join11.$join1.$searchElig.$join21.$join2.$searchElig.$join31;
+        $sql = $sql.$searchElig.$join.$searchElig.$join1.$searchElig.$join2;
     }
     
     $orderby1 = ' ORDER BY '.$sort1;
@@ -1010,16 +1126,6 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
     }
     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
-    
-    //Sample query above
-    //     'SELECT * FROM (
-    //         SELECT HIP, Horse, Sex, Color, Gait, A.Type, ET, Elig, B.Dam, Sireofdam, Salecode, Consno, Saledate, A.Day, Price, CONCAT (Purlname," " ,Purfname) As Buyer, Rating FROM Sales A JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0 AND B.Sire="A GO GO LAUXMONT"
-    //         ) a left join
-    //         (select price ,(@curRank := @curRank + 1) AS Ranking from (
-        //             SELECT price FROM Sales A
-        //             JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0
-        //             AND B.Sire="A GO GO LAUXMONT" group by price ORDER BY price desc) as a,(SELECT @curRank := 0) r) b
-    //             on a.price=b.price  ORDER BY A.SaleCode;'
 }
 
 function fetchConsAnalysis($consno,$year,$elig,$gait)
