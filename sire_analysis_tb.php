@@ -205,9 +205,8 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
                   #echo $row[Price];
                   foreach($row1 as $elements) {
                       $elementCount =$elementCount+1;
-                      // Check if $elements is numeric before formatting
-                      if (($elementCount == 17) && is_numeric($elements)) {
-                        $elements = "$" . number_format((float)$elements);
+                      if($elementCount == 17){
+                          $elements = "$".number_format($elements);
                       }
                       // Check and format date fields
                       if ($elementCount == 9 || $elementCount == 15) {
