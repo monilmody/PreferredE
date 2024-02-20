@@ -1054,19 +1054,19 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
         Rating
         FROM tsales a
         JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
-        WHERE TYPE= "Y" AND PRICE>0) a';
+        WHERE TYPE= "Y" AND PRICE>0 ';
     
-    $join = ' LEFT JOIN
+    $join = ') a LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
     SELECT Price FROM tsales a
     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0) as subquery1) b
     on a.price=b.Rankprice '; //in order to do ranking because rank function doesn't work on server.
-    $join1 = ' LEFT JOIN
+    $join1 = ') a LEFT JOIN
     (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
             SELECT price, sex FROM tsales a
             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0) as subquery2) c
             on a.price=c.P1 and a.Sex=c.S1 ';
-    $join2 = ' LEFT JOIN
+    $join2 = ') a LEFT JOIN
     (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
             SELECT price, sex FROM tsales a
             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0) as subquery3) d
@@ -1078,17 +1078,13 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
     
     if ($year != "" && $sire != "" && $elig != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.
-        $join.$searchSire.$searchElig.$searchYear.$join1.
-        $join1.$searchSire.$searchElig.$searchYear.$join2;
+        $join.$searchSire.$searchElig.$searchYear.$join1.$searchSire.$searchElig.$searchYear.$join2;
     } elseif ($year != "" && $sire != "") {
-        $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join1.
-        $join1.$searchSire.$searchYear.$join2;
+        $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join1.$searchSire.$searchYear.$join2;
     } elseif ($sire != "" && $elig != "") {
-        $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join1.
-        $join1.$searchSire.$searchElig.$join2;
+        $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join1.$searchSire.$searchElig.$join2;
     } elseif ($year != "" && $elig != "") {
-        $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join1.
-        $join1.$searchElig.$searchYear.$join2;
+        $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join1.$searchElig.$searchYear.$join2;
     } elseif ($sire != "") {
         $sql = $sql.$searchSire.$join.$searchSire.$join1.
         $join1.$searchSire.$join2;
