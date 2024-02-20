@@ -1,5 +1,4 @@
 <?php
-session_start();
 require_once("config.php");
 
 //Prevent the user visiting the logged in page if he/she is already logged in
