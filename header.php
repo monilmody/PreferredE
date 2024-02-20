@@ -1,5 +1,5 @@
 <?php
-session_start();
+// session_start();
 ?>
 <head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
