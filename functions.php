@@ -1026,7 +1026,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
 {
     global $mysqli;
     $sql = 
-    'SELECT Rank,Frank,CRank, HIP, Horse, Sex, Color, Gait, `Type`, ET,Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
+    'SELECT Rank,FRank,CRank, HIP, Horse, Sex, Color, Gait, `Type`, ET,Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
         a.Price, Currency, Purlname, Purfname, Rating FROM (
         SELECT        
         HIP,
