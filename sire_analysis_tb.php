@@ -209,7 +209,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
                           $elements = "$".number_format($elements);
                       }
                       if ($elements == "0000-00-00") {
-                          $elements="1900-01-01";
+                          $elements="";
                       }
                       // Check and format date fields
                       if ($elementCount == 9 || $elementCount == 15) {
