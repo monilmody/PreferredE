@@ -214,7 +214,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
                       if ($elementCount == 9 or $elementCount == 15) {
                           if ($elements != "") {
                               $date=date_create($elements);
-                              $elements = date_format($date,"m/d/y");
+                              $elements = date_format($date,"Y-m-d");
                           }
                       }
                       if ($elementCount == 14) {
