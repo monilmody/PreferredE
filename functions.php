@@ -905,82 +905,122 @@ function fetchSireData_tb($sire, $year, $elig, $sort1, $sort2, $sort3, $sort4, $
 {
     global $mysqli;
     
-    // Constructing the WHERE clause based on input parameters
-    $whereConditions = [];
-    if ($year != "") $whereConditions[] = 'YEAR(Saledate) = "'.$year.'"';
-    if ($sire != "") $whereConditions[] = 'b.Sire = "'.$sire.'"';
-    if ($elig != "") $whereConditions[] = 'Elig = "'.$elig.'"';
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                    AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
+                    AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")';
     
-    $whereClause = "";
-    if (!empty($whereConditions)) {
-        $whereClause = "WHERE " . implode(" AND ", $whereConditions);
+    $sql =
+    'SELECT Rank,FRank,CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
+        a.Price,Currency, Purlname, Purfname, Rating FROM (
+        SELECT
+        HIP,
+        Horse,
+        Sex,
+        Color,
+        a.Type,
+        Datefoal,
+        Elig,
+        b.Dam,
+        Sireofdam,
+        Salecode,
+        Consno,
+        Saledate,
+        a.Day,
+        Price,
+        Currency,
+        Purlname,
+        Purfname,
+        Rating
+        FROM tsales a
+        JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
+        WHERE TYPE= "Y" AND PRICE>0) a';
+    
+    $join = ' LEFT JOIN
+    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
+    SELECT Price FROM tsales a
+    JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0';
+    $join1 = ' LEFT JOIN
+    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
+            SELECT price, sex FROM tsales a
+            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
+    $join2 = ' LEFT JOIN
+    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
+            SELECT price, sex FROM tsales a
+            JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0';
+   
+    $searchSire = ' AND b.Sire="'.$sire.'"';
+    $searchYear = ' AND YEAR(`SALEDATE`)="'.$year.'"';
+    $searchElig = ' AND Elig= "'.$elig.'" ';
+    
+    $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
+    on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
+    $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
+            on a.price=c.P1 and a.Sex=c.S1 ';
+    $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
+            on a.price=d.P2 and a.Sex=d.S2; ';
+    
+    if ($year != "" && $sire != "" && $elig != "") {
+        $sql = $sql.$searchSire.$searchElig.$searchYear.
+        $join.$searchSire.$searchElig.$searchYear.$join11.
+        $join1.$searchSire.$searchElig.$searchYear.$join21.
+        $join2.$searchSire.$searchElig.$searchYear.$join31;
+    } elseif ($year != "" && $sire != "") {
+        $sql = $sql.$searchSire.$searchYear.$join.$searchSire.$searchYear.$join11.
+        $join1.$searchSire.$searchYear.$join21.$join2.$searchSire.$searchYear.$join31;
+    } elseif ($sire != "" && $elig != "") {
+        $sql = $sql.$searchSire.$searchElig.$join.$searchSire.$searchElig.$join11.
+        $join1.$searchSire.$searchElig.$join21.$join2.$searchSire.$searchElig.$join31;
+    } elseif ($year != "" && $elig != "") {
+        $sql = $sql.$searchElig.$searchYear.$join.$searchElig.$searchYear.$join11.
+        $join1.$searchElig.$searchYear.$join21.$join2.$searchElig.$searchYear.$join31;
+    } elseif ($sire != "") {
+        $sql = $sql.$searchSire.$join.$searchSire.$join11.
+        $join1.$searchSire.$join21.$join2.$searchSire.$join31;
+    } elseif ($year != "") {
+        $sql = $sql.$searchYear.$join.$searchYear.$join11.$join1.$searchYear.$join21.$join2.$searchYear.$join31;
+    } elseif ($elig != "") {
+        $sql = $sql.$searchElig.$join.$searchElig.$join11.$join1.$searchElig.$join21.$join2.$searchElig.$join31;
     }
     
-    // Constructing the ORDER BY clause based on input parameters
-    $orderByClause = "";
-    $sortArray = [$sort1, $sort2, $sort3, $sort4, $sort5];
-    $validSorts = array_filter($sortArray);
-    if (!empty($validSorts)) {
-        $orderByClause = "ORDER BY " . implode(", ", $validSorts);
+    $orderby1 = ' ORDER BY '.$sort1;
+    $orderby2 = ', '.$sort2;
+    $orderby3 = ', '.$sort3;
+    $orderby4 = ', '.$sort4;
+    $orderby5 = ', '.$sort5;
+    
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
     }
     
-    // Constructing the SQL query
-    $sql = "SELECT Rank,Frank,CRank, HIP, Horse, Sex, Color, `Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
-        a.Price,Currency, Purlname, Purfname, Rating
-        FROM (
-            SELECT HIP, Horse, Sex, Color, a.Type, Datefoal, Elig, b.Dam, Sireofdam, Salecode, Consno, Saledate, a.Day, Price, Currency, Purlname, Purfname, Rating
-            FROM tsales a
-            JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-            WHERE TYPE= 'Y' AND PRICE > 0
-        ) a
-        LEFT JOIN (
-            SELECT Price AS Rankprice, (@curRank := @curRank + 1) AS Rank
-            FROM (
-                SELECT Price
-                FROM tsales a
-                JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-                WHERE TYPE = 'Y' AND PRICE > 0 $whereClause
-                GROUP BY Price
-                ORDER BY Price DESC
-            ) AS a, (SELECT @curRank := 0) r
-        ) b ON a.price = b.Rankprice
-        LEFT JOIN (
-            SELECT Price AS P1, Sex AS S1, (@curRank1 := @curRank1 + 1) AS FRank
-            FROM (
-                SELECT price, sex
-                FROM tsales a
-                JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-                WHERE TYPE = 'Y' AND Sex IN ('F', 'M') AND PRICE > 0 $whereClause
-                GROUP BY price, sex
-                ORDER BY price DESC
-            ) AS a, (SELECT @curRank1 := 0) r
-        ) c ON a.price = c.P1 AND a.Sex = c.S1
-        LEFT JOIN (
-            SELECT Price AS P2, Sex AS S2, (@curRank2 := @curRank2 + 1) AS CRank
-            FROM (
-                SELECT price, sex
-                FROM tsales a
-                JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-                WHERE TYPE = 'Y' AND Sex IN ('C', 'H', 'G') AND PRICE > 0 $whereClause
-                GROUP BY price, sex
-                ORDER BY price DESC
-            ) AS a, (SELECT @curRank2 := 0) r
-        ) d ON a.price = d.P2 AND a.Sex = d.S2
-        $orderByClause";
-    
-    // Execute the query
+    echo "Generated SQL Query: " . $sql;
+    //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
         echo $sql;
     }
-    
-    // Fetch data and return as JSON
-    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
+    
+    //Sample query above
+    //     'SELECT * FROM (
+    //         SELECT HIP, Horse, Sex, Color, Gait, A.Type, ET, Elig, B.Dam, Sireofdam, Salecode, Consno, Saledate, A.Day, Price, CONCAT (Purlname," " ,Purfname) As Buyer, Rating FROM Sales A JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0 AND B.Sire="A GO GO LAUXMONT"
+    //         ) a left join
+    //         (select price ,(@curRank := @curRank + 1) AS Ranking from (
+        //             SELECT price FROM Sales A
+        //             JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0
+        //             AND B.Sire="A GO GO LAUXMONT" group by price ORDER BY price desc) as a,(SELECT @curRank := 0) r) b
+    //             on a.price=b.price  ORDER BY A.SaleCode;'
 }
-
 
 function fetchConsAnalysis($consno,$year,$elig,$gait)
 {
