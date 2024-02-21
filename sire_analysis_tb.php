@@ -251,7 +251,8 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
         }
         if ($elementCount == 9 or $elementCount == 15) {
             if ($elements != "" && $elements !== "1900-01-01") {
-                  $elements = date_format($elements,"y-m-d");
+              $date = new DateTime($elements);
+              $elements = $date->format('Y-m-d');
             }
         }
         if ($elementCount == 14) {
