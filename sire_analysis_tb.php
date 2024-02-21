@@ -240,9 +240,6 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
                   $elements = "1900-01-01"; // Set to default date if date is empty or "1900-01-01"
               }
             }
-            if (($elementCount == 17) && is_numeric($elements)) {
-              $elements = "$" . number_format((float) $elements);
-            }
 
             echo "<div class='cell'>" . $elements . "</div>";
 
