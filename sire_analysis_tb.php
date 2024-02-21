@@ -206,7 +206,10 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
                   foreach($row1 as $elements) {
                       $elementCount =$elementCount+1;
                       if($elementCount == 17){
-                          $elements = "$".number_format($elements);
+                          $elements = "$".number_format((float)$elements);
+                      }
+                      if($elements = "0000-00-00") {
+                        $elements = "1900-01-01";
                       }
                       // Check and format date fields
                       if ($elementCount == 9 || $elementCount == 15) {
