@@ -225,22 +225,41 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
           foreach ($row1 as $elements) {
             $elementCount = $elementCount + 1;
             // Check if $elements is numeric before formatting
-            
-            // Check and format date fields
-            if ($elementCount == 9 || $elementCount == 15) {
-              if ($elements !== "" && $elements !== "1900-01-01") {
-                  $date = date_create($elements);
-                  if ($date !== false) {
-                      $elements = date_format($date, 'Y-m-d');
-                  } else {
-                      // Handle invalid date format here, maybe log it
-                      error_log("Invalid date format: $elements");
-                  }
-              } else {
-                  $elements = "1900-01-01"; // Set to default date if date is empty or "1900-01-01"
-              }
-            }
+          //   if (($elementCount == 17) && is_numeric($elements)) {
+          //     $elements = "$" . number_format((float) $elements);
+          //   }
+          //   // Check and format date fields
+          //   if ($elementCount == 9 || $elementCount == 15) {
+          //     if ($elements !== "" && $elements !== "1900-01-01") {
+          //         $date = date_create($elements);
+          //         if ($date !== false) {
+          //             $elements = date_format($date, 'Y-m-d');
+          //         } else {
+          //             // Handle invalid date format here, maybe log it
+          //             error_log("Invalid date format: $elements");
+          //         }
+          //     } else {
+          //         $elements = ""; // Set to default date if date is empty or "1900-01-01"
+          //     }
+          // }
 
+          if($elementCount == 17){
+            $elements = "$".number_format((float)$elements);
+        }
+        if ($elements == "0000-00-00") {
+            $elements="";
+        }
+        if ($elementCount == 9 or $elementCount == 15) {
+            if ($elements != "" && $elements !== "1900-01-01") {
+                $date=date_create($elements);
+                if($date !== false) {
+                  $elements = date_format($date,"m/d/y");
+                }
+            }
+        }
+        if ($elementCount == 14) {
+            $elements= substr($elements, 0,4);
+        }
             echo "<div class='cell'>" . $elements . "</div>";
 
           }
