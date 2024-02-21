@@ -249,10 +249,15 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
         if ($elements == "0000-00-00") {
             $elements="";
         }
-        if ($elementCount == 9 or $elementCount == 15) {
+        if ($elementCount == 9 || $elementCount == 15) {
             if ($elements != "" && $elements !== "1900-01-01") {
-              $date = new DateTime($elements);
-              $elements = $date->format('Y-m-d');
+              $date = DateTime::createFromFormat('Y-m-d', $elements);
+              if ($date !== false) {
+                  $elements = $date->format('Y-m-d');
+              } else {
+                  // Handle invalid date format here, maybe log it
+                  error_log("Invalid date format: $elements");
+              }
             }
         }
         if ($elementCount == 14) {
