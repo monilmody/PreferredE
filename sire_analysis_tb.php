@@ -228,7 +228,9 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
             if (($elementCount == 17) && is_numeric($elements)) {
               $elements = "$" . number_format((float) $elements);
             }
-            // Check and format date fields
+            if ($elements == "2024-02-21") {
+              $elements="";
+            }
             // Check and format date fields
             if ($elementCount == 9 || $elementCount == 15) {
               if ($elements !== "" && $elements !== "1900-01-01") {
