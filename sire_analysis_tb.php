@@ -225,12 +225,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
           foreach ($row1 as $elements) {
             $elementCount = $elementCount + 1;
             // Check if $elements is numeric before formatting
-            if (($elementCount == 17) && is_numeric($elements)) {
-              $elements = "$" . number_format((float) $elements);
-            }
-            if ($elements == "2024-02-21") {
-              $elements="";
-            }
+            
             // Check and format date fields
             if ($elementCount == 9 || $elementCount == 15) {
               if ($elements !== "" && $elements !== "1900-01-01") {
@@ -242,9 +237,12 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
                       error_log("Invalid date format: $elements");
                   }
               } else {
-                  $elements = ""; // Set to default date if date is empty or "1900-01-01"
+                  $elements = "1900-01-01"; // Set to default date if date is empty or "1900-01-01"
               }
-          }
+            }
+            if (($elementCount == 17) && is_numeric($elements)) {
+              $elements = "$" . number_format((float) $elements);
+            }
 
             echo "<div class='cell'>" . $elements . "</div>";
 
