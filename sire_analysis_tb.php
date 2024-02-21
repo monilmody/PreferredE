@@ -229,15 +229,20 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
               $elements = "$" . number_format((float) $elements);
             }
             // Check and format date fields
+            // Check and format date fields
             if ($elementCount == 9 || $elementCount == 15) {
-              $date = date_create($elements);
-              $elements = date_format($date, 'Y-m-d');
-            } else {
-              $elements = "1900-01-01"; // Set to empty string if date is empty or "1900-01-01" 
-            }
-            if ($elementCount == 14) {
-              $elements = substr($elements, 0, 4);
-            }
+              if ($elements !== "" && $elements !== "1900-01-01") {
+                  $date = date_create($elements);
+                  if ($date !== false) {
+                      $elements = date_format($date, 'Y-m-d');
+                  } else {
+                      // Handle invalid date format here, maybe log it
+                      error_log("Invalid date format: $elements");
+                  }
+              } else {
+                  $elements = ""; // Set to default date if date is empty or "1900-01-01"
+              }
+          }
 
             echo "<div class='cell'>" . $elements . "</div>";
 
