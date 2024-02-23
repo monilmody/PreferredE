@@ -1,5 +1,6 @@
 <?php
 // session_start();
+require_once("config.php");
 ?>
 <head>
 <!-- Global site tag (gtag.js) - Google Analytics -->
