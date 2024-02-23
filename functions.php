@@ -2521,22 +2521,18 @@ FROM
     WHERE 
         GAIT = "P" '.$searchParam.'
     GROUP BY 
-        Salecode, Horse
-    ORDER BY 
-        Salecode, Price DESC) AS a
+        Salecode, Horse) AS a
 LEFT JOIN
     (SELECT 
         Salecode,
-        MAX(Horse) AS Horse,
+        Horse,
         MAX(Price) AS TMax 
     FROM 
         tsales 
     WHERE 
         GAIT = "T" '.$searchParam.'
     GROUP BY 
-        Salecode
-    ORDER BY 
-        Salecode, MAX(Price) DESC) AS b 
+        Salecode, Horse) AS b 
 ON 
     a.Salecode = b.Salecode 
 GROUP BY 
