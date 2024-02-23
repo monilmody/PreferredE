@@ -29,7 +29,7 @@ table, th, td {
 include_once("config.php");
 $year_param =$_GET['year'];
 $elig_param =$_GET['elig'];
-//$gait_param =$_GET['gait'];
+$gait_param =$_GET['gait'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
