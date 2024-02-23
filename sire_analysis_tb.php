@@ -137,8 +137,10 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
 
     if ($year_param != "" or $sire_param != "" or $elig_param != "") {
       ?>
-      <div class="table" style="max-height: calc(96.2vh - 96.2px);overflow: auto;">
+      <div style="max-height: calc(96.2vh - 96.2px);overflow: auto;">
+      <div class="table" style="width: device-width;">
         <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
+        <table id="salesTable">
           <div class="cell" style="width: device-width;">
             No.
           </div>
@@ -205,6 +207,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
           <div class="cell" style="width: device-width;">
             Rate
           </div>
+        </table>
         </div>
 
         <?php
