@@ -2536,7 +2536,7 @@ LEFT JOIN (
         Salecode, Horse
 ) AS b ON a.Salecode = b.Salecode 
 GROUP BY 
-    a.Salecode;';
+    a.Salecode, a.PMax, b.TMax;';
     
     //     if ($year != "") {
     //         $sql = "SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM
