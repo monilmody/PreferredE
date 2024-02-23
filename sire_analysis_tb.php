@@ -138,72 +138,74 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
     if ($year_param != "" or $sire_param != "" or $elig_param != "") {
       ?>
 
-<div class="table" style="width: 100%;table-layout: fixed;">
+<hr>
+<div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
+        <div class="table" style="width: device-width;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        	  <div class="cell" style="width: 2%;">
+        	  <div class="cell" style="width: device-width;">
                 No.
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 R
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 FR
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 CR
               </div>
-              <div class="cell" style="width: 3%;">
+              <div class="cell" style="width: device-width;">
                 HIP
               </div>
-              <div class="cell" style="width: 12%;">
+              <div class="cell" style="width: device-width;">
                 Horse
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 S
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 C
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 T
               </div>
-              <div class="cell" style="width: 5%;">
+              <div class="cell" style="width: device-width;">
                 DOB
               </div>
-              <div class="cell" style="width: 3%;">
+              <div class="cell" style="width: device-width;">
                 Elig
               </div>
-              <div class="cell" style="width: 12%;">
+              <div class="cell" style="width: device-width;">
                 Dam
               </div>
-              <div class="cell" style="width: 12%;">
+              <div class="cell" style="width: device-width;">
                 SireOfDam
               </div>
-              <div class="cell" style="width: 10%;">
+              <div class="cell" style="width: device-width;">
                 SaleCode
               </div>
-              <div class="cell" style="width: 4%;">
+              <div class="cell" style="width: device-width;">
                 Consno
               </div>
-              <div class="cell" style="width: 5%;">
+              <div class="cell" style="width: device-width;">
                 Saledate
               </div>
-              <div class="cell" style="width: 2%;">
+              <div class="cell" style="width: device-width;">
                 Day
               </div>
-              <div class="cell" style="width: 5%;">
+              <div class="cell" style="width: device-width;">
                 Price
               </div>
-              <div class="cell" style="width: 3%;">
+              <div class="cell" style="width: device-width;">
                 Curr
               </div>
-              <div class="cell" style="width: 7%;">
+              <div class="cell" style="width: device-width;">
                 PLastName
               </div>
-              <div class="cell" style="width: 7%;">
+              <div class="cell" style="width: device-width;">
                 PFirstName
               </div>
-              <div class="cell" style="width: 3%;">
+              <div class="cell" style="width: device-width;">
                 Rate
               </div>
           </div>
@@ -273,6 +275,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
     }
   }
   ?>
+  </div>
   </div>
 </div>
 <br>
