@@ -144,7 +144,7 @@ FROM sales a
 JOIN damsire b ON a.damsire_Id = b.damsire_ID
 JOIN sales c ON c.Horse = b.dam
 WHERE b.dam = "'.$damName.'" AND c.type = "B"
-AND c.lastbred <> "0000-00-00" 
+AND c.lastbred <> "1900-01-01" 
 AND a.datefoal >= DATE_ADD(c.lastbred, INTERVAL 11 MONTH)
 AND a.datefoal <= DATE_ADD(c.lastbred, INTERVAL 13 MONTH)
 AND YEAR(c.lastbred) >= '.$saleYear.'
@@ -178,7 +178,7 @@ FROM tsales a
 JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
 JOIN tsales c ON c.Horse = b.dam
 WHERE b.dam = "'.$damName.'" AND c.type = "B"
-AND c.lastbred <> "0000-00-00" 
+AND c.lastbred <> "1900-01-01" 
 AND a.datefoal >= DATE_ADD(c.lastbred, INTERVAL 11 MONTH)
 AND a.datefoal <= DATE_ADD(c.lastbred, INTERVAL 13 MONTH)
 AND YEAR(c.lastbred) >= '.$saleYear.'
