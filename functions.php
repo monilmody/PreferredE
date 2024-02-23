@@ -2536,7 +2536,7 @@ LEFT JOIN
     GROUP BY 
         Salecode
     ORDER BY 
-        Salecode, Price DESC) AS b 
+        Salecode, MAX(Price) DESC) AS b 
 ON 
     a.Salecode = b.Salecode 
 GROUP BY 
