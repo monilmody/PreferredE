@@ -2507,7 +2507,7 @@ function fetchSalesSummary_tb($year,$type,$salecode)
     
     $sql = 'SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax, MAX(b.Horse) As Trotter,b.Max As TMax FROM
     (SELECT Salecode, Horse, MAX(Price) AS Max FROM tsales WHERE GAIT ="P" '.$searchParam.'
-        GROUP BY Salecode ORDER BY salecode,Price Desc) AS a
+        GROUP BY Salecode,Horse ORDER BY salecode,Price Desc) AS a
     LEFT JOIN
     (SELECT Salecode, Horse, MAX(Price) AS Max FROM tsales WHERE GAIT ="T" '.$searchParam.'
         GROUP BY Salecode ORDER BY Salecode,Price Desc) AS b on a.Salecode=b.Salecode Group by a.salecode';
