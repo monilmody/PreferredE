@@ -226,8 +226,7 @@ function fetchOffsprings_tb($damName)
     Sbcountry
     FROM tsales a
     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
-    WHERE b.dam = "'.$damName.'" order by a.datefoal DESC,a.saledate DESC
-    LIMIT 1;';
+    WHERE b.dam = "'.$damName.'" order by a.datefoal DESC,a.saledate DESC;';
     
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
