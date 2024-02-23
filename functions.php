@@ -2601,9 +2601,8 @@ function fetchTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     //     if ($year=="") {
     //         $year=null;
     //     }
-    $sql = 'SELECT CONCAT(Purlname, " ") AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
-    FROM tsales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-    GROUP BY CONCAT(Purlname," ",Purfname)';
+    $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
+    FROM tsales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
     
     //     if ($year != "") {
     //         $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
