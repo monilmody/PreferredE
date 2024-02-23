@@ -2505,12 +2505,43 @@ function fetchSalesSummary_tb($year,$type,$salecode)
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
                      AND left(Salecode,4)= IF("'.$salecode.'"  = "", left(Salecode,4), "'.$salecode.'") ';
     
-    $sql = 'SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax, MAX(b.Horse) As Trotter,b.Max As TMax FROM
-    (SELECT Salecode, Horse, MAX(Price) AS Max FROM tsales WHERE GAIT ="P" '.$searchParam.'
-        GROUP BY Salecode,Horse ORDER BY salecode,Price Desc) AS a
-    LEFT JOIN
-    (SELECT Salecode, Horse, MAX(Price) AS Max FROM tsales WHERE GAIT ="T" '.$searchParam.'
-        GROUP BY Salecode ORDER BY Salecode,Price Desc) AS b on a.Salecode=b.Salecode Group by a.salecode';
+    $sql = 'SELECT 
+    a.Salecode,
+    a.PACER,
+    a.PMax,
+    MAX(b.Horse) AS Trotter,
+    b.TMax
+FROM
+    (SELECT 
+        Salecode,
+        Horse AS PACER,
+        MAX(Price) AS PMax
+    FROM 
+        tsales 
+    WHERE 
+        GAIT = "P" '.$searchParam.'
+    GROUP BY 
+        Salecode, Horse
+    ORDER BY 
+        Salecode, Price DESC) AS a
+LEFT JOIN
+    (SELECT 
+        Salecode,
+        MAX(Horse) AS Horse,
+        MAX(Price) AS TMax 
+    FROM 
+        tsales 
+    WHERE 
+        GAIT = "T" '.$searchParam.'
+    GROUP BY 
+        Salecode
+    ORDER BY 
+        Salecode, Price DESC) AS b 
+ON 
+    a.Salecode = b.Salecode 
+GROUP BY 
+    a.Salecode;
+';
     
     //     if ($year != "") {
     //         $sql = "SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM
