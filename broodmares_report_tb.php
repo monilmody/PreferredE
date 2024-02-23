@@ -234,7 +234,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                     if($elementCount == 6){
                         $elements = "$".number_format($elements);
                     }
-                    if ($elements == "0000-00-00") {
+                    if ($elements == "1900-01-01") {
                         $elements="";
                     }
                     if ($elementCount == 14) {
