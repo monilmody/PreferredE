@@ -125,67 +125,67 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
         	  <div class="cell">
                 No.
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 R
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 FR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 CR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 HIP
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Horse
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 S
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 C
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 T
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 DOB
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Elig
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Sire
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Dam
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 SaleCode
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Consno
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Saledate
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Day
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Price
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Curr
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 PLastName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 PFirstName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Rate
               </div>
           </div>
