@@ -2731,56 +2731,151 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
 //         return "";
 //     }
     
-    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")
-                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'") ';
-    $sql =
-    'SELECT ORank,Frank,CRank, HIP, Horse, Sex, Color, Type, Datefoal, Elig, Sire, Dam, Salecode, Consno, Saledate, Day,
-        a.Price, Currency, Purlname, Purfname, Rating FROM (
-        SELECT
-        HIP,
-        Horse,
-        Sex,
-        Color,
-        a.Type,
-        Datefoal,
-        Elig,
-        b.Sire,
-        b.Dam,
-        Salecode,
-        Consno,
-        Saledate,
-        a.Day,
-        Currency,
-        Price,
-        Purlname,
-        Purfname,
-        Rating
-        FROM tsales a
-        JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
-        WHERE PRICE>0 '.$searchParam.') a
-	LEFT JOIN
-    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS ORank from (
-		SELECT Price FROM tsales a
-		JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE PRICE>0 '.$searchParam.'
-        group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
-		on a.price=b.Rankprice
-    LEFT JOIN
-    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
-             SELECT price, sex FROM tsales a
-             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("F","M") AND PRICE>0 '.$searchParam.'
-             group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
-             on a.price=c.P1 and a.Sex=c.S1
-    LEFT JOIN
-    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
-             SELECT price, sex FROM tsales a
-             JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("C","H","G") AND PRICE>0 '.$searchParam.'
-             group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2';
+    // $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+    //                  AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
+    //                  AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
+    //                  AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")
+    //                  AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'") ';
+    // $sql =
+    // 'SELECT ORank,Frank,CRank, HIP, Horse, Sex, Color, Type, Datefoal, Elig, Sire, Dam, Salecode, Consno, Saledate, Day,
+    //     a.Price, Currency, Purlname, Purfname, Rating FROM (
+    //     SELECT
+    //     HIP,
+    //     Horse,
+    //     Sex,
+    //     Color,
+    //     a.Type,
+    //     Datefoal,
+    //     Elig,
+    //     b.Sire,
+    //     b.Dam,
+    //     Salecode,
+    //     Consno,
+    //     Saledate,
+    //     a.Day,
+    //     Currency,
+    //     Price,
+    //     Purlname,
+    //     Purfname,
+    //     Rating
+    //     FROM tsales a
+    //     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID
+    //     WHERE PRICE>0 '.$searchParam.') a
+	// LEFT JOIN
+    // (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS ORank from (
+	// 	SELECT Price FROM tsales a
+	// 	JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE PRICE>0 '.$searchParam.'
+    //     group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
+	// 	on a.price=b.Rankprice
+    // LEFT JOIN
+    // (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
+    //          SELECT price, sex FROM tsales a
+    //          JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("F","M") AND PRICE>0 '.$searchParam.'
+    //          group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
+    //          on a.price=c.P1 and a.Sex=c.S1
+    // LEFT JOIN
+    // (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
+    //          SELECT price, sex FROM tsales a
+    //          JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("C","H","G") AND PRICE>0 '.$searchParam.'
+    //          group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
+    //          on a.price=d.P2 and a.Sex=d.S2';
     
-    
+    $sql = 'SELECT 
+    a.HIP,
+    a.Horse,
+    a.Sex,
+    a.Color,
+    a.Type,
+    a.Datefoal,
+    a.Elig,
+    b.Sire,
+    b.Dam,
+    a.Salecode,
+    a.Consno,
+    a.Saledate,
+    a.Day,
+    a.Currency,
+    a.Price,
+    a.Purlname,
+    a.Purfname,
+    a.Rating,
+    b.ORank,
+    c.FRank,
+    d.CRank
+FROM 
+    (
+        SELECT 
+            HIP,
+            Horse,
+            Sex,
+            Color,
+            Type,
+            Datefoal,
+            Elig,
+            damsire_Id,
+            Salecode,
+            Consno,
+            Saledate,
+            Day,
+            Currency,
+            Price,
+            Purlname,
+            Purfname,
+            Rating
+        FROM 
+            tsales
+        WHERE 
+            PRICE > 0
+            AND YEAR(Saledate) = COALESCE(NULLIF("'.$year.'", ""), YEAR(Saledate))
+            AND Salecode = COALESCE(NULLIF("'.$salecode.'", ""), Salecode)
+            AND Type = COALESCE(NULLIF("'.$type.'", ""), Type)
+            AND Elig = COALESCE(NULLIF("'.$elig.'", ""), Elig)
+            AND Gait = COALESCE(NULLIF("'.$gait.'", ""), Gait)
+    ) a
+LEFT JOIN
+    (
+        SELECT 
+            damsire_Id,
+            Price,
+            ROW_NUMBER() OVER (ORDER BY Price DESC) AS ORank
+        FROM 
+            tsales
+        WHERE 
+            PRICE > 0
+            AND YEAR(Saledate) = COALESCE(NULLIF("'.$year.'", ""), YEAR(Saledate))
+            AND Salecode = COALESCE(NULLIF("'.$salecode.'", ""), Salecode)
+    ) b ON a.damsire_Id = b.damsire_Id AND a.Price = b.Price
+LEFT JOIN
+    (
+        SELECT 
+            damsire_Id,
+            Sex,
+            Price,
+            ROW_NUMBER() OVER (PARTITION BY Sex ORDER BY Price DESC) AS FRank
+        FROM 
+            tsales
+        WHERE 
+            Sex IN ("F", "M")
+            AND PRICE > 0
+            AND YEAR(Saledate) = COALESCE(NULLIF("'.$year.'", ""), YEAR(Saledate))
+            AND Salecode = COALESCE(NULLIF("'.$salecode.'", ""), Salecode)
+    ) c ON a.damsire_Id = c.damsire_Id AND a.Sex = c.Sex AND a.Price = c.Price
+LEFT JOIN
+    (
+        SELECT 
+            damsire_Id,
+            Sex,
+            Price,
+            ROW_NUMBER() OVER (PARTITION BY Sex ORDER BY Price DESC) AS CRank
+        FROM 
+            tsales
+        WHERE 
+            Sex IN ("C", "H", "G")
+            AND PRICE > 0
+            AND YEAR(Saledate) = COALESCE(NULLIF("'.$year.'", ""), YEAR(Saledate))
+            AND Salecode = COALESCE(NULLIF("'.$salecode.'", ""), Salecode)
+    ) d ON a.damsire_Id = d.damsire_Id AND a.Sex = d.Sex AND a.Price = d.Price';
+
     
     $orderby1 = ' ORDER BY '.$sort1;
     $orderby2 = ', '.$sort2;
