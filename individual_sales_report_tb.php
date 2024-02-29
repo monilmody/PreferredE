@@ -54,6 +54,10 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
   }
 //}
 
+$time_end = microtime(true);
+
+echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
+
 // $yearList = getYearsList_tb();
 // $eligList = getEligList_tb();
 // //$gaitList = getGaitList_tb();
@@ -288,11 +292,5 @@ function getValues() {
   	window.open(link,"_self");
 }
 </script>
-
-<?php
-$time_end = microtime(true);
-
-echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
-?>
 
 
