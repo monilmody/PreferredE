@@ -32,7 +32,7 @@ $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
 // Initialize the Phpfastcache
-$cache = new \Phpfastcache\CacheManager('files');
+$cache = \Phpfastcache\CacheManager::getInstance('files');
 
 // Build a unique cache key based on the parameters
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
