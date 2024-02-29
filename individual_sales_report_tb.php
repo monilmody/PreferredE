@@ -54,43 +54,43 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
   }
 //}
 
-if (!$cache->has('salecode_list')) {
+if (!$cache->getItem('salecode')) {
   // If not cached, fetch and cache the salecode list
   $salecodeList = fetchSalecodeList_tb($year_param);
-  $cache->set('salecode_list', $salecodeList, 300);
+  $cache->set('salecode', $salecodeList, 300);
 } else {
   // Retrieve salecode list from cache
-  $salecodeList = $cache->get('salecode_list');
+  $salecodeList = $cache->getItem('salecode');
 }
 
 // Check if the years list is cached
-if (!$cache->has('years_list')) {
+if (!$cache->getItem('year')) {
   // If not cached, fetch and cache the years list
   $yearsList = getYearsList_tb();
-  $cache->set('years_list', $yearsList, 300);
+  $cache->set('year', $yearsList, 300);
 } else {
   // Retrieve years list from cache
-  $yearsList = $cache->get('years_list');
+  $yearsList = $cache->getItem('year');
 }
 
 // Check if the eligibility list is cached
-if (!$cache->has('eligibility_list')) {
+if (!$cache->getItem('elig')) {
   // If not cached, fetch and cache the eligibility list
   $eligList = getEligList_tb();
-  $cache->set('eligibility_list', $eligList, 300);
+  $cache->set('elig', $eligList, 300);
 } else {
   // Retrieve eligibility list from cache
-  $eligList = $cache->get('eligibility_list');
+  $eligList = $cache->getItem('elig');
 }
 
 // Check if the type list is cached
-if (!$cache->has('type_list')) {
+if (!$cache->getItem('type')) {
   // If not cached, fetch and cache the type list
   $typeList = fetchTypeList_tb();
-  $cache->set('type_list', $typeList, 300);
+  $cache->set('type', $typeList, 300);
 } else {
   // Retrieve type list from cache
-  $typeList = $cache->get('type_list');
+  $typeList = $cache->getItem('type');
 }
 
 $time_end = microtime(true);
