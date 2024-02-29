@@ -1,16 +1,13 @@
 <?php
 require_once 'vendor/autoload.php'; // Adjust the path to autoload.php as needed
 
-use Phpfastcache\CacheManager;
-use Phpfastcache\Drivers\Files\Config as FileConfig;
-
-$cacheConfig = new FileConfig([
-    'path' => realpath(__DIR__) . '/cache', // The folder where caching will be created
-    'securityKey' => 'my-random-security-key', // Can be the name of your project, used to create a folder inside the caching path
+/* Cache adapter for phpFastCache */
+$cache_config = new \Phpfastcache\Drivers\Files\Config([
+    'path' => realpath(__DIR__) . '/cache', // The folder where the caching will be created
+    'securityKey' => 'my-random-security-key', // Can be the name of your project, will be used to create the folder inside the caching path
     'preventCacheSlams' => true,
     'cacheSlamsTimeout' => 20,
     'secureFileManipulation' => true
 ]);
-
-CacheManager::setDefaultConfig($cacheConfig);
-$cache = CacheManager::getInstance('Files');
+\Phpfastcache\CacheManager::setDefaultConfig($cache_config);
+$cache = \Phpfastcache\CacheManager::getInstance('Files');
