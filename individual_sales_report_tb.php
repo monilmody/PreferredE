@@ -16,27 +16,85 @@ include("./header.php");
 <?php
 
 include_once("config.php");
+require_once("phpFastCaching.php");
+use Phpfastcache\Helper\Psr16Adapter;
+$time_start = microtime(true);
 $year_param =$_GET['year'];
 $salecode_param =$_GET['salecode'];
 $type_param =$_GET['type'];
 $elig_param =$_GET['elig'];
-//$gait_param =$_GET['gait'];
+$gait_param =$_GET['gait'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
+// Initialize the Phpfastcache
+$cache = new \Phpfastcache\CacheManager('files');
+
+// Build a unique cache key based on the parameters
+$cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
+
+
 //if ($year_param != "" && $salecode_param !="" && $type_param !="" && $elig_param !="" && $gait_param !="") {
+  if ($cache->has($cacheKey)) {
+    $resultFound = $cache->get($cachekey);
+  } else {
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
         $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+
+    $cache->set($cacheKey, $resultFound, 300);
+  }
 //}
 
-$resultList = fetchSalecodeList_tb($year_param);
-$yearList = getYearsList_tb();
-$eligList = getEligList_tb();
-//$gaitList = getGaitList_tb();
-$typeList = fetchTypeList_tb();
+if (!$cache->has('salecode_list')) {
+  // If not cached, fetch and cache the salecode list
+  $salecodeList = fetchSalecodeList_tb($year_param);
+  $cache->set('salecode_list', $salecodeList, 300);
+} else {
+  // Retrieve salecode list from cache
+  $salecodeList = $cache->get('salecode_list');
+}
+
+// Check if the years list is cached
+if (!$cache->has('years_list')) {
+  // If not cached, fetch and cache the years list
+  $yearsList = getYearsList_tb();
+  $cache->set('years_list', $yearsList, 300);
+} else {
+  // Retrieve years list from cache
+  $yearsList = $cache->get('years_list');
+}
+
+// Check if the eligibility list is cached
+if (!$cache->has('eligibility_list')) {
+  // If not cached, fetch and cache the eligibility list
+  $eligList = getEligList_tb();
+  $cache->set('eligibility_list', $eligList, 300);
+} else {
+  // Retrieve eligibility list from cache
+  $eligList = $cache->get('eligibility_list');
+}
+
+// Check if the type list is cached
+if (!$cache->has('type_list')) {
+  // If not cached, fetch and cache the type list
+  $typeList = fetchTypeList_tb();
+  $cache->set('type_list', $typeList, 300);
+} else {
+  // Retrieve type list from cache
+  $typeList = $cache->get('type_list');
+}
+
+$time_end = microtime(true);
+
+echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
+
+// $yearList = getYearsList_tb();
+// $eligList = getEligList_tb();
+// //$gaitList = getGaitList_tb();
+// $typeList = fetchTypeList_tb();
 
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
