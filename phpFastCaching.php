@@ -10,4 +10,4 @@ $cache_config = new \Phpfastcache\Config\ConfigurationOption([
     'cacheSlamsTimeout' => 20,
 ]);
 \Phpfastcache\CacheManager::setDefaultConfig($cache_config);
-$cache = \Phpfastcache\CacheManager::getInstance('Files');
+$cache = \Phpfastcache\CacheManager::getInstance('files');
