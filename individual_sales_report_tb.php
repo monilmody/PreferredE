@@ -54,49 +54,6 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
   }
 //}
 
-if (!$cache->getItem('salecode')) {
-  // If not cached, fetch and cache the salecode list
-  $salecodeList = fetchSalecodeList_tb($year_param);
-  $cache->set('salecode', $salecodeList, 300);
-} else {
-  // Retrieve salecode list from cache
-  $salecodeList = $cache->getItem('salecode');
-}
-
-// Check if the years list is cached
-if (!$cache->getItem('year')) {
-  // If not cached, fetch and cache the years list
-  $yearsList = getYearsList_tb();
-  $cache->set('year', $yearsList, 300);
-} else {
-  // Retrieve years list from cache
-  $yearsList = $cache->getItem('year');
-}
-
-// Check if the eligibility list is cached
-if (!$cache->getItem('elig')) {
-  // If not cached, fetch and cache the eligibility list
-  $eligList = getEligList_tb();
-  $cache->set('elig', $eligList, 300);
-} else {
-  // Retrieve eligibility list from cache
-  $eligList = $cache->getItem('elig');
-}
-
-// Check if the type list is cached
-if (!$cache->getItem('type')) {
-  // If not cached, fetch and cache the type list
-  $typeList = fetchTypeList_tb();
-  $cache->set('type', $typeList, 300);
-} else {
-  // Retrieve type list from cache
-  $typeList = $cache->getItem('type');
-}
-
-$time_end = microtime(true);
-
-echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
-
 // $yearList = getYearsList_tb();
 // $eligList = getEligList_tb();
 // //$gaitList = getGaitList_tb();
@@ -331,5 +288,11 @@ function getValues() {
   	window.open(link,"_self");
 }
 </script>
+
+<?php
+$time_end = microtime(true);
+
+echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
+?>
 
 
