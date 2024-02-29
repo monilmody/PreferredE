@@ -1,5 +1,5 @@
 <?php
-require_once '/path/to/phpfastcache/autoload.php'; // Adjust the path to autoload.php as needed
+require_once 'vendor/autoload.php'; // Adjust the path to autoload.php as needed
 
 use Phpfastcache\CacheManager;
 use Phpfastcache\Drivers\File\Config as FileConfig;
