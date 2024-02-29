@@ -2,7 +2,7 @@
 require_once 'vendor/autoload.php'; // Adjust the path to autoload.php as needed
 
 use Phpfastcache\CacheManager;
-use Phpfastcache\Drivers\File\Config as FileConfig;
+use Phpfastcache\Drivers\Files\Config as FileConfig;
 
 $cacheConfig = new FileConfig([
     'path' => realpath(__DIR__) . '/cache', // The folder where caching will be created
