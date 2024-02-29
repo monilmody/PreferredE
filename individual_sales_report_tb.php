@@ -40,12 +40,16 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
 //if ($year_param != "" && $salecode_param !="" && $type_param !="" && $elig_param !="" && $gait_param !="") {
   if ($cache->has($cacheKey)) {
-    $resultFound = $cache->get($cachekey);
+    $resultFound = $cache->get($cacheKey);
   } else {
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
         $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
-    $cache->set($cacheKey, $resultFound, 300);
+        if ($resultFound !== false) {
+          $cache->set($cacheKey, $resultFound, 300);
+        } else {
+          echo "Error fetching data from database";
+        }
   }
 //}
 
