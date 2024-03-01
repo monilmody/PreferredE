@@ -81,17 +81,17 @@ echo '<ul>';
 
 // Previous page link
 if ($page > 1) {
-  echo '<li><a href="?page=' . ($page - 1) . '">Previous</a></li>';
+  echo '<li><a href="?page=' . ($page - 1) . '">&laquo;</a></li>';
 }
 
-// Page links
+// Render page numbers
 for ($i = 1; $i <= $totalPages; $i++) {
   echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
 }
 
 // Next page link
 if ($page < $totalPages) {
-  echo '<li><a href="?page=' . ($page + 1) . '">Next</a></li>';
+  echo '<li><a href="?page=' . ($page + 1) . '">&raquo;</a></li>';
 }
 
 
@@ -279,6 +279,13 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
             }
 
           ?>
+</div>
+<div class="pagination">
+    <a href="#" class="page-link">&laquo;</a>
+    <a href="#" class="page-link">1</a>
+    <a href="#" class="page-link">2</a>
+    <a href="#" class="page-link">3</a>
+    <a href="#" class="page-link">&raquo;</a>
 </div>
 </div>
 <br>
