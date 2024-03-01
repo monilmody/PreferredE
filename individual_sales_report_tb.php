@@ -69,38 +69,7 @@ $typeList = fetchTypeList_tb();
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
-// Calculate total number of records (assuming this function exists)
-$totalRecords = count($resultFound);
 
-// Calculate total number of pages
-$totalPages = ceil($totalRecords / $perPage);
-
-// Display pagination controls
-echo '<div class="pagination">';
-echo '<ul>';
-
-// Previous page link
-if ($page > 1) {
-  echo '<li><a href="?page=' . ($page - 1) . '">&laquo;</a></li>';
-}
-
-// Render page numbers
-for ($i = 1; $i <= $totalPages; $i++) {
-  // Including other parameters in pagination links
-  $params = $_GET;
-  $params['page'] = $i;
-  $queryString = http_build_query($params);
-  echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
-}
-
-// Next page link
-if ($page < $totalPages) {
-  echo '<li><a href="?page=' . ($page + 1) . '">&raquo;</a></li>';
-}
-
-
-echo '</ul>';
-echo '</div>';
 echo "<br>";
 
 echo '<div style= "margin:5px 30px 30px 30px;">';
@@ -284,13 +253,41 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 
           ?>
 </div>
-<div class="pagination">
-    <a href="#" class="page-link">&laquo;</a>
-    <a href="#" class="page-link">1</a>
-    <a href="#" class="page-link">2</a>
-    <a href="#" class="page-link">3</a>
-    <a href="#" class="page-link">&raquo;</a>
-</div>
+<?php
+// Calculate total number of records (assuming this function exists)
+$totalRecords = count($resultFound);
+
+// Calculate total number of pages
+$totalPages = ceil($totalRecords / $perPage);
+
+// Display pagination controls
+echo '<div class="pagination">';
+echo '<ul>';
+
+// Previous page link
+if ($page > 1) {
+  echo '<li><a href="?page=' . ($page - 1) . '">&laquo;</a></li>';
+}
+
+// Render page numbers
+for ($i = 1; $i <= $totalPages; $i++) {
+  // Including other parameters in pagination links
+  $params = $_GET;
+  $params['page'] = $i;
+  $queryString = http_build_query($params);
+  echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
+}
+
+// Next page link
+if ($page < $totalPages) {
+  echo '<li><a href="?page=' . ($page + 1) . '">&raquo;</a></li>';
+}
+
+
+echo '</ul>';
+echo '</div>';
+?>
+
 </div>
 <br>
 <script>
