@@ -248,12 +248,8 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 </div>
 <?php
 // Calculate total number of records (assuming this function exists)
-$rowCount = 0;
-while ($row = mysqli_fetch_assoc($resultFound)) {
-  // Increment the row count for each row
-  $rowCount++;
-}
-$nr_of_rows = $rowCount;
+
+$nr_of_rows = $resultFound->num_rows;
 $rows_per_page = 50; 
 
 // Calculate total number of pages
