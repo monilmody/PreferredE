@@ -79,9 +79,21 @@ $totalPages = ceil($totalRecords / $perPage);
 echo '<div class="pagination">';
 echo '<ul>';
 
-for ($i = 1; $i <= $totalPages; $i++) {
-    echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+// Previous page link
+if ($page > 1) {
+  echo '<li><a href="?page=' . ($page - 1) . '">Previous</a></li>';
 }
+
+// Page links
+for ($i = 1; $i <= $totalPages; $i++) {
+  echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+}
+
+// Next page link
+if ($page < $totalPages) {
+  echo '<li><a href="?page=' . ($page + 1) . '">Next</a></li>';
+}
+
 
 echo '</ul>';
 echo '</div>';
