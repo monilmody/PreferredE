@@ -55,6 +55,7 @@ $time_end = microtime(true);
 
 echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
 
+$cache->deleteItem($cacheKey);
 // $yearList = getYearsList_tb();
 // $eligList = getEligList_tb();
 // //$gaitList = getGaitList_tb();
