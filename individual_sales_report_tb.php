@@ -37,6 +37,8 @@ $cache = \Phpfastcache\CacheManager::getInstance('files');
 // Build a unique cache key based on the parameters
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
+$rows_per_page = 1000; 
+$start = 0;
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
@@ -250,12 +252,10 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 // Calculate total number of records (assuming this function exists)
 
 $nr_of_rows = $resultFound->num_rows;
-$rows_per_page = 1000; 
+
 
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
-
-$start = 0;
 
 if(isset($_GET['page-nr'])){
   $page = $_GET['page-nr'] - 1;
