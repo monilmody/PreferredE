@@ -245,6 +245,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 
           ?>
 </div>
+</div>
 <?php
 // Calculate total number of records (assuming this function exists)
 $rowCount = 0;
@@ -327,7 +328,7 @@ Showing  <?php echo $page ?> of <?php echo $pages; ?> pages
       <a href="?page-nr=<?php echo $pages ?>">Last</a>
 
 </div>
-</div>
+
 <br>
 <script>
 //alert(document.getElementById('elig').value);
