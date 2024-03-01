@@ -38,7 +38,7 @@ $cache = \Phpfastcache\CacheManager::getInstance('files');
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
 $rows_per_page = 1000; 
-$start = 0;
+
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
@@ -142,7 +142,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
-<div style="max-height: calc(96.2vh - 96.2px);overflow:fixed;">
+<div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
        <div class="table" style="width: device-width;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
         	  <div class="cell">
@@ -256,6 +256,8 @@ $nr_of_rows = $resultFound->num_rows;
 
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
+
+$start = 0;
 
 if(isset($_GET['page-nr'])){
   $page = $_GET['page-nr'] - 1;
