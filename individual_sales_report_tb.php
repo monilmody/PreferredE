@@ -39,6 +39,8 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
 $rows_per_page = 1000; 
 
+$start = 0;
+
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
@@ -63,6 +65,82 @@ $typeList = fetchTypeList_tb();
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
+
+                  // Calculate total number of records (assuming this function exists)
+                  
+                  $nr_of_rows = $resultFound->num_rows;
+                  
+                  
+                  // Calculate total number of pages
+                  $pages = ceil($nr_of_rows / $rows_per_page);
+                  
+                  if(isset($_GET['page-nr'])){
+                    $page = $_GET['page-nr'] - 1;
+                    $start = $page * $rows_per_page;
+                  }
+                  
+                  echo '<div class="page-info">';
+                  
+                     if(!isset($_GET['page-nr'])){
+                        $page = 1;
+                     }else{
+                        $page = $_GET['page-nr'];
+                     }
+                     ?>
+                  Showing  <?php echo $page ?> of <?php echo $pages; ?> pages
+                  
+                  <div class="pagination">
+                        <!-- Go to the first page -->
+                        <a href="?page-nr=1">First</a>
+                    
+                        <!-- Go to the previous page -->
+                        <?php 
+                        if(isset($_GET['page-nr']) && $_GET['page-nr'] > 1){
+                          ?> <a href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>">Previous</a> <?php
+                        }else{
+                          ?> <a>Previous</a>	<?php
+                        }
+                        ?>
+                  
+                        <!-- Output the page numbers -->
+                        <div class="page-numbers">
+                           <?php 
+                              if(!isset($_GET['page-nr'])){
+                                 ?> <a class="active" href="?page-nr=1">1</a> <?php
+                                 $count_from = 2;
+                              }else{
+                                 $count_from = 1;
+                              }
+                           ?>
+                           
+                           <?php
+                              for ($num = $count_from; $num <= $pages; $num++) {
+                                 if($num == @$_GET['page-nr']) {
+                                    ?> <a class="active" href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
+                                 }else{
+                                    ?> <a href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
+                                 }
+                              }
+                           ?>
+                        </div>
+                  
+                        <!-- Go to the next page -->
+                        <?php 
+                            if(isset($_GET['page-nr'])){
+                              if($_GET['page-nr'] >= $pages){
+                                  ?> <a>Next</a> <?php
+                              }else{
+                                  ?> <a href="?page-nr=<?php echo $_GET['page-nr'] + 1 ?>">Next</a> <?php
+                              }
+                            }else{
+                              ?> <a href="?page-nr=2">Next</a> <?php
+                            }
+                        ?>
+                  
+                        <!-- Go to the last page -->
+                        <a href="?page-nr=<?php echo $pages ?>">Last</a>
+                  
+                  </div>
 
 echo "<br>";
 
@@ -256,8 +334,6 @@ $nr_of_rows = $resultFound->num_rows;
 
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
-
-$start = 0;
 
 if(isset($_GET['page-nr'])){
   $page = $_GET['page-nr'] - 1;
