@@ -45,12 +45,9 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
         $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
-        if ($resultFound !== false) {
           $cache->getItem($cacheKey)->set($resultFound)->expiresAfter(300);
           $cache->save($cache->getItem($cacheKey));
-        } else {
-          echo "Error fetching data from database";
-        }
+
   }
 //}
 
