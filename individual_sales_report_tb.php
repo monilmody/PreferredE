@@ -86,7 +86,11 @@ if ($page > 1) {
 
 // Render page numbers
 for ($i = 1; $i <= $totalPages; $i++) {
-  echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+  // Including other parameters in pagination links
+  $params = $_GET;
+  $params['page'] = $i;
+  $queryString = http_build_query($params);
+  echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
 }
 
 // Next page link
