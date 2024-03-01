@@ -2799,7 +2799,7 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
     }
     
     // Append LIMIT clause
-    if ($perPage && $offset !== null) {
+    if ($perPage !== null && $offset !== null) {
         $sql .= $orderby1 . ' LIMIT ' . $offset . ', ' . $perPage;
     }
     //echo $sql;
