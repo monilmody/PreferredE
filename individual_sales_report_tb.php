@@ -230,7 +230,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
           <?php
             setlocale(LC_MONETARY,"en_US");
             $number =0;
-            foreach($result as $row1) {
+            foreach($result->fetch_assoc() as $row1) {
                   $elementCount = 0;
                   $number = $number+1;
                   
