@@ -235,28 +235,51 @@ div.wrapper {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
-.pagination {
-  margin-top: 20px;
-  text-align: center;
-}
-
-.page-link {
-  display: inline-block;
-  padding: 8px 12px;
-  margin: 0 4px;
-  background-color: #f4f4f4;
-  color: #333;
-  text-decoration: none;
-  border-radius: 4px;
-  border: 1px solid #ccc;
-  transition: background-color 0.3s ease;
-}
-
-.page-link:hover {
-  background-color: #eaeaea;
-}
-
-.page-link.active {
-  background-color: #007bff;
+a.active{
+  background-color: #0d81cd;
   color: #fff;
+}
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-size: 20px;
+}
+
+body{
+  font-family: sans-serif;
+  min-height: 100vh;
+  color: #555;
+  padding: 30px;
+}
+
+a{
+  display: inline-block;
+  text-decoration: none;
+  color: #006cb3;
+  padding: 10px 20px;
+  border: thin solid #d4d4d4;
+  transition: all 0.3s;
+  font-size: 18px;
+}
+
+a.active{
+  background-color: #0d81cd;
+  color: #fff;
+}
+.page-info{
+  margin-top: 90px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.pagination{
+  margin-top: 20px;
+}
+.content p{
+  margin-bottom: 15px;
+}
+.page-numbers{
+  display: inline-block;
 }

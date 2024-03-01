@@ -36,25 +36,17 @@ $cache = \Phpfastcache\CacheManager::getInstance('files');
 
 // Build a unique cache key based on the parameters
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
-// Calculate pagination parameters
-$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
-$perPage = 50; // Number of records per page
 
-// Calculate offset for database query
-$offset = ($page - 1) * $perPage;
-
-//if ($year_param != "" && $salecode_param !="" && $type_param !="" && $elig_param !="" && $gait_param !="") {
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
-        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $offset, $perPage);
+        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $start, $rows_per_page);
 
           $cache->getItem($cacheKey)->set($resultFound)->expiresAfter(300);
           $cache->save($cache->getItem($cacheKey));
 
   }
-//}
 
 $time_end = microtime(true);
 
@@ -255,43 +247,81 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 </div>
 <?php
 // Calculate total number of records (assuming this function exists)
-$totalRecords = count($resultFound);
+$nr_of_rows = $resultFound->num_rows;
+$rows_per_page = 50; 
 
 // Calculate total number of pages
-$totalPages = ceil($totalRecords / $perPage);
+$pages = ceil($nr_of_rows / $rows_per_page);
 
-// Display pagination controls
-echo '<div class="pagination">';
-echo '<ul>';
+$start = 0;
 
-// Previous page link
-if ($page > 1) {
-  echo '<li><a href="?page=' . ($page - 1) . '">&laquo;</a></li>';
+if(isset($_GET['page-nr'])){
+  $page = $_GET['page-nr'] - 1;
+  $start = $page * $rows_per_page;
 }
 
-// Render page numbers
-for ($i = 1; $i <= $totalPages; $i++) {
-  // Including other parameters in pagination links
-  $params['page'] = $i;
-  $queryString = http_build_query($params);
-  echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
-}
+echo '<div class="page-info">';
 
-// Next page link
-if ($page < $totalPages) {
-  echo '<li><a href="?page=' . ($page + 1) . '">&raquo;</a></li>';
-}
-
-
-echo '</ul>';
-echo '</div>';
+   if(!isset($_GET['page-nr'])){
+      $page = 1;
+   }else{
+      $page = $_GET['page-nr'];
+   }
 ?>
+Showing  <?php echo $page ?> of <?php echo $pages; ?> pages
+</div>
+
 <div class="pagination">
-    <a href="#" class="page-link">&laquo;</a>
-    <a href="#" class="page-link">1</a>
-    <a href="#" class="page-link">2</a>
-    <a href="#" class="page-link">3</a>
-    <a href="#" class="page-link">&raquo;</a>
+      <!-- Go to the first page -->
+      <a href="?page-nr=1">First</a>
+  
+      <!-- Go to the previous page -->
+      <?php 
+      if(isset($_GET['page-nr']) && $_GET['page-nr'] > 1){
+        ?> <a href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>">Previous</a> <?php
+      }else{
+        ?> <a>Previous</a>	<?php
+      }
+      ?>
+
+      <!-- Output the page numbers -->
+      <div class="page-numbers">
+         <?php 
+            if(!isset($_GET['page-nr'])){
+               ?> <a class="active" href="?page-nr=1">1</a> <?php
+               $count_from = 2;
+            }else{
+               $count_from = 1;
+            }
+         ?>
+         
+         <?php
+            for ($num = $count_from; $num <= $pages; $num++) {
+               if($num == @$_GET['page-nr']) {
+                  ?> <a class="active" href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
+               }else{
+                  ?> <a href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
+               }
+            }
+         ?>
+      </div>
+
+      <!-- Go to the next page -->
+      <?php 
+          if(isset($_GET['page-nr'])){
+            if($_GET['page-nr'] >= $pages){
+                ?> <a>Next</a> <?php
+            }else{
+                ?> <a href="?page-nr=<?php echo $_GET['page-nr'] + 1 ?>">Next</a> <?php
+            }
+          }else{
+            ?> <a href="?page-nr=2">Next</a> <?php
+          }
+      ?>
+
+      <!-- Go to the last page -->
+      <a href="?page-nr=<?php echo $pages ?>">Last</a>
+
 </div>
 </div>
 <br>
