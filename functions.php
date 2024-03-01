@@ -2723,7 +2723,7 @@ function fetchIndividualSaleData($year,$salecode,$type,$elig,$gait,$sort1,$sort2
     
 }
 
-function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5,$offset,$perPage)
 {
     global $mysqli;
 //     if ($year == "" && $salecode == "" && $type == "" && $elig == "" && $gait == "") {

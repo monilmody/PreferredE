@@ -36,14 +36,19 @@ $cache = \Phpfastcache\CacheManager::getInstance('files');
 
 // Build a unique cache key based on the parameters
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
+// Calculate pagination parameters
+$page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+$perPage = 50; // Number of records per page
 
+// Calculate offset for database query
+$offset = ($page - 1) * $perPage;
 
 //if ($year_param != "" && $salecode_param !="" && $type_param !="" && $elig_param !="" && $gait_param !="") {
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
-        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $offset, $perPage);
 
           $cache->getItem($cacheKey)->set($resultFound)->expiresAfter(300);
           $cache->save($cache->getItem($cacheKey));
@@ -56,14 +61,29 @@ $time_end = microtime(true);
 echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
 
 $cache->deleteItem($cacheKey);
-// $yearList = getYearsList_tb();
-// $eligList = getEligList_tb();
-// //$gaitList = getGaitList_tb();
-// $typeList = fetchTypeList_tb();
+$yearList = getYearsList_tb();
+$eligList = getEligList_tb();
+//$gaitList = getGaitList_tb();
+$typeList = fetchTypeList_tb();
 
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
+                  // Calculate total number of records (assuming this function exists)
+
+// Calculate total number of pages
+$totalPages = ceil($resultFound / $perPage);
+
+// Display pagination controls
+echo '<div class="pagination">';
+echo '<ul>';
+
+for ($i = 1; $i <= $totalPages; $i++) {
+    echo '<li><a href="?page=' . $i . '">' . $i . '</a></li>';
+}
+
+echo '</ul>';
+echo '</div>';
 echo "<br>";
 
 echo '<div style= "margin:5px 30px 30px 30px;">';
