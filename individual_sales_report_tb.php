@@ -75,7 +75,8 @@ if(isset($_GET['page-nr'])){
   $start = $page * $rows_per_page;
 }
 
-$result = $mysqli->query("$resultFound LIMIT $start, $rows_per_page");
+$query = "$resultFound LIMIT $start, $rows_per_page";
+$result = $mysqli->query($query);
 
 echo "<br>";
 
