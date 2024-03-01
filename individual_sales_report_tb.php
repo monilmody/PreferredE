@@ -272,8 +272,7 @@ if ($page > 1) {
 // Render page numbers
 for ($i = 1; $i <= $totalPages; $i++) {
   // Including other parameters in pagination links
-  $params = $_GET;
-  unset($params['page']);
+  $params['page'] = $i;
   $queryString = http_build_query($params);
   echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
 }
@@ -287,7 +286,13 @@ if ($page < $totalPages) {
 echo '</ul>';
 echo '</div>';
 ?>
-
+<div class="pagination">
+    <a href="#" class="page-link">&laquo;</a>
+    <a href="#" class="page-link">1</a>
+    <a href="#" class="page-link">2</a>
+    <a href="#" class="page-link">3</a>
+    <a href="#" class="page-link">&raquo;</a>
+</div>
 </div>
 <br>
 <script>
