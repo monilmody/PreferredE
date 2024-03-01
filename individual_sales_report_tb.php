@@ -62,25 +62,6 @@ $typeList = fetchTypeList_tb();
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
-                  $nr_of_rows = $resultFound->num_rows;
-
-$rows_per_page = 1000; 
-
-$pages = ceil($nr_of_rows / $rows_per_page);
-
-$start = 0;
-
-if(isset($_GET['page-nr'])){
-  $page = $_GET['page-nr'] - 1;
-  $start = $page * $rows_per_page;
-}
-
-$query = "$resultFound LIMIT $start, $rows_per_page";
-$result = $mysqli->query($query);
-if(!$result) {
-  echo "Error: " . $mysqli->error;
-  exit;
-}
 
 echo "<br>";
 
@@ -234,7 +215,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
           <?php
             setlocale(LC_MONETARY,"en_US");
             $number =0;
-            foreach($result->fetch_assoc() as $row1) {
+            foreach($resultFound as $row1) {
                   $elementCount = 0;
                   $number = $number+1;
                   
@@ -267,6 +248,20 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 </div>
 </div>
 <?php
+// Calculate total number of records (assuming this function exists)
+
+$nr_of_rows = $resultFound->num_rows;
+
+$rows_per_page = 1000; 
+
+$pages = ceil($nr_of_rows / $rows_per_page);
+
+$start = 0;
+
+if(isset($_GET['page-nr'])){
+  $page = $_GET['page-nr'] - 1;
+  $start = $page * $rows_per_page;
+}
 
 echo '<div class="page-info">';
 
