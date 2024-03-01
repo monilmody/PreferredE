@@ -2777,7 +2777,7 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
              SELECT price, sex FROM tsales a
              JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("C","H","G") AND PRICE>0 '.$searchParam.'
              group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2 and LIMIT ' .$offset .$perPage;
+             on a.price=d.P2 and a.Sex=d.S2';
     
     $orderby1 = ' ORDER BY '.$sort1;
     $orderby2 = ', '.$sort2;
@@ -2798,6 +2798,10 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
         $sql = $sql.$orderby1;
     }
     
+    // Append LIMIT clause
+    if ($perPage && $offset !== null) {
+        $sql .= $orderby1 . ' LIMIT ' . $offset . ', ' . $perPage;
+    }
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
