@@ -273,7 +273,7 @@ if ($page > 1) {
 for ($i = 1; $i <= $totalPages; $i++) {
   // Including other parameters in pagination links
   $params = $_GET;
-  $params['page'] = $i;
+  unset($params['page']);
   $queryString = http_build_query($params);
   echo '<li><a href="?' . $queryString . '">' . $i . '</a></li>';
 }
