@@ -41,6 +41,11 @@ $rows_per_page = 1000;
 
 $start = 0;
 
+if(isset($_GET['page-nr'])){
+  $page = $_GET['page-nr'] - 1;
+  $start = $page * $rows_per_page;
+}
+
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
@@ -259,11 +264,6 @@ $nr_of_rows = $resultFound->num_rows;
 
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
-
-if(isset($_GET['page-nr'])){
-  $page = $_GET['page-nr'] - 1;
-  $start = $page * $rows_per_page;
-}
 
 echo '<div class="page-info">';
 
