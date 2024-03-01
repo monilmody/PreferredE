@@ -2723,7 +2723,7 @@ function fetchIndividualSaleData($year,$salecode,$type,$elig,$gait,$sort1,$sort2
     
 }
 
-function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5,$offset,$perPage)
+function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
 //     if ($year == "" && $salecode == "" && $type == "" && $elig == "" && $gait == "") {
@@ -2798,10 +2798,6 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
         $sql = $sql.$orderby1;
     }
     
-    // Append LIMIT clause
-    if ($perPage !== null && $offset !== null) {
-        $sql .= ' LIMIT ' . $offset . ', ' . $perPage;
-    }
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     

@@ -37,20 +37,11 @@ $cache = \Phpfastcache\CacheManager::getInstance('files');
 // Build a unique cache key based on the parameters
 $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
-$rows_per_page = 1000; 
-
-$start = 0;
-
-if(isset($_GET['page-nr'])){
-  $page = $_GET['page-nr'] - 1;
-  $start = $page * $rows_per_page;
-}
-
   if ($cache->getItem($cacheKey) -> isHit()) {
     $resultFound = $cache->getItem($cacheKey) -> get();
   } else {
     $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
-        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $start, $rows_per_page);
+        $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
           $cache->getItem($cacheKey)->set($resultFound)->expiresAfter(300);
           $cache->save($cache->getItem($cacheKey));
@@ -71,6 +62,20 @@ $typeList = fetchTypeList_tb();
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
+                  $nr_of_rows = $resultFound->num_rows;
+
+$rows_per_page = 1000; 
+
+$pages = ceil($nr_of_rows / $rows_per_page);
+
+$start = 0;
+
+if(isset($_GET['page-nr'])){
+  $page = $_GET['page-nr'] - 1;
+  $start = $page * $rows_per_page;
+}
+
+$result = $mysqli->query("$resultFound LIMIT $start, $rows_per_page");
 
 echo "<br>";
 
@@ -224,7 +229,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
           <?php
             setlocale(LC_MONETARY,"en_US");
             $number =0;
-            foreach($resultFound as $row1) {
+            foreach($result as $row1) {
                   $elementCount = 0;
                   $number = $number+1;
                   
@@ -257,22 +262,6 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 </div>
 </div>
 <?php
-// Calculate total number of records (assuming this function exists)
-$resultFound1 = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
-$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $start, $rows_per_page);
-
-$nr_of_rows = $resultFound1->num_rows;
-
-$rows_per_page = 1000; 
-
-$start = 0;
-
-if(isset($_GET['page-nr'])){
-  $page = $_GET['page-nr'] - 1;
-  $start = $page * $rows_per_page;
-}
-// Calculate total number of pages
-$pages = ceil($nr_of_rows / $rows_per_page);
 
 echo '<div class="page-info">';
 
