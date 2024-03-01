@@ -258,10 +258,19 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 </div>
 <?php
 // Calculate total number of records (assuming this function exists)
+$resultFound1 = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
+$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $start, $rows_per_page);
 
-$nr_of_rows = $resultFound->num_rows;
+$nr_of_rows = $resultFound1->num_rows;
 
+$rows_per_page = 1000; 
 
+$start = 0;
+
+if(isset($_GET['page-nr'])){
+  $page = $_GET['page-nr'] - 1;
+  $start = $page * $rows_per_page;
+}
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
 
