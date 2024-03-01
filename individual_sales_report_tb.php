@@ -250,7 +250,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 // Calculate total number of records (assuming this function exists)
 
 $nr_of_rows = $resultFound->num_rows;
-$rows_per_page = 50; 
+$rows_per_page = 1000; 
 
 // Calculate total number of pages
 $pages = ceil($nr_of_rows / $rows_per_page);
