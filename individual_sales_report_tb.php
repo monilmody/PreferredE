@@ -69,10 +69,11 @@ $typeList = fetchTypeList_tb();
 $sortList = array("ORank","FRank","CRank","SaleDate","SaleCode","Sire",  "Dam",
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname","Rating Desc");
 
-                  // Calculate total number of records (assuming this function exists)
+// Calculate total number of records (assuming this function exists)
+$totalRecords = count($resultFound);
 
 // Calculate total number of pages
-$totalPages = ceil($resultFound / $perPage);
+$totalPages = ceil($totalRecords / $perPage);
 
 // Display pagination controls
 echo '<div class="pagination">';
