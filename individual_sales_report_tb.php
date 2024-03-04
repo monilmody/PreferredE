@@ -50,7 +50,7 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
 $time_end = microtime(true);
 
-echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
+//echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
 
 $cache->deleteItem($cacheKey);
 
@@ -141,7 +141,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
-<div style="max-height: calc(96.2vh - 96.2px);">
+<div style="max-height: calc(96.2vh - 96.2px);overflow:fixed;">
        <div class="table" style="width: device-width;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
         	  <div class="cell">
@@ -246,84 +246,6 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 
           ?>
 </div>
-</div>
-<?php
-// Calculate total number of records (assuming this function exists)
-
-$nr_of_rows = $resultFound->num_rows;
-
-$rows_per_page = 1000; 
-
-$pages = ceil($nr_of_rows / $rows_per_page);
-
-$start = 0;
-
-if(isset($_GET['page-nr'])){
-  $page = $_GET['page-nr'] - 1;
-  $start = $page * $rows_per_page;
-}
-
-echo '<div class="page-info">';
-
-   if(!isset($_GET['page-nr'])){
-      $page = 1;
-   }else{
-      $page = $_GET['page-nr'];
-   }
-?>
-Showing  <?php echo $page ?> of <?php echo $pages; ?> pages
-
-<div class="pagination">
-      <!-- Go to the first page -->
-      <a href="?page-nr=1">First</a>
-  
-      <!-- Go to the previous page -->
-      <?php 
-      if(isset($_GET['page-nr']) && $_GET['page-nr'] > 1){
-        ?> <a href="?page-nr=<?php echo $_GET['page-nr'] - 1 ?>">Previous</a> <?php
-      }else{
-        ?> <a>Previous</a>	<?php
-      }
-      ?>
-
-      <!-- Output the page numbers -->
-      <div class="page-numbers">
-         <?php 
-            if(!isset($_GET['page-nr'])){
-               ?> <a class="active" href="?page-nr=1">1</a> <?php
-               $count_from = 2;
-            }else{
-               $count_from = 1;
-            }
-         ?>
-         
-         <?php
-            for ($num = $count_from; $num <= $pages; $num++) {
-               if($num == @$_GET['page-nr']) {
-                  ?> <a class="active" href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
-               }else{
-                  ?> <a href="?page-nr=<?php echo $num ?>"><?php echo $num ?></a> <?php
-               }
-            }
-         ?>
-      </div>
-
-      <!-- Go to the next page -->
-      <?php 
-          if(isset($_GET['page-nr'])){
-            if($_GET['page-nr'] >= $pages){
-                ?> <a>Next</a> <?php
-            }else{
-                ?> <a href="?page-nr=<?php echo $_GET['page-nr'] + 1 ?>">Next</a> <?php
-            }
-          }else{
-            ?> <a href="?page-nr=2">Next</a> <?php
-          }
-      ?>
-
-      <!-- Go to the last page -->
-      <a href="?page-nr=<?php echo $pages ?>">Last</a>
-
 </div>
 
 <br>
