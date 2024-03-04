@@ -142,70 +142,70 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
         <div class="table" style="width: device-width;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        	  <div class="cell" style="width: device-width;">
+        	  <div class="cell">
                 No.
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 R
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 FR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 CR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 HIP
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Horse
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 S
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 C
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 T
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 DOB
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Elig
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Dam
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 SireOfDam
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 SaleCode
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Consno
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Saledate
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Day
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Price
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Curr
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 PLastName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 PFirstName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell">
                 Rate
               </div>
           </div>
