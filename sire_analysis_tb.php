@@ -138,7 +138,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
     if ($year_param != "" or $sire_param != "" or $elig_param != "") {
       ?>
 
-<div class="table" style="width: 100%;table-layout: auto;">
+<div class="table" style="width: 100%; overflow: auto;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
         	  <div class="cell" style="width: 2%;">
                 No.
