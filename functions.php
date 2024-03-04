@@ -1078,7 +1078,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
              on a.price=c.P1 and a.Sex=c.S1 '; 
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2; '; 
+             on a.price=d.P2 and a.Sex=d.S2 LIMIT 1000; '; 
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.$searchGait.
