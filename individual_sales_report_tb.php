@@ -50,7 +50,7 @@ $cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
 
 $time_end = microtime(true);
 
-//echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
+echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
 
 $cache->deleteItem($cacheKey);
 
@@ -141,7 +141,7 @@ echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
-<div style="max-height: calc(96.2vh - 96.2px);overflow:fixed;">
+<div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
        <div class="table" style="width: device-width;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
         	  <div class="cell">
