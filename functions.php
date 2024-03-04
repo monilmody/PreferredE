@@ -2806,7 +2806,7 @@ function fetchIndividualSaleData_tb($year,$salecode,$type,$elig,$gait,$sort1,$so
         echo $sql;
     }
     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-    return $result;
+    return $json;
     
 }
 
