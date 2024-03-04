@@ -1023,15 +1023,21 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
 function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
-    $sql = 
-    'SELECT `Rank`,`FRank`,`CRank`, HIP, Horse, Sex, Color, a.`Type`, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, `Day`, 
-        a.Price, Currency, Purlname, Purfname, Rating FROM (
-        SELECT        
+    
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
+                     AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")
+                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'") ';
+    
+    $sql =
+    'SELECT Rank,Frank,CRank, HIP, Horse, Sex, Color, Type, Datefoal, Elig, Dam, Sireofdam, Salecode, Consno, Saledate, Day, 
+        a.Price,Currency, Purlname, Purfname, Rating FROM (
+        SELECT
         HIP,
         Horse,
         Sex,
         Color,
-        a.`Type`,
+        a.Type,
         Datefoal,
         Elig,
         b.Dam,
@@ -1039,7 +1045,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         Salecode,
         Consno,
         Saledate,
-        a.`Day`,
+        a.Day,
         Price,
         Currency,
         Purlname,
@@ -1050,15 +1056,15 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
         WHERE TYPE= "Y" AND PRICE>0 ';
     
     $join = ') a LEFT JOIN
-    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS `Rank` from (
-    SELECT Price FROM tsales a 
+    (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS Rank from (
+    SELECT Price FROM tsales a
     JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND PRICE>0 ';
     $join1 = 'LEFT JOIN
-    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS `FRank` from (
+    (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
              SELECT price, sex FROM tsales a
              JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("F","M") AND PRICE>0 ';
     $join2 = 'LEFT JOIN
-    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS `CRank` from (
+    (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
              SELECT price, sex FROM tsales a
              JOIN tdamsire b ON a.damsire_Id=b.damsire_ID WHERE TYPE= "Y" AND Sex IN ("C","H","G") AND PRICE>0 ';
     $searchSire = ' AND b.Sire="'.$sire.'"';
@@ -1072,13 +1078,13 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     $orderby4 = ', '.$sort4;
     $orderby5 = ', '.$sort5;
     
-   
+    
     $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
     on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
-             on a.price=c.P1 and a.Sex=c.S1 '; 
+             on a.price=c.P1 and a.Sex=c.S1 ';
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2 LIMIT 1000; '; 
+             on a.price=d.P2 and a.Sex=d.S2 ';
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.$searchGait.
@@ -1144,7 +1150,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
-
+    
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
@@ -1156,14 +1162,14 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     return $json;
     
     //Sample query above
-//     'SELECT * FROM (
-//         SELECT HIP, Horse, Sex, Color, Gait, A.Type, ET, Elig, B.Dam, Sireofdam, Salecode, Consno, Saledate, A.Day, Price, CONCAT (Purlname," " ,Purfname) As Buyer, Rating FROM Sales A JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0 AND B.Sire="A GO GO LAUXMONT"
-//         ) a left join
-//         (select price ,(@curRank := @curRank + 1) AS Ranking from (
-//             SELECT price FROM Sales A
-//             JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0
-//             AND B.Sire="A GO GO LAUXMONT" group by price ORDER BY price desc) as a,(SELECT @curRank := 0) r) b
-//             on a.price=b.price  ORDER BY A.SaleCode;'
+    //     'SELECT * FROM (
+    //         SELECT HIP, Horse, Sex, Color, Gait, A.Type, ET, Elig, B.Dam, Sireofdam, Salecode, Consno, Saledate, A.Day, Price, CONCAT (Purlname," " ,Purfname) As Buyer, Rating FROM Sales A JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0 AND B.Sire="A GO GO LAUXMONT"
+    //         ) a left join
+    //         (select price ,(@curRank := @curRank + 1) AS Ranking from (
+        //             SELECT price FROM Sales A
+        //             JOIN Damsire B ON A.damsire_Id=B.damsire_ID WHERE TYPE= "Y" AND PRICE>0
+        //             AND B.Sire="A GO GO LAUXMONT" group by price ORDER BY price desc) as a,(SELECT @curRank := 0) r) b
+    //             on a.price=b.price  ORDER BY A.SaleCode;'
 }
 
 function fetchConsAnalysis($consno,$year,$elig,$gait)
