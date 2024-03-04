@@ -138,74 +138,72 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
     if ($year_param != "" or $sire_param != "" or $elig_param != "") {
       ?>
 
-<hr>
-<div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
-        <div class="table" style="width: device-width;">
+<div class="table" style="width: 100%;table-layout: fixed;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        	  <div class="cell">
+        	  <div class="cell" style="width: 2%;">
                 No.
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 R
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 FR
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 CR
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 3%;">
                 HIP
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 12%;">
                 Horse
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 S
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 C
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 T
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 5%;">
                 DOB
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 3%;">
                 Elig
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 12%;">
                 Dam
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 12%;">
                 SireOfDam
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 10%;">
                 SaleCode
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 4%;">
                 Consno
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 5%;">
                 Saledate
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 2%;">
                 Day
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 5%;">
                 Price
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 3%;">
                 Curr
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 7%;">
                 PLastName
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 7%;">
                 PFirstName
               </div>
-              <div class="cell">
+              <div class="cell" style="width: 3%;">
                 Rate
               </div>
           </div>
