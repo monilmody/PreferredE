@@ -725,6 +725,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
 
     $sql = 'LIMIT 100;';
     
+    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
     if (!$result) {
