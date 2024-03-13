@@ -1368,6 +1368,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     $select = 'SELECT
     Sire,
     Elig,
+    Gait,
     Count,
     A.Total,
     A.Avg,
