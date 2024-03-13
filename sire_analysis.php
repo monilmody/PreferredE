@@ -217,7 +217,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                   foreach($row1 as $elements) {
                       $elementCount =$elementCount+1;
                       if($elementCount == 19){
-                          $elements = "$".number_format($elements);
+                          $elements = "$".number_format((float)$elements);
                       }
                       if ($elements == "0000-00-00") {
                           $elements="";
