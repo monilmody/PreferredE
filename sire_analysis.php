@@ -223,10 +223,15 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                           $elements="";
                       }
                       if ($elementCount == 11 or $elementCount == 17) {
-                          if ($elements != "") {
-                              $date=date_create($elements);
-                              $elements = date_format($date,"m/d/y");
+                        if ($elements != "" && $elements !== "1900-01-01") {
+                          $date = DateTime::createFromFormat('Y-m-d', $elements);
+                          if ($date !== false) {
+                              $elements = $date->format('Y-m-d');
+                          } else {
+                              // Handle invalid date format here, maybe log it
+                              error_log("Invalid date format: $elements");
                           }
+                        }
                       }
                       if ($elementCount == 16) {
                           $elements= substr($elements, 0,4);
