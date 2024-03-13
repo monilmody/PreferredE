@@ -714,13 +714,13 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3;
+        $sql = $sql.$orderby1.$orderby2.$orderby3." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !=""){
-        $sql = $sql.$orderby1.$orderby2;
+        $sql = $sql.$orderby1.$orderby2." LIMIT 100;";
     }elseif ($sort1 !=""){
-        $sql = $sql.$orderby1;
+        $sql = $sql.$orderby1." LIMIT 100;";
     }
     
     echo $sql;
@@ -1130,18 +1130,16 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     }
     
     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3;
+        $sql = $sql.$orderby1.$orderby2.$orderby3." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !=""){
-        $sql = $sql.$orderby1.$orderby2;
+        $sql = $sql.$orderby1.$orderby2." LIMIT 100;";
     }elseif ($sort1 !=""){
-        $sql = $sql.$orderby1;
+        $sql = $sql.$orderby1." LIMIT 100;";
     }
-
-    $sql = 'LIMIT 100;';
 
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
