@@ -1483,6 +1483,8 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
+
+    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
