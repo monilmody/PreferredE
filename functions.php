@@ -651,7 +651,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     $orderby3 = ', '.$sort3;
     $orderby4 = ', '.$sort4;
     $orderby5 = ', '.$sort5;
-    
+
     $join11 = ' group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
     on a.price=b.Rankprice '; //in order to do ranking becauserank function doesn't work on server.
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
@@ -723,7 +723,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
         $sql = $sql.$orderby1;
     }
     
-    //echo $sql;
+    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
     if (!$result) {
