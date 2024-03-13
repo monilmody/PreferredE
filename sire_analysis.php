@@ -25,7 +25,7 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
+$resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param);
 $resultList = fetchSireList($year_param);
 $yearList = getYearsList();
 $eligList = getEligList();
