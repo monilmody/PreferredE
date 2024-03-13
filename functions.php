@@ -1367,7 +1367,6 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     global $mysqli;
     $select = 'SELECT 
     Sire,
-    MAX(Gait) AS Gait,
     Elig,
     Count,
     A.Total,
@@ -1382,11 +1381,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     FAvg,
     FTop,
     SireAvgRank,
-    SireGrossRank,
-    PacerAvgRank,
-    PacerGrossRank,
-    TrotterAvgRank,
-    TrotterGrossRank FROM';
+    SireGrossRank FROM';
     
     $sql_elig= $select.' (
         (SELECT * FROM sire_sales_elig) A
