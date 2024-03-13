@@ -723,7 +723,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
         $sql = $sql.$orderby1." LIMIT 100;";
     }
     
-    echo $sql;
+    //echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
     if (!$result) {
@@ -1441,7 +1441,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
         LEFT JOIN 
         (SELECT Total ,(@curRank5 := @curRank5 + 1) AS TrotterGrossRank From (SELECT Total
     		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank5 := 0) r) G
-            ON A.Total=G.Total and A.Gait="T")';
+            ON A.Total=G.Total and A.Gait="T" GROUP BY Sire, Gait, Elig, Count, Top, CCount, CTotal, CAvg, CTop, FCount, FTotal, FAvg, FTop, SireAvgRank, SireGrossRank, PacerAvgRank, PacerGrossRank, TrotterAvgRank, TrotterGrossRank ';
     $sql = $sql_elig_allyear;
 //     if ($year != "" && $elig != "") {
 //         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
@@ -1483,6 +1483,8 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
+
+    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
