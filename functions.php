@@ -712,7 +712,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     }
     
     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5." LIMIT 100;";
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
@@ -722,8 +722,6 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
-
-    $sql = 'LIMIT 100;';
     
     echo $sql;
     $result = mysqli_query($mysqli, $sql);
