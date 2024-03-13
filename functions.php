@@ -1365,7 +1365,7 @@ function fetchSireAnalysis_tb($sire,$year,$elig,$gait)
 function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
-    $select = 'SELECT 
+    $select = 'SELECT
     Sire,
     Elig,
     Count,
@@ -1421,30 +1421,30 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
         (SELECT Total ,(@CurRank1 := @CurRank1 + 1) AS SireGrossRank From (SELECT Total
             FROM sire_sales_elig_allyear GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank1 := 0) r) C
             ON A.Total=C.Total
-        LEFT JOIN 
+        LEFT JOIN
         (SELECT Avg ,(@curRank2 := @curRank2 + 1) AS PacerAvgRank From (SELECT Avg
     		FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank2 := 0) r) D
             ON A.Avg=D.Avg and A.Gait="P"
-        LEFT JOIN 
+        LEFT JOIN
         (SELECT Total ,(@curRank3 := @curRank3 + 1) AS PacerGrossRank From (SELECT Total
     		FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank3 := 0) r) E
             ON A.Total=E.Total and A.Gait="P"
-        LEFT JOIN 
+        LEFT JOIN
         (SELECT Avg ,(@curRank4 := @curRank4 + 1) AS TrotterAvgRank From (SELECT Avg
     		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank4 := 0) r) F
             ON A.Avg=F.Avg and A.Gait="T"
-        LEFT JOIN 
+        LEFT JOIN
         (SELECT Total ,(@curRank5 := @curRank5 + 1) AS TrotterGrossRank From (SELECT Total
     		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank5 := 0) r) G
             ON A.Total=G.Total and A.Gait="T")';
     $sql = $sql_elig_allyear;
-//     if ($year != "" && $elig != "") {
-//         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
-//     }elseif ($year != "") {
-//         $sql = $sql_elig.' WHERE Year = '.$year;
-//     }elseif ($elig != "") {
-//         $sql = $sql_elig_allyear.' WHERE Elig ="'.$elig.'"';
-//     }
+    //     if ($year != "" && $elig != "") {
+    //         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
+    //     }elseif ($year != "") {
+    //         $sql = $sql_elig.' WHERE Year = '.$year;
+    //     }elseif ($elig != "") {
+    //         $sql = $sql_elig_allyear.' WHERE Elig ="'.$elig.'"';
+    //     }
     if ($year != "" && $elig != "" && $gait != "") {
         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year.' AND Gait = "'.$gait.'"';
     }elseif ($year != "" && $elig) {
@@ -1478,8 +1478,6 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
-
-    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
