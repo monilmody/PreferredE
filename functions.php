@@ -1367,6 +1367,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     global $mysqli;
     $select = 'SELECT 
     Sire,
+    MAX(Gait) AS Gait,
     Elig,
     Count,
     A.Total,
