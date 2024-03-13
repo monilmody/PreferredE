@@ -657,7 +657,7 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
              on a.price=c.P1 and a.Sex=c.S1 '; 
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2 LIMIT 100'; 
+             on a.price=d.P2 and a.Sex=d.S2 '; 
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.$searchGait.
@@ -722,8 +722,9 @@ function fetchSireData($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
+
+    $sql = 'LIMIT 100;';
     
-    echo $sql;
     $result = mysqli_query($mysqli, $sql);
     
     if (!$result) {
@@ -1075,7 +1076,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     $join21 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
              on a.price=c.P1 and a.Sex=c.S1 '; 
     $join31 = ' group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2 LIMIT 100'; 
+             on a.price=d.P2 and a.Sex=d.S2 '; 
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
         $sql = $sql.$searchSire.$searchElig.$searchYear.$searchGait.
@@ -1140,6 +1141,8 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
     }elseif ($sort1 !=""){
         $sql = $sql.$orderby1;
     }
+
+    $sql = 'LIMIT 100;';
 
     //echo $sql;
     $result = mysqli_query($mysqli, $sql);
