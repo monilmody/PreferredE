@@ -1367,7 +1367,6 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     global $mysqli;
     $select = 'SELECT 
     Sire,
-    Gait,
     Elig,
     Count,
     A.Total,
@@ -1441,7 +1440,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
         LEFT JOIN 
         (SELECT Total ,(@curRank5 := @curRank5 + 1) AS TrotterGrossRank From (SELECT Total
     		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank5 := 0) r) G
-            ON A.Total=G.Total and A.Gait="T") GROUP BY Sire, Gait, Elig';
+            ON A.Total=G.Total and A.Gait="T")';
     $sql = $sql_elig_allyear;
 //     if ($year != "" && $elig != "") {
 //         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
