@@ -1162,7 +1162,7 @@ function fetchSireData_tb($sire,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$s
 //             on a.price=b.price  ORDER BY A.SaleCode;'
 }
 
-function fetchConsAnalysis($consno,$year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchConsAnalysis($consno,$year,$elig,$gait)
 {
     global $mysqli;
     $sql = 'SELECT * FROM cons_sales_allyear';
@@ -2580,9 +2580,9 @@ function fetchTopBuyers($year,$sort1,$sort2,$sort3,$sort4,$sort5)
 //     if ($year=="") {
 //         $year=null;
 //     } 
-    $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg 
-    FROM sales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-    GROUP BY CONCAT(Purlname," ",Purfname)';
+$sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
+FROM sales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
+
     
 //     if ($year != "") {
 //         $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
