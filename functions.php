@@ -2468,10 +2468,10 @@ function fetchSalesSummary($year,$type,$salecode)
                      AND left(Salecode,4)= IF("'.$salecode.'"  = "", left(Salecode,4), "'.$salecode.'") ';
     
     $sql = 'SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM 
-    (SELECT Salecode, Horse, Price as Max FROM sales WHERE GAIT ="P" '.$searchParam.'
+    (SELECT Salecode, Horse, MAX(Price) as Max FROM sales WHERE GAIT ="P" '.$searchParam.'
         GROUP BY Salecode,horse ORDER BY salecode,Price Desc) a
     LEFT JOIN 
-    (SELECT Salecode, Horse, Price AS Max FROM sales WHERE GAIT ="T" '.$searchParam.'
+    (SELECT Salecode, Horse, MAX(Price) AS Max FROM sales WHERE GAIT ="T" '.$searchParam.'
         GROUP BY Salecode,Horse ORDER BY Salecode,Price Desc) b on a.Salecode=b.Salecode Group by salecode';
     
 //     if ($year != "") {
