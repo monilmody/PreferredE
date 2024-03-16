@@ -63,9 +63,6 @@ if (!empty($_POST)) {
           <div class="cell" style="width: device-width;">
             No.
           </div>
-          <div class="cell" style="width:device-width;">
-            Upload-Date
-          </div>
           <div class="cell" style="width: device-width;">
             salecode
             <button onclick="sortTable('Salecode')">
