@@ -3055,9 +3055,9 @@ function getsaledata($breed)
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 
     global $mysqli;
-    $sql = "SELECT s.Salecode, s.Saledate, d.upload_date, count(*) FROM sales s LEFT JOIN documents d ON d.file_name = s.salecode GROUP BY s.salecode, s.saledate ORDER BY $orderBy $sortOrder";
+    $sql = "SELECT s.Salecode, s.Saledate, d.upload_date, count(*) FROM sales s LEFT JOIN documents d ON d.file_name = s.salecode GROUP BY s.salecode, s.saledate, d.upload_date ORDER BY $orderBy $sortOrder";
     if ($breed == "T") {
-        $sql = "SELECT s.Salecode, s.Saledate, d.upload_date, count(*) FROM tsales s LEFT JOIN documents d ON d.file_name = s.salecode GROUP BY s.salecode, s.saledate ORDER BY $orderBy $sortOrder";
+        $sql = "SELECT s.Salecode, s.Saledate, d.upload_date, count(*) FROM tsales s LEFT JOIN documents d ON d.file_name = s.salecode GROUP BY s.salecode, s.saledate, d.upload_date ORDER BY $orderBy $sortOrder";
     }
 
 
