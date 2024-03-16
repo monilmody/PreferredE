@@ -2467,39 +2467,13 @@ function fetchSalesSummary($year,$type,$salecode)
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'") 
                      AND left(Salecode,4)= IF("'.$salecode.'"  = "", left(Salecode,4), "'.$salecode.'") ';
     
-                     $sql = 'SELECT 
-                     a.Salecode,
-                     MAX(a.Horse) AS PACER,
-                     a.PMax,
-                     MAX(b.Horse) AS Trotter,
-                     b.TMax
-                 FROM (
-                     SELECT 
-                         Salecode,
-                         Horse,
-                         MAX(Price) AS PMax
-                     FROM 
-                         sales 
-                     WHERE 
-                         GAIT = "P" '.$searchParam.'
-                     GROUP BY 
-                         Salecode, Horse
-                 ) AS a
-                 LEFT JOIN (
-                     SELECT 
-                         Salecode,
-                         Horse,
-                         MAX(Price) AS TMax
-                     FROM 
-                         sales 
-                     WHERE 
-                         GAIT = "T" '.$searchParam.'
-                     GROUP BY 
-                         Salecode, Horse
-                 ) AS b ON a.Salecode = b.Salecode 
-                 GROUP BY 
-                     a.Salecode, a.PMax, b.TMax;';
-    
+    $sql = 'SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM 
+    (SELECT Salecode, Horse, Price as Max FROM sales WHERE GAIT ="P" '.$searchParam.'
+        GROUP BY Salecode,horse ORDER BY salecode,Price Desc) a
+    LEFT JOIN 
+    (SELECT Salecode, Horse, Price AS Max FROM sales WHERE GAIT ="T" '.$searchParam.'
+        GROUP BY Salecode,Horse ORDER BY Salecode,Price Desc) b on a.Salecode=b.Salecode Group by salecode';
+
 //     if ($year != "") {
 //         $sql = "SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM
 //     (SELECT Salecode, Horse, MAX(Price) AS Max FROM sales WHERE GAIT ='P' AND Type='Y' AND year(Saledate)=".$year."
@@ -2666,6 +2640,7 @@ function fetchIndividualSaleData($year,$salecode,$type,$elig,$gait,$sort1,$sort2
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
                      AND Elig= IF("'.$elig.'"  = "", Elig, "'.$elig.'")
                      AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'") ';
+    
     $sql =
     'SELECT ORank,Frank,CRank, HIP, Horse, Sex, Color, Gait, Type, ET,Datefoal, Elig, Sire, Dam, Salecode, Consno, Saledate, Day,
         a.Price, Currency, Purlname, Purfname, Rating FROM (
@@ -2693,33 +2668,30 @@ function fetchIndividualSaleData($year,$salecode,$type,$elig,$gait,$sort1,$sort2
         FROM sales a
         JOIN damsire b ON a.damsire_Id=b.damsire_ID
         WHERE PRICE>0 '.$searchParam.') a 
-	LEFT JOIN
+    LEFT JOIN
     (SELECT Price AS Rankprice ,(@curRank := @curRank + 1) AS ORank from (
-		SELECT Price FROM sales a
-		JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE PRICE>0 '.$searchParam.'
+        SELECT Price FROM sales a
+        JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE PRICE>0 '.$searchParam.'
         group by Price ORDER BY Price desc) as a,(SELECT @curRank := 0) r) b
-		on a.price=b.Rankprice
+        on a.price=b.Rankprice
     LEFT JOIN
     (select price  AS P1,sex AS S1,(@curRank1 := @curRank1 + 1) AS FRank from (
-             SELECT price, sex FROM sales a
-             JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("F","M") AND PRICE>0 '.$searchParam.'
-             group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
-             on a.price=c.P1 and a.Sex=c.S1
+            SELECT price, sex FROM sales a
+            JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("F","M") AND PRICE>0 '.$searchParam.'
+            group by price,sex ORDER BY price desc) as a,(SELECT @curRank1 := 0) r) c
+            on a.price=c.P1 and a.Sex=c.S1
     LEFT JOIN
     (select price  AS P2,sex AS S2,(@curRank2 := @curRank2 + 1) AS CRank from (
-             SELECT price, sex FROM sales a
-             JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("C","H","G") AND PRICE>0 '.$searchParam.'
-             group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
-             on a.price=d.P2 and a.Sex=d.S2';
-    
-    
-    
+            SELECT price, sex FROM sales a
+            JOIN damsire b ON a.damsire_Id=b.damsire_ID WHERE Sex IN ("C","H","G") AND PRICE>0 '.$searchParam.'
+            group by price,sex ORDER BY price desc) as a,(SELECT @curRank2 := 0) r) d
+            on a.price=d.P2 and a.Sex=d.S2';
+                     
     $orderby1 = ' ORDER BY '.$sort1;
     $orderby2 = ', '.$sort2;
     $orderby3 = ', '.$sort3;
     $orderby4 = ', '.$sort4;
     $orderby5 = ', '.$sort5;
-    
     
     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;

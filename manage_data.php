@@ -69,19 +69,19 @@ if (!empty($_POST)) {
           <div class="cell" style="width: device-width;">
             salecode
             <button onclick="sortTable('Salecode')">
-              <img src="assets\images\sort.png" alt="Sort Salecode">
+              <img src="assets\images\sort.png">
             </button>
           </div>
           <div class="cell" style="width: device-width;">
             Saledate
             <button onclick="sortTable('Saledate')">
-              <img src="assets\images\sort.png" alt="Sort Saledate">
+              <img src="assets\images\sort.png">
             </button>
           </div>
 	  <div class="cell" style="width:device-width;">
             Upload-date
             <button onclick="sortTable('upload_date')">
-              <img src="assets\images\sort.png" alt="Sort Uploadtime">
+              <img src="assets\images\sort.png">
             </button>
           </div>
           <div class="cell" style="width: device-width;">
