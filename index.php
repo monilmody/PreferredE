@@ -68,10 +68,10 @@ require_once("config.php");
                                 <div class="dropdown-menu" style="background-color:black;" >
                                     <a class="dropdown-item" href="dam_search.php">Horse Search Report</a>
                                     <a class="dropdown-item" href="sire_analysis.php">Sire Analysis</a>
-                                    <!-- <a class="dropdown-item" href="sire_analysis_summary.php">Sire Analysis Summary</a> -->
+                                    <a class="dropdown-item" href="sire_analysis_summary.php">Sire Analysis Summary</a>
                                     <a class="dropdown-item" href="buyers_report.php">Buyer's Report</a>
                                     <a class="dropdown-item" href="sales_report.php">Sales Report</a>
-                                    <!-- <a class="dropdown-item" href="auction_report.php">Auction Report</a> -->
+                                    <a class="dropdown-item" href="auction_report.php">Auction Report</a>
                                     <a class="dropdown-item" href="top_buyers.php">Top Yearling Buyers</a>
                                     <a class="dropdown-item" href="individual_sales_report.php">Individual Horse Sales Report</a>
                                     <a class="dropdown-item" href="broodmares_report.php">Broodmares Report</a>
