@@ -1368,7 +1368,6 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     $select = 'SELECT
     Sire,
     Elig,
-    Gait,
     Count,
     A.Total,
     A.Avg,
@@ -1382,11 +1381,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     FAvg,
     FTop,
     SireAvgRank,
-    SireGrossRank,
-    PacerAvgRank,
-    PacerGrossRank,
-    TrotterAvgRank,
-    TrotterGrossRank FROM';
+    SireGrossRank FROM';
     
     $sql_elig= $select.' (
         (SELECT * FROM sire_sales_elig) A
@@ -1417,7 +1412,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     
     
     $sql_elig_allyear= $select.' (
-        (SELECT * FROM sire_sales_elig_allyear) A
+        (SELECT * FROM sire_sales_elig_allyear_tb) A
         LEFT JOIN
         (SELECT Avg ,(@CurRank := @CurRank + 1) AS SireAvgRank From (SELECT Avg
             FROM sire_sales_elig_allyear GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank := 0) r) B
