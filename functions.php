@@ -2472,7 +2472,7 @@ function fetchSalesSummary($year,$type,$salecode)
         GROUP BY Salecode,horse ORDER BY salecode,Price Desc) a
     LEFT JOIN 
     (SELECT Salecode, Horse, Price AS Max FROM sales WHERE GAIT ="T" '.$searchParam.'
-        GROUP BY Salecode,Horse ORDER BY Salecode,Price Desc) b on a.Salecode=b.Salecode Group by salecode';
+        GROUP BY Salecode,Horse ORDER BY Salecode,Price Desc) b on a.Salecode=b.Salecode Group by salecode LIMIT 500';
 
 //     if ($year != "") {
 //         $sql = "SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM
