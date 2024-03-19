@@ -26,7 +26,14 @@ $salecode_param =$_GET['salecode'];
 
 $resultFound = fetchSalesAuctionReport($year_param,$type_param,$salecode_param);
 
+// Check if any parameter is selected
+if (!empty($year_param) || !empty($elig_param) || !empty($salecode_param)) {
+  // Call the function to fetch filtered data based on the selected parameters
 $resultFound21 = fetchSalesSummary($year_param,$type_param,$salecode_param);
+} else {
+  // If no parameter is selected, set $resultFound to an empty array
+  $resultFound = array();
+}
 
 $yearList = getYearsList();
 $typeList = fetchTypeList();
@@ -46,7 +53,7 @@ $resultList = fetchSalecodeWithoutYear($year_param);
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
 	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row[Year].'</option>';
+	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
 
@@ -54,7 +61,7 @@ $resultList = fetchSalecodeWithoutYear($year_param);
 	<option value="">Sale Code Filter</option>
 	<option value="">All Salecode</option>
 	<?php foreach($resultList as $row) {
-	    echo '<option>'.$row[Salecode].'</option>';
+	    echo '<option>'.$row['Salecode'].'</option>';
     } ?>
 </select>
 
