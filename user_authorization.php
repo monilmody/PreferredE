@@ -75,11 +75,11 @@ if(!empty($_POST)) {
           
           ?>
           <form name="myform" action="<?php echo $_SERVER['$PHP_SELF']; ?>" method="POST">
-            <input type="hidden" name="USER_ID_UNAUTH" id="USER_ID_UNAUTH" value="<?php echo $row[USER_ID];?>" />
+            <input type="hidden" name="USER_ID_UNAUTH" id="USER_ID_UNAUTH" value="<?php echo $row['USER_ID'];?>" />
             <button type="submit" >Unauthorize</button>
          </form>
          <form name="myform" action="<?php echo $_SERVER['$PHP_SELF']; ?>" method="POST">
-            <input type="hidden" name="USER_ID_AUTH" id="USER_ID_AUTH" value="<?php echo $row[USER_ID];?>" />
+            <input type="hidden" name="USER_ID_AUTH" id="USER_ID_AUTH" value="<?php echo $row['USER_ID'];?>" />
             <button type="submit">Authorize</button>
          </form>
           </div>
