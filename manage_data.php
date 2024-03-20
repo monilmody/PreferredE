@@ -164,4 +164,10 @@ if (!empty($_POST)) {
             return false;
         }
     }
+
+    // Redirect the user back to the same page after deletion
+    <?php if (!empty($_POST)) { ?>
+        var breed = "<?php echo $breed_param; ?>";
+        window.location.href = '?breed=' + breed;
+    <?php } ?>
 </script>
