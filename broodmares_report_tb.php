@@ -50,7 +50,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 <!-- </b> -->
 <br>
 <br>
-<select class="custom-select1" id="year" onchange="updateSalecode($resultList)">
+<select class="custom-select1" id="year" onchange="fetchSalecodeList_tb(this.value)">
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
 	<?php foreach($yearList as $row) {
