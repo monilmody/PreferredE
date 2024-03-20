@@ -60,7 +60,10 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
  <select class="custom-select1" id="salecode">
 	<option value="">Sale Code Filter</option>
 	<option value="">All Salecode</option>
-  </select>
+	<?php foreach($resultList as $row) {
+	    echo '<option>'.$row['Salecode'].'</option>';
+    } ?>
+
 </select>
  <select class="custom-select1" id="type">
 	<option value="">Type Filter</option>
