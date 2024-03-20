@@ -116,9 +116,9 @@ if (!empty($_POST)) {
       
 
         ?>
-        <form name="myform" action="<?php echo $_SERVER['$PHP_SELF']; ?>" method="POST">
-          <input type="hidden" name="salecode" id="salecode" value="<?php echo $row['Salecode']; ?>" />
-          <button type="submit" href="javascript:deleteSaleData();">Delete</button>
+        <form name="myform" action="<?php echo $_SERVER['$PHP_SELF']; ?>" method="POST" onsubmit="return confirmDelete();">
+            <input type="hidden" name="salecode" id="salecode" value="<?php echo $row['Salecode']; ?>" />
+            <button type="submit">Delete</button>
         </form>
         <!--           <div class='cell'><a href='javascript:deleteSaleData(`".$row[Salecode]."`);'>Delete</a></div> -->
       </div>
@@ -153,20 +153,15 @@ if (!empty($_POST)) {
 </script>
 
 <script>
-  <?php if (!empty($_POST)) { ?>
-    var breed = document.getElementById('breed').value;
-    //alert(bred);
-    //alert('<?php echo $salecode; ?>');
-    var result = "";
-    if (confirm("Are you sure, you want to delete -" + '<?php echo $salecode; ?>' + "?")) {
-      txt = "You pressed OK!";
-      result = "<?php echo deleteSalecode($breed_param, $salecode); ?>";
-    } else {
-      result = "You pressed Cancel!";
-    } alert(result);
-    getValues();
-    //alert("Are You Sure?");
-    <?php
-  }
-  ?>
+    function confirmDelete() {
+        var breed = document.getElementById('breed').value;
+        var salecode = document.getElementById('salecode').value;
+        if (confirm("Are you sure you want to delete " + salecode + "?")) {
+            // User clicked "OK", proceed with deletion
+            return true;
+        } else {
+            // User clicked "Cancel", prevent form submission
+            return false;
+        }
+    }
 </script>
