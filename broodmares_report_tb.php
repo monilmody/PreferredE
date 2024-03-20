@@ -50,19 +50,20 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 <!-- </b> -->
 <br>
 <br>
-<select class="custom-select1" id="year"> onchange="location = this.value;"
+<select class="custom-select1" id="year" onchange="updateSalecode(this.value)">
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
 	<?php foreach($yearList as $row) {
 	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
- <select class="custom-select1" id="salecode"> onchange="location = this.value;"
+ <select class="custom-select1" id="salecode">
 	<option value="">Sale Code Filter</option>
 	<option value="">All Salecode</option>
 	<?php foreach($resultList as $row) {
 	    echo '<option>'.$row['Salecode'].'</option>';
     } ?>
+
 </select>
  <select class="custom-select1" id="type">
 	<option value="">Type Filter</option>
