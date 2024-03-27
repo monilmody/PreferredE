@@ -53,7 +53,7 @@ require_once("config.php");
                 <div class="col-12">
                     <nav class="main-nav">
                         <!-- ***** Logo Start ***** -->
-                        <a href="index.php" class="logo">Preferred <em> Equine</em></a>
+                        <a href="index.php" class="logo">Preferred <em> Equine - AWS</em></a>
                         <!-- ***** Logo End ***** -->
                         <!-- ***** Menu Start ***** -->
                         <ul class="nav">
