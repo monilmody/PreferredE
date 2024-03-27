@@ -88,9 +88,11 @@ $sortList = array("Hip","Horse","Sex", "Type", "Gait", "Price Desc", "Salecode",
 <select class="custom-select1" id="gait"> 
 	<option value="">Gait Filter</option>
 	<option value="">All Gait</option>
-	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row['Gait'].'</option>';
-    } ?>
+	<option value="P">P : Pacer</option>
+	<option value="T">T : Trotter</option>
+	<?php //foreach($gaitList as $row) {
+  	//    echo '<option>'.$row['Gait'].'</option>';
+   // } ?>
 </select>
 <select class="custom-select1" id="sex"> 
 	<option value="">Sex Filter</option>
