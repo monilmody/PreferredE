@@ -24,8 +24,15 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSalesReport_tb($salecode_param,$year_param,$type_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
+// Check if any parameter is selected
+if (!empty($year_param) || !empty($salecode_param)) {
+  // Call the function to fetch filtered data based on the selected parameters
+  $resultFound = fetchSalesReport_tb($salecode_param,$year_param,$type_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+} else {
+  // If no parameter is selected, set $resultFound to an empty array
+  $resultFound = array();
+}
 $yearList = getYearsList_tb();
 $resultList = fetchSalecodeList_tb($year_param);
 $typeList = fetchTypeList_tb();
