@@ -290,15 +290,18 @@ if (isset($_POST["import"])) {
                 if (isset($column[32])) {
                     $bredto = mysqli_real_escape_string($conn, $column[32]);
                 }
+               
                 $lastbred = "0000-00-00";
-                if ($column[33] != "" and isset($column[33])) {
+                if ($column[33] != "" && isset($column[33])) {
                     $lastbred = mysqli_real_escape_string($conn, $column[33]);
-                    $date=date_create($lastbred);
-                    $lastbred = date_format($date,"Y-m-d");
-                    if ($lastbred == "") {
-                        $lastbred="0000-00-00";
+                    $date = date_create($lastbred);
+                    if ($date !== false) {
+                        $lastbred = date_format($date, "Y-m-d");
+                    } else {
+                        $lastbred = "0000-00-00"; // Set default value for invalid date
                     }
                 }
+
                 $sbcity = "";
                 if (isset($column[39])) {
                     $sbcity = mysqli_real_escape_string($conn, $column[39]);
