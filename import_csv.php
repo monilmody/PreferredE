@@ -266,7 +266,7 @@ if (isset($_POST["import"])) {
                     if ($date !== false) {
                         $saledate = date_format($date, "Y-m-d");
                     } else {
-                        $saledate = "0000-00-00"; // Set default value for invalid date
+                        $saledate = "1901-01-01"; // Set default value for invalid date
                     }
                 }
 
@@ -282,7 +282,7 @@ if (isset($_POST["import"])) {
                     if ($date !== false) {
                         $datefoal = date_format($date, "Y-m-d");
                     } else {
-                        $datefoal = "0000-00-00"; // Set default value for invalid date
+                        $datefoal = "1901-01-01"; // Set default value for invalid date
                     }
                 }
 
@@ -298,7 +298,7 @@ if (isset($_POST["import"])) {
                     if ($date !== false) {
                         $lastbred = date_format($date, "Y-m-d");
                     } else {
-                        $lastbred = "0000-00-00"; // Set default value for invalid date
+                        $lastbred = "1901-01-01"; // Set default value for invalid date
                     }
                 }
 
