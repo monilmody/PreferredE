@@ -259,28 +259,33 @@ if (isset($_POST["import"])) {
                 if ($column[42] != "" and isset($column[42])) {
                     $price = mysqli_real_escape_string($conn, $column[42]);
                 }
-                $saledate = 0;
-                if ($column[3] != "" and isset($column[3])) {
+                $saledate = "0000-00-00";
+                if ($column[3] != "" && isset($column[3])) {
                     $saledate = mysqli_real_escape_string($conn, $column[3]);
-                    $date=date_create($saledate);
-                    $saledate = date_format($date,"Y-m-d");
-                    if ($saledate == "") {
-                        $saledate="0000-00-00";
+                    $date = date_create($saledate);
+                    if ($date !== false) {
+                        $saledate = date_format($date, "Y-m-d");
+                    } else {
+                        $saledate = "0000-00-00"; // Set default value for invalid date
                     }
                 }
+
                 $record = "";
                 if (isset($column[18])) {
                     $record = mysqli_real_escape_string($conn, $column[18]);
                 }
+
                 $datefoal = "0000-00-00";
-                if ($column[12] != "" and isset($column[12])) {
+                if ($column[12] != "" && isset($column[12])) {
                     $datefoal = mysqli_real_escape_string($conn, $column[12]);
-                    $date=date_create($datefoal);
-                    $datefoal = date_format($date,"Y-m-d");
-                    if ($datefoal == "") {
-                        $datefoal="0000-00-00";
+                    $date = date_create($datefoal);
+                    if ($date !== false) {
+                        $datefoal = date_format($date, "Y-m-d");
+                    } else {
+                        $datefoal = "0000-00-00"; // Set default value for invalid date
                     }
                 }
+
                 $bredto = "0000-00-00";
                 if (isset($column[32])) {
                     $bredto = mysqli_real_escape_string($conn, $column[32]);
