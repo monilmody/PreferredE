@@ -292,7 +292,7 @@ if (isset($_POST["import"])) {
                 }
                
                 $lastbred = "0000-00-00";
-                if ($column[33] != "" && isset($column[33])) {
+                if (!empty($column[33]) && isset($column[33])) {
                     $lastbred = mysqli_real_escape_string($conn, $column[33]);
                     $date = date_create($lastbred);
                     if ($date !== false) {
@@ -301,6 +301,7 @@ if (isset($_POST["import"])) {
                         $lastbred = "1901-01-01"; // Set default value for invalid date
                     }
                 }
+
 
                 $sbcity = "";
                 if (isset($column[39])) {
