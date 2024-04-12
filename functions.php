@@ -115,7 +115,7 @@ function fetchOffsprings($damName)
     FROM sales a
     JOIN damsire b ON a.damsire_Id=b.damsire_ID
     WHERE b.dam = "'.$damName.'" order by a.datefoal DESC,a.saledate DESC
-    LIMIT 1;';
+    LIMIT 100;';
     
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
@@ -1368,6 +1368,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     $select = 'SELECT
     Sire,
     Elig,
+    Gait,
     Count,
     A.Total,
     A.Avg,
@@ -1381,7 +1382,11 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     FAvg,
     FTop,
     SireAvgRank,
-    SireGrossRank FROM';
+    SireGrossRank,
+    PacerAvgRank,
+    PacerGrossRank,
+    TrotterAvgRank,
+    TrotterGrossRank FROM';
     
     $sql_elig= $select.' (
         (SELECT * FROM sire_sales_elig) A
@@ -1412,7 +1417,7 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     
     
     $sql_elig_allyear= $select.' (
-        (SELECT * FROM sire_sales_elig_allyear_tb) A
+        (SELECT * FROM sire_sales_elig_allyear) A
         LEFT JOIN
         (SELECT Avg ,(@CurRank := @CurRank + 1) AS SireAvgRank From (SELECT Avg
             FROM sire_sales_elig_allyear GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank := 0) r) B
@@ -3080,6 +3085,7 @@ function getsaledata($breed)
     if ($breed == "T") {
         $sql = "SELECT s.Salecode, s.Saledate, d.upload_date, count(*) FROM tsales s LEFT JOIN documents d ON d.file_name = s.salecode GROUP BY s.salecode, s.saledate, d.upload_date ORDER BY $orderBy $sortOrder";
     }
+
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
