@@ -479,11 +479,11 @@ form.example::after {
                       }
                   }echo "</div>";
                   include("./buyer_collapse2.php");
-                  if ($lastname2 == $row1['Horse']) {
+                  if ($lastname2 == $row1[`Horse`]) {
                       continue;
                   }
-                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
-                  $lastname2 =$row1['Horse'];
+                  $damOfDamOffspings1 = fetchOffsprings($row1[`Horse`]);
+                  $lastname2 =$row1[`Horse`];
                   $sequence3 = 0;
                   #3rd Generation
                   foreach($damOfDamOffspings1 as $row2) {
