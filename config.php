@@ -4,7 +4,7 @@
 ob_start();
 //error reporting and warning display.
 //error_reporting(E_ALL);
-ini_set('display_errors', 'off');
+ini_set('display_errors', 'on');
 
 
 require_once("db-settings.php"); //Require DB connection
