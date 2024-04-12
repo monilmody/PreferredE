@@ -114,8 +114,7 @@ function fetchOffsprings($damName)
     Sbcountry
     FROM sales a
     JOIN damsire b ON a.damsire_Id=b.damsire_ID
-    WHERE b.dam = "'.$damName.'" order by a.datefoal DESC,a.saledate DESC
-    LIMIT 100;';
+    WHERE b.dam = "'.$damName.'" order by a.datefoal DESC,a.saledate DESC;';
     
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
