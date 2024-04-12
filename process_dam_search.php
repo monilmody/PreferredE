@@ -440,6 +440,7 @@ form.example::after {
                   continue;
               }
               $damOfDamOffspings = fetchOffsprings($row['Horse']);
+              echo "<pre>"; print_r($damOfDamOffspings); echo "</pre>"; // Debugging statement
               $lastname1 =$row['Horse'];
               
               $sequence2 = 0;
@@ -483,6 +484,7 @@ form.example::after {
                       continue;
                   }
                   $damOfDamOffspings1 = fetchOffsprings($row1[`Horse`]);
+                  echo "<pre>"; print_r($damOfDamOffspings1); echo "</pre>"; // Debugging statement
                   $lastname2 =$row1[`Horse`];
                   $sequence3 = 0;
                   #3rd Generation
@@ -530,6 +532,7 @@ form.example::after {
     </div>
   </div>
 </div>
+
 
 <script>
     window.onload = function() {
