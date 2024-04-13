@@ -235,156 +235,6 @@ form.example::after {
     <div class="panel panel-default">
       <div class="panel-heading">
         <h4 class="panel-title">
-          <a data-toggle="collapse" href="#collapse4"><?php echo "$horseName";?>'s 4-Generation Lineage</a>
-        </h4>
-      </div>
-      <div id="collapse4" class="panel-collapse collapse in">
-      
-       <div class="table" style="width: 100%;table-layout: fixed;">
-          <div class="row header skyblue">
-          	<?php
-          	include("./dam_search_table_header.php");
-          	?>
-          </div>
-          
-          <?php
-          $number =0;
-          $lastname1 = "";
-          $collapseID = 'collapse41';
-          foreach($damsofdamOffspings as $row) {
-              $elementCount =0;
-              $number = $number+1;
-              echo "<div class='row'>";
-              echo "<div class='cell' style='color:white;background-color:#1B4F72'>".$number."</div>";
-              foreach($row as $elements) {
-                  $elementCount = $elementCount+1;
-                  if($elementCount == 11){
-                      $elements = "$".number_format($elements);
-                  }
-                  if ($elements == "0000-00-00") {
-                      $elements="";
-                  }
-                  if ($elementCount == 9 or $elementCount == 19) {
-                      if ($elements != "") {
-                          $date=date_create($elements);
-                          $elements = date_format($date,"m/d/y");
-                      }
-                  }
-                  if ($elementCount == 15) {
-                      $elements= substr($elements, 0,4);
-                  }
-                  if ($elementCount == 1) {
-                      echo "<a data-toggle='collapse' href='#".$collapseID.$number."'>";
-                      echo "<div class='cell' >".$elements."</div>";
-                      echo "</a>";
-                  }else {
-                      echo "<div class='cell'>".$elements."</div>";
-                  }
-                  if ($elementCount==19) {
-                      break;
-                  }
-              }echo "</div>";
-              include("./buyer_collapse.php");
-              if ($lastname1 == $row['Horse']) {
-                  continue;
-              }
-              $damOfDamOffspings = fetchOffsprings($row['Horse']);
-              $lastname1 =$row['Horse'];
-              
-              $sequence2 = 0;
-              $lastname2 = "";
-              #2nd generation
-              foreach($damOfDamOffspings as $row1) {
-                  $elementCount =0;
-                  $sequence2 =$sequence2+1;
-                  echo "<div class='row'>";
-                  echo "<div class='cell' style='background-color:#3498DB'>".$number.".".$sequence2."</div>";
-                  foreach($row1 as $elements) {
-                      $elementCount = $elementCount+1;
-                      if($elementCount == 11){
-                          $elements = "$".number_format($elements);
-                      }
-                      if ($elements == "0000-00-00") {
-                          $elements="";
-                      }
-                      if ($elementCount == 9 or $elementCount == 19) {
-                          if ($elements != "") {
-                              $date=date_create($elements);
-                              $elements = date_format($date,"m/d/y");
-                          }
-                      }
-                      if ($elementCount == 15) {
-                          $elements= substr($elements, 0,4);
-                      }
-                      if ($elementCount == 1) {
-                          echo "<a data-toggle='collapse' href='#".$collapseID.$number.$sequence2."'>";
-                          echo "<div class='cell' >".$elements."</div>";
-                          echo "</a>";
-                      }else {
-                          echo "<div class='cell'>".$elements."</div>";
-                      }
-                      if ($elementCount==19) {
-                          break;
-                      }
-                  }echo "</div>";
-                  include("./buyer_collapse2.php");
-                  if ($lastname2 == $row1['Horse']) {
-                      continue;
-                  }
-                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
-                  $lastname2 =$row1['Horse'];
-                  $sequence3 = 0;
-                  #3rd Generation
-                  foreach($damOfDamOffspings1 as $row2) {
-                      $elementCount =0;
-                      $sequence3 =$sequence3+1;
-                      echo "<div class='row'>";
-                      echo "<div class='cell' style='background-color:#D6EAF8'>".$number.".".$sequence2.".".$sequence3."</div>";
-                      foreach($row2 as $elements) {
-                          $elementCount = $elementCount+1;
-                          if($elementCount == 11){
-                              $elements = "$".number_format($elements);
-                          }
-                          if ($elements == "0000-00-00") {
-                              $elements="";
-                          }
-                          if ($elementCount == 9 or $elementCount == 19) {
-                              if ($elements != "") {
-                                  $date=date_create($elements);
-                                  $elements = date_format($date,"m/d/y");
-                              }
-                          }
-                          if ($elementCount == 15) {
-                              $elements= substr($elements, 0,4);
-                          }
-                          if ($elementCount == 1) {
-                              echo "<a data-toggle='collapse' href='#".$collapseID.$number.$sequence2.$sequence3."'>";
-                              echo "<div class='cell' >".$elements."</div>";
-                              echo "</a>";
-                          }else {
-                              echo "<div class='cell'>".$elements."</div>";
-                          }
-                          if ($elementCount==19) {
-                              break;
-                          }
-                      }echo "</div>";
-                      include("./buyer_collapse3.php");
-                  }
-              }
-          }
-          ?>
-     
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container">
-  <div class="panel-group">
-    <div class="panel panel-default">
-      <div class="panel-heading">
-        <h4 class="panel-title">
           <a data-toggle="collapse" href="#collapse3"><?php echo "$damName";?>'s Offspring </a>
         </h4>
       </div>
@@ -522,6 +372,156 @@ form.example::after {
                   }
               }
            }
+          ?>
+     
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="panel-group">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <h4 class="panel-title">
+          <a data-toggle="collapse" href="#collapse4"><?php echo "$horseName";?>'s 4-Generation Lineage</a>
+        </h4>
+      </div>
+      <div id="collapse4" class="panel-collapse collapse in">
+      
+       <div class="table" style="width: 100%;table-layout: fixed;">
+          <div class="row header skyblue">
+          	<?php
+          	include("./dam_search_table_header.php");
+          	?>
+          </div>
+          
+          <?php
+          $number =0;
+          $lastname1 = "";
+          $collapseID = 'collapse41';
+          foreach($damsofdamOffspings as $row) {
+              $elementCount =0;
+              $number = $number+1;
+              echo "<div class='row'>";
+              echo "<div class='cell' style='color:white;background-color:#1B4F72'>".$number."</div>";
+              foreach($row as $elements) {
+                  $elementCount = $elementCount+1;
+                  if($elementCount == 11){
+                      $elements = "$".number_format($elements);
+                  }
+                  if ($elements == "0000-00-00") {
+                      $elements="";
+                  }
+                  if ($elementCount == 9 or $elementCount == 19) {
+                      if ($elements != "") {
+                          $date=date_create($elements);
+                          $elements = date_format($date,"m/d/y");
+                      }
+                  }
+                  if ($elementCount == 15) {
+                      $elements= substr($elements, 0,4);
+                  }
+                  if ($elementCount == 1) {
+                      echo "<a data-toggle='collapse' href='#".$collapseID.$number."'>";
+                      echo "<div class='cell' >".$elements."</div>";
+                      echo "</a>";
+                  }else {
+                      echo "<div class='cell'>".$elements."</div>";
+                  }
+                  if ($elementCount==19) {
+                      break;
+                  }
+              }echo "</div>";
+              include("./buyer_collapse.php");
+              if ($lastname1 == $row['Horse']) {
+                  continue;
+              }
+              $damOfDamOffspings = fetchOffsprings($row['Horse']);
+              $lastname1 =$row['Horse'];
+              
+              $sequence2 = 0;
+              $lastname2 = "";
+              #2nd generation
+              foreach($damOfDamOffspings as $row1) {
+                  $elementCount =0;
+                  $sequence2 =$sequence2+1;
+                  echo "<div class='row'>";
+                  echo "<div class='cell' style='background-color:#3498DB'>".$number.".".$sequence2."</div>";
+                  foreach($row1 as $elements) {
+                      $elementCount = $elementCount+1;
+                      if($elementCount == 11){
+                          $elements = "$".number_format($elements);
+                      }
+                      if ($elements == "0000-00-00") {
+                          $elements="";
+                      }
+                      if ($elementCount == 9 or $elementCount == 19) {
+                          if ($elements != "") {
+                              $date=date_create($elements);
+                              $elements = date_format($date,"m/d/y");
+                          }
+                      }
+                      if ($elementCount == 15) {
+                          $elements= substr($elements, 0,4);
+                      }
+                      if ($elementCount == 1) {
+                          echo "<a data-toggle='collapse' href='#".$collapseID.$number.$sequence2."'>";
+                          echo "<div class='cell' >".$elements."</div>";
+                          echo "</a>";
+                      }else {
+                          echo "<div class='cell'>".$elements."</div>";
+                      }
+                      if ($elementCount==19) {
+                          break;
+                      }
+                  }echo "</div>";
+                  include("./buyer_collapse2.php");
+                  if ($lastname2 == $row1['Horse']) {
+                      continue;
+                  }
+                  $damOfDamOffspings1 = fetchOffsprings($row1['Horse']);
+                  $lastname2 =$row1['Horse'];
+                  $sequence3 = 0;
+                  #3rd Generation
+                  foreach($damOfDamOffspings1 as $row2) {
+                      $elementCount =0;
+                      $sequence3 =$sequence3+1;
+                      echo "<div class='row'>";
+                      echo "<div class='cell' style='background-color:#D6EAF8'>".$number.".".$sequence2.".".$sequence3."</div>";
+                      foreach($row2 as $elements) {
+                          $elementCount = $elementCount+1;
+                          if($elementCount == 11){
+                              $elements = "$".number_format($elements);
+                          }
+                          if ($elements == "0000-00-00") {
+                              $elements="";
+                          }
+                          if ($elementCount == 9 or $elementCount == 19) {
+                              if ($elements != "") {
+                                  $date=date_create($elements);
+                                  $elements = date_format($date,"m/d/y");
+                              }
+                          }
+                          if ($elementCount == 15) {
+                              $elements= substr($elements, 0,4);
+                          }
+                          if ($elementCount == 1) {
+                              echo "<a data-toggle='collapse' href='#".$collapseID.$number.$sequence2.$sequence3."'>";
+                              echo "<div class='cell' >".$elements."</div>";
+                              echo "</a>";
+                          }else {
+                              echo "<div class='cell'>".$elements."</div>";
+                          }
+                          if ($elementCount==19) {
+                              break;
+                          }
+                      }echo "</div>";
+                      include("./buyer_collapse3.php");
+                  }
+              }
+          }
           ?>
      
         </div>
