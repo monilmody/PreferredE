@@ -1,4 +1,5 @@
 <?php
+
 include("./header.php");
 ?>
 
@@ -379,6 +380,7 @@ form.example::after {
     </div>
   </div>
 </div>
+
 
 <div class="container">
   <div class="panel-group">
