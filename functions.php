@@ -196,6 +196,63 @@ LIMIT 1;';
     return $json;
 }
 
+function fetchOffsprings_weanling_tb($damName, $saleYear)
+{
+    global $mysqli;
+    
+    // Validate input parameters
+    if (empty($damName)) {
+        return "";
+    }
+
+    // Prepare the SQL query with the required conditions
+    $sql = '
+    SELECT
+        a.Horse,
+        a.Hip,
+        a.Sex,
+        a.Salecode,
+        a.Price,
+        a.Rating,
+        a.saledate
+    FROM tsales a
+    JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
+    JOIN tsales c ON c.Horse = b.dam
+    WHERE b.dam = ? AND c.type = "Y"
+    AND c.lastbred <> "1900-01-01" 
+    AND a.datefoal >= DATE_ADD(c.lastbred, INTERVAL 11 MONTH)
+    AND a.datefoal <= DATE_ADD(c.lastbred, INTERVAL 13 MONTH)
+    AND YEAR(c.lastbred) >= ?
+    AND a.type = "W"
+    AND a.saledate BETWEEN DATE_SUB(a.saledate, INTERVAL 2 YEAR) AND DATE_SUB(a.saledate, INTERVAL 14 MONTH)
+    ORDER BY a.datefoal DESC, a.saledate DESC;';
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($sql);
+    if (!$stmt) {
+        printf("Errormessage: %s\n", $mysqli->error);
+        return "";
+    }
+
+    // Bind the parameters
+    $stmt->bind_param("si", $damName, $saleYear);
+
+    // Execute the statement
+    if (!$stmt->execute()) {
+        printf("Errormessage: %s\n", $stmt->error);
+        return "";
+    }
+
+    // Fetch the results
+    $result = $stmt->get_result();
+    $json = $result->fetch_all(MYSQLI_ASSOC);
+
+    // Close the statement
+    $stmt->close();
+
+    return $json;
+}
+
 function fetchOffsprings_tb($damName)
 {
     global $mysqli;
@@ -2196,6 +2253,68 @@ function fetchBroodmaresReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$s
     FROM sales a
     LEFT JOIN damsire b
     ON a.damsire_Id=b.damsire_ID WHERE Price>0 '.$searchParam;
+    
+    
+    $orderby1 = ' ORDER BY '.$sort1.' ASC';
+    $orderby2 = ', '.$sort2.' ASC';
+    $orderby3 = ', '.$sort3.' ASC';
+    $orderby4 = ', '.$sort4.' ASC';
+    $orderby5 = ', '.$sort5.' ASC';
+    
+    
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
+    }
+    $result = mysqli_query($mysqli, $sql);
+    //echo $sql;
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
+{
+    global $mysqli;
+
+    if ($year == "" && $salecode == "" && $type == "" && $gait == "" && $sex == "" && $sire == "" && $bredto == "") {
+        return "";
+    }
+    
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
+                     AND Saletype= IF("'.$type.'"  = "", Saletype, "'.$type.'")
+                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'")
+                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
+                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
+                     AND Bredto= IF("'.$bredto.'"  = "", Bredto, "'.$bredto.'") ';
+    
+    $sql = 'SELECT
+    HIP,
+    Horse,
+    Sex,
+    Type,
+    Price,
+    Currency,
+    Salecode,
+    Day,
+    Consno,
+    saletype,
+    LastBred,
+    Age,
+    Rating
+    FROM tsales a
+    LEFT JOIN tdamsire b
+    ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;
     
     
     $orderby1 = ' ORDER BY '.$sort1.' ASC';
