@@ -229,19 +229,19 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 6){
+                    if($elementCount == 5){
                         $elements = "$".number_format($elements);
                     }
                     if ($elements == "1900-01-01") {
                         $elements="";
                     }
-                    if ($elementCount == 14) {
+                    if ($elementCount == 13) {
                         // if ($elements != "") {
                         //     $date=date_create($elements);
                         //     $elements = date_format($date,"m/d/y");
                         // }
                     }
-                    if ($elementCount == 10) {
+                    if ($elementCount == 9) {
                         $elements= substr($elements, 0,4);
                     }
                     echo "<div class='cell'>".$elements."</div>";
