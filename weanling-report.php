@@ -68,14 +68,6 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
  <select class="custom-select1" id="type">
 	<option value="">Type Filter</option>
 	<option value="">All Types</option>
-	<option value="B">B : Broodmare</option>
-	<option value="LB">LB : Lifetime Breeding</option>
-	<option value="M">M : Maiden Broodmare</option>
-	<option value="P">P : Broodmare Prospect</option>
-	<option value="R">R : Race Horse</option>
-	<option value="S">S : Share</option>
-	<option value="SEA">SEA : Season</option>
-	<option value="T">T : Stallion</option>
 	<option value="W">W : Weanling</option>
 	<option value="Y">Y : Yearling</option>
   <script>
@@ -165,6 +157,9 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 Horse
               </div>
               <div class="cell"  style="width: device-width;">
+                Dam
+              </div>
+              <div class="cell"  style="width: device-width;">
                 Sex
               </div>
               <div class="cell"  style="width: device-width;">
@@ -197,7 +192,6 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
               <div class="cell"  style="width: device-width;">
                 Rating
               </div>
-              
               <div class="cell" style="width: device-width;background-color:#D98880">
                 Offspring Horse
               </div>
@@ -229,27 +223,26 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 5){
+                    if($elementCount == 6){
                         $elements = "$".number_format($elements);
                     }
                     if ($elements == "1900-01-01") {
                         $elements="";
                     }
-                    if ($elementCount == 13) {
+                    if ($elementCount == 14) {
                         // if ($elements != "") {
                         //     $date=date_create($elements);
                         //     $elements = date_format($date,"m/d/y");
                         // }
                     }
-                    if ($elementCount == 9) {
+                    if ($elementCount == 10) {
                         $elements= substr($elements, 0,4);
                     }
                     echo "<div class='cell'>".$elements."</div>";
                 }
                 
-                $offspring_rows = fetchOffsprings_weanling_tb($row['Horse'], $year_param);
+                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $year_param);
                 foreach ($offspring_rows as $offspring_row) {
-                    $elementCount = 0;
                     foreach ($offspring_row as $element) {
                         $elementCount++;
                         if ($elementCount == 5) {

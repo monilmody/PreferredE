@@ -208,50 +208,32 @@ function fetchOffsprings_weanling_tb($damName, $saleYear)
     // Prepare the SQL query with the required conditions
     $sql = '
     SELECT
-        a.Horse,
-        a.Hip,
-        a.Sex,
-        a.Salecode,
-        a.Price,
-        a.Rating,
-        a.saledate
+    a.Horse,
+    a.Hip,
+    a.Sex,
+    a.Salecode,
+    a.Price,
+    a.Rating
     FROM tsales a
     JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
     JOIN tsales c ON c.Horse = b.dam
-    WHERE b.dam = ? AND c.type = "Y"
-    AND c.lastbred <> "1900-01-01" 
-    AND a.datefoal >= DATE_ADD(c.lastbred, INTERVAL 11 MONTH)
-    AND a.datefoal <= DATE_ADD(c.lastbred, INTERVAL 13 MONTH)
-    AND YEAR(c.lastbred) >= ?
-    AND a.type = "W"
-    AND a.saledate BETWEEN DATE_SUB(a.saledate, INTERVAL 2 YEAR) AND DATE_SUB(a.saledate, INTERVAL 14 MONTH)
+    WHERE b.dam = "'.$damName.'" AND c.type = "W"
+    AND c.saledate <> "1900-01-01" 
+    AND a.datefoal >= DATE_ADD(c.saledate, INTERVAL 11 MONTH)
+    AND a.datefoal <= DATE_ADD(c.saledate, INTERVAL 13 MONTH)
+    AND YEAR(c.saledate) > '.$saleYear.'
+    AND a.type IN ("Y")
     ORDER BY a.datefoal DESC, a.saledate DESC;';
 
-    // Prepare the statement
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
-        return "";
     }
-
-    // Bind the parameters
-    $stmt->bind_param("si", $damName, $saleYear);
-
-    // Execute the statement
-    if (!$stmt->execute()) {
-        printf("Errormessage: %s\n", $stmt->error);
-        return "";
-    }
-
-    // Fetch the results
-    $result = $stmt->get_result();
-    $json = $result->fetch_all(MYSQLI_ASSOC);
-
-    // Close the statement
-    $stmt->close();
-
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    
     return $json;
 }
+
 
 function fetchOffsprings_tb($damName)
 {
@@ -2292,7 +2274,7 @@ function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sor
     
     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Saletype= IF("'.$type.'"  = "", Saletype, "'.$type.'")
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
                      AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'")
                      AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
                      AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
@@ -2301,6 +2283,7 @@ function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sor
     $sql = 'SELECT
     HIP,
     Horse,
+    b.Dam,
     Sex,
     Type,
     Price,
