@@ -210,6 +210,9 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Rating 
               </div> 
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Sale Type
+              </div> 
            </div>
           
           <?php
