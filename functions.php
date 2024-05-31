@@ -208,22 +208,17 @@ function fetchOffsprings_weanling_tb($damName, $saleYear)
     // Prepare the SQL query with the required conditions
     $sql = '
     SELECT
-    a.Horse,
-    a.Hip,
-    a.Sex,
-    a.Salecode,
-    a.Price,
-    a.Rating
-    FROM tsales a
-    JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-    JOIN tsales c ON c.Horse = b.dam
-    WHERE b.dam = "'.$damName.'" AND c.type = "W"
-    AND c.saledate <> "1900-01-01" 
-    AND a.datefoal >= DATE_ADD(c.saledate, INTERVAL 11 MONTH)
-    AND a.datefoal <= DATE_ADD(c.saledate, INTERVAL 13 MONTH)
-    AND YEAR(c.saledate) > '.$saleYear.'
-    AND a.type IN ("Y")
-    ORDER BY a.datefoal DESC, a.saledate DESC;';
+	a.Horse,
+	a.Hip,
+	a.Sex,
+	a.Salecode,
+	a.Price,
+	a.Rating
+	FROM tsales a
+	JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
+	WHERE b.Dam = "' . $damName . '"
+	AND a.Yearfoal = "' . $saleYear . '"
+	AND a.Type = "Y";';
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
