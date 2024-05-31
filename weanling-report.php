@@ -184,9 +184,6 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 Sale Type
               </div>
               <div class="cell"  style="width: device-width;">
-                Last Bred
-              </div>
-              <div class="cell"  style="width: device-width;">
                 Age
               </div>
               <div class="cell"  style="width: device-width;">
@@ -244,7 +241,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                     echo "<div class='cell'>".$elements."</div>";
                 }
                 
-                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $year_param);
+                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam']);
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
                         $elementCount++;

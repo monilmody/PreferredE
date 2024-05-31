@@ -196,7 +196,7 @@ LIMIT 1;';
     return $json;
 }
 
-function fetchOffsprings_weanling_tb($damName, $saleYear)
+function fetchOffsprings_weanling_tb($damName)
 {
     global $mysqli;
     
@@ -2290,7 +2290,6 @@ function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sor
     Day,
     Consno,
     saletype,
-    LastBred,
     Age,
     Rating
     FROM tsales a
@@ -3214,5 +3213,3 @@ function deleteSalecode($breed,$salecode)
     return $result;
 }
 ?>
-
-
