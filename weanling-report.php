@@ -209,7 +209,10 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
               </div> 
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Sale Type
-              </div> 
+              </div>
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Total
+              </div>
            </div>
           
           <?php
@@ -218,13 +221,16 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
             foreach($resultFound as $row) {
                 $number = $number+1;
                 $elementCount = 0;
+                $totalPrice = floatval($row['Price']); // Assuming the price column name is 'Price'
+                $offspringTotalPrice = 0;
+
                 echo "<div class='row'>";
                 echo "<div class='cell'>".$number."</div>";
-                
+
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
                     if($elementCount == 6){
-                        $elements = "$".number_format($elements);
+                        $elements = "$".number_format(floatval($elements), 0);
                     }
                     if ($elements == "1900-01-01") {
                         $elements="";
@@ -242,15 +248,32 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 }
                 
                 $offspring_rows = fetchOffsprings_weanling_tb($row['Dam']);
+                $offspringTotalPrice = 0;
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
                         $elementCount++;
-                        if ($elementCount == 5) {
-                            $element = "$" . number_format($element);
+                        if ($elementCount == 18) {
+                          $element = intval($element);
+                          $offspringTotalPrice += $element; // Assuming the price column is at index 18
+                          $element = "$" . number_format($element, 0);
                         }
                         echo "<div class='cell'>" . $element . "</div>";
                     }
                 }
+
+
+                // Calculate the total price difference
+                $priceDifference = $offspringTotalPrice - $totalPrice;
+                
+                $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+
+                // Display the price difference in the "Total" column
+                if ($offspringTotalPrice > 0) {
+                  echo "<div class='cell' style='width: device-width;background-color:" . $cellColor . "'>$" . number_format($priceDifference, 0) . "</div>";
+                } else {
+                  echo "";
+                }
+                
                 echo "</div>";
             }
           

@@ -231,8 +231,6 @@ function fetchOffsprings_weanling_tb($damName)
     return $json;
 }
 
-
-
 function fetchOffsprings_tb($damName)
 {
     global $mysqli;
