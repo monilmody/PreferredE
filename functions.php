@@ -216,7 +216,7 @@ function fetchOffsprings_weanling_tb($damName, $saleYear)
     a.Rating
 FROM tsales a
 JOIN tdamsire b ON a.damsire_Id = b.damsire_ID
-JOIN tsales c ON c.Horse = b.dam
+JOIN tsales c ON c.SALEID = a.SALEID
 WHERE b.dam = "'.$damName.'"
   AND a.type = "W"
   AND a.yearfoal = c.yearfoal
