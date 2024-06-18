@@ -31,6 +31,7 @@ if ($breed_param == "T") {
 
 if (!empty($_POST)) {
   $salecode = trim($_POST["salecode"]);
+  $breed_param = trim($_POST["breed"]);
   //$password = trim($_POST["password"]);
   //echo("alert('aaaa')");
   echo $salecode;
@@ -116,9 +117,10 @@ if (!empty($_POST)) {
       
 
         ?>
-        <form name="myform" action="<?php echo $_SERVER['$PHP_SELF']; ?>" method="POST">
+        <form name="myform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
           <input type="hidden" name="salecode" id="salecode" value="<?php echo $row['Salecode']; ?>" />
-          <button type="submit" href="javascript:deleteSaleData();">Delete</button>
+          <input type="hidden" name="breed" id="breed" value="<?php echo $breed_param; ?>" />
+          <button type="submit">Delete</button>
         </form>
         <!--           <div class='cell'><a href='javascript:deleteSaleData(`".$row[Salecode]."`);'>Delete</a></div> -->
       </div>
