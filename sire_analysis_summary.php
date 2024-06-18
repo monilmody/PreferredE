@@ -36,14 +36,9 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-// Check if any parameter is selected
-if (!empty($year_param) || !empty($elig_param) || !empty($gait_param)) {
-  // Call the function to fetch filtered data based on the selected parameters
-  $resultFound = fetchSireAnalysisSummary($year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
-} else {
-  // If no parameter is selected, set $resultFound to an empty array
-  $resultFound = array();
-}
+// Call the function to fetch filtered data based on the selected parameters
+$resultFound = fetchSireAnalysisSummary($year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+
 // $resultFound = fetchSireAnalysisSummary($year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 $yearList = getYearsList();
 $eligList = getEligList();
