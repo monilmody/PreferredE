@@ -3177,9 +3177,9 @@ function getsaledata($breed)
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 
     global $mysqli;
-    $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+    $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM sales GROUP BY salecode, Saledate, upload_date ORDER BY $orderBy $sortOrder";
     if ($breed == "T") {
-        $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+        $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM tsales GROUP BY salecode, Saledate, upload_date ORDER BY $orderBy $sortOrder";
     }
 
 
