@@ -3173,7 +3173,7 @@ function getsaledata($breed)
         return [];
     }
     
-    $orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 's.Saledate';
+    $orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'Saledate';
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 
     global $mysqli;
