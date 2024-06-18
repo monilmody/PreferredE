@@ -1395,36 +1395,34 @@ function fetchSireAnalysis_tb($sire,$year,$elig,$gait)
     return $json;
 }
 
+
 function fetchSireAnalysisSummary($year, $elig, $gait, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
+
     $select = 'SELECT
-    Sire,
-    Elig,
-    Count,
-    A.Total,
-    A.Avg,
-    Top,
-    CCount,
-    CTotal,
-    CAvg,
-    CTop,
-    FCount,
-    FTotal,
-    FAvg,
-    FTop,
-    SireAvgRank,
-    SireGrossRank,
-    PacerAvgRank,
-    PacerGrossRank,
-    TrotterAvgRank,
-    TrotterGrossRank FROM';
-    
+        Sire,
+        Elig,
+        Count,
+        A.Total,
+        A.Avg,
+        Top,
+        CCount,
+        CTotal,
+        CAvg,
+        CTop,
+        FCount,
+        FTotal,
+        FAvg,
+        FTop,
+        SireAvgRank,
+        SireGrossRank FROM';
+
     $sql_elig = $select . ' (
         (SELECT * FROM sire_sales_elig) A
         LEFT JOIN
         (SELECT Avg, (@CurRank := @CurRank + 1) AS SireAvgRank FROM (SELECT Avg
-            FROM sire_sales_elig WHERE Year=' . $year . ' GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank := 0) r) B
+            FROM sire_sales_elig_tb WHERE Year=' . $year . ' GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank := 0) r) B
             ON A.Avg=B.Avg
         LEFT JOIN
         (SELECT Total, (@CurRank1 := @CurRank1 + 1) AS SireGrossRank FROM (SELECT Total
