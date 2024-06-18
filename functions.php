@@ -1395,14 +1395,12 @@ function fetchSireAnalysis_tb($sire,$year,$elig,$gait)
     return $json;
 }
 
-
-function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchSireAnalysisSummary($year, $elig, $gait, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
     $select = 'SELECT
     Sire,
     Elig,
-    Gait,
     Count,
     A.Total,
     A.Avg,
@@ -1422,106 +1420,62 @@ function fetchSireAnalysisSummary($year,$elig,$gait,$sort1,$sort2,$sort3,$sort4,
     TrotterAvgRank,
     TrotterGrossRank FROM';
     
-    $sql_elig= $select.' (
+    $sql_elig = $select . ' (
         (SELECT * FROM sire_sales_elig) A
         LEFT JOIN
-        (SELECT Avg ,(@CurRank := @CurRank + 1) AS SireAvgRank From (SELECT Avg
-            FROM sire_sales_elig WHERE Year='.$year.' GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank := 0) r) B
+        (SELECT Avg, (@CurRank := @CurRank + 1) AS SireAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig WHERE Year=' . $year . ' GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank := 0) r) B
             ON A.Avg=B.Avg
         LEFT JOIN
-        (SELECT Total ,(@CurRank1 := @CurRank1 + 1) AS SireGrossRank From (SELECT Total
-            FROM sire_sales_elig WHERE Year='.$year.' GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank1 := 0) r) C
-            ON A.Total=C.Total
-        LEFT JOIN
-        (SELECT Avg ,(@curRank2 := @curRank2 + 1) AS PacerAvgRank From (SELECT Avg
-    		FROM sire_sales_elig WHERE Gait="P" AND Year='.$year.' GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank2 := 0) r) D
-            ON A.Avg=D.Avg and A.Gait="P"
-        LEFT JOIN
-        (SELECT Total ,(@curRank3 := @curRank3 + 1) AS PacerGrossRank From (SELECT Total
-    		FROM sire_sales_elig WHERE Gait="P" AND Year='.$year.' GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank3 := 0) r) E
-            ON A.Total=E.Total and A.Gait="P"
-        LEFT JOIN
-        (SELECT Avg ,(@curRank4 := @curRank4 + 1) AS TrotterAvgRank From (SELECT Avg
-    		FROM sire_sales_elig WHERE Gait="T" AND Year='.$year.' GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank4 := 0) r) F
-            ON A.Avg=F.Avg and A.Gait="T"
-        LEFT JOIN
-        (SELECT Total ,(@curRank5 := @curRank5 + 1) AS TrotterGrossRank From (SELECT Total
-    		FROM sire_sales_elig WHERE Gait="T" AND Year='.$year.' GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank5 := 0) r) G
-            ON A.Total=G.Total and A.Gait="T")';
-    
-    
-    $sql_elig_allyear= $select.' (
+        (SELECT Total, (@CurRank1 := @CurRank1 + 1) AS SireGrossRank FROM (SELECT Total
+            FROM sire_sales_elig WHERE Year=' . $year . ' GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank1 := 0) r) C
+            ON A.Total=C.Total)';
+
+    $sql_elig_allyear = $select . ' (
         (SELECT * FROM sire_sales_elig_allyear) A
         LEFT JOIN
-        (SELECT Avg ,(@CurRank := @CurRank + 1) AS SireAvgRank From (SELECT Avg
-            FROM sire_sales_elig_allyear GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank := 0) r) B
+        (SELECT Avg, (@CurRank := @CurRank + 1) AS SireAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig_allyear GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank := 0) r) B
             ON A.Avg=B.Avg
         LEFT JOIN
-        (SELECT Total ,(@CurRank1 := @CurRank1 + 1) AS SireGrossRank From (SELECT Total
-            FROM sire_sales_elig_allyear GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank1 := 0) r) C
-            ON A.Total=C.Total
-        LEFT JOIN
-        (SELECT Avg ,(@curRank2 := @curRank2 + 1) AS PacerAvgRank From (SELECT Avg
-    		FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank2 := 0) r) D
-            ON A.Avg=D.Avg and A.Gait="P"
-        LEFT JOIN
-        (SELECT Total ,(@curRank3 := @curRank3 + 1) AS PacerGrossRank From (SELECT Total
-    		FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank3 := 0) r) E
-            ON A.Total=E.Total and A.Gait="P"
-        LEFT JOIN
-        (SELECT Avg ,(@curRank4 := @curRank4 + 1) AS TrotterAvgRank From (SELECT Avg
-    		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Avg ORDER BY Avg DESC) as a,(SELECT @curRank4 := 0) r) F
-            ON A.Avg=F.Avg and A.Gait="T"
-        LEFT JOIN
-        (SELECT Total ,(@curRank5 := @curRank5 + 1) AS TrotterGrossRank From (SELECT Total
-    		FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Total ORDER BY Total DESC) as a,(SELECT @curRank5 := 0) r) G
-            ON A.Total=G.Total and A.Gait="T")';
+        (SELECT Total, (@CurRank1 := @CurRank1 + 1) AS SireGrossRank FROM (SELECT Total
+            FROM sire_sales_elig_allyear GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank1 := 0) r) C
+            ON A.Total=C.Total)';
+
     $sql = $sql_elig_allyear;
-    //     if ($year != "" && $elig != "") {
-    //         $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
-    //     }elseif ($year != "") {
-    //         $sql = $sql_elig.' WHERE Year = '.$year;
-    //     }elseif ($elig != "") {
-    //         $sql = $sql_elig_allyear.' WHERE Elig ="'.$elig.'"';
-    //     }
-    if ($year != "" && $elig != "" && $gait != "") {
-        $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year.' AND Gait = "'.$gait.'"';
-    }elseif ($year != "" && $elig) {
-        $sql = $sql_elig.' WHERE Elig ="'.$elig.'" AND Year = '.$year;
-    }elseif ($elig != "" && $gait != "") {
-        $sql = $sql_elig_allyear.' WHERE Elig ="'.$elig.'" AND Gait = "'.$gait.'"';
-    }elseif ($year != "" && $gait != "") {
-        $sql = $sql_elig.' WHERE Gait ="'.$gait.'" AND Year = '.$year;
-    }elseif ($elig != "") {
-        $sql = $sql_elig_allyear.' WHERE Elig ="'.$elig.'"';
-    }elseif ($year != "") {
-        $sql = $sql_elig.' WHERE Year = '.$year;
-    }elseif ($gait != "") {
-        $sql = $sql_elig_allyear.' WHERE Gait ="'.$gait.'"';
+
+    if ($year != "" && $elig != "") {
+        $sql .= ' WHERE Elig ="' . $elig . '" AND Year = ' . $year;
+    } elseif ($year != "") {
+        $sql .= ' WHERE Year = ' . $year;
+    } elseif ($elig != "") {
+        $sql .= ' WHERE Elig ="' . $elig . '"';
     }
-    
-    $orderby1 = ' ORDER BY '.$sort1;
-    $orderby2 = ', '.$sort2;
-    $orderby3 = ', '.$sort3;
-    $orderby4 = ', '.$sort4;
-    $orderby5 = ', '.$sort5;
-    
-    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
-    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
-    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3;
-    }elseif ($sort1 !="" && $sort2 !=""){
-        $sql = $sql.$orderby1.$orderby2;
-    }elseif ($sort1 !=""){
-        $sql = $sql.$orderby1;
+
+    $orderby1 = ' ORDER BY ' . $sort1;
+    $orderby2 = ', ' . $sort2;
+    $orderby3 = ', ' . $sort3;
+    $orderby4 = ', ' . $sort4;
+    $orderby5 = ', ' . $sort5;
+
+    if ($sort1 != "" && $sort2 != "" && $sort3 != "" && $sort4 != "" && $sort5 != "") {
+        $sql .= $orderby1 . $orderby2 . $orderby3 . $orderby4 . $orderby5;
+    } elseif ($sort1 != "" && $sort2 != "" && $sort3 != "" && $sort4 != "") {
+        $sql .= $orderby1 . $orderby2 . $orderby3 . $orderby4;
+    } elseif ($sort1 != "" && $sort2 != "" && $sort3 != "") {
+        $sql .= $orderby1 . $orderby2 . $orderby3;
+    } elseif ($sort1 != "" && $sort2 != "") {
+        $sql .= $orderby1 . $orderby2;
+    } elseif ($sort1 != "") {
+        $sql .= $orderby1;
     }
+
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
+        throw new mysqli_sql_exception("Error executing SQL query: " . mysqli_error($mysqli));
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
 
@@ -1605,9 +1559,6 @@ function fetchSireAnalysisSummary_tb($year, $elig, $gait, $sort1, $sort2, $sort3
     $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
-
-
-
 
 function fetchHorseList()
 {
