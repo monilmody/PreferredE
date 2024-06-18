@@ -1416,7 +1416,11 @@ function fetchSireAnalysisSummary($year, $elig, $gait, $sort1, $sort2, $sort3, $
         FAvg,
         FTop,
         SireAvgRank,
-        SireGrossRank FROM';
+        SireGrossRank,
+        PacerAvgRank,
+        PacerGrossRank,
+        TrotterAvgRank,
+        TrotterGrossRank FROM';
 
     $sql_elig = $select . ' (
         (SELECT * FROM sire_sales_elig) A
@@ -1427,7 +1431,23 @@ function fetchSireAnalysisSummary($year, $elig, $gait, $sort1, $sort2, $sort3, $
         LEFT JOIN
         (SELECT Total, (@CurRank1 := @CurRank1 + 1) AS SireGrossRank FROM (SELECT Total
             FROM sire_sales_elig WHERE Year=' . $year . ' GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank1 := 0) r) C
-            ON A.Total=C.Total)';
+            ON A.Total=C.Total
+        LEFT JOIN
+        (SELECT Avg, (@curRank2 := @curRank2 + 1) AS PacerAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig WHERE Gait="P" AND Year=' . $year . ' GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank2 := 0) r) D
+            ON A.Avg=D.Avg AND A.Gait="P"
+        LEFT JOIN
+        (SELECT Total, (@curRank3 := @curRank3 + 1) AS PacerGrossRank FROM (SELECT Total
+            FROM sire_sales_elig WHERE Gait="P" AND Year=' . $year . ' GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank3 := 0) r) E
+            ON A.Total=E.Total AND A.Gait="P"
+        LEFT JOIN
+        (SELECT Avg, (@curRank4 := @curRank4 + 1) AS TrotterAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig WHERE Gait="T" AND Year=' . $year . ' GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank4 := 0) r) F
+            ON A.Avg=F.Avg AND A.Gait="T"
+        LEFT JOIN
+        (SELECT Total, (@curRank5 := @curRank5 + 1) AS TrotterGrossRank FROM (SELECT Total
+            FROM sire_sales_elig WHERE Gait="T" AND Year=' . $year . ' GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank5 := 0) r) G
+            ON A.Total=G.Total AND A.Gait="T")';
 
     $sql_elig_allyear = $select . ' (
         (SELECT * FROM sire_sales_elig_allyear) A
@@ -1438,7 +1458,23 @@ function fetchSireAnalysisSummary($year, $elig, $gait, $sort1, $sort2, $sort3, $
         LEFT JOIN
         (SELECT Total, (@CurRank1 := @CurRank1 + 1) AS SireGrossRank FROM (SELECT Total
             FROM sire_sales_elig_allyear GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank1 := 0) r) C
-            ON A.Total=C.Total)';
+            ON A.Total=C.Total
+        LEFT JOIN
+        (SELECT Avg, (@curRank2 := @curRank2 + 1) AS PacerAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank2 := 0) r) D
+            ON A.Avg=D.Avg AND A.Gait="P"
+        LEFT JOIN
+        (SELECT Total, (@curRank3 := @curRank3 + 1) AS PacerGrossRank FROM (SELECT Total
+            FROM sire_sales_elig_allyear WHERE Gait="P" GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank3 := 0) r) E
+            ON A.Total=E.Total AND A.Gait="P"
+        LEFT JOIN
+        (SELECT Avg, (@curRank4 := @curRank4 + 1) AS TrotterAvgRank FROM (SELECT Avg
+            FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Avg ORDER BY Avg DESC) AS a, (SELECT @curRank4 := 0) r) F
+            ON A.Avg=F.Avg AND A.Gait="T"
+        LEFT JOIN
+        (SELECT Total, (@curRank5 := @curRank5 + 1) AS TrotterGrossRank FROM (SELECT Total
+            FROM sire_sales_elig_allyear WHERE Gait="T" GROUP BY Total ORDER BY Total DESC) AS a, (SELECT @curRank5 := 0) r) G
+            ON A.Total=G.Total AND A.Gait="T")';
 
     $sql = $sql_elig_allyear;
 
