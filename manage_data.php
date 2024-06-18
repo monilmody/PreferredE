@@ -24,9 +24,9 @@ $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 $orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'Saledate';
 
 // Construct your SQL query based on the sorting parameters
-$sql = "SELECT Salecode, Saledate, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+$sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
 if ($breed_param == "T") {
-  $sql = "SELECT Salecode, Saledate, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+  $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
 }
 
 if (!empty($_POST)) {
@@ -108,6 +108,12 @@ if (!empty($_POST)) {
             if ($elements != "") {
               $date = date_create($elements);
               $elements = date_format($date, "m/d/y");
+            }
+          }
+          if ($elementCount == 3) { // Check if the current column is upload_date
+            if ($elements != "") {
+                $date = date_create($elements);
+                $elements = date_format($date, "m/d/y H:i:s"); // Format the upload_date column
             }
           }
           echo "<div class='cell'>" . $elements . "</div>";
