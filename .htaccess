@@ -2,9 +2,11 @@ AddHandler perl-script .pl
 AddHandler cgi-script .cgi .pl
 php_value memory_limit 768M
 php_value post_max_size 256M
+php_value max_execution_time 300
+php_value max_input_time 300
 php_value upload_max_filesize 256M
 php_value max_input_vars 3000
-php_value output_buffering 0
+php_flag output_buffering Off
 # Enable error logging
 php_value log_errors 1
 # Set the path to the error log file
