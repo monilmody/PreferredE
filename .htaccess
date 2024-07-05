@@ -4,7 +4,7 @@ php_value memory_limit 768M
 php_value post_max_size 256M
 php_value upload_max_filesize 256M
 php_value max_input_vars 3000
-php_value output_buffering = 0
+php_value output_buffering 0
 <IfModule mod_headers.c>
 Header set Cache-Control "max-age=0,no-store"
 </IfModule>
