@@ -1,6 +1,8 @@
 AddHandler perl-script .pl
 AddHandler cgi-script .cgi .pl
 php_value memory_limit 768M
+php_value post_max_size 256M
+php_value upload_max_filesize 256M
 <IfModule mod_headers.c>
 Header set Cache-Control "max-age=0,no-store"
 </IfModule>
