@@ -10,7 +10,7 @@ php_flag output_buffering Off
 # Enable error logging
 php_value log_errors 1
 # Set the path to the error log file
-php_value error_log /var/www/PreferredE/php_errorlog
+php_value error_log /var/www/html/PreferredE/php_errorlog
 <IfModule mod_headers.c>
 Header set Cache-Control "max-age=0,no-store"
 </IfModule>
