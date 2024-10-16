@@ -4,7 +4,7 @@
 	$db_host = "preferred-equine-database.cdq66kiey6co.us-east-1.rds.amazonaws.com"; //Host address (most likely localhost)
 	$db_name = "horse"; //Name of Database
 	$db_user = "preferredequine"; //Name of database user
-	$db_pass = "914MoniMaket77$$"; //Password for database user
+	$db_pass = "914MoniMaker77$$"; //Password for database user
 	$db_table_prefix = ""; // if the table prefix exists use this variable as a global
 	
 
