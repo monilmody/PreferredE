@@ -1,7 +1,5 @@
 <?php
-include("./header.php");
-require_once("config.php");
-
+include 'header.php';
 //Prevent the user visiting the logged in page if he/she is already logged in
 
 // if(isUserLoggedIn()) {
@@ -14,17 +12,20 @@ require_once("config.php");
 //require_once("header.php");
 //$horseList = fetchHorseList();
 ?>
+
 <head>
-  <script src="assets/js/script.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-<link href="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/css/select2.min.css" rel="stylesheet" />
-<script src="https://cdn.jsdelivr.net/npm/select2@4.0.13/dist/js/select2.min.js"></script>
-  
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
+
+<?php
+include_once("config.php");
+?>
     <!-- ***** Header Area End ***** -->
     <br>
 	<h1 style="text-align:center;color:#D98880;">HORSE SEARCH REPORT</h1>
-    <section class="section" id="call-to-action" style="background-color:C7FAF7)">
+    <section class="section" id="call-to-action" style="background-color:C7FAF7">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
@@ -54,10 +55,8 @@ require_once("config.php");
             </div>
         </div>
     </section>
-
-   
-
     <!-- ***** Footer Start ***** -->
+
     <footer>
         <div class="container">
             <div class="row">

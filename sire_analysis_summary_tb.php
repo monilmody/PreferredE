@@ -29,20 +29,17 @@ table, th, td {
 include_once("config.php");
 $year_param =$_GET['year'];
 $elig_param =$_GET['elig'];
-$gait_param =$_GET['gait'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSireAnalysisSummary_tb($year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+$resultFound = fetchSireAnalysisSummary_tb($year_param,$elig_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 $yearList = getYearsList_tb();
 $eligList = getEligList_tb();
-//$gaitList = getGaitList_tb();
 
-$sortList = array("Horse","Elig","SireAvgRank", "SireGrossRank", 
-                  "PacerAvgRank", "PacerGrossRank", "TrotterAvgRank", "TrotterGrossRank");
+$sortList = array("Horse","Elig","SireAvgRank", "SireGrossRank");
 
 echo "<br>";
 

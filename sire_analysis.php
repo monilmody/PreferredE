@@ -15,57 +15,65 @@ include("./header.php");
 <?php
 
 include_once("config.php");
-$sire_param =$_GET['sire'];
-$year_param =$_GET['year'];
-$elig_param =$_GET['elig'];
-$gait_param =$_GET['gait'];
-$sort1_param =$_GET['sort1'];
-$sort2_param =$_GET['sort2'];
-$sort3_param =$_GET['sort3'];
-$sort4_param =$_GET['sort4'];
-$sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param);
+$sire_param = $_GET['sire'] ?? ''; // Use null coalescing operator for default value
+$year_param = $_GET['year'] ?? '';
+$elig_param = $_GET['elig'] ?? '';
+$gait_param = $_GET['gait'] ?? '';
+$sort1_param = $_GET['sort1'] ?? '';
+$sort2_param = $_GET['sort2'] ?? '';
+$sort3_param = $_GET['sort3'] ?? '';
+$sort4_param = $_GET['sort4'] ?? '';
+$sort5_param = $_GET['sort5'] ?? '';
+
+$resultFound = fetchSireAnalysis($sire_param, $year_param, $elig_param, $gait_param);
 $resultList = fetchSireList($year_param);
 $yearList = getYearsList();
 $eligList = getEligList();
 $gaitList = getGaitList();
 
-$sortList = array("Rank","FRank","CRank","Gait","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
-                  "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
+$sortList = array("Rank", "FRank", "CRank", "Gait", "SaleDate", "Day", "SaleCode", "Dam", "Sireofdam", 
+                  "Sex", "Color", "Type", "Elig", "Hip", "Price Desc", "ConsNo", "Purlname", "Purfname");
 
 echo "<br>";
-
-echo '<div style= "margin:5px 30px 30px 30px;">';
+echo '<div style="margin:5px 30px 30px 30px;">';
 echo '<h1 style="text-align:center;">SIRE ANALYSIS   
-<label style="color:5D6D7E";>'.$year_param.'</label> <label style="color:#D98880";>'.$sire_param.'</label></h1>';
+<label style="color:#5D6D7E;">' . htmlspecialchars($year_param) . '</label> <label style="color:#D98880;">' . htmlspecialchars($sire_param) . '</label></h1>';
 ?>
-<select class="custom-select1" id="year"> <!--onchange="location = this.value;" -->
-	<option value="">Sale Year</option>
-	<option  value="">All Years</option>
-	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row['Year'].'</option>';
+
+<select class="custom-select1" id="year">
+    <option value="">Sale Year</option>
+    <option value="">All Years</option>
+    <?php foreach ($yearList as $row) {
+        $selected = ($row['Year'] == $year_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Year']) . '" ' . $selected . '>' . htmlspecialchars($row['Year']) . '</option>';
     } ?>
 </select>
- <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
-	<option value="">Sire Filter</option>
-	<option value="">All Sire</option>
-	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row['Sire'].'</option>';
+
+<select class="custom-select1" id="sire">
+    <option value="">Sire Filter</option>
+    <option value="">All Sire</option>
+    <?php foreach ($resultList as $row) {
+        $selected = ($row['Sire'] == $sire_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Sire']) . '" ' . $selected . '>' . htmlspecialchars($row['Sire']) . '</option>';
     } ?>
 </select>
-<select class="custom-select1" id="elig"> 
-	<option value="">Elig Filter</option>
-	<option  value="">All Elig</option>
-	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row['Elig'].'</option>';
+
+<select class="custom-select1" id="elig">
+    <option value="">Elig Filter</option>
+    <option value="">All Elig</option>
+    <?php foreach ($eligList as $row) {
+        $selected = ($row['Elig'] == $elig_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Elig']) . '" ' . $selected . '>' . htmlspecialchars($row['Elig']) . '</option>';
     } ?>
 </select>
-<select class="custom-select1" id="gait"> 
-	<option value="">Gait Filter</option>
-	<option value="">All Gait</option>
-	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row['Gait'].'</option>';
+
+<select class="custom-select1" id="gait">
+    <option value="">Gait Filter</option>
+    <option value="">All Gait</option>
+    <?php foreach ($gaitList as $row) {
+        $selected = ($row['Gait'] == $gait_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Gait']) . '" ' . $selected . '>' . htmlspecialchars($row['Gait']) . '</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -203,7 +211,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $sireData = fetchSireData($sire_param,$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
+            $sireData = fetchSireData($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);         
 
             foreach($sireData as $row1) {
                   $elementCount = 0;
@@ -229,7 +237,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                               $elements = $date->format('Y-m-d');
                           } else {
                               // Handle invalid date format here, maybe log it
-                              error_log("Invalid date format: $elements");
+                              $elements = ""; // Default value for invalid date
                           }
                         }
                       }

@@ -9,7 +9,7 @@ include("./header.php");
    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
   <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
   <script src="assets/js/script.js"></script>
-
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 </head>
 <?php
 include_once("config.php");
@@ -157,6 +157,12 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 Horse
               </div>
               <div class="cell"  style="width: device-width;">
+                Sire
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Datefoal
+              </div>
+              <div class="cell"  style="width: device-width;">
                 Dam
               </div>
               <div class="cell"  style="width: device-width;">
@@ -196,7 +202,10 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 Hip
               </div>
               <div class="cell" style="width: device-width;background-color:#D98880">
-                S
+                Sex
+              </div>
+              <div class="cell" style="width: device-width;background-color:#D98880">
+                Datefoal
               </div>
               <div class="cell" style="width: device-width;background-color:#D98880">
                 Salecode

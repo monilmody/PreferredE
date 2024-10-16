@@ -1,5 +1,4 @@
 <?php
-require_once 'vendor/autoload.php';
 include("./header.php");
 ?>
 
@@ -17,9 +16,6 @@ include("./header.php");
 <?php
 
 include_once("config.php");
-require_once("phpFastCaching.php");
-use Phpfastcache\Helper\Psr16Adapter;
-$time_start = microtime(true);
 $year_param =$_GET['year'];
 $salecode_param =$_GET['salecode'];
 $type_param =$_GET['type'];
@@ -31,28 +27,8 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-// Initialize the Phpfastcache
-$cache = \Phpfastcache\CacheManager::getInstance('files');
-
-// Build a unique cache key based on the parameters
-$cacheKey = 'fetchIndividualSaleData_tb_' . md5(serialize($_GET));
-
-  if ($cache->getItem($cacheKey) -> isHit()) {
-    $resultFound = $cache->getItem($cacheKey) -> get();
-  } else {
-    $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
+$resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_param,$elig_param,$gait_param,
         $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
-
-          $cache->getItem($cacheKey)->set($resultFound)->expiresAfter(300);
-          $cache->save($cache->getItem($cacheKey));
-
-  }
-
-$time_end = microtime(true);
-
-echo 'Execution time: ' . number_format($time_end - $time_start, 10) . ' seconds';
-
-$cache->deleteItem($cacheKey);
 
 $yearList = getYearsList_tb();
 $eligList = getEligList_tb();

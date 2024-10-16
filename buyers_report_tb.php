@@ -31,7 +31,7 @@ $yearList = getYearsList_tb();
 $resultList = fetchSalecodeList_tb($year_param);
 $typeList = fetchTypeList_tb();
 
-$sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Purlname", "Purfname", "Sbcity", "Sbstate","Sbcountry");
+$sortList = array("Hip","Horse","Type", "Sire", "Dam", "Datefoal", "Price Desc", "Salecode", "Purlname", "Purfname");
 ?>
 <br>
 
@@ -123,6 +123,18 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Purlname", "P
                 Type
               </div>
               <div class="cell" style="width: device-width;">
+                Sire
+              </div>
+              <div class="cell" style="width: device-width;">
+                Dam
+              </div>
+              <div class="cell" style="width: device-width;">
+                Sex
+              </div>
+              <div class="cell" style="width: device-width;">
+                Datefoal
+              </div>
+              <div class="cell" style="width: device-width;">
                 Price
               </div>
               <div class="cell" style="width: device-width;">
@@ -140,15 +152,6 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Purlname", "P
               <div class="cell" style="width: device-width;">
                 Buyer FirstName
               </div>
-              <div class="cell" style="width: device-width;">
-                SBCity
-              </div>
-              <div class="cell" style="width: device-width;">
-                SBState
-              </div>
-              <div class="cell" style="width: device-width;">
-                SBCountry
-              </div>
           </div>
           
           <?php
@@ -162,7 +165,7 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Purlname", "P
                 echo "<div class='cell'>".$number."</div>";
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 4){
+                    if($elementCount == 8){
                         $elements = "$".number_format($elements);
                     }
                     echo "<div class='cell'>".$elements."</div>";

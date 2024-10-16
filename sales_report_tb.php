@@ -130,6 +130,9 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
                 Type
               </div>
               <div class="cell" style="width: device-width;">
+                Datefoal
+              </div>
+              <div class="cell" style="width: device-width;">
                 Price
               </div>
               <div class="cell" style="width: device-width;">
@@ -140,9 +143,6 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
               </div>
               <div class="cell" style="width: device-width;">
                 Day
-              </div>
-              <div class="cell" style="width: device-width;">
-                Consno
               </div>
               <div class="cell" style="width: device-width;">
                 Sire
@@ -174,7 +174,7 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
                 echo "<div class='cell'>".$number."</div>";
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 4){
+                    if($elementCount == 5){
                         $elements = "$".number_format($elements);
                     }
                     if ($elements == "0000-00-00") {

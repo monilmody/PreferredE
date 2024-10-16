@@ -16,11 +16,14 @@ require_once("config.php");
 ?>
 <head>
   <script src="assets/js/script.js"></script>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
 </head>
     <!-- ***** Header Area End ***** -->
     <br>
 	<h1 style="text-align:center;color:#D98880;">THOROUGHBRED HORSE SEARCH REPORT</h1>
-    <section class="section" id="call-to-action" style="background-color:C7FAF7)">
+    <section class="section" id="call-to-action" style="background-color:C7FAF7">
         <div class="container">
             <div class="row">
                 <div class="col-lg-10 offset-lg-1">
