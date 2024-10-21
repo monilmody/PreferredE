@@ -1586,6 +1586,19 @@ function getYearsList_tb() {
     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
 }
+
+function getYearsList_tb1() {
+    global $mysqli;
+    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "W" ORDER BY Year(saledate) DESC;';
+    
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function getEligList() {
     global $mysqli;
     $sql = 'select distinct Elig FROM sales WHERE PRICE>0 ORDER BY Elig';
@@ -1784,6 +1797,25 @@ function fetchSalecodeList($year)
 }
 
 function fetchSalecodeList_tb($year)
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT Salecode FROM tsales
+            WHERE Salecode<> ""
+            ORDER BY Salecode';
+    if ($year != "") {
+        $sql = 'SELECT DISTINCT Salecode FROM tsales WHERE YEAR(`SALEDATE`) = "'.$year.'"
+                AND Salecode<> ""
+                ORDER BY Salecode';
+    }
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchSalecodeList_tb1($year)
 {
     global $mysqli;
     $sql = 'SELECT DISTINCT Salecode FROM tsales

@@ -29,8 +29,8 @@ $sort5_param =$_GET['sort5'];
 $resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,$gait_param,
     $sex_param,$sire_param,$bredto_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
-$yearList = getYearsList_tb();
-$resultList = fetchSalecodeList_tb($year_param);
+$yearList = getYearsList_tb1();
+$resultList = fetchSalecodeList_tb1($year_param);
 $typeList = fetchTypeList_tb();
 $gaitList = getGaitList_tb();
 $sexList = getSexList_tb();
@@ -50,7 +50,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 <!-- </b> -->
 <br>
 <br>
-<select class="custom-select1" id="year">
+<select class="custom-select1" id="year" onchange="updateSalecode_tb(this.value)">
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
 	<?php foreach($yearList as $row) {
@@ -195,6 +195,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
               <div class="cell"  style="width: device-width;">
                 Rating
               </div>
+              
               <div class="cell" style="width: device-width;background-color:#D98880">
                 Offspring Horse
               </div>
@@ -238,7 +239,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 6){
+                    if($elementCount == 8){
                         $elements = "$".number_format(floatval($elements), 0);
                     }
                     if ($elements == "1900-01-01") {
@@ -251,7 +252,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                         // }
                     }
                     if ($elementCount == 10) {
-                        $elements= substr($elements, 0,4);
+                        // $elements= substr($elements, 0,4);
                     }
                     echo "<div class='cell'>".$elements."</div>";
                 }
@@ -261,7 +262,7 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
                         $elementCount++;
-                        if ($elementCount == 18) {
+                        if ($elementCount == 21) {
                           $element = intval($element);
                           $offspringTotalPrice += $element; // Assuming the price column is at index 18
                           $element = "$" . number_format($element, 0);

@@ -164,9 +164,6 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                 T
               </div>
               <div class="cell" style="width: device-width;">
-                ET
-              </div>
-              <div class="cell" style="width: device-width;">
                 DOB
               </div>
               <div class="cell" style="width: device-width;">
@@ -224,13 +221,13 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                   #echo $row[Price];
                   foreach($row1 as $elements) {
                       $elementCount =$elementCount+1;
-                      if($elementCount == 19){
+                      if($elementCount == 18){
                           $elements = "$".number_format((float)$elements);
                       }
                       if ($elements == "0000-00-00") {
                           $elements="";
                       }
-                      if ($elementCount == 11 || $elementCount == 17) {
+                      if ($elementCount == 10 || $elementCount == 16) {
                         if ($elements != "" && $elements !== "1900-01-01") {
                           $date = DateTime::createFromFormat('Y-m-d', $elements);
                           if ($date !== false) {
@@ -241,7 +238,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
                           }
                         }
                       }
-                      if ($elementCount == 16) {
+                      if ($elementCount == 15) {
                           $elements= substr($elements, 0,4);
                       }
                       

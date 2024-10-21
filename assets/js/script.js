@@ -12,9 +12,7 @@ function updateSalecode(year) {
 }
 
 function updateSalecode_tb(year) {
-    // Assuming you have the breed value stored somewhere, you can retrieve it as needed
-    var breed = document.getElementById("breed").value; // Adjust the ID as per your HTML structure
-    
+        
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = function() {
         if (this.readyState == 4 && this.status == 200) {
@@ -23,7 +21,7 @@ function updateSalecode_tb(year) {
     };
     
     // Modify the URL to include both year and breed parameters
-    xmlhttp.open("GET", "ajaxSaleCode.php?year=" + year + "&breed=" + breed, true);
+    xmlhttp.open("GET", "ajaxSaleCode_tb.php?year=" + year, true);
     xmlhttp.send();
 }
 

@@ -32,6 +32,7 @@ $resultFound = fetchIndividualSaleData_tb($year_param,$salecode_param,$type_para
 
 $yearList = getYearsList_tb();
 $eligList = getEligList_tb();
+$resultList = fetchSalecodeList_tb1($year_param);
 //$gaitList = getGaitList_tb();
 $typeList = fetchTypeList_tb();
 
@@ -44,7 +45,7 @@ echo "<br>";
 echo '<div style= "margin:5px 30px 30px 30px;">';
 echo '<h1 style="text-align:center;color:#D98880;">THOROUGHBRED INDIVIDUAL HORSE SALES REPORT</h1>';
 ?>
-<select class="custom-select1" id="year" onchange="updateSalecode(this.value)"> 
+<select class="custom-select1" id="year" onchange="updateSalecode_tb(this.value)">
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
