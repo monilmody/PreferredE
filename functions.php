@@ -232,6 +232,43 @@ function fetchOffsprings_weanling_tb($damName)
     return $json;
 }
 
+function fetchOffsprings_breeze_tb($damName)
+{
+    global $mysqli;
+    
+    // Validate input parameters
+    if (empty($damName)) {
+        return "";
+    }
+
+    // Prepare the SQL query with the required conditions
+    $sql = '
+    SELECT
+    b.Horse,
+    b.Hip,
+    b.Sex,
+    b.Datefoal,
+    b.Salecode,
+    b.Price,
+    b.Rating,
+    b.type AS b_type
+    FROM tsales a
+    JOIN tsales b ON a.TDAM = b.TDAM
+    WHERE a.TDAM = "'.$damName.'"
+    AND a.type = "Y"
+    AND b.type = "R"
+    AND a.Saledate < b.Saledate
+    AND a.Datefoal <= b.Datefoal 
+    LIMIT 1;';
+
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    
+    return $json;
+}
 function fetchOffsprings_tb($damName)
 {
     global $mysqli;
@@ -1599,6 +1636,18 @@ function getYearsList_tb1() {
     return $json;
 }
 
+function getYearsList_tb_breeze() {
+    global $mysqli;
+    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "Y" ORDER BY Year(saledate) DESC;';
+    
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function getEligList() {
     global $mysqli;
     $sql = 'select distinct Elig FROM sales WHERE PRICE>0 ORDER BY Elig';
@@ -1833,6 +1882,7 @@ function fetchSalecodeList_tb1($year)
     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
 }
+
 
 function fetchSalecodeWithoutYear($year)
 {
@@ -2088,6 +2138,72 @@ function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sor
     saletype,
     Age,
     Rating
+    FROM tsales a
+    LEFT JOIN tdamsire b
+    ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;
+    
+    
+    $orderby1 = ' ORDER BY '.$sort1.' ASC';
+    $orderby2 = ', '.$sort2.' ASC';
+    $orderby3 = ', '.$sort3.' ASC';
+    $orderby4 = ', '.$sort4.' ASC';
+    $orderby5 = ', '.$sort5.' ASC';
+    
+    
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
+    }
+    $result = mysqli_query($mysqli, $sql);
+    //echo $sql;
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchBreezeReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
+{
+    global $mysqli;
+
+    if ($year == "" && $salecode == "" && $type == "" && $gait == "" && $sex == "" && $sire == "" && $bredto == "") {
+        return "";
+    }
+    
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
+                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'")
+                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
+                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
+                     AND Bredto= IF("'.$bredto.'"  = "", Bredto, "'.$bredto.'") ';
+    
+    $sql = 'SELECT
+    HIP,
+    Horse,
+    tSire,
+    Datefoal,
+    b.Dam,
+    Sex,
+    Type,
+    Price,
+    Currency,
+    Salecode,
+    Day,
+    Consno,
+    saletype,
+    Age,
+    Rating,
+    a.Purlname,
+    a.Purfname
     FROM tsales a
     LEFT JOIN tdamsire b
     ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;

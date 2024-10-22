@@ -74,6 +74,7 @@ require_once("config.php");
                                     <a class="dropdown-item" href="auction_report_tb.php">Auction Report</a>
                                     <a class="dropdown-item" href="top_buyers_tb.php">Top Yearling Buyers</a>
                                     <a class="dropdown-item" href="weanling-report.php">Weanlings Report</a>
+                                    <a class="dropdown-item" href="yearling_to_breeze_report.php">Yealing To Breeze Report</a>
                                     <a class="dropdown-item" href="individual_sales_report_tb.php">Individual Horse Sales Report</a>
                                     <a class="dropdown-item" href="broodmares_report_tb.php">Broodmares Report</a>
                                 </div>
