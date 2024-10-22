@@ -2106,21 +2106,19 @@ function fetchBroodmaresReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$s
     return $json;
 }
 
-function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
 
-    if ($year == "" && $salecode == "" && $type == "" && $gait == "" && $sex == "" && $sire == "" && $bredto == "") {
+    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
         return "";
     }
     
     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'")
                      AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
-                     AND Bredto= IF("'.$bredto.'"  = "", Bredto, "'.$bredto.'") ';
+                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")';
     
     $sql = 'SELECT
     HIP,
@@ -2170,21 +2168,19 @@ function fetchWeanlingReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sor
     return $json;
 }
 
-function fetchBreezeReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
 
-    if ($year == "" && $salecode == "" && $type == "" && $gait == "" && $sex == "" && $sire == "" && $bredto == "") {
+    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
         return "";
     }
     
     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Gait= IF("'.$gait.'"  = "", Gait, "'.$gait.'")
                      AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")
-                     AND Bredto= IF("'.$bredto.'"  = "", Bredto, "'.$bredto.'") ';
+                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'") ';
     
     $sql = 'SELECT
     HIP,

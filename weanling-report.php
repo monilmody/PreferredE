@@ -16,28 +16,24 @@ include_once("config.php");
 $salecode_param =$_GET['salecode'];
 $year_param =$_GET['year'];
 $type_param =$_GET['type'];
-$gait_param =$_GET['gait'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
-$bredto_param =$_GET['bredto'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,$gait_param,
-    $sex_param,$sire_param,$bredto_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+$resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,
+    $sex_param,$sire_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
 $yearList = getYearsList_tb1();
 $resultList = fetchSalecodeList_tb1($year_param);
 $typeList = fetchTypeList_tb();
-$gaitList = getGaitList_tb();
 $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
-$bredtoList = getBredtoList_tb($year_param);
 
-$sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day", "Consno","Sire" ,"Dam" , "Bredto", "Lastbred","Age","Rating","Sire");
+$sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day", "Consno","Sire" ,"Dam", "Lastbred","Age","Rating","Sire");
 
 ?>
 <br>
@@ -81,13 +77,6 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 //     } 
     ?>
 </select>
-<select class="custom-select1" id="gait"> 
-	<option value="">Gait Filter</option>
-	<option value="">All Gait</option>
-	<?php foreach($gaitList as $row) {
-  	    echo '<option>'.$row['Gait'].'</option>';
-    } ?>
-</select>
 <select class="custom-select1" id="sex"> 
 	<option value="">Sex Filter</option>
 	<option value="">All Sex</option>
@@ -100,13 +89,6 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 	<option value="">All Sire</option>
 	<?php foreach($sireList as $row) {
   	    echo '<option>'.$row['Sire'].'</option>';
-    } ?>
-</select>
-<select class="custom-select1" id="bredto"> 
-	<option value="">BredTo Filter</option>
-	<option value="">All BredTo</option>
-	<?php foreach($bredtoList as $row) {
-  	    echo '<option>'.$row['Bredto'].'</option>';
     } ?>
 </select>
 <br>
@@ -296,10 +278,8 @@ $sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day",
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('type').value="<?php echo $type_param;?>";
-	document.getElementById('gait').value="<?php echo $gait_param;?>";
 	document.getElementById('sex').value="<?php echo $sex_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
-	document.getElementById('bredto').value="<?php echo $bredto_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
@@ -312,10 +292,8 @@ function getValues() {
     var year = document.getElementById('year').value;
 	var salecode = document.getElementById('salecode').value;
 	var type = document.getElementById('type').value;
-	var gait = document.getElementById('gait').value;
 	var sex = document.getElementById('sex').value;
 	var sire = document.getElementById('sire').value;
-	var bredto = document.getElementById('bredto').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
 	var sort3 = document.getElementById('sort3').value;
@@ -325,10 +303,8 @@ function getValues() {
     var link ="weanling-report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
-    							+"&gait="+gait
     							+"&sex="+sex
     							+"&sire="+sire
-    							+"&bredto="+bredto
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3
@@ -337,44 +313,10 @@ function getValues() {
     //alert(link);
     							
   	window.open(link,"_self");
-  	if(year== "" && salecode== "" && type == "" && gait == "" && sex== "" && sire == "" && bredto == "")
+  	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
   	{
   		alert("Please Select Atleast One Category Filter");
   	}
-}
-function downloadData(){
-
-	var year = document.getElementById('year').value;
-	var salecode = document.getElementById('salecode').value;
-	var type = document.getElementById('type').value;
-	var gait = document.getElementById('gait').value;
-	var sex = document.getElementById('sex').value;
-	var sire = document.getElementById('sire').value;
-	var bredto = document.getElementById('bredto').value;
-	var sort1 = document.getElementById('sort1').value;
-	var sort2 = document.getElementById('sort2').value;
-	var sort3 = document.getElementById('sort3').value;
-	var sort4 = document.getElementById('sort4').value;
-	var sort5 = document.getElementById('sort5').value;
-
-    var link ="weanling-report_download.php?year="+year
-    							+"&salecode="+salecode
-    							+"&type="+type
-    							+"&gait="+gait
-    							+"&sex="+sex
-    							+"&sire="+sire
-    							+"&bredto="+bredto
-    							+"&sort1="+sort1
-    							+"&sort2="+sort2
-    							+"&sort3="+sort3
-    							+"&sort4="+sort4
-    							+"&sort5="+sort5;
-    							
-  	if(year== "" && salecode== "" && type == "" && gait == "" && sex== "" && sire == "" && bredto == "")
-  	{
-  		alert("Please Select Atleast One Category Filter");
-  	}
-  	window.open(link,"_blank");
 }
 </script>
 
