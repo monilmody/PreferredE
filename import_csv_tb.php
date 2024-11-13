@@ -231,26 +231,43 @@ if (isset($_POST["import"])) {
                 if ($column[42] != "" and isset($column[42])) {
                     $price = mysqli_real_escape_string($conn, $column[42]);
                 }
-                $saledate = 0;
-                if ($column[3] != "" and isset($column[3])) {
+                $saledate = "0000-00-00";
+                if ($column[3] != "" && isset($column[3])) {
                     $saledate = mysqli_real_escape_string($conn, $column[3]);
                     $date=date_create($saledate);
                     $saledate = date_format($date,"Y-m-d");
                 }
+
+                if ($saledate === "0000-00-00") {
+                    // Here you can set a default value. Choose what is appropriate for your application
+                    $saledate = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                    // Or simply choose to log an error or skip this entry
+                    // echo "No valid SALEDATE provided. Setting to default value.";
+                }
+                
                 $record = "";
                 if (isset($column[18])) {
                     $record = mysqli_real_escape_string($conn, $column[18]);
                 }
                 $datefoal = "0000-00-00";
-                if ($column[12] != "" and isset($column[12])) {
+                if ($column[12] != "" && isset($column[12])) {
                     $datefoal = mysqli_real_escape_string($conn, $column[12]);
                     $date=date_create($datefoal);
                     $datefoal = date_format($date,"Y-m-d");
                 }
-                $bredto = "0000-00-00";
+
+                if ($datefoal === "0000-00-00") {
+                    // Here you can set a default value. Choose what is appropriate for your application
+                    $datefoal = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                    // Or simply choose to log an error or skip this entry
+                    // echo "No valid SALEDATE provided. Setting to default value.";
+                }
+
+                $bredto = "";
                 if (isset($column[32])) {
                     $bredto = mysqli_real_escape_string($conn, $column[32]);
                 }
+
                 $lastbred = "0000-00-00";
                 if ($column[33] != "" and isset($column[33])) {
                     $lastbred = mysqli_real_escape_string($conn, $column[33]);
@@ -260,6 +277,14 @@ if (isset($_POST["import"])) {
                         $lastbred="0000-00-00";
                     }
                 }
+
+                if ($lastbred === "0000-00-00") {
+                    // Here you can set a default value. Choose what is appropriate for your application
+                    $lastbred = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                    // Or simply choose to log an error or skip this entry
+                    // echo "No valid SALEDATE provided. Setting to default value.";
+                }
+
                 $sbcity = "";
                 if (isset($column[39])) {
                     $sbcity = mysqli_real_escape_string($conn, $column[39]);
@@ -339,6 +364,33 @@ if (isset($_POST["import"])) {
                 if (isset($column[48])) {
                     $yearFoal = mysqli_real_escape_string($conn, $column[48]);
                 }
+
+                $tSire = "";
+                if (isset($column[49])) {
+                    $tSire = mysqli_real_escape_string($conn, $column[49]);
+                }
+
+                $tSireofdam = "";
+                if (isset($column[50])) {
+                    $tSireofdam = mysqli_real_escape_string($conn, $column[50]);
+                }
+
+                $TDAM = "";
+                if (isset($column[51])) {
+                    $TDAM = mysqli_real_escape_string($conn, $column[51]);
+                }
+
+                $UTT = 0.0;
+                if (isset($column[52])) {
+                    $UTT = mysqli_real_escape_string($conn, $column[52]);
+                }
+
+                $STATUS = "";
+                if (isset($column[53])) {
+                    $STATUS = mysqli_real_escape_string($conn, $column[53]);
+                }
+
+                
                 
 //                 echo '<br>';
 //                 echo $tattoo.'|'.
@@ -379,11 +431,11 @@ if (isset($_POST["import"])) {
             
             if ($saleID == "") {
                 $sqlInsert = "INSERT into tsales
-                (TATTOO,BREED,HIP,HORSE,CHORSE,SEX,TYPE,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
+                (TATTOO,BREED,HIP,HORSE,CHORSE,SEX,`TYPE`,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssi";
+                AGE,SALETYPE,ET,HIPNUM,`DAY`,ELIG,RATING,`URL`,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,tSire,tSireofdam,TDAM,UTT,`STATUS`)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssds";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -423,7 +475,12 @@ if (isset($_POST["import"])) {
                     $book,
                     $currency,
                     $NFFM,
-                    $yearFoal
+                    $yearFoal,
+                    $tSire,
+                    $tSireofdam,
+                    $TDAM,
+                    $UTT,
+                    $STATUS
                 );
                 
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
@@ -441,14 +498,14 @@ if (isset($_POST["import"])) {
                 //                 $response = "Success";
                 //                 $message = "Data Already Exist";
                 $sqlInsert = "UPDATE tsales SET
-                TATTOO = ?,BREED = ?, HIP = ?,HORSE = ?,CHORSE = ?,SEX = ?,TYPE = ?,COLOR = ?,GAIT = ?,PRICE = ?,
+                TATTOO = ?,BREED = ?, HIP = ?,HORSE = ?,CHORSE = ?,SEX = ?,`TYPE` = ?,COLOR = ?,GAIT = ?,PRICE = ?,
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
-                AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,DAY = ?,ELIG = ?,RATING = ?,URL = ?,PRIVATESALE = ?,
-                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?
+                AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,`DAY` = ?,ELIG = ?,RATING = ?,`URL` = ?,PRIVATESALE = ?,
+                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, tSire = ?, tSireofdam = ?, TDAM = ?, UTT = ?, `STATUS` = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssi";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssds";
                 //echo $sqlInsert;
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
@@ -496,7 +553,13 @@ if (isset($_POST["import"])) {
                         $book,
                         $currency,
                         $NFFM,
-                        $yearFoal);
+                        $yearFoal,
+                        $tSire,
+                        $tSireofdam,
+                        $TDAM,
+                        $UTT,
+                        $STATUS
+                    );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";
                     $message = "CSV Data Updated into the Database";

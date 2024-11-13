@@ -24,9 +24,9 @@ $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 $orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'Saledate';
 
 // Construct your SQL query based on the sorting parameters
-$sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+$sql = "SELECT Salecode, Saledate, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
 if ($breed_param == "T") {
-  $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
+  $sql = "SELECT Salecode, Saledate, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
 }
 
 if (!empty($_POST)) {
@@ -76,22 +76,27 @@ if (!empty($_POST)) {
               <img src="assets\images\sort.png" alt="Sort Saledate">
             </button>
           </div>
-	  <div class="cell" style="width:device-width;">
+          <div class="cell" style="width: device-width;">
+            Salecount
+          </div>
+          <div class="cell" style="width: device-width;">
+            Download
+          </div>
+          <div class="cell" style="width: device-width;">
+            Delete
+          </div>
+          <div class="cell" style="width:device-width;">
             Upload-date
             <button onclick="sortTable('upload_date')">
               <img src="assets\images\sort.png" alt="Sort Uploadtime">
             </button>
           </div>
-          <div class="cell" style="width: device-width;">
-            Salecount
-          </div>
-          <div class="cell" style="width: device-width;">
-            delete
-          </div>
+          
         </table>
       </div>
 
       <?php
+      if(!empty($resultFound)) {
       setlocale(LC_MONETARY, "en_US");
       $number = 0;
       foreach ($resultFound as $row) {
@@ -110,27 +115,41 @@ if (!empty($_POST)) {
               $elements = date_format($date, "m/d/y");
             }
           }
-          if ($elementCount == 3) { // Check if the current column is upload_date
+          if ($elementCount == 5) { // Check if the current column is upload_date
             if ($elements != "") {
                 $date = date_create($elements);
                 $elements = date_format($date, "m/d/y H:i:s"); // Format the upload_date column
             }
           }
           echo "<div class='cell'>" . $elements . "</div>";
+          
         }
+
+        // Download link column
+        echo "<div class='cell' style='width:device-width;'>";
+        echo "<a href='download_file.php?salecode=" . $row['Salecode'] . "'>";
+        echo "<img src='assets/images/download-image.png' alt='Download' style='width:20px; height:20px;'/>";
+        echo "</a>";
+        echo "</div>";
+    
+        // Delete form column
+        echo "<div class='cell' style='width:device-width;'>";
+        echo "<form name='myform' action='" . $_SERVER['PHP_SELF'] . "' method='POST'>";
+        echo "<input type='hidden' name='salecode' id='salecode' value='" . $row['Salecode'] . "' />";
+        echo "<input type='hidden' name='breed' id='breed' value='" . $breed_param . "' />";
+        echo "<button type='submit'>Delete</button>";
+        echo "</form>";
+        echo "</div>";
+
+        echo "</div>"; // Close row div
+
+      }}
+        
         //echo "<div class='cell'><a href='javascript:deleteSaleData(`".$row[Salecode]."`);'>Delete</a></div>";
         //echo "</div>";
       
 
-        ?>
-        <form name="myform" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="POST">
-          <input type="hidden" name="salecode" id="salecode" value="<?php echo $row['Salecode']; ?>" />
-          <input type="hidden" name="breed" id="breed" value="<?php echo $breed_param; ?>" />
-          <button type="submit">Delete</button>
-        </form>
-        <!--           <div class='cell'><a href='javascript:deleteSaleData(`".$row[Salecode]."`);'>Delete</a></div> -->
-      </div>
-    <?php } ?>
+    //     ?>
   </div>
 </div>
 </div>

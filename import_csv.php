@@ -32,7 +32,7 @@ if (isset($_POST["import"])) {
     
     $fileName = $_FILES["file"]["tmp_name"];
 
-    $targetDir = 'uploads/SB';
+    $targetDir = 'uploads/';
     $targetFilePath = $targetDir . basename($_FILES["file"]["name"]);
 
     // Assuming $mysqli is your MySQL connection
@@ -382,6 +382,22 @@ if (isset($_POST["import"])) {
                 if (isset($column[48])) {
                     $yearFoal = mysqli_real_escape_string($conn, $column[48]);
                 }
+
+                $Sire = "";
+                if (isset($column[49])) {
+                    $Sire = mysqli_real_escape_string($conn, $column[49]);
+                }
+
+                $Sireofdam = "";
+                if (isset($column[50])) {
+                    $Sireofdam = mysqli_real_escape_string($conn, $column[50]);
+                }
+
+                $DAM = "";
+                if (isset($column[51])) {
+                    $DAM = mysqli_real_escape_string($conn, $column[51]);
+                }
+
 //                 echo '<br>';
 //                 echo $tattoo.'|'.
 //                     $hip.'|'.
@@ -422,9 +438,9 @@ if (isset($_POST["import"])) {
                 $sqlInsert = "INSERT into sales
                 (TATTOO, BREED, HIP,HORSE,CHORSE,SEX,TYPE,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssi";
+                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisss";
                 
                 $paramArray = array(
                     $tattoo,
@@ -465,7 +481,10 @@ if (isset($_POST["import"])) {
                     $book,
                     $currency,
                     $NFFM,
-                    $yearFoal
+                    $yearFoal,
+                    $Sire,
+                    $Sireofdam,
+                    $DAM
                 );
                 
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
@@ -487,10 +506,10 @@ if (isset($_POST["import"])) {
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
                 AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,DAY = ?,ELIG = ?,RATING = ?,URL = ?, PRIVATESALE = ?, DAMSIRE_ID = ?,
-                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?
+                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssi";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisss";
                 //echo $sqlInsert;
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
@@ -538,7 +557,11 @@ if (isset($_POST["import"])) {
                         $book,
                         $currency,
                         $NFFM,
-                        $yearFoal);
+                        $yearFoal,
+                        $Sire,
+                        $Sireofdam,
+                        $DAM
+                    );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";
                     $message = "CSV Data Updated into the Database";

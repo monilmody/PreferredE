@@ -2852,20 +2852,32 @@ function getDamsireID($csire,$cdam)
     return $damsire_ID['damsire_ID'];
 }
 
-function getTDamsireID($csire,$cdam)
+function getTDamsireID($csire, $cdam)
 {
     global $mysqli;
     $sqlDamsireCheck = "SELECT damsire_ID FROM tdamsire WHERE csire='".$csire."' AND cdam='".$cdam."'";
     try {
         $result = $mysqli->query($sqlDamsireCheck);
-        $damsire_ID = $result->fetch_assoc();
+        
+        // Check if the result is valid and has at least one row
+        if ($result && $result->num_rows > 0) {
+            $damsire_ID = $result->fetch_assoc();
+            return $damsire_ID['damsire_ID'];
+        } else {
+            // Handle the case where no records are found
+            return null; // Or return a default value, or handle it as needed
+        }
     } catch(Exception $e) {
         echo "Error: " . $e->getMessage();
     }
+
+    // If the query fails, print the error message
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID['damsire_ID'];
+
+    // Return null if no result found or if there was an error
+    return null;
 }
 
 function getLastDamsireID()
@@ -2903,18 +2915,32 @@ function getLastTDamsireID()
 function checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
 {
     global $mysqli;
-    $sqlDamsireId = "SELECT SALEID FROM sales WHERE TATTOO='".$tattoo."' AND HIP='".$hip."' AND CHORSE='".$chorse."'
-                     AND SALECODE='".$salecode."' AND SALEDATE='".$saledate."'";
+
+    // Ensure $tattoo is handled when it is null
+    if ($tattoo === "") {
+        // If tattoo is null, modify the query accordingly
+        $sqlDamsireId = "SELECT SALEID FROM sales WHERE HIP='$hip' AND CHORSE='$chorse' AND SALECODE='$salecode' AND SALEDATE='$saledate'";
+    } else {
+        $sqlDamsireId = "SELECT SALEID FROM sales WHERE TATTOO='$tattoo' AND HIP='$hip' AND CHORSE='$chorse' AND SALECODE='$salecode' AND SALEDATE='$saledate'";
+    }
+    
     $result = $mysqli->query($sqlDamsireId);
     try {
         $salesExist = $result->fetch_assoc();
     } catch(PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
+    // Check if the result is not false and has results
+    if ($result && $result->num_rows > 0) {
+        $salesExist = $result->fetch_assoc();
+        // Ensure SALEID is set before accessing
+        if (isset($salesExist['SALEID'])) {
+            return $salesExist['SALEID'];
+        }
     }
-    return $salesExist['SALEID'];
+
+    // If we reach here, handle the case where there is no matching sale ID
+    return null; // Or handle as needed
 }
 
 function checkSalesforUpdate($hip,$salecode,$datefoal)
@@ -2954,18 +2980,32 @@ function checkSalesforETUpdate($tattoo,$salecode,$datefoal)
 function checkTSalesData($tattoo,$hip,$chorse,$salecode,$saledate)
 {
     global $mysqli;
-    $sqlDamsireId = "SELECT SALEID FROM tsales WHERE TATTOO='".$tattoo."' AND HIP='".$hip."' AND CHORSE='".$chorse."'
-                     AND SALECODE='".$salecode."' AND SALEDATE='".$saledate."'";
+
+    // Ensure $tattoo is handled when it is null
+    if ($tattoo === "") {
+        // If tattoo is null, modify the query accordingly
+        $sqlDamsireId = "SELECT SALEID FROM tsales WHERE HIP='$hip' AND CHORSE='$chorse' AND SALECODE='$salecode' AND SALEDATE='$saledate'";
+    } else {
+        $sqlDamsireId = "SELECT SALEID FROM tsales WHERE TATTOO='$tattoo' AND HIP='$hip' AND CHORSE='$chorse' AND SALECODE='$salecode' AND SALEDATE='$saledate'";
+    }
+    
     $result = $mysqli->query($sqlDamsireId);
     try {
         $salesExist = $result->fetch_assoc();
     } catch(PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
+    // Check if the result is not false and has results
+    if ($result && $result->num_rows > 0) {
+        $salesExist = $result->fetch_assoc();
+        // Ensure SALEID is set before accessing
+        if (isset($salesExist['SALEID'])) {
+            return $salesExist['SALEID'];
+        }
     }
-    return $salesExist['SALEID'];
+
+    // If we reach here, handle the case where there is no matching sale ID
+    return null; // Or handle as needed
 }
 
 function getUserID($user)
@@ -3087,9 +3127,9 @@ function getsaledata($breed)
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 
     global $mysqli;
-    $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM sales GROUP BY salecode, Saledate, upload_date ORDER BY $orderBy $sortOrder";
+    $sql = "SELECT Salecode, Saledate, count(*) FROM sales GROUP BY salecode, Saledate ORDER BY $orderBy $sortOrder";
     if ($breed == "T") {
-        $sql = "SELECT Salecode, Saledate, upload_date, count(*) FROM tsales GROUP BY salecode, Saledate, upload_date ORDER BY $orderBy $sortOrder";
+        $sql = "SELECT Salecode, Saledate, count(*) FROM tsales GROUP BY salecode, Saledate ORDER BY $orderBy $sortOrder";
     }
 
 
