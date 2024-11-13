@@ -3,10 +3,10 @@
 $bred_param =$_GET['bred'];
 $url = "";
 if ($bred_param == "S") {
-    $url = "http://www.preferredequineresults.com/PreferredE/sampleFileUpload.csv";
+    $url = "http://52.23.166.233/PreferredE/sampleFileUpload.csv";
 }elseif ($bred_param == "T")
 {
-   $url = "http://www.preferredequineresults.com/PreferredE/sampleFileUpload_T.csv";
+   $url = "http://52.23.166.233/PreferredE/sampleFileUpload_T.csv";
 }
 // echo "Your file is being checked. <br>";
 
