@@ -2842,14 +2842,26 @@ function getDamsireID($csire,$cdam)
     $sqlDamsireCheck = "SELECT damsire_ID FROM damsire WHERE csire='".$csire."' AND cdam='".$cdam."'";
     try {
         $result = $mysqli->query($sqlDamsireCheck);
-        $damsire_ID = $result->fetch_assoc();
+        
+        // Check if the result is valid and has at least one row
+        if ($result && $result->num_rows > 0) {
+            $damsire_ID = $result->fetch_assoc();
+            return $damsire_ID['damsire_ID'];
+        } else {
+            // Handle the case where no records are found
+            return null; // Or return a default value, or handle it as needed
+        }
     } catch(Exception $e) {
         echo "Error: " . $e->getMessage();
     }
+
+    // If the query fails, print the error message
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    return $damsire_ID['damsire_ID'];
+
+    // Return null if no result found or if there was an error
+    return null;
 }
 
 function getTDamsireID($csire, $cdam)
