@@ -3139,20 +3139,34 @@ function getsaledata($breed)
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
 
     global $mysqli;
-    $sql = "SELECT Salecode, Saledate, count(*) FROM sales GROUP BY salecode, Saledate ORDER BY $orderBy $sortOrder";
-    if ($breed == "T") {
-        $sql = "SELECT Salecode, Saledate, count(*) FROM tsales GROUP BY salecode, Saledate ORDER BY $orderBy $sortOrder";
-    }
 
+    // Default query for the 'sales' table
+    $sql = "
+        SELECT s.Salecode, s.Saledate, d.upload_date, COUNT(*) 
+        FROM sales s
+        LEFT JOIN documents d ON s.Salecode = d.file_name  -- Assuming salecode matches the file_name in documents
+        GROUP BY s.Salecode, s.Saledate, d.upload_date
+        ORDER BY $orderBy $sortOrder
+    ";
+
+    // If the breed is 'T', use the 'tsales' table
+    if ($breed == "T") {
+        $sql = "
+            SELECT s.Salecode, s.Saledate, d.upload_date, COUNT(*) 
+            FROM tsales s
+            LEFT JOIN documents d ON s.Salecode = d.file_name  -- Assuming salecode matches the file_name in documents
+            GROUP BY s.Salecode, s.Saledate, d.upload_date
+            ORDER BY $orderBy $sortOrder
+        ";
+    }
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
-
 
 function deleteSalecode($breed,$salecode)
 {

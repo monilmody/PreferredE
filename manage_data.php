@@ -20,15 +20,6 @@ $breed_param = $_GET['breed'];
 
 $resultFound = getsaledata($breed_param);
 
-$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';
-$orderBy = isset($_GET['orderby']) ? $_GET['orderby'] : 'Saledate';
-
-// Construct your SQL query based on the sorting parameters
-$sql = "SELECT Salecode, Saledate, count(*) FROM sales GROUP BY salecode ORDER BY $orderBy $sortOrder";
-if ($breed_param == "T") {
-  $sql = "SELECT Salecode, Saledate, count(*) FROM tsales GROUP BY salecode ORDER BY $orderBy $sortOrder";
-}
-
 if (!empty($_POST)) {
   $salecode = trim($_POST["salecode"]);
   $breed_param = trim($_POST["breed"]);
@@ -76,6 +67,12 @@ if (!empty($_POST)) {
               <img src="assets\images\sort.png" alt="Sort Saledate">
             </button>
           </div>
+          <div class="cell" style="width:device-width;">
+            Upload-date
+            <button onclick="sortTable('upload_date')">
+              <img src="assets\images\sort.png" alt="Sort Uploadtime">
+            </button>
+          </div>
           <div class="cell" style="width: device-width;">
             Salecount
           </div>
@@ -84,12 +81,6 @@ if (!empty($_POST)) {
           </div>
           <div class="cell" style="width: device-width;">
             Delete
-          </div>
-          <div class="cell" style="width:device-width;">
-            Upload-date
-            <button onclick="sortTable('upload_date')">
-              <img src="assets\images\sort.png" alt="Sort Uploadtime">
-            </button>
           </div>
           
         </table>
@@ -115,10 +106,16 @@ if (!empty($_POST)) {
               $elements = date_format($date, "m/d/y");
             }
           }
-          if ($elementCount == 5) { // Check if the current column is upload_date
+          if ($elementCount == 3) { // For upload_date column
             if ($elements != "") {
-                $date = date_create($elements);
-                $elements = date_format($date, "m/d/y H:i:s"); // Format the upload_date column
+              // Assuming $elements is already a valid date string
+              $date = DateTime::createFromFormat('Y-m-d H:i:s', $elements); // Adjust the format if needed
+              if ($date !== false) {
+                $elements = $date->format('m/d/y H:i:s'); // Format the upload_date column
+              } else {
+                // Handle invalid date format if necessary
+                $elements = "Invalid date format";
+              }
             }
           }
           echo "<div class='cell'>" . $elements . "</div>";
@@ -160,9 +157,13 @@ if (!empty($_POST)) {
 
 <script>
   function sortTable(column) {
-    var sortOrder = '<?php echo $sortOrder === 'ASC' ? 'DESC' : 'ASC'; ?>';
-    window.location.href = '?orderby=' + column + '&sortOrder=' + sortOrder + '&breed=<?php echo $breed_param; ?>';
-  }
+    // Get the current sort order (ascending or descending) from the URL
+    var urlParams = new URLSearchParams(window.location.search);
+    var currentSortOrder = urlParams.get('sortOrder') === 'ASC' ? 'DESC' : 'ASC'; // Toggle the sort order
+
+    // Redirect to the page with the updated query parameters for sorting
+    window.location.href = '?orderby=' + column + '&sortOrder=' + currentSortOrder + '&breed=<?php echo $breed_param; ?>';
+}
 </script>
 
 <script>
