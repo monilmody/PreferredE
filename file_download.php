@@ -1,62 +1,32 @@
 <?php
+$bred_param = $_GET['bred'];
 
-$bred_param =$_GET['bred'];
-$url = "";
+// Define the local file path based on the `bred_param` value
+$file_path = "";
 if ($bred_param == "S") {
-    $url = "http://52.23.166.233/PreferredE/sampleFileUpload.csv";
-}elseif ($bred_param == "T")
-{
-   $url = "http://52.23.166.233/PreferredE/sampleFileUpload_T.csv";
+    $file_path = __DIR__ . "/sampleFileUpload.csv"; // Adjust path if necessary
+} elseif ($bred_param == "T") {
+    $file_path = __DIR__ . "/sampleFileUpload_T.csv"; // Adjust path if necessary
 }
-// echo "Your file is being checked. <br>";
 
-// Use basename() function to return
-// the base name of file
-$file_name = basename($url);
-//echo $file_name;
+// Get the file name for the download
+$file_name = basename($file_path);
 $info = pathinfo($file_name);
-// $file = "https://raw.githubusercontent.com/Vishal-Goyal/Preferred_SampleFile/main/sampleFileUpload.csv";
-// DownloadFile($file);
-// function DownloadFile($file) { // $file = include path
-//     if(file_exists($file)) {
-//         header('Content-Description: File Transfer');
-//         header('Content-Type: application/octet-stream');
-//         header('Content-Disposition: attachment; filename='.basename($file));
-//         header('Content-Transfer-Encoding: binary');
-//         header('Expires: 0');
-//         header('Cache-Control: must-revalidate, post-check=0, pre-check=0');
-//         header('Pragma: public');
-//         header('Content-Length: ' . filesize($file));
-//         ob_clean();
-//         flush();
-//         readfile($file);
-//         exit;
-//     }
-    
-// }
 
-// Checking if the file is a
-// CSV file or not
-if ($info["extension"] == "csv") {
-    
-    /* Informing the browser that
-     the file type of the concerned
-     file is a MIME type (Multipurpose
-     Internet Mail Extension type).
-     Hence, no need to play the file
-     but to directly download it on
-     the client's machine. */
+// Check if the file is a CSV and exists
+if ($info["extension"] == "csv" && file_exists($file_path)) {
+    // Set headers to prompt the download
     header("Content-Description: File Transfer");
     header("Content-Type: application/octet-stream");
-    header(
-        "Content-Disposition: attachment; filename=\""
-        . $file_name . "\"");
-    //echo "File downloaded successfully";
-    readfile ($url);
+    header("Content-Disposition: attachment; filename=\"" . $file_name . "\"");
+    header("Content-Length: " . filesize($file_path));
+    
+    // Clear output buffer and read the file
+    ob_clean();
+    flush();
+    readfile($file_path);
+    exit;
+} else {
+    // Display an error message if the file is not found or not a CSV
+    echo "Error: File not found or not a CSV file.";
 }
-
-//else echo "Sorry, that's not a CSV file";
-
-exit();
-
-?>
