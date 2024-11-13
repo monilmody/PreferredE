@@ -105,9 +105,9 @@ include_once("config.php");
               <div class="cell">"NFFM" varchar(2) </div> </div> <div class='row'>
               <div class="cell">"PRIVATESALE" varchar(2) </div> </div> <div class='row'>
               <div class="cell">"BREED" varchar(2) </div> </div> <div class='row'>
-              <div class="cell">"YEARFOAL" int(YYYY) </div> </div> 
-              <div class="cell">"Sire" varchar(50) </div> </div> 
-              <div class="cell">"Sireofdam" varchar(50) </div> </div> 
+              <div class="cell">"YEARFOAL" int(YYYY) </div> </div> <div class='row'>
+              <div class="cell">"Sire" varchar(50) </div> </div> <div class='row'>
+              <div class="cell">"Sireofdam" varchar(50) </div> </div> <div class='row'>
               <div class="cell">"DAM" varchar(50) </div> </div> 
         </div>
     </div>

@@ -105,11 +105,11 @@ include_once("config.php");
               <div class="cell">"NFFM" varchar(2) </div> </div> <div class='row'>
               <div class="cell">"PRIVATESALE" varchar(2) </div> </div> <div class='row'>
               <div class="cell">"BREED" varchar(2) </div> </div> <div class='row'>
-              <div class="cell">"YEARFOAL" int(YYYY) </div> </div> 
-              <div class="cell">"tSire" int(YYYY) </div> </div> 
-              <div class="cell">"tSireofdam" int(YYYY) </div> </div> 
-              <div class="cell">"TDAM" int(YYYY) </div> </div> 
-              <div class="cell">"UTT" float </div> </div> 
+              <div class="cell">"YEARFOAL" int(YYYY) </div> </div> <div class='row'>
+              <div class="cell">"tSire" int(YYYY) </div> </div> <div class='row'>
+              <div class="cell">"tSireofdam" int(YYYY) </div> </div> <div class='row'>
+              <div class="cell">"TDAM" int(YYYY) </div> </div> <div class='row'>
+              <div class="cell">"UTT" float </div> </div> <div class='row'>
               <div class="cell">"STATUS" varchar(255) </div> </div> 
         </div>
     </div>
