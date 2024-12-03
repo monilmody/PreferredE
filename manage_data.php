@@ -62,6 +62,12 @@ if (!empty($_POST)) {
             </button>
           </div>
           <div class="cell" style="width: device-width;">
+            Session
+            <button onclick="sortTable('Session')">
+              <img src="assets\images\sort.png" alt="Sort Session">
+            </button>
+          </div>
+          <div class="cell" style="width: device-width;">
             Saledate
             <button onclick="sortTable('Saledate')">
               <img src="assets\images\sort.png" alt="Sort Saledate">
@@ -100,13 +106,13 @@ if (!empty($_POST)) {
           if ($elements == "0000-00-00") {
             $elements = "";
           }
-          if ($elementCount == 2) {
+          if ($elementCount == 3) {
             if ($elements != "") {
               $date = date_create($elements);
               $elements = date_format($date, "m/d/y");
             }
           }
-          if ($elementCount == 3) { // For upload_date column
+          if ($elementCount == 4) { // For upload_date column
             if ($elements != "") {
               // Assuming $elements is already a valid date string
               $date = DateTime::createFromFormat('Y-m-d H:i:s', $elements); // Adjust the format if needed
