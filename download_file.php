@@ -17,7 +17,7 @@ $filePath = "./uploads/$salecode.csv";
 
 // Function to fetch the file from Flask server if not found locally
 function fetchFileFromFlask($salecode) {
-    $flaskUrl = "http://18.209.103.60:8000/views/uploads/$salecode.csv"; // Flask server URL
+    $flaskUrl = "http://18.209.103.60:8000/views/uploads/formatted_" . $salecode . ".csv"; // Flask server URL
     
     // Use file_get_contents to fetch file from Flask server
     $fileContent = @file_get_contents($flaskUrl); // "@" suppresses warnings in case of failure
