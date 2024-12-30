@@ -20,6 +20,7 @@ $sire_param = $_GET['sire'] ?? ''; // Use null coalescing operator for default v
 $year_param = $_GET['year'] ?? '';
 $elig_param = $_GET['elig'] ?? '';
 $gait_param = $_GET['gait'] ?? '';
+$salecode_param = $_GET['Salecode'] ?? '';
 $sort1_param = $_GET['sort1'] ?? '';
 $sort2_param = $_GET['sort2'] ?? '';
 $sort3_param = $_GET['sort3'] ?? '';
@@ -31,6 +32,7 @@ $resultList = fetchSireList($year_param);
 $yearList = getYearsList();
 $eligList = getEligList();
 $gaitList = getGaitList();
+$salcodeList = fetchSalecodeList($year_param);
 
 $sortList = array("Rank", "FRank", "CRank", "Gait", "SaleDate", "Day", "SaleCode", "Dam", "Sireofdam", 
                   "Sex", "Color", "Type", "Elig", "Hip", "Price Desc", "ConsNo", "Purlname", "Purfname");
@@ -41,7 +43,7 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
 <label style="color:#5D6D7E;">' . htmlspecialchars($year_param) . '</label> <label style="color:#D98880;">' . htmlspecialchars($sire_param) . '</label></h1>';
 ?>
 
-<select class="custom-select1" id="year">
+<select class="custom-select1" id="year" onchange="updateSalecode(this.value)">
     <option value="">Sale Year</option>
     <option value="">All Years</option>
     <?php foreach ($yearList as $row) {
@@ -76,6 +78,16 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
         echo '<option value="' . htmlspecialchars($row['Gait']) . '" ' . $selected . '>' . htmlspecialchars($row['Gait']) . '</option>';
     } ?>
 </select>
+
+<select class="custom-select1" id="salecode">
+    <option value="">Salecode Filter</option>
+    <option value="">All Salecode</option>
+    <?php foreach ($salcodeList as $row) {
+        $selected = ($row['Salecode'] == $salecode_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Salecode']) . '" ' . $selected . '>' . htmlspecialchars($row['Salecode']) . '</option>';
+    } ?>
+</select>
+
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
 	<option  value="">Sort By 1st</option>
 	<?php foreach($sortList as $row) {
@@ -258,6 +270,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param !
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
 	document.getElementById('elig').value="<?php echo $elig_param;?>";
 	document.getElementById('gait').value="<?php echo $gait_param;?>";
+  document.getElementById('Salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
@@ -271,6 +284,7 @@ function getValues() {
 	var sire = document.getElementById('sire').value;
 	var elig = document.getElementById('elig').value;
 	var gait = document.getElementById('gait').value;
+  var salecode = document.getElementById('Salecode').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
 	var sort3 = document.getElementById('sort3').value;
@@ -281,6 +295,7 @@ function getValues() {
     							+"&sire="+sire
     							+"&elig="+elig
     							+"&gait="+gait
+                  +"&salecode="+salecode
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3

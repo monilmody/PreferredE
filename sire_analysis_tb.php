@@ -19,6 +19,7 @@ $sire_param =$_GET['sire'];
 $year_param =$_GET['year'];
 $elig_param =$_GET['elig'];
 $gait_param = isset($_GET['gait']) ? $_GET['gait'] : '';
+$salecode_param = $_GET['Salecode'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
@@ -30,6 +31,7 @@ $resultList = fetchSireList_tb($year_param);
 $yearList = getYearsList_tb();
 $eligList = getEligList_tb();
 //$gaitList = getGaitList_tb();
+$salcodeList = fetchSalecodeList_tb($year_param);
 
 $sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
@@ -40,7 +42,7 @@ echo '<div style= "margin:5px 30px 30px 30px;">';
 echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS   
 <label style="color:5D6D7E";>'.$year_param.'</label> <label style="color:#D98880";>'.$sire_param.'</label></h1>';
 ?>
-<select class="custom-select1" id="year"> <!--onchange="location = this.value;" -->
+<select class="custom-select1" id="year" onchange="updateSalecode_tb(this.value)"> <!--onchange="location = this.value;" -->
 	<option value="">Sale Year</option>
 	<option  value="">All Years</option>
 	<?php foreach($yearList as $row) {
@@ -59,6 +61,14 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
 	<option  value="">All Elig</option>
 	<?php foreach($eligList as $row) {
   	    echo '<option>'.$row['Elig'].'</option>';
+    } ?>
+</select>
+<select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
+    <option value="">Salecode Filter</option>
+    <option value="">All Salecode</option>
+    <?php foreach ($salcodeList as $row) {
+        $selected = ($row['Salecode'] == $salecode_param) ? 'selected' : '';
+        echo '<option value="' . htmlspecialchars($row['Salecode']) . '" ' . $selected . '>' . htmlspecialchars($row['Salecode']) . '</option>';
     } ?>
 </select>
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -244,6 +254,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
 	document.getElementById('elig').value="<?php echo $elig_param;?>";
+  document.getElementById('Salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
@@ -256,6 +267,7 @@ function getValues() {
     var year = document.getElementById('year').value;
 	var sire = document.getElementById('sire').value;
 	var elig = document.getElementById('elig').value;
+  var salecode = document.getElementById('Salecode').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
 	var sort3 = document.getElementById('sort3').value;
@@ -265,6 +277,7 @@ function getValues() {
     var link ="sire_analysis_tb.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
+                  +"&salecode="+salecode
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3
