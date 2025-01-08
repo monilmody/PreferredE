@@ -33,6 +33,7 @@ $eligList = getEligList_tb();
 //$gaitList = getGaitList_tb();
 $salcodeList = fetchSalecodeList_tb($year_param);
 
+
 $sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
                   "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
 
@@ -63,6 +64,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
   	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
+
 <select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
     <option value="">Salecode Filter</option>
     <option value="">All Salecode</option>
@@ -71,6 +73,7 @@ echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS
         echo '<option value="' . htmlspecialchars($row['Salecode']) . '" ' . $selected . '>' . htmlspecialchars($row['Salecode']) . '</option>';
     } ?>
 </select>
+
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
 	<option  value="">Sort By 1st</option>
 	<?php foreach($sortList as $row) {
@@ -254,7 +257,6 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
 	document.getElementById('elig').value="<?php echo $elig_param;?>";
-  document.getElementById('Salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
@@ -267,7 +269,6 @@ function getValues() {
     var year = document.getElementById('year').value;
 	var sire = document.getElementById('sire').value;
 	var elig = document.getElementById('elig').value;
-  var salecode = document.getElementById('Salecode').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
 	var sort3 = document.getElementById('sort3').value;
@@ -277,7 +278,6 @@ function getValues() {
     var link ="sire_analysis_tb.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
-                  +"&salecode="+salecode
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3
@@ -289,5 +289,3 @@ function getValues() {
   	
 }
 </script>
-
-
