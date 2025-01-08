@@ -778,7 +778,7 @@ function sanitizeSort(?string $sort, array $allowedSortColumns): ?string {
     return null;
 }
 
-function fetchSireData($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sort4, $sort5) {
+function fetchSireData($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sort4, $sort5, $salecode) {
     global $mysqli;
 
     // Define allowed sort columns to prevent SQL injection
@@ -836,6 +836,7 @@ function fetchSireData($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sort
           AND YEAR(Saledate) = COALESCE(NULLIF(?, ''), YEAR(Saledate))
           AND (Elig = COALESCE(NULLIF(?, ''), Elig))
           AND (Gait = COALESCE(NULLIF(?, ''), Gait))
+          AND (Salecode = COALESCE(NULLIF(?, ''), Salecode))
     )
     SELECT 
         RankNum AS `Rank`,
@@ -872,7 +873,7 @@ function fetchSireData($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sort
     }
 
     // Bind parameters
-    if (!$stmt->bind_param('siss', $sire, $year, $elig, $gait)) {
+    if (!$stmt->bind_param('sisss', $sire, $year, $elig, $gait, $salecode)) {
         error_log("Binding parameters failed: (" . $stmt->errno . ") " . $stmt->error);
         $stmt->close();
         return [];
@@ -1093,40 +1094,53 @@ function fetchConsAnalysis($consno,$year,$elig,$gait)
     return $json;
 }
 
-function fetchSireAnalysis($sire,$year,$elig,$gait)
+function fetchSireAnalysis($sire,$year,$elig,$gait,$salecode)
 {
     global $mysqli;
-    $sql = 'SELECT * FROM sire_sales_allyear';
+    $sql = 'SELECT * FROM sire_sales_allyear_tb';
     
-    if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND
-                Elig ="'.$elig.'" AND Gait="'.$gait.'"';
-    }elseif ($year != "" && $sire != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Gait="'.$gait.'"';
+    if ($year != "" && $sire != "" && $elig != "" && $gait != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Elig ="'.$elig.'" AND Gait="'.$gait.'" AND Salecode="'.$salecode.'"';
+    }elseif ($year != "" && $sire != "" && $gait != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Gait="'.$gait.'" AND Salecode="'.$salecode.'"';
+    }elseif ($year != "" && $sire != "" && $elig != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Elig ="'.$elig.'" AND Salecode="'.$salecode.'"';
+    }elseif ($sire != "" && $elig != "" && $gait != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Elig ="'.$elig.'" AND Gait="'.$gait.'" AND Salecode="'.$salecode.'"';
     }elseif ($year != "" && $elig != "" && $gait != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Elig ="'.$elig.'" AND Year = '.$year.' AND Gait="'.$gait.'"';
-    }elseif ($sire != "" && $elig != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Elig = "'.$elig.'" AND Gait="'.$gait.'"';
     }elseif ($year != "" && $sire != "" && $elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Elig ="'.$elig.'"';
     }elseif ($year != "" && $sire != "") {
         $sql = 'SELECT * FROM sire_sales WHERE Sire ="'.$sire.'" AND Year = '.$year;
-    }elseif ($sire != "" && $elig != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Elig ="'.$elig.'"';
     }elseif ($year != "" && $elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Elig ="'.$elig.'" AND Year = '.$year;
     }elseif ($year != "" && $gait != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Gait ="'.$gait.'" AND Year = '.$year;
+    }elseif ($sire != "" && $elig != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Elig ="'.$elig.'"';
     }elseif ($sire != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait ="'.$gait.'" AND Sire = '.$sire;
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Gait="'.$gait.'"';
     }elseif ($elig != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait ="'.$gait.'" AND Elig = '.$elig;
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="'.$elig.'" AND Gait="'.$gait.'"';
+    }elseif ($sire != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="'.$sire.'" AND Salecode="'.$salecode.'"';
+    }elseif ($year != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Year = '.$year.' AND Salecode="'.$salecode.'"';
+    }elseif ($elig != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="'.$elig.'" AND Salecode="'.$salecode.'"';
+    }elseif ($gait != "" && $salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait="'.$gait.'" AND Salecode="'.$salecode.'"';
     }elseif ($sire != "") {
         $sql = 'SELECT * FROM sire_sales_allyear WHERE Sire ="'.$sire.'"';
     }elseif ($year != "") {
-        $sql = 'SELECT * FROM sire_sales WHERE `Year` = '.$year;
+        $sql = 'SELECT * FROM sire_sales WHERE Year = '.$year;
     }elseif ($elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="'.$elig.'"';
+    }elseif ($gait != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait="'.$gait.'"';
+    }elseif ($salecode != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Salecode="'.$salecode.'"';
     }
     
     $result = mysqli_query($mysqli, $sql);
@@ -1134,72 +1148,9 @@ function fetchSireAnalysis($sire,$year,$elig,$gait)
         printf("Errormessage: %s\n", $mysqli->error);
         echo $sql;
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
-
-// function fetchSireAnalysis_tb($sire,$year,$elig,$gait, $sort1, $sort2, $sort3, $sort4, $sort5)
-// {
-//     global $mysqli;
-//     $sql = 'SELECT * FROM sire_sales_allyear_tb';
-    
-//     if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND
-//                 Elig ="'.$elig.'" AND Gait="'.$gait.'"';
-//     }elseif ($year != "" && $sire != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Gait="'.$gait.'"';
-//     }elseif ($year != "" && $elig != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Elig ="'.$elig.'" AND Year = '.$year.' AND Gait="'.$gait.'"';
-//     }elseif ($sire != "" && $elig != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Sire ="'.$sire.'" AND Elig = "'.$elig.'" AND Gait="'.$gait.'"';
-//     }elseif ($year != "" && $sire != "" && $elig != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Elig ="'.$elig.'"';
-//     }elseif ($year != "" && $sire != "") {
-//         $sql = 'SELECT * FROM sire_sales_tb WHERE Sire ="'.$sire.'" AND Year = '.$year;
-//     }elseif ($sire != "" && $elig != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Sire ="'.$sire.'" AND Elig ="'.$elig.'"';
-//     }elseif ($year != "" && $elig != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Elig ="'.$elig.'" AND Year = '.$year;
-//     }elseif ($year != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_tb WHERE Gait ="'.$gait.'" AND Year = '.$year;
-//     }elseif ($sire != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Gait ="'.$gait.'" AND Sire = '.$sire;
-//     }elseif ($elig != "" && $gait != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Gait ="'.$gait.'" AND Elig = '.$elig;
-//     }elseif ($sire != "") {
-//         $sql = 'SELECT * FROM sire_sales_allyear_tb WHERE Sire ="'.$sire.'"';
-//     }elseif ($year != "") {
-//         $sql = 'SELECT * FROM sire_sales_tb WHERE `Year` = '.$year;
-//     }elseif ($elig != "") {
-//         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Elig ="'.$elig.'"';
-//     }
-
-//     $orderby1 = ' ORDER BY '.$sort1;
-//     $orderby2 = ', '.$sort2;
-//     $orderby3 = ', '.$sort3;
-//     $orderby4 = ', '.$sort4;
-//     $orderby5 = ', '.$sort5;
-    
-//     if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-//         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
-//     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-//         $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
-//     }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-//         $sql = $sql.$orderby1.$orderby2.$orderby3;
-//     }elseif ($sort1 !="" && $sort2 !=""){
-//         $sql = $sql.$orderby1.$orderby2;
-//     }elseif ($sort1 !=""){
-//         $sql = $sql.$orderby1;
-//     }
-    
-//     $result = mysqli_query($mysqli, $sql);
-//     if (!$result) {
-//         printf("Errormessage: %s\n", $mysqli->error);
-//         echo $sql;
-//     }
-//     $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-//     return $json;
-// }
 
 function fetchSireAnalysis_tb($sire,$year,$elig,$gait,$salecode)
 {
