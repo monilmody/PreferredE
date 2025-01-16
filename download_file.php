@@ -18,7 +18,7 @@ $fileExtensions = ['csv', 'xls', 'xlsx']; // Allowed file extensions
 // Function to fetch the file from Flask server if not found locally
 function fetchFileFromFlask($salecode, $extension) {
     // Flask server URL with the specified file extension
-    $flaskUrl = "http://35.174.109.189:8000/views/uploads/formatted_" . $salecode . "." . $extension;
+    $flaskUrl = "http://3.95.189.5:8000/views/uploads/formatted_" . $salecode . "." . $extension;
     
     // Use file_get_contents to fetch file from Flask server
     $fileContent = @file_get_contents($flaskUrl); // "@" suppresses warnings in case of failure
