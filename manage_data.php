@@ -63,9 +63,6 @@ if (!empty($_POST)) {
           </div>
           <div class="cell" style="width: device-width;">
             Session
-            <button onclick="sortTable('Session')">
-              <img src="assets\images\sort.png" alt="Sort Session">
-            </button>
           </div>
           <div class="cell" style="width: device-width;">
             Saledate
