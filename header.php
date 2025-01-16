@@ -90,7 +90,7 @@ require_once("config.php");
                                 <div class="dropdown-menu" style="background-color:black;" >
                                     <a class="dropdown-item" href="sales_file_upload.php">Standardbred</a>
                                 	<a class="dropdown-item" href="sales_file_upload_tb.php">Thoroughbred</a>
-                                    <a class="dropdown-item" href="http://18.209.103.60:8000/">File Upload Python</a>
+                                    <a class="dropdown-item" href="http://18.209.103.60:8000/" target="_blank">File Upload Python</a>
                                 	<a class="dropdown-item" href="manage_data.php">Manage File Upload Data</a>
                                 	<a class="dropdown-item" href="file_upload_rating_update.php">Standardbred Rating Update</a>
                                 	<a class="dropdown-item" href="file_upload_et_update.php">Standardbred ET Update</a>
