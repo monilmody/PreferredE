@@ -15,7 +15,7 @@ include("./header.php");
 </head>
 <?php
 include_once("config.php");
-$salecode_param =$_GET['salecode'];
+$salecode_param =$_GET['Salecode'];
 $year_param =$_GET['year'];
 $type_param =$_GET['type'];
 $gait_param =$_GET['gait'];
