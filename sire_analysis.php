@@ -40,7 +40,7 @@ $sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sir
 echo "<br>";
 
 echo '<div style= "margin:5px 30px 30px 30px;">';
-echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS   
+echo '<h1 style="text-align:center;">SIRE ANALYSIS   
 <label style="color:5D6D7E";>'.$year_param.'</label> <label style="color:#D98880";>'.$sire_param.'</label></h1>';
 ?>
 <select class="custom-select1" id="year" onchange="updateSalecode(this.value)"> <!--onchange="location = this.value;" -->
