@@ -15,64 +15,63 @@ include("./header.php");
 <?php
 
 include_once("config.php");
-
-$sire_param = isset($_GET['sire']) ? $_GET['sire'] : '';
-$year_param = isset($_GET['year']) ? $_GET['year'] : '';
-$elig_param = isset($_GET['elig']) ? $_GET['elig'] : '';
-$salecode_param = isset($_GET['salecode']) ? $_GET['salecode'] : '';
+$sire_param =$_GET['sire'];
+$year_param =$_GET['year'];
+$elig_param =$_GET['elig'];
 $gait_param = isset($_GET['gait']) ? $_GET['gait'] : '';
-$sort1_param = isset($_GET['sort1']) ? $_GET['sort1'] : '';
-$sort2_param = isset($_GET['sort2']) ? $_GET['sort2'] : '';
-$sort3_param = isset($_GET['sort3']) ? $_GET['sort3'] : '';
-$sort4_param = isset($_GET['sort4']) ? $_GET['sort4'] : '';
-$sort5_param = isset($_GET['sort5']) ? $_GET['sort5'] : '';
+$salecode_param = $_GET['salecode'];
+$sort1_param =$_GET['sort1'];
+$sort2_param =$_GET['sort2'];
+$sort3_param =$_GET['sort3'];
+$sort4_param =$_GET['sort4'];
+$sort5_param =$_GET['sort5'];
 
-$resultFound = fetchSireAnalysis($sire_param, $year_param, $elig_param, $gait_param, $salecode_param);
+$resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param, $salecode_param);
 $resultList = fetchSireList($year_param);
 $yearList = getYearsList();
 $eligList = getEligList();
-// $gaitList = getGaitList();
+//$gaitList = getGaitList_tb();
 $salcodeList = fetchSalecodeList($year_param);
 
-$sortList = array("Rank", "FRank", "CRank", "Gait", "SaleDate", "Day", "SaleCode", "Dam", "Sireofdam", 
-                  "Sex", "Color", "Type", "Elig", "Hip", "Price Desc", "ConsNo", "Purlname", "Purfname");
+
+$sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
+                  "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
 
 echo "<br>";
-echo '<div style="margin:5px 30px 30px 30px;">';
-echo '<h1 style="text-align:center;">SIRE ANALYSIS   
-<label style="color:#5D6D7E;">' . htmlspecialchars($year_param) . '</label> <label style="color:#D98880;">' . htmlspecialchars($sire_param) . '</label></h1>';
-?>
 
-<select class="custom-select1" id="year" onchange="updateSalecode(this.value)">
-    <option value="">Sale Year</option>
-    <option value="">All Years</option>
-    <?php foreach ($yearList as $row) {
-        	 echo '<option>'.$row['Year'].'</option>';
+echo '<div style= "margin:5px 30px 30px 30px;">';
+echo '<h1 style="text-align:center;">THOROUGHBRED SIRE ANALYSIS   
+<label style="color:5D6D7E";>'.$year_param.'</label> <label style="color:#D98880";>'.$sire_param.'</label></h1>';
+?>
+<select class="custom-select1" id="year" onchange="updateSalecode(this.value)"> <!--onchange="location = this.value;" -->
+	<option value="">Sale Year</option>
+	<option  value="">All Years</option>
+	<?php foreach($yearList as $row) {
+	    echo '<option>'.$row['Year'].'</option>';
+    } ?>
+</select>
+ <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
+	<option value="">Sire Filter</option>
+	<option value="">All Sire</option>
+	<?php foreach($resultList as $row) {
+  	    echo '<option>'.$row['Sire'].'</option>';
+    } ?>
+</select>
+<select class="custom-select1" id="elig"> 
+	<option value="">Elig Filter</option>
+	<option  value="">All Elig</option>
+	<?php foreach($eligList as $row) {
+  	    echo '<option>'.$row['Elig'].'</option>';
     } ?>
 </select>
 
-<select class="custom-select1" id="sire">
-    <option value="">Sire Filter</option>
-    <option value="">All Sire</option>
-    <?php foreach ($resultList as $row) {
-   	    echo '<option>'.$row['Sire'].'</option>';
-      } ?>
-</select>
-
-<select class="custom-select1" id="elig">
-    <option value="">Elig Filter</option>
-    <option value="">All Elig</option>
-    <?php foreach ($eligList as $row) {
-      	    echo '<option>'.$row['Elig'].'</option>';
-          } ?>
-</select>
-
-<select class="custom-select1" id="salecode">
+<select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
     <option value="">Salecode Filter</option>
     <option value="">All Salecode</option>
     <?php foreach ($salcodeList as $row) {
-        	    echo '<option>'.$row['Salecode'].'</option>';
-            } ?>
+        echo '<option>'.$row['Salecode'].'</option>';
+
+    } ?>
 </select>
 
   <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
@@ -128,77 +127,77 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
                         Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
     		    echo '</div>';
     		    
-if ($year_param != "" or $sire_param != "" or $elig_param != "" or $salecode_param != "") {
+if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 ?>
-       <div class="table" style="width: device-width;overflow: fixed;">
+       <div class="table" style="width: 100%;overflow: auto;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        	  <div class="cell" style="width: device-width;">
+        	  <div class="cell" style="width: 2%;">
                 No.
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 R
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 FR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 CR
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 3%;">
                 HIP
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 12%;">
                 Horse
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 S
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 C
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 G
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 T
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 5%;">
                 DOB
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 3%;">
                 Elig
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 12%;">
                 Dam
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 12%;">
                 SireOfDam
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 10%;">
                 SaleCode
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 4%;">
                 Consno
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 5%;">
                 Saledate
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 2%;">
                 Day
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 5%;">
                 Price
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 3%;">
                 Curr
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 7%;">
                 PLastName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 7%;">
                 PFirstName
               </div>
-              <div class="cell" style="width: device-width;">
+              <div class="cell" style="width: 1.5%;">
                 Rate
               </div>
           </div>
@@ -207,7 +206,7 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $salecode_par
 		    
 		    #$lastname1 =$row[Sire];
             $number =0;
-            $sireData = fetchSireData($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param, $salecode_param);         
+            $sireData = fetchSireData($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param,$salecode_param);         
 
             foreach($sireData as $row1) {
                   $elementCount = 0;
@@ -226,17 +225,19 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $salecode_par
                       if ($elements == "0000-00-00") {
                           $elements="";
                       }
-                      if ($elementCount == 10 || $elementCount == 16) {
+                      if ($elementCount == 10 or $elementCount == 16) {
                         if ($elements != "" && $elements !== "1900-01-01") {
                           $date = DateTime::createFromFormat('Y-m-d', $elements);
-                          if ($date !== false) {
-                              $elements = $date->format('Y-m-d');
+                          if ($date !== false && $date instanceof DateTime) {
+                            $elements = $date->format('Y-m-d');
                           } else {
-                              // Handle invalid date format here, maybe log it
-                              $elements = ""; // Default value for invalid date
+                            // Handle invalid date format here
+                            error_log("Invalid date format: $elements");
+                            $elements = ""; // Default value for invalid date
                           }
                         }
                       }
+
                       if ($elementCount == 15) {
                           $elements= substr($elements, 0,4);
                       }
@@ -276,7 +277,7 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
-    var link ="sire_analysis.php?year="+year
+    var link ="sire_analysis_tb.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
                   +"&salecode="+salecode
