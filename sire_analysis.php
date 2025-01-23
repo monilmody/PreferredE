@@ -256,7 +256,6 @@ if ($year_param != "" or $sire_param != "" or $elig_param != "" or $salecode_par
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
 	document.getElementById('elig').value="<?php echo $elig_param;?>";
-	document.getElementById('gait').value="<?php echo $gait_param;?>";
   document.getElementById('salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
@@ -270,7 +269,6 @@ function getValues() {
     var year = document.getElementById('year').value;
 	var sire = document.getElementById('sire').value;
 	var elig = document.getElementById('elig').value;
-	var gait = document.getElementById('gait').value;
   var salecode = document.getElementById('salecode').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
@@ -281,7 +279,6 @@ function getValues() {
     var link ="sire_analysis.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
-    							+"&gait="+gait
                   +"&salecode="+salecode
     							+"&sort1="+sort1
     							+"&sort2="+sort2
