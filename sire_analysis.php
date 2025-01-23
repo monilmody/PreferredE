@@ -135,7 +135,7 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
                         Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
     		    echo '</div>';
     		    
-if ($year_param != "" or $sire_param != "" or $elig_param != "" or $gait_param != "" or $salecode_param != "") {
+if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 ?>
        <div class="table" style="width: device-width;overflow: fixed;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
