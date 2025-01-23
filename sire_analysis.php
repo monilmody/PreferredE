@@ -277,7 +277,7 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
-    var link ="sire_analysis_tb.php?year="+year
+    var link ="sire_analysis.php?year="+year
     							+"&sire="+sire
     							+"&elig="+elig
                   +"&salecode="+salecode
