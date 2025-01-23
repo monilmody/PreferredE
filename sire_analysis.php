@@ -20,6 +20,7 @@ $sire_param = isset($_GET['sire']) ? $_GET['sire'] : '';
 $year_param = isset($_GET['year']) ? $_GET['year'] : '';
 $elig_param = isset($_GET['elig']) ? $_GET['elig'] : '';
 $salecode_param = isset($_GET['salecode']) ? $_GET['salecode'] : '';
+$gait_param = isset($_GET['gait']) ? $_GET['gait'] : '';
 $sort1_param = isset($_GET['sort1']) ? $_GET['sort1'] : '';
 $sort2_param = isset($_GET['sort2']) ? $_GET['sort2'] : '';
 $sort3_param = isset($_GET['sort3']) ? $_GET['sort3'] : '';
