@@ -30,7 +30,7 @@ $resultFound = fetchSireAnalysis($sire_param, $year_param, $elig_param, $gait_pa
 $resultList = fetchSireList($year_param);
 $yearList = getYearsList();
 $eligList = getEligList();
-$gaitList = getGaitList();
+// $gaitList = getGaitList();
 $salcodeList = fetchSalecodeList($year_param);
 
 $sortList = array("Rank", "FRank", "CRank", "Gait", "SaleDate", "Day", "SaleCode", "Dam", "Sireofdam", 
@@ -63,14 +63,6 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
     <option value="">All Elig</option>
     <?php foreach ($eligList as $row) {
       	    echo '<option>'.$row['Elig'].'</option>';
-          } ?>
-</select>
-
-<select class="custom-select1" id="gait">
-    <option value="">Gait Filter</option>
-    <option value="">All Gait</option>
-    <?php foreach ($gaitList as $row) {
-       	    echo '<option>'.$row['Gait'].'</option>';
           } ?>
 </select>
 
@@ -135,7 +127,7 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
                         Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
     		    echo '</div>';
     		    
-if ($year_param != "" or $sire_param != "" or $elig_param != "") {
+if ($year_param != "" or $sire_param != "" or $elig_param != "" or $salecode_param != "") {
 ?>
        <div class="table" style="width: device-width;overflow: fixed;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
