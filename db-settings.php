@@ -1,7 +1,7 @@
 <?php
 
 //Development Database Information
-	$db_host = "db-backup-restore.cdq66kiey6co.us-east-1.rds.amazonaws.com"; //Host address (most likely localhost)
+	$db_host = "preferredequinesalesresultsdatabase.cdq66kiey6co.us-east-1.rds.amazonaws.com"; //Host address (most likely localhost)
 	$db_name = "horse"; //Name of Database
 	$db_user = "preferredequine"; //Name of database user
 	$db_pass = "914MoniMaker77$$"; //Password for database user
