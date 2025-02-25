@@ -2111,25 +2111,30 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     LEFT JOIN tdamsire b
     ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;
     
-    
-    $orderby1 = ' ORDER BY '.$sort1.' ASC';
-    $orderby2 = ', '.$sort2.' ASC';
-    $orderby3 = ', '.$sort3.' ASC';
-    $orderby4 = ', '.$sort4.' ASC';
-    $orderby5 = ', '.$sort5.' ASC';
-    
-    
-    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
-    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
-    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-        $sql = $sql.$orderby1.$orderby2.$orderby3;
-    }elseif ($sort1 !="" && $sort2 !=""){
-        $sql = $sql.$orderby1.$orderby2;
-    }elseif ($sort1 !=""){
-        $sql = $sql.$orderby1;
+    // Initialize an array to store sorting clauses
+    $orderConditions = [];
+
+    // Sorting parameters mapping
+    $sortParams = [$sort1, $sort2, $sort3, $sort4, $sort5];
+
+    // Loop through the sort parameters and add valid sorting clauses
+    foreach ($sortParams as $index => $sort) {
+        if ($sort != "") {
+            // Special case for Price Desc
+            if ($sort == "Price Desc") {
+                $orderConditions[] = "Price DESC";
+            } else {
+                // For other fields, default sorting is ASC
+                $orderConditions[] = "$sort ASC";
+            }
+        }
     }
+
+    // If any valid sorting clauses exist, add them to the SQL query
+    if (!empty($orderConditions)) {
+        $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
+    }
+    
     $result = mysqli_query($mysqli, $sql);
     //echo $sql;
     if (!$result) {
