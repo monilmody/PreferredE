@@ -221,7 +221,7 @@ function fetchOffsprings_weanling_tb($damName)
     WHERE a.TDAM = "'.$damName.'"
     AND a.type = "W"
     AND b.type = "Y"
-    AND b.Saledate >= DATE_ADD(a.Saledate, INTERVAL 3 MONTH)
+    AND DATEDIFF(b.Saledate, a.Saledate) >= 90
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
