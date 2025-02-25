@@ -218,7 +218,7 @@ function fetchOffsprings_weanling_tb($damName)
     b.type AS b_type
     FROM tsales a
     JOIN tsales b ON a.TDAM = b.TDAM
-    WHERE a.TDAM = "'.$damName.'"
+    WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND a.type = "W"
     AND b.type = "Y"
     AND DATEDIFF(b.Saledate, a.Saledate) >= 90
