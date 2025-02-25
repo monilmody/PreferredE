@@ -221,6 +221,7 @@ function fetchOffsprings_weanling_tb($damName)
     WHERE a.TDAM = "'.$damName.'"
     AND a.type = "W"
     AND b.type = "Y"
+    AND a.Saledate < b.Saledate
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
@@ -3119,7 +3120,7 @@ function getsaledata($breed)
         $sql = "
             SELECT s.Salecode, s.DAY, s.Saledate, d.upload_date, COUNT(*) 
             FROM tsales s
-            LEFT JOIN documents d ON s.Salecode = d.file_name  -- Assuming salecode matches the file_name in documents
+            LEFT JOIN documents d ON s.Salecode = d.file_name -- Assuming salecode matches the file_name in documents
             GROUP BY s.Salecode, s.Saledate, d.upload_date
             ORDER BY $orderBy $sortOrder
         ";
