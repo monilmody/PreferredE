@@ -66,15 +66,15 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day", "Consno
 	<option value="">All Types</option>
 	<option value="W">W : Weanling</option>
 	<option value="Y">Y : Yearling</option>
-  <script>
+  <!-- <script>
     $(document).ready(function() {
     $('#type').val('W'); 
     });
-  </script>
+  </script> -->
 	<?php 
-    //foreach($typeList as $row) {
-// 	    echo '<option>'.$row[Type].'</option>';
-//     } 
+    foreach($typeList as $row) {
+	    echo '<option>'.$row['Type'].'</option>';
+    } 
     ?>
 </select>
 <select class="custom-select1" id="sex"> 
