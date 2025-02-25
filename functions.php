@@ -227,6 +227,7 @@ function fetchOffsprings_weanling_tb($damName, $salecode)
     AND a.Salecode = "'.$salecode.'"
     AND DATEDIFF(b.Saledate, a.Saledate) >= 90
     AND DATEDIFF(b.Saledate, a.Saledate) <= 390
+    AND b.type = "Y"
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
@@ -2134,7 +2135,7 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
-    
+
     $result = mysqli_query($mysqli, $sql);
     //echo $sql;
     if (!$result) {
