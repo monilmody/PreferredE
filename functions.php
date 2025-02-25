@@ -225,9 +225,8 @@ function fetchOffsprings_weanling_tb($damName, $salecode)
     JOIN tsales b ON a.TDAM = b.TDAM
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND a.Salecode = "'.$salecode.'"
-    AND a.type = "W"
-    AND b.type = "Y"
     AND DATEDIFF(b.Saledate, a.Saledate) >= 90
+    AND DATEDIFF(b.Saledate, a.Saledate) <= 390
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
