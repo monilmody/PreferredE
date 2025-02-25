@@ -205,6 +205,11 @@ function fetchOffsprings_weanling_tb($damName, $salecode)
         return "";
     }
 
+    // Validate input parameters
+    if (empty($salecode)) {
+        return "";
+    }
+
     // Prepare the SQL query with the required conditions
     $sql = '
     SELECT
