@@ -196,7 +196,7 @@ LIMIT 1;';
     return $json;
 }
 
-function fetchOffsprings_weanling_tb($damName)
+function fetchOffsprings_weanling_tb($damName, $salecode)
 {
     global $mysqli;
     
@@ -219,6 +219,7 @@ function fetchOffsprings_weanling_tb($damName)
     FROM tsales a
     JOIN tsales b ON a.TDAM = b.TDAM
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
+    AND a.Salecode = "'.$salecode.'"
     AND a.type = "W"
     AND b.type = "Y"
     AND DATEDIFF(b.Saledate, a.Saledate) >= 90
