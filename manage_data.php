@@ -33,7 +33,7 @@ if (!empty($_POST)) {
 <style>
   #printButton {
   position: fixed;
-  left: 20px;         /* Position on the left */
+  right: 20px;         /* Position on the right */
   padding: 12px 20px; /* Increased padding for a larger, more clickable button */
   background-color: #007BFF; /* Blue background color */
   color: white;       /* White text color */
@@ -46,12 +46,9 @@ if (!empty($_POST)) {
 }
 
 </style>
-<button id="printButton" onclick="window.print()">Print Page</button>
 
 <div style="margin:5px 30px 30px 30px;">
   <h1 style="text-align:center;color:#D98880;">Manage File Upload Data</h1>
-
-
 
   <select style="background-color:#229954;" class="custom-select1" id="breed">
     <option value="">Breed Filter</option>
@@ -62,6 +59,8 @@ if (!empty($_POST)) {
 
   <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
     style="font-size:20px; " />
+
+  <button id="printButton" onclick="window.print()">Print Page</button>
 
   <hr>
   <div>
