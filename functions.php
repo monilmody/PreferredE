@@ -2086,11 +2086,11 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
         return "";
     }
     
-    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+    $searchParam = ' AND Saleyear= IF("'.$year.'" = "", Saleyear, "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
                      AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'")';
+                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'")';
     
     $sql = 'SELECT
     HIP,
