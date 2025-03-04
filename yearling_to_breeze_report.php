@@ -33,7 +33,7 @@ $typeList = fetchTypeList_tb();
 $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
 
-$sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day", "Consno","Sire" ,"Dam", "Lastbred","Age","Rating","Sire");
+$sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price","Salecode" , "Dym", "Consno", "Saletype", "Age", "Rating","Purlname", "Purfname");
 
 ?>
 <br>
@@ -159,9 +159,6 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day", "Consno
                 Price
               </div>
               <div class="cell"  style="width: device-width;">
-                Curr
-              </div>
-              <div class="cell"  style="width: device-width;">
                 SaleCode
               </div>
               <div class="cell"  style="width: device-width;">
@@ -257,7 +254,7 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day", "Consno
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
                         $elementCount++;
-                        if ($elementCount == 21) {
+                        if ($elementCount == 20) {
                           $element = intval($element);
                           $offspringTotalPrice += $element; // Assuming the price column is at index 18
                           $element = "$" . number_format($element, 0);

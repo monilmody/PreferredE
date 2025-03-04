@@ -2155,29 +2155,27 @@ function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
                      AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND b.Sire= IF("'.$sire.'"  = "", b.Sire, "'.$sire.'") ';
+                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'") ';
     
     $sql = 'SELECT
     HIP,
     Horse,
     tSire,
     Datefoal,
-    b.Dam,
+    TDAM AS Dam,
     Sex,
     Type,
     Price,
-    Currency,
     Salecode,
     Day,
     Consno,
     saletype,
     Age,
     Rating,
-    a.Purlname,
-    a.Purfname
+    Purlname,
+    Purfname
     FROM tsales a
-    LEFT JOIN tdamsire b
-    ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;
+    WHERE Price>0'.$searchParam;
     
     
     $orderby1 = ' ORDER BY '.$sort1.' ASC';
