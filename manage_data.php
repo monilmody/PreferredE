@@ -31,6 +31,8 @@ if (!empty($_POST)) {
 
 <br>
 
+<button id="printButton" onclick="window.print()">Print Page</button>
+
 <div style="margin:5px 30px 30px 30px;">
   <h1 style="text-align:center;color:#D98880;">Manage File Upload Data</h1>
 
@@ -46,9 +48,8 @@ if (!empty($_POST)) {
   <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
     style="font-size:20px; " />
 
-
   <hr>
-  <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
+  <div>
     <div class="table" style="width: device-width;">
       <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
         <table id="salesTable">
