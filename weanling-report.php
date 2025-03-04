@@ -248,7 +248,7 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
                         $elementCount++;
-                        if ($elementCount == 21) {
+                        if ($elementCount == 20) {
                           $element = intval($element);
                           $offspringTotalPrice += $element; // Assuming the price column is at index 18
                           $element = "$" . number_format($element, 0);
