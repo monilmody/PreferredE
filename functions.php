@@ -196,7 +196,7 @@ LIMIT 1;';
     return $json;
 }
 
-function fetchOffsprings_weanling_tb($damName, $salecode)
+function fetchOffsprings_weanling_tb($damName, $salecode, $saledate)
 {
     global $mysqli;
     
@@ -221,12 +221,11 @@ function fetchOffsprings_weanling_tb($damName, $salecode)
     b.Price,
     b.Rating,
     b.type AS b_type
-    FROM tsales a
-    JOIN tsales b ON a.TDAM = b.TDAM
+    FROM tsales b
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
-    AND a.Salecode = "'.$salecode.'"
-    AND DATEDIFF(b.Saledate, a.Saledate) >= 90
-    AND DATEDIFF(b.Saledate, a.Saledate) <= 390
+    AND b.Salecode = "'.$salecode.'"
+    AND DATEDIFF("'.$saledate.'", b.Saledate) >= 90
+    AND DATEDIFF("'.$saledate.'", b.Saledate) <= 390
     AND b.type = "Y"
     LIMIT 1;';
 
