@@ -43,7 +43,6 @@ if (!empty($_POST)) {
   font-weight: bold;   /* Bold text for emphasis */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   cursor: pointer;    /* Pointer cursor on hover */
-  transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
 </style>
