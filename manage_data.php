@@ -46,16 +46,6 @@ if (!empty($_POST)) {
   transition: all 0.3s ease; /* Smooth transition for hover effects */
 }
 
-#printButton:hover {
-  background-color: #0056b3; /* Darker shade of blue on hover */
-  box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15); /* Increase shadow on hov */
-  transform: translateY(-2px); /* Slight lift effect on hover */
-}
-
-#printButton:active {
-  background-color: #004085; /* Even darker shade when pressed */
-  transform: translateY(1px); /* Pressed effect */
-}
 </style>
 <button id="printButton" onclick="window.print()">Print Page</button>
 
