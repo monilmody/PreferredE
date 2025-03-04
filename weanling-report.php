@@ -246,7 +246,7 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
                     echo "<div class='cell'>".$elements."</div>";
                 }
                 
-                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $row['Salecode'], $row['Saledate']);
+                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $row['Salecode']);
                 $offspringTotalPrice = 0;
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
