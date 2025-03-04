@@ -2097,7 +2097,7 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     Horse,
     tSire,
     Datefoal,
-    TDAM,
+    TDAM AS Dam,
     Sex,
     Type,
     Price,
