@@ -31,9 +31,10 @@ if (!empty($_POST)) {
 
 <br>
 <style>
+  
   #printButton {
-  position: relative;
-  right: 20px;         /* Position on the right */
+  position: absolute;
+  right:auto;         /* Position on the right */
   padding: 12px 20px;  /* Increased padding for a larger, more clickable button */
   background-color: #007BFF; /* Blue background color */
   color: white;        /* White text color */
@@ -44,7 +45,7 @@ if (!empty($_POST)) {
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   cursor: pointer;    /* Pointer cursor on hover */
   transition: opacity 0.3s ease; /* Smooth transition for hiding/showing */
-}
+  }
 
 </style>
 
