@@ -2078,39 +2078,57 @@ function fetchBroodmaresReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$s
     return $json;
 }
 
-function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
-{
+function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5) {
     global $mysqli;
 
-    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
-        return "";
+    // Initialize search parameters array
+    $searchParams = [];
+
+    // Add conditions based on provided parameters
+    if ($year != "") {
+        $searchParams[] = "Saleyear = '$year'";
     }
-    
-    $searchParam = ' AND Saleyear= IF("'.$year.'" = "", Saleyear, "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'")';
-    
+    if ($salecode != "") {
+        $searchParams[] = "Salecode = '$salecode'";
+    }
+    if ($type != "") {
+        $searchParams[] = "Type = '$type'";
+    }
+    if ($sex != "") {
+        $searchParams[] = "Sex = '$sex'";
+    }
+    if ($sire != "") {
+        $searchParams[] = "tSire = '$sire'";
+    }
+
+    // If no filters were provided, return an empty result
+    if (empty($searchParams)) {
+        return [];
+    }
+
+    // Join all the conditions into one string, prefixed by 'AND'
+    $searchParam = ' WHERE ' . implode(' AND ', $searchParams);
+
+    // Base SQL query
     $sql = 'SELECT
-    HIP,
-    Horse,
-    tSire,
-    Datefoal,
-    TDAM,
-    Sex,
-    Type,
-    Price,
-    Currency,
-    Salecode,
-    Day,
-    Consno,
-    saletype,
-    Age,
-    Rating
-    FROM tsales a
-    WHERE Price>0'.$searchParam;
-    
+        HIP,
+        Horse,
+        tSire,
+        Datefoal,
+        TDAM,
+        Sex,
+        Type,
+        Price,
+        Currency,
+        Salecode,
+        Day,
+        Consno,
+        saletype,
+        Age,
+        Rating
+        FROM tsales a
+        WHERE Price > 0 ' . $searchParam;
+
     // Initialize an array to store sorting clauses
     $orderConditions = [];
 
@@ -2135,12 +2153,14 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
 
+    // Execute the query
     $result = mysqli_query($mysqli, $sql);
-    //echo $sql;
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+
+    // Fetch and return the results as an associative array
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
     return $json;
 }
 
