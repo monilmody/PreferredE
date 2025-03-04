@@ -222,7 +222,7 @@ function fetchOffsprings_weanling_tb($damName, $salecode, $saledate)
     b.Rating,
     b.type AS b_type
     FROM tsales b
-    WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
+    WHERE LOWER(b.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND b.Salecode = "'.$salecode.'"
     AND DATEDIFF("'.$saledate.'", b.Saledate) >= 90
     AND DATEDIFF("'.$saledate.'", b.Saledate) <= 390
