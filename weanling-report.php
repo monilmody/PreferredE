@@ -164,9 +164,6 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
                 Price
               </div>
               <div class="cell"  style="width: device-width;">
-                Saledate
-              </div>
-              <div class="cell"  style="width: device-width;">
                 SaleCode
               </div>
               <div class="cell"  style="width: device-width;">
