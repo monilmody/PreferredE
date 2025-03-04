@@ -31,10 +31,10 @@ if (!empty($_POST)) {
 
 <br>
 <style>
-  
+
   #printButton {
   position: absolute;
-  right:auto;         /* Position on the right */
+  right:20px;         /* Position on the right */
   padding: 12px 20px;  /* Increased padding for a larger, more clickable button */
   background-color: #007BFF; /* Blue background color */
   color: white;        /* White text color */
