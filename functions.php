@@ -2100,7 +2100,7 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     Sex,
     Type,
     Price,
-    Currency,
+    Saledate,
     Salecode,
     Day,
     Consno,
