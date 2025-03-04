@@ -2097,7 +2097,7 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     Horse,
     tSire,
     Datefoal,
-    b.Dam,
+    TDAM,
     Sex,
     Type,
     Price,
@@ -2109,8 +2109,7 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     Age,
     Rating
     FROM tsales a
-    LEFT JOIN tdamsire b
-    ON a.damsire_Id=b.damsire_ID WHERE Price>0'.$searchParam;
+    WHERE Price>0'.$searchParam;
     
     // Initialize an array to store sorting clauses
     $orderConditions = [];
