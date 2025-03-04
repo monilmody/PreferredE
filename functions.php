@@ -239,7 +239,7 @@ function fetchOffsprings_weanling_tb($damName, $salecode)
     return $json;
 }
 
-function fetchOffsprings_breeze_tb($damName)
+function fetchOffsprings_breeze_tb($damName, $salecode)
 {
     global $mysqli;
     
@@ -261,11 +261,10 @@ function fetchOffsprings_breeze_tb($damName)
     b.type AS b_type
     FROM tsales a
     JOIN tsales b ON a.TDAM = b.TDAM
-    WHERE a.TDAM = "'.$damName.'"
-    AND a.type = "Y"
+    WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
+    AND a.Salecode = "'.$salecode.'"
+    AND DATEDIFF(b.Saledate, a.Saledate) <= 365  -- Sale must be within 12 months (365 days) of the dam
     AND b.type = "R"
-    AND a.Saledate < b.Saledate
-    AND a.Datefoal <= b.Datefoal 
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);

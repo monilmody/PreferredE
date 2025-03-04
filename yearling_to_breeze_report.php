@@ -249,7 +249,7 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
                     echo "<div class='cell'>".$elements."</div>";
                 }
                 
-                $offspring_rows = fetchOffsprings_breeze_tb($row['Dam']);
+                $offspring_rows = fetchOffsprings_breeze_tb($row['Dam'],  $row['Salecode']);
                 $offspringTotalPrice = 0;
                 foreach ($offspring_rows as $offspring_row) {
                     foreach ($offspring_row as $element) {
