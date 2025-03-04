@@ -263,6 +263,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     JOIN tsales b ON a.TDAM = b.TDAM
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND a.Salecode = "'.$salecode.'"
+    AND DATEDIFF(b.Saledate, a.Saledate) >= 1
     AND DATEDIFF(b.Saledate, a.Saledate) <= 365  -- Sale must be within 12 months (365 days) of the dam
     AND b.type = "R"
     LIMIT 1;';
