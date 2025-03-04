@@ -3119,7 +3119,7 @@ function getsaledata($breed)
 
     // Default query for the 'sales' table
     $sql = "
-        SELECT s.Salecode, s.DAY, s.Saledate, d.upload_date, COUNT(*) 
+        SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) 
         FROM sales s
         LEFT JOIN documents d ON s.Salecode = d.file_name  -- Assuming salecode matches the file_name in documents
         GROUP BY s.Salecode, s.Saledate, d.upload_date
