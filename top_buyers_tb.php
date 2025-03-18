@@ -119,7 +119,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
   
                   echo "<div class='cell'>";
                   echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
-                  echo $row['Purfname'];  // Display the actual buyer's last name
+                  echo $row['BuyerFullName'];  // Display the actual buyer's last name
                   echo "</button>";
                   echo "</div>";
 
