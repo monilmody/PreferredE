@@ -90,10 +90,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                 NO
               </div>
               <div class="cell" style="width: device-width;">
-                BUYER LAST NAME
-              </div>
-              <div class="cell" style="width: device-width;">
-                BUYER FIRST NAME
+                BUYERS FULL NAME
               </div>
               <div class="cell" style="width: device-width;">
                 TOTAL NO PURCHASED
@@ -130,7 +127,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
 
                       $elementCount =$elementCount+1;
                       
-                      if($elementCount == 5 || $elementCount == 4){
+                      if($elementCount == 4 || $elementCount == 3){
                         $elements = "$".number_format(floatval($elements), 0);
                       }
                       echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
