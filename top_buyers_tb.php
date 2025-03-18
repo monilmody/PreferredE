@@ -136,10 +136,27 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   }
                   echo "</div>";
 
-                // Collapsible panel to show Horses bought
-                echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-                echo "<div class='cell' style='padding-left: 20px;'><i>Horses Bought:</i> <i>" . $row['Horses'] . "</i></div>";
-                echo "</div>"; // Close the collapsible panel div
+                // Check if all horses are "No Horse"
+                $horses = explode(",", $row['Horses']); // Assuming horses are stored as comma-separated values
+                $allNoHorse = true; // Flag to check if all horses are "No Horse"
+                foreach ($horses as $horse) {
+                    if (trim($horse) !== "No Horse") {
+                        $allNoHorse = false; // If any horse is not "No Horse", set the flag to false
+                        break;
+                    }
+                }
+
+                // If all horses are "No Horse", display it once
+                if ($allNoHorse) {
+                    echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+                    echo "<div class='cell' style='padding-left: 20px;'><i>All Horses Bought: No Horse</i></div>";
+                    echo "</div>"; // End of collapsible panel
+                } else {
+                    // Otherwise, display each horse individually in a collapsible panel
+                    echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+                    echo "<div class='cell' style='padding-left: 20px;'><i>Horses Bought:</i> <i>" . $row['Horses'] . "</i></div>";
+                    echo "</div>"; // End of collapsible panel
+                }
               }
           ?>
     </div>
