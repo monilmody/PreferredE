@@ -132,7 +132,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
 
                       $elementCount =$elementCount+1;
                       
-                      if($elementCount == 5 or $elementCount == 4){
+                      if($elementCount == 5 || $elementCount == 4){
                           $elements = "$".number_format($elements);
                       }
                       echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
