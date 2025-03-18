@@ -31,7 +31,7 @@ $resultFound = fetchTopBuyers_tb($year_param,$sort1_param,$sort2_param,$sort3_pa
 
 $yearList = getYearsList_tb();
 
-$sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "Gross Asc", "Gross Desc",
+$sortList = array("BuyerFullName","Total Asc", "Total Desc", "Gross Asc", "Gross Desc",
                   "Avg Asc", "Avg Desc");
 ?>
 <br>
