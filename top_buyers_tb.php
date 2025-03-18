@@ -120,7 +120,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   echo "</button>";
                   echo "</div>";
 
-                  foreach($row as $elements) {
+                  foreach($row as $key => $elements) {
                       if ($key === 'Horses') {
                         continue; // Skip Horse in the main row display
                       }
