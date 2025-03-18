@@ -112,7 +112,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
               foreach($resultFound as $row) {
                   $number = $number+1;
                   $elementCount = 0;
-                  echo "<div class='row' style='font-size:15px;border: 1px solid white;'>";
+                  echo "<div class='row style='font-size:15px;border: 1px solid white;'>";
                   echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$number."</div>";
 
                   $collapseID = "collapse" . $number;
@@ -129,7 +129,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
 
                       $elementCount =$elementCount+1;
                       
-                      if($elementCount == 4 || $elementCount == 3){
+                      if($elementCount == 5 || $elementCount == 4){
                         $elements = "$".number_format(floatval($elements), 0);
                       }
                       echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
