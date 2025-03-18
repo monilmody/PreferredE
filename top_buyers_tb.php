@@ -90,10 +90,10 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                 NO
               </div>
               <div class="cell" style="width: device-width;">
-                BUYERS FIRST NAME
+                HORSES BOUGHT BY BUYER
               </div>
               <div class="cell" style="width: device-width;">
-                BUYERS LAST NAME
+                BUYER FULL NAME
               </div>
               <div class="cell" style="width: device-width;">
                 TOTAL NO PURCHASED
@@ -112,18 +112,17 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
               foreach($resultFound as $row) {
                   $number = $number+1;
                   $elementCount = 0;
-                  echo "<div class='row style='font-size:15px;border: 1px solid white;'>";
+                  echo "<div class='row' style='font-size:15px;border: 1px solid white;'>";
                   echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$number."</div>";
 
                   $collapseID = "collapse" . $number;
   
                   echo "<div class='cell'>";
                   echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
-                  echo $row['BuyerFullName'];  // Display the actual buyer's last name
-                  echo "</button>";
+                  echo "HORSES BOUGHT BY BUYER" . "</button>"; // HIP button for collapsing
                   echo "</div>";
 
-                  foreach($row as $key => $elements) {
+                  foreach($row as $elements) {
                       if ($key === 'Horses') {
                         continue; // Skip Horse in the main row display
                       }
