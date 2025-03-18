@@ -126,7 +126,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   echo "</div>";
 
                   foreach($row as $elements) {
-                      if ($key === 'Horse') {
+                      if ($key === 'Horses') {
                         continue; // Skip Horse in the main row display
                       }
 
@@ -141,7 +141,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
 
                 // Collapsible panel to show Horses bought
                 echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-                echo "<div class='cell' style='padding-left: 20px;'><i>Horses Bought:</i> <i>" . $row['Horse'] . "</i></div>";
+                echo "<div class='cell' style='padding-left: 20px;'><i>Horses Bought:</i> <i>" . $row['Horses'] . "</i></div>";
                 echo "</div>"; // Close the collapsible panel div
               }
           ?>
