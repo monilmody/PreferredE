@@ -114,7 +114,22 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   $elementCount = 0;
                   echo "<div class='row style='font-size:15px;border: 1px solid white;'>";
                   echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$number."</div>";
+
+                  $collapseID = "collapse" . $number;
+                
+                  echo "<div class='row'>";
+                  echo "<div class='cell'>".$number."</div>";
+  
+                  echo "<div class='cell'>";
+                  echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
+                  echo "BUYER LAST NAME" . "</button>"; // HIP button for collapsing
+                  echo "</div>";
+
                   foreach($row as $elements) {
+                      if ($key === 'Horse') {
+                        continue; // Skip Horse in the main row display
+                      }
+
                       $elementCount =$elementCount+1;
                       
                       if($elementCount == 5 or $elementCount == 4){
@@ -123,6 +138,11 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                       echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
                   }
                   echo "</div>";
+
+                // Collapsible panel to show Horses bought
+                echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+                echo "<div class='cell' style='padding-left: 20px;'><i>Horses Bought:</i> <i>" . $row['Horse'] . "</i></div>";
+                echo "</div>"; // Close the collapsible panel div
               }
           ?>
     </div>
