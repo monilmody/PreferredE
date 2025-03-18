@@ -116,9 +116,6 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$number."</div>";
 
                   $collapseID = "collapse" . $number;
-                
-                  echo "<div class='row'>";
-                  echo "<div class='cell'>".$number."</div>";
   
                   echo "<div class='cell'>";
                   echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
