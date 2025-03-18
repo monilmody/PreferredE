@@ -127,6 +127,12 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
                 Horse
               </div>
               <div class="cell" style="width: device-width;">
+                Buyer First Name
+              </div>
+              <div class="cell" style="width: device-width;">
+                Buyer last Name
+              </div>
+              <div class="cell" style="width: device-width;">
                 Type
               </div>
               <div class="cell" style="width: device-width;">
@@ -174,19 +180,19 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
                 echo "<div class='cell'>".$number."</div>";
                 foreach($row as $elements) {
                     $elementCount =$elementCount+1;
-                    if($elementCount == 5){
+                    if($elementCount == 7){
                         $elements = "$".number_format($elements);
                     }
                     if ($elements == "0000-00-00") {
                         $elements="";
                     }
-                    if ($elementCount == 12) {
+                    if ($elementCount == 14) {
                         if ($elements != "") {
                             $date=date_create($elements);
                             $elements = date_format($date,"m/d/y");
                         }
                     }
-                    if ($elementCount == 8) {
+                    if ($elementCount == 10) {
                         $elements= substr($elements, 0,4);
                     }
                     echo "<div class='cell'>".$elements."</div>";

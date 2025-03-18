@@ -2280,6 +2280,8 @@ function fetchSalesReport_tb($salecode,$year,$type,$sort1,$sort2,$sort3,$sort4,$
     $sql = 'SELECT
     HIP,
     Horse,
+    Purlfname,
+    Purlname,
     `Type`,
     Datefoal,
     Price,
