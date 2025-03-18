@@ -122,7 +122,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                   echo "HORSES BOUGHT BY BUYER" . "</button>"; // HIP button for collapsing
                   echo "</div>";
 
-                  foreach($row as $elements) {
+                  foreach($row as $key => $elements) {
                       if ($key === 'Horses') {
                         continue; // Skip Horse in the main row display
                       }
@@ -132,7 +132,7 @@ $sortList = array("BuyerLastName","BuyerFirstName","Total Asc", "Total Desc", "G
                       if($elementCount == 4 || $elementCount == 3){
                         $elements = "$".number_format(floatval($elements), 0);
                       }
-                      // echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
+                      echo "<div class='cell' style='font-size:14px;border: 1px solid white;'>".$elements."</div>";
                   }
                   echo "</div>";
 
