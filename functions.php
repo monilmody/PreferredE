@@ -2596,7 +2596,7 @@ FROM sales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", Y
 }
 
 
-function fetchTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchTopYearlingBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
     //     if ($year=="") {
