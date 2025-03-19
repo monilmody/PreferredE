@@ -47,6 +47,18 @@ if (!empty($_POST)) {
   transition: opacity 0.3s ease; /* Smooth transition for hiding/showing */
   }
 
+  @media print {
+  /* Hide Download and Delete columns when printing */
+  .download-column, .delete-column {
+    display: none !important;
+  }
+  
+  /* Optionally, you can also hide the "Print Page" button during printing */
+  #printButton {
+    display: none;
+  }
+  }
+
 </style>
 
 <div style="margin:5px 30px 30px 30px;">
@@ -146,14 +158,14 @@ if (!empty($_POST)) {
         }
 
         // Download link column
-        echo "<div class='cell' style='width:device-width;'>";
+        echo "<div class='cell download-column' style='width:device-width;'>";
         echo "<a href='download_file.php?salecode=" . $row['Salecode'] . "'>";
         echo "<img src='assets/images/download-image.png' alt='Download' style='width:20px; height:20px;'/>";
         echo "</a>";
         echo "</div>";
     
         // Delete form column
-        echo "<div class='cell' style='width:device-width;'>";
+        echo "<div class='cell delete-column' style='width:device-width;'>";
         echo "<form name='myform' action='" . $_SERVER['PHP_SELF'] . "' method='POST'>";
         echo "<input type='hidden' name='salecode' id='salecode' value='" . $row['Salecode'] . "' />";
         echo "<input type='hidden' name='breed' id='breed' value='" . $breed_param . "' />";
