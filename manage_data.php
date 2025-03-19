@@ -49,7 +49,7 @@ if (!empty($_POST)) {
 
   @media print {
   /* Hide Download and Delete columns when printing */
-  .download-column, .delete-column {
+  .download-column, .delete-column, .download-header, .delete-header {
     display: none !important;
   }
   
@@ -111,10 +111,10 @@ if (!empty($_POST)) {
           <div class="cell" style="width: device-width;">
             Salecount
           </div>
-          <div class="cell" style="width: device-width;">
+          <div class="cell download-header" style="width: device-width;">
             Download
           </div>
-          <div class="cell" style="width: device-width;">
+          <div class="cell delete-header" style="width: device-width;">
             Delete
           </div>
           
