@@ -38,7 +38,7 @@ $sortList = array("BuyerFullName","Total Asc", "Total Desc", "Gross Asc", "Gross
 
 
 <div class="container">
-<h1 style="text-align:center;color:#D98880;">THOROUGHBRED TOP MIXED BUYERS</h1>
+<h1 style="text-align:center;color:#D98880;">THOROUGHBRED ALL TOP BUYERS</h1>
 
 
 <select class="custom-select1" id="year">
