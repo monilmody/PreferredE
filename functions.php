@@ -1929,6 +1929,20 @@ function fetchTypeList_tb()
     return $json;
 }
 
+function fetchBuyerList_tb()
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT Purlname FROM tsales
+            WHERE Purlname<> ""
+            ORDER BY Purlname';
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function fetchSalesReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;

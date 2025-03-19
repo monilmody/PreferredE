@@ -36,8 +36,9 @@ if (!empty($year_param) || !empty($salecode_param)) {
 $yearList = getYearsList_tb();
 $resultList = fetchSalecodeList_tb($year_param);
 $typeList = fetchTypeList_tb();
+$buyerList = fetchBuyerList_tb();
 
-$sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,"Dam" , "Bredto", "Lastbred", "Age","Age Desc","Rating");
+$sortList = array("Purfname", "Purlname", "Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,"Dam" , "Bredto", "Lastbred", "Age","Age Desc","Rating");
 
 ?>
 <br>
@@ -64,22 +65,20 @@ $sortList = array("Hip","Horse","Type", "Price Desc", "Salecode", "Day","Sire" ,
  <select class="custom-select1" id="type">
 	<option value="">Type Filter</option>
 	<option value="">All Types</option>
-<!-- 	<option value="B">B : Broodmare</option> -->
-<!-- 	<option value="LB">LB : Lifetime Breeding</option> -->
-<!-- 	<option value="M">M : Maiden Broodmare</option> -->
-<!-- 	<option value="P">P : Broodmare Prospect</option> -->
-<!-- 	<option value="R">R : Race Horse</option> -->
-<!-- 	<option value="S">S : Share</option> -->
-<!-- 	<option value="SEA">SEA : Season</option> -->
-<!-- 	<option value="T">T : Stallion</option> -->
-<!-- 	<option value="W">W : Weanling</option> -->
-<!-- 	<option value="Y">Y : Yearling</option> -->
 	<?php 
     foreach($typeList as $row) {
 	    echo '<option>'.$row['Type'].'</option>';
     } 
     ?>
 </select>
+<select class="custom-select1" id="buyer">
+	<option value="">Buyer List</option>
+	<option value="">All Buyers</option>
+	<?php foreach($buyerList as $row) {
+	    echo '<option>'.$row['Purlname'].'</option>';
+    } ?>
+</select>
+
  <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
 	<option  value="">Sort By 1st</option>
 	<?php foreach($sortList as $row) {
