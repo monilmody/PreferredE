@@ -2628,7 +2628,7 @@ function fetchTopYearlingBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     //         $year=null;
     //     }
     $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
-       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Hip SEPARATOR ", ") AS Hips
+       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(CONCAT(Salecode, " - ", Hip) SEPARATOR ", ") AS Hips
     FROM tsales WHERE Saletype="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
     
     //     if ($year != "") {
@@ -2668,7 +2668,7 @@ function fetchAllTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     //         $year=null;
     //     }
     $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
-       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Hip SEPARATOR ", ") AS Hips
+       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(CONCAT(Salecode, " - ", Hip) SEPARATOR ", ") AS Hips
     FROM tsales WHERE  Saletype="Y" AND Saletype="M" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
     
     //     if ($year != "") {
@@ -2708,7 +2708,7 @@ function fetchTopMixedBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     //         $year=null;
     //     }
     $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
-       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Hip SEPARATOR ", ") AS Hips
+       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(CONCAT(Salecode, " - ", Hip) SEPARATOR ", ") AS Hips
     FROM tsales WHERE Saletype="M" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
     
     //     if ($year != "") {
