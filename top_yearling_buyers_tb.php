@@ -27,7 +27,7 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchTopBuyers_tb($year_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+$resultFound = fetchTopYearlingBuyers_tb($year_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
 $yearList = getYearsList_tb();
 

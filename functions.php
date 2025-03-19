@@ -2604,7 +2604,7 @@ function fetchTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     //     }
     $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
        IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Hip SEPARATOR ", ") AS Hips
-    FROM tsales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
+    FROM tsales WHERE `Type`="Y" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
     
     //     if ($year != "") {
     //         $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
