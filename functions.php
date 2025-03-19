@@ -2283,10 +2283,11 @@ function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto
     return $json;
 }
 
-function fetchSalesReport_tb($salecode,$year,$type,$buyer,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchSalesReport_tb($salecode, $year, $type, $buyer, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
-    
+
+    // Sanitize inputs
     $salecode = mysqli_real_escape_string($mysqli, $salecode);
     $year = mysqli_real_escape_string($mysqli, $year);
     $type = mysqli_real_escape_string($mysqli, $type);
@@ -2308,75 +2309,67 @@ function fetchSalesReport_tb($salecode,$year,$type,$buyer,$sort1,$sort2,$sort3,$
     if (!empty($buyer)) {
         $searchParam .= ' AND Purlname = "' . $buyer . '"';
     }
-    
+
+    // Start building the SQL query
     $sql = 'SELECT
-    HIP,
-    Horse,
-    Purfname,
-    Purlname,
-    `Type`,
-    Datefoal,
-    Price,
-    Currency,
-    Salecode,
-    `Day`,
-    b.Sire,
-    b.Dam,
-    Bredto,
-    IF(LastBred = "1900-01-01", NULL, LastBred) AS LastBred,
-    Age,
-    Rating
+        HIP,
+        Horse,
+        Purfname,
+        Purlname,
+        `Type`,
+        Datefoal,
+        Price,
+        Currency,
+        Salecode,
+        `Day`,
+        b.Sire,
+        b.Dam,
+        Bredto,
+        IF(LastBred = "1900-01-01", NULL, LastBred) AS LastBred,
+        Age,
+        Rating
     FROM tsales a
-    LEFT JOIN tdamsire b
-    ON a.damsire_Id=b.damsire_ID WHERE Price>0 '.$searchParam;
+    LEFT JOIN tdamsire b ON a.damsire_Id = b.damsire_ID ' . $searchParam;
+
+    // Dynamically add sorting based on inputs
+    $sortFields = ['Purfname', 'Purlname', 'Hip', 'Horse', 'Type', 'Price', 'Salecode', 'Day', 'Sire', 'Dam', 'Bredto', 'Lastbred', 'Age', 'Rating'];
+    $sortParams = [];
+    if (!empty($sort1) && in_array($sort1, $sortFields)) {
+        $sortParams[] = $sort1;
+    }
+    if (!empty($sort2) && in_array($sort2, $sortFields)) {
+        $sortParams[] = $sort2;
+    }
+    if (!empty($sort3) && in_array($sort3, $sortFields)) {
+        $sortParams[] = $sort3;
+    }
+    if (!empty($sort4) && in_array($sort4, $sortFields)) {
+        $sortParams[] = $sort4;
+    }
+    if (!empty($sort5) && in_array($sort5, $sortFields)) {
+        $sortParams[] = $sort5;
+    }
+
+    // Append sorting if any valid sort fields are given
+    if (count($sortParams) > 0) {
+        $sql .= ' ORDER BY ' . implode(', ', $sortParams);
+    }
+
+    // Debugging: Print the SQL query
+    //echo $sql; // This will print the SQL query before execution. Remove after debugging.
+
+    // Execute the query
+    $result = mysqli_query($mysqli, $sql);
     
-    
-    //     $searchSalecode = ' AND Salecode="'.$salecode.'"';
-    //     $searchYear = ' AND YEAR(`SALEDATE`)='.$year;
-    //     $searchType = ' AND Type="'.$type.'"';
-    //     $searchGait = ' AND Gait="'.$Gait.'"';
-    
-    $orderby1 = ' ORDER BY '.$sort1;
-    $orderby2 = ', '.$sort2;
-    $orderby3 = ', '.$sort3;
-    $orderby4 = ', '.$sort4;
-    $orderby5 = ', '.$sort5;
-    
-    //     if ($year != "" && $salecode != "" && $type != "") {
-    //         $sql = $sql.$searchSalecode.$searchType.$searchYear;
-    //     }elseif ($year != "" && $salecode) {
-    //         $sql = $sql.$searchSalecode.$searchYear;
-    //     }elseif ($salecode != "" && $type != "") {
-    //         $sql = $sql.$searchSalecode.$searchType;
-    //     }elseif ($year != "" && $type != "") {
-    //         $sql = $sql.$searchType.$searchYear;
-    //     }elseif ($salecode != "") {
-    //         $sql = $sql.$searchSalecode;
-    //     }elseif ($year != "") {
-    //         $sql = $sql.$searchYear;
-    //     }elseif ($type != "") {
-    //         $sql = $sql.$searchType;
-    //     }else
-        //         return "";
-    
-        if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
-            $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
-        }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
-            $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
-        }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
-            $sql = $sql.$orderby1.$orderby2.$orderby3;
-        }elseif ($sort1 !="" && $sort2 !=""){
-            $sql = $sql.$orderby1.$orderby2;
-        }elseif ($sort1 !=""){
-            $sql = $sql.$orderby1;
-        }
-        $result = mysqli_query($mysqli, $sql);
-        //echo $sql;
-        if (!$result) {
-            printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
-        }
-        $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-        return $json;
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error . '--SQL--' . $sql);
+        return [];
+    }
+
+    // Fetch all results as an associative array
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+    return $json;
 }
 
 function fetchSalesAuctionReport($year,$type,$salecode)
