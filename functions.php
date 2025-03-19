@@ -2636,6 +2636,86 @@ function fetchTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
     return $json;
 }
 
+function fetchAllTopBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
+{
+    global $mysqli;
+    //     if ($year=="") {
+    //         $year=null;
+    //     }
+    $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
+       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Horse SEPARATOR ", ") AS Horses
+    FROM tsales WHERE  `Type`="Y" AND Saletype="M" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
+    
+    //     if ($year != "") {
+    //         $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
+    //         FROM sales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)='.$year.'
+    //         GROUP BY CONCAT(Purlname," ",Purfname)';
+    //     }
+    $orderby1 = ' ORDER BY '.$sort1;
+    $orderby2 = ', '.$sort2;
+    $orderby3 = ', '.$sort3;
+    $orderby4 = ', '.$sort4;
+    $orderby5 = ', '.$sort5;
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
+    }
+    
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchTopMixedBuyers_tb($year,$sort1,$sort2,$sort3,$sort4,$sort5)
+{
+    global $mysqli;
+    //     if ($year=="") {
+    //         $year=null;
+    //     }
+    $sql = 'SELECT CONCAT(Purlname," ", Purfname) AS BuyerFullName, count(*) AS Total, IFNULL(CAST(SUM(Price) AS DECIMAL(10, 2)), 0) AS Gross,  -- Casting to DECIMAL
+       IFNULL(ROUND(AVG(Price), 0), 0) AS Avg, GROUP_CONCAT(Horse SEPARATOR ", ") AS Horses
+    FROM tsales WHERE Saletype="M" AND Price>0 AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'") GROUP BY CONCAT(Purlname," ",Purfname)';
+    
+    //     if ($year != "") {
+    //         $sql = 'SELECT Purlname AS BuyerLastName,Purfname AS BuyerFirstName,count(*) AS Total,SUM(Price) AS Gross,ROUND(Avg(Price),0) AS Avg
+    //         FROM sales WHERE Type="Y" AND Price>0 AND YEAR(Saledate)='.$year.'
+    //         GROUP BY CONCAT(Purlname," ",Purfname)';
+    //     }
+    $orderby1 = ' ORDER BY '.$sort1;
+    $orderby2 = ', '.$sort2;
+    $orderby3 = ', '.$sort3;
+    $orderby4 = ', '.$sort4;
+    $orderby5 = ', '.$sort5;
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
+    }
+    
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function fetchIndividualSaleData($year,$salecode,$type,$elig,$gait,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
