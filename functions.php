@@ -2287,10 +2287,27 @@ function fetchSalesReport_tb($salecode,$year,$type,$buyer,$sort1,$sort2,$sort3,$
 {
     global $mysqli;
     
-    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'") 
-                     AND Purlname = IF("'.$buyer.'" = "", Purlname, "'.$buyer.'"';
+    $salecode = mysqli_real_escape_string($mysqli, $salecode);
+    $year = mysqli_real_escape_string($mysqli, $year);
+    $type = mysqli_real_escape_string($mysqli, $type);
+    $buyer = mysqli_real_escape_string($mysqli, $buyer);
+
+    // Start building the search query
+    $searchParam = 'WHERE Price > 0';
+
+    // Add conditions based on input
+    if (!empty($year)) {
+        $searchParam .= ' AND YEAR(Saledate) = ' . $year;
+    }
+    if (!empty($salecode)) {
+        $searchParam .= ' AND Salecode = "' . $salecode . '"';
+    }
+    if (!empty($type)) {
+        $searchParam .= ' AND Type = "' . $type . '"';
+    }
+    if (!empty($buyer)) {
+        $searchParam .= ' AND Purlname = "' . $buyer . '"';
+    }
     
     $sql = 'SELECT
     HIP,
