@@ -171,7 +171,7 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 	
-    var link ="top_buyers_tb.php?year="+year
+    var link ="top_mixed_buyers_tb.php?year="+year
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3
