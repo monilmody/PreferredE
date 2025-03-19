@@ -2283,13 +2283,14 @@ function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto
     return $json;
 }
 
-function fetchSalesReport_tb($salecode,$year,$type,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchSalesReport_tb($salecode,$year,$type,$buyer,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
     
     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'") ';
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'") 
+                     AND Purlname = IF("'.$buyer.'" = "", Purlname, "'.$buyer.'"';
     
     $sql = 'SELECT
     HIP,

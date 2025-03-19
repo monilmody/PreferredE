@@ -18,6 +18,7 @@ include_once("config.php");
 $salecode_param =$_GET['salecode'];
 $year_param =$_GET['year'];
 $type_param =$_GET['type'];
+$buyer_param =$_GET['Purlname'];
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
@@ -28,7 +29,7 @@ $sort5_param =$_GET['sort5'];
 // Check if any parameter is selected
 if (!empty($year_param) || !empty($salecode_param)) {
   // Call the function to fetch filtered data based on the selected parameters
-  $resultFound = fetchSalesReport_tb($salecode_param,$year_param,$type_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+  $resultFound = fetchSalesReport_tb($salecode_param,$year_param,$type_param, $buyer_param, $sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 } else {
   // If no parameter is selected, set $resultFound to an empty array
   $resultFound = array();
@@ -208,6 +209,7 @@ $sortList = array("Purfname", "Purlname", "Hip","Horse","Type", "Price Desc", "S
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('salecode').value="<?php echo $salecode_param;?>";
 	document.getElementById('type').value="<?php echo $type_param;?>";
+  document.getElementById('Purlname').value="<?php echo $buyer_param;?>";
 	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
 	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
@@ -220,6 +222,7 @@ function getValues() {
     var year = document.getElementById('year').value;
 	var salecode = document.getElementById('salecode').value;
 	var type = document.getElementById('type').value;
+  var buyer = document.getElementById('Purlname').value;
 	var sort1 = document.getElementById('sort1').value;
 	var sort2 = document.getElementById('sort2').value;
 	var sort3 = document.getElementById('sort3').value;
@@ -229,6 +232,7 @@ function getValues() {
     var link ="sales_report_tb.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
+                  +"&buyer="+type
     							+"&sort1="+sort1
     							+"&sort2="+sort2
     							+"&sort3="+sort3
