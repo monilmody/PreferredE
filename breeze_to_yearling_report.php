@@ -221,7 +221,7 @@ foreach ($resultFound as $row) {
 
         // Display the requested fields from the second function
         echo "<div class='cell'>" . $number++ . "</div>"; // No.
-        echo "<div class='cell'>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</div>"; // Purchaser Name
+        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // Purchaser Name
         echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // HIP
         echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // Horse
         echo "<div class='cell'>" . $offspringRow['Sire'] . "</div>"; // Sire
@@ -248,7 +248,7 @@ foreach ($resultFound as $row) {
 
         // Collapsible Panel for Purchaser Name for offspring
         echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</i></div>";
+        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
         echo "</div>";
 
         // Close the row for the offspring details
