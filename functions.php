@@ -280,42 +280,63 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
 function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
 {
     global $mysqli;
-    
+
     // Validate input parameters
     if (empty($year)) {
         return "";
     }
 
-        $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'") ';
-
-
-    // Prepare the SQL query with the required conditions
+    // Prepare SQL with placeholders
     $sql = '
     SELECT
-    b.Horse,
-    b.Hip,
-    b.Sex,
-    b.Datefoal,
-    b.Salecode,
-    b.Price,
-    b.Rating,
-    b.type AS b_type,
-    b.TDAM,
+        b.Horse,
+        b.Hip,
+        b.Sex,
+        b.Datefoal,
+        b.Salecode,
+        b.Price,
+        b.Rating,
+        b.type AS b_type,
+        b.TDAM
     FROM tsales b
-    WHERE Price > 0;' .$searchParam;
+    WHERE Price > 0
+    AND (YEAR(Saledate) = ? OR ? = "")
+    AND (Salecode = ? OR ? = "")
+    AND (Type = ? OR ? = "")
+    AND (Sex = ? OR ? = "")
+    AND (tSire = ? OR ? = "")';
 
-    $result = mysqli_query($mysqli, $sql);
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
+    // Prepare the statement
+    if ($stmt = mysqli_prepare($mysqli, $sql)) {
+        // Bind parameters
+        mysqli_stmt_bind_param($stmt, 'ssssssssss', $year, $year, $salecode, $salecode, $type, $type, $sex, $sex, $sire, $sire);
+
+        // Execute the statement
+        if (mysqli_stmt_execute($stmt)) {
+            // Get the result
+            $result = mysqli_stmt_get_result($stmt);
+
+            if (!$result) {
+                printf("Error getting result: %s\n", mysqli_error($mysqli));
+            }
+
+            // Fetch all results
+            $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+
+            // Return results
+            return $json;
+        } else {
+            // Handle execution errors
+            printf("Error executing statement: %s\n", mysqli_stmt_error($stmt));
+        }
+    } else {
+        // Handle SQL preparation errors
+        printf("Error preparing statement: %s\n", mysqli_error($mysqli));
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-    
-    return $json;
+
+    return [];
 }
+
 function fetchOffsprings_tb($damName)
 {
     global $mysqli;
