@@ -174,85 +174,89 @@ $sireList = fetchSireListAll_tb($year_param);
              
 
              </div>
-          <?php
-            setlocale(LC_MONETARY,"en_US");
-            $number =0;  
-            foreach($resultFound as $row) {
-                $offspringTotalPrice = 0;
-                foreach ($resultFound as $offspring_row) {
-                    foreach ($offspring_row as $element) {
-                        $elementCount++;
-                        if ($elementCount == 5) {
-                          $element = intval($element);
-                          $offspringTotalPrice += $element; // Assuming the price column is at index 18
-                          $element = "$" . number_format($element, 0);
-                        }
-                        echo "<div class='cell'>" . $element . "</div>";
-                    }
-                }
+<?php
+  setlocale(LC_MONETARY,"en_US");
+  $number =0;  
 
-                // Calculate the total price difference
-                $priceDifference = $offspringTotalPrice - $totalPrice;
-                
-                $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+// First loop to display the main fields
+foreach ($resultFound as $row) {
+    // Retrieve offspring data
+    $offspringRows = fetchBreezeReport1($row['Salecode'], $row['Dam-R']);
+    
+    // Start a row for each entry
+    echo "<div class='row'>";
 
-                // Display the price difference in the "Total" column
-                if ($offspringTotalPrice > 0) {
-                  echo "<div class='cell' style='width: device-width;background-color:" . $cellColor . "'>$" . number_format($priceDifference, 0) . "</div>";
-                } else {
-                  echo "";
-                }
-                
-                echo "</div>";
+    // Main fields to display from the first function
+    echo "<div class='cell'>" . $row['Horse'] . "</div>"; // b.Horse
+    echo "<div class='cell'>" . $row['HIP'] . "</div>"; // b.HIP
+    echo "<div class='cell'>" . $row['Sex'] . "</div>"; // b.Sex
+    echo "<div class='cell'>" . date("m/d/y", strtotime($row['Datefoal'])) . "</div>"; // b.Datefoal
+    echo "<div class='cell'>" . $row['Salecode'] . "</div>"; // b.Salecode
+    echo "<div class='cell'>" . "$" . number_format($row['Price'], 0) . "</div>"; // b.Price
+    echo "<div class='cell'>" . $row['Rating'] . "</div>"; // b.Rating
+    echo "<div class='cell'>" . $row['SaleType'] . "</div>"; // b.SaleType
+    echo "<div class='cell'>" . $row['Dam-R'] . "</div>"; // b.Dam-R
 
-                 // Collapsible panel to show Purlname
-                echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-                echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</i></div>";
-                echo "</div>"; // Close the collapsible panel div
-            }
- 
-                $offspring_rows = fetchBreezeReport1($row['Salecode'], $row['Dam-R']);
-            
-                $number = $number+1;
-                $elementCount = 0;
-                $totalPrice = floatval($row['Price']); // Assuming the price column name is 'Price'
-                $offspringTotalPrice = 0;
+    // Calculate price difference (if needed)
+    $priceDifference = 0; // Modify this as needed if you want price differences
+    $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+    echo "<div class='cell' style='background-color:$cellColor'>$" . number_format($priceDifference, 0) . "</div>";
 
-                // Generate a unique ID for the collapse panel
-                $collapseID = "collapse" . $number;
-                
-                echo "<div class='row'>";
-                echo "<div class='cell'>".$number."</div>";
+    // Purchaser and collapsible functionality
+    $collapseID = "collapse" . $number;
+    echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
 
-                echo "<div class='cell'>";
-                echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
-                echo "Purchaser" . "</button>"; // HIP button for collapsing
-                echo "</div>";
+    // Collapsible Panel for Purchaser Name
+    echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+    echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</i></div>";
+    echo "</div>";
 
-                foreach($row as $key => $elements) {
-                  if ($key === 'Purlname' || $key === 'Purfname') {
-                    continue; // Skip Purlname and Purfname in the main row display
-                  }
-                    $elementCount =$elementCount+1;
-                    if($elementCount == 18){
-                        $elements = "$".number_format(floatval($elements), 0);
-                    }
-                    if ($elements == "1900-01-01") {
-                        $elements="";
-                    }
-                    if ($elementCount == 14) {
-                        // if ($elements != "") {
-                        //     $date=date_create($elements);
-                        //     $elements = date_format($date,"m/d/y");
-                        // }
-                    }
-                    if ($elementCount == 10) {
-                        // $elements= substr($elements, 0,4);
-                    }
-                    echo "<div class='cell'>".$elements."</div>";
-                }
-          
-          ?>
+    // Close the row for the first function
+    echo "</div>";
+
+    // Now loop through the offspring details (second function) and display their fields
+    foreach ($offspringRows as $offspringRow) {
+        // Start a new row for each offspring
+        echo "<div class='row'>";
+
+        // Display the requested fields from the second function
+        echo "<div class='cell'>" . $number++ . "</div>"; // No.
+        echo "<div class='cell'>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</div>"; // Purchaser Name
+        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // HIP
+        echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // Horse
+        echo "<div class='cell'>" . $offspringRow['Sire'] . "</div>"; // Sire
+        echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // Datefoal
+        echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // Dam
+        echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // Sex
+        echo "<div class='cell'>" . $offspringRow['Type'] . "</div>"; // Type
+        echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // Price
+        echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // Salecode
+        echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // Day
+        echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // Consno
+        echo "<div class='cell'>" . $offspringRow['SaleType'] . "</div>"; // Sale Type
+        echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // Age
+        echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // Rating
+
+        // Calculate and display price difference for each offspring (if needed)
+        $priceDifference = $offspringRow['Price'] - $row['Price'];
+        $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+        echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>";
+
+        // Purchaser collapsible functionality for offspring
+        $collapseID = "collapse" . $number;
+        echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
+
+        // Collapsible Panel for Purchaser Name for offspring
+        echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</i></div>";
+        echo "</div>";
+
+        // Close the row for the offspring details
+        echo "</div>";
+    }
+}
+?>
+
     </div>
 
 
@@ -278,25 +282,14 @@ function getValues() {
 	var type = document.getElementById('type').value;
 	var sex = document.getElementById('sex').value;
 	var sire = document.getElementById('sire').value;
-	var sort1 = document.getElementById('sort1').value;
-	var sort2 = document.getElementById('sort2').value;
-	var sort3 = document.getElementById('sort3').value;
-	var sort4 = document.getElementById('sort4').value;
-	var sort5 = document.getElementById('sort5').value;
 
     var link ="breeze_to_yearling_report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
     							+"&sex="+sex
-    							+"&sire="+sire
-    							+"&sort1="+sort1
-    							+"&sort2="+sort2
-    							+"&sort3="+sort3
-    							+"&sort4="+sort4
-    							+"&sort5="+sort5;
-    //alert(link);
+    							+"&sire="+sire;
     							
-  	window.location.href = link;
+    window.open(link,"_self");
   	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
   	{
   		alert("Please Select Atleast One Category Filter");
