@@ -118,9 +118,6 @@ $sireList = fetchSireListAll_tb($year_param);
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Dam-R
               </div>
-              <div class="cell" style="width: device-width;background-color:#D98880 ">
-                Total
-              </div>
 
               <div class="cell"  style="width: device-width;">
                 No.
@@ -169,6 +166,10 @@ $sireList = fetchSireListAll_tb($year_param);
               </div>
               <div class="cell"  style="width: device-width;">
                 Rating
+              </div>
+
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Total
               </div>
               
              
