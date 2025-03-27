@@ -188,6 +188,7 @@ $sireList = fetchSireListAll_tb($year_param);
 
               echo "</div>"; // End of offspring row
           }
+        }
       }
       ?>
     </div>
