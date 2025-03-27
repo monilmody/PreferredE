@@ -202,8 +202,8 @@ $sireList = fetchSireListAll_tb($year_param);
     echo "<div class='cell'>" . $row['Rating'] . "</div>"; // 7. Rating
     echo "<div class='cell'>" . $row['b_type'] . "</div>";  // 8. Sale Type
     echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // 9. Dam-R
-    echo "<div class='cell'>" . $row['tSire'] . "</div>";  // 10. Sire
-    echo "<div class='cell'>" . $row['utt'] . "</div>"; // 11. Horse
+    echo "<div class='cell'>" . $row['utt'] . "</div>"; // 10. utt
+    echo "<div class='cell'>" . $row['tSire'] . "</div>";  // 11. Sire
 
 
     // Now, loop through the offspring details (second query)
