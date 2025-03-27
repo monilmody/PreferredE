@@ -64,7 +64,7 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
 	<option value="">Type Filter</option>
 	<option value="">All Types</option>
 	<option value="Y">Y : Yearling</option>
-  <option value="Y">R : Racing Horse</option>
+  <option value="R">R : Racing Horse</option>
   <script>
     $(document).ready(function() {
     $('#type').val('R'); 
