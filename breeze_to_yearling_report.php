@@ -220,7 +220,7 @@ $sireList = fetchSireListAll_tb($year_param);
         echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // 25. Rating
 
         // Calculate and display price difference for each offspring
-        $priceDifference = $offspringRow['Price'] - $row['Price'];
+        $priceDifference = $row['Price'] - $offspringRow['Price'];
         $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
         echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>"; // 26. Total
     }
