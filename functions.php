@@ -276,6 +276,45 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     
     return $json;
 }
+
+function fetchOffsprings_breeze_tb1($damName, $salecode)
+{
+    global $mysqli;
+    
+    // Validate input parameters
+    if (empty($damName)) {
+        return "";
+    }
+
+    // Prepare the SQL query with the required conditions
+    $sql = '
+    SELECT
+    b.Horse,
+    b.Hip,
+    b.Sex,
+    b.Datefoal,
+    b.Salecode,
+    b.Price,
+    b.Rating,
+    b.type AS b_type
+    FROM tsales a
+    JOIN tsales b ON a.TDAM = b.TDAM
+    WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
+    AND a.Salecode = "'.$salecode.'"
+    AND DATEDIFF(b.Saledate, a.Saledate) <= 1
+    AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
+    AND b.type IN ("Y", "W")  -- Horse was sold previously as either Y (Yearling) or W (Racing Horse)
+    AND a.type = "R"  -- Searching for R horses (Racing Horse)
+    LIMIT 1;';
+
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    
+    return $json;
+}
 function fetchOffsprings_tb($damName)
 {
     global $mysqli;

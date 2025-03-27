@@ -24,7 +24,7 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchOffsprings_breeze_tb($row['Dam'],  $salecode_param);
+$resultFound = fetchOffsprings_breeze_tb1($row['Dam'],  $salecode_param);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
