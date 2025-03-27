@@ -133,23 +133,44 @@ $sireList = fetchSireListAll_tb($year_param);
 
           // Loop through the offspring details and display their fields
           foreach ($offspringRows as $offspringRow) {
-              echo "<div class='row'>";
-              echo "<div class='cell'>" . $number++ . "</div>";  // No.
-              echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>";
-              echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['type'] . "</div>";
-              echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Day'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Age'] . "</div>";
-              echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>";
+            $number = $number+1;
+            $elementCount = 0;
+            $totalPrice = floatval($row['Price']); // Assuming the price column name is 'Price'
+            $offspringTotalPrice = 0;
+
+            // Generate a unique ID for the collapse panel
+            $collapseID = "collapse" . $number;
+            
+            echo "<div class='row'>";
+            echo "<div class='cell'>".$number."</div>";
+
+            echo "<div class='cell'>";
+            echo "<button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>";
+            echo "Purchaser" . "</button>"; // HIP button for collapsing
+            echo "</div>";
+
+            foreach($row as $key => $elements) {
+              if ($key === 'Purlname' || $key === 'Purfname') {
+                continue; // Skip Purlname and Purfname in the main row display
+              }
+                $elementCount =$elementCount+1;
+                if($elementCount == 18){
+                    $elements = "$".number_format(floatval($elements), 0);
+                }
+                if ($elements == "1900-01-01") {
+                    $elements="";
+                }
+                if ($elementCount == 14) {
+                    // if ($elements != "") {
+                    //     $date=date_create($elements);
+                    //     $elements = date_format($date,"m/d/y");
+                    // }
+                }
+                if ($elementCount == 10) {
+                    // $elements= substr($elements, 0,4);
+                }
+                echo "<div class='cell'>".$elements."</div>";
+
 
               // Price difference cell with color coding
               $priceDifference = $offspringRow['Price'] - $row['Price'];
