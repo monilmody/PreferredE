@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
+function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire)
 {
     global $mysqli;
 
@@ -315,7 +315,8 @@ function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
             b.Price,
             b.Rating,
             b.type AS b_type,
-            b.TDAM
+            b.TDAM,
+            b.tSire
         FROM tsales b
         $searchParam
     ";
@@ -2315,7 +2316,7 @@ function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3
     return $json;
 }
 
-function fetchBreezeReport1($salecode, $dam)
+function fetchBreezeSoldAsYearling($salecode, $dam)
 {
     global $mysqli;
 
@@ -2328,8 +2329,7 @@ function fetchBreezeReport1($salecode, $dam)
     $sql = '
         SELECT
             b.HIP,
-            b.Horse,
-            b.tSire,
+            b.utt,
             b.Datefoal,
             b.TDAM AS Dam,
             b.Sex,

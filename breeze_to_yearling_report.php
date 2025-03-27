@@ -19,7 +19,7 @@ $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
 
-$resultFound = fetchOffsprings_breeze_tb1($year_param, $salecode_param, $type_param, $sex_param, $sire_param);
+$resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
@@ -32,7 +32,7 @@ $sireList = fetchSireListAll_tb($year_param);
 
 
 <div style= "margin:5px 30px 30px 30px;">
-<h1 style="text-align:center;color:#D98880;">YEARLING TO BREEZE REPORT THOROUGHBRED</h1>
+<h1 style="text-align:center;color:#D98880;">BREEZE FROM YEARLING REPORT THOROUGHBRED</h1>
 <!-- <b> -->
 <!-- <button class="custom-select1" style="background-color:#35CC03;" onclick="downloadData();">Export Data to CSV</button> -->
 <!-- </b> -->
@@ -118,6 +118,9 @@ $sireList = fetchSireListAll_tb($year_param);
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Dam-R
               </div>
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Sire
+              </div>
 
               <div class="cell"  style="width: device-width;">
                 No.
@@ -129,10 +132,7 @@ $sireList = fetchSireListAll_tb($year_param);
                 HIP
               </div>
               <div class="cell"  style="width: device-width;">
-                Horse
-              </div>
-              <div class="cell"  style="width: device-width;">
-                Sire
+                UTT
               </div>
               <div class="cell"  style="width: device-width;">
                 Datefoal
@@ -182,7 +182,7 @@ $sireList = fetchSireListAll_tb($year_param);
   // Loop through the first set of data (main horse details)
   foreach ($resultFound as $row) {
     // Retrieve offspring data (second set of data)
-    $offspringRows = fetchBreezeReport1($row['Salecode'], $row['TDAM']);
+    $offspringRows = fetchBreezeSoldAsYearling($row['Salecode'], $row['TDAM']);
     
     // Start a row for the main horse details
     echo "<div class='row'>";
@@ -197,16 +197,16 @@ $sireList = fetchSireListAll_tb($year_param);
     echo "<div class='cell'>" . $row['Rating'] . "</div>"; // 7. Rating
     echo "<div class='cell'>" . $row['b_type'] . "</div>";  // 8. Sale Type
     echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // 9. Dam-R
+    echo "<div class='cell'>" . $row['tSire'] . "</div>";  // 10. Sire
 
     // Now, loop through the offspring details (second query)
     // and append their data in the same row
     foreach ($offspringRows as $offspringRow) {
         // Display offspring data in the same row as the main horse
-        echo "<div class='cell'>" . $number++ . "</div>";  // 10. No.
-        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 11. Purchaser Name
-        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 12. HIP
-        echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // 13. Horse
-        echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // 14. Sire
+        echo "<div class='cell'>" . $number++ . "</div>";  // 11. No.
+        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 12. Purchaser Name
+        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 13. HIP
+        echo "<div class='cell'>" . $offspringRow['utt'] . "</div>"; // 14. Horse
         echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // 15. Datefoal
         echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // 16. Dam
         echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // 17. Sex
