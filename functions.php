@@ -1610,7 +1610,7 @@ function getYearsList_tb1() {
 
 function getYearsList_tb_breeze() {
     global $mysqli;
-    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "Y" ORDER BY Year(saledate) DESC;';
+    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "R" ORDER BY Year(saledate) DESC;';
     
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
