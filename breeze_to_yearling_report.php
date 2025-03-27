@@ -181,14 +181,14 @@ $sireList = fetchSireListAll_tb($year_param);
 // First loop to display the main fields
 foreach ($resultFound as $row) {
     // Retrieve offspring data
-    $offspringRows = fetchBreezeReport1($row['Salecode'], $row['Dam-R']);
+    $offspringRows = fetchBreezeReport1($row['Salecode'], $row['TDAM']);
     
     // Start a row for each entry
     echo "<div class='row'>";
 
     // Main fields to display from the first function
     echo "<div class='cell'>" . $row['Horse'] . "</div>";  // b.Horse
-    echo "<div class='cell'>" . $row['HIP'] . "</div>";    // b.HIP
+    echo "<div class='cell'>" . $row['Hip'] . "</div>";    // b.HIP
     echo "<div class='cell'>" . $row['Sex'] . "</div>";    // b.Sex
     echo "<div class='cell'>" . date("m/d/y", strtotime($row['Datefoal'])) . "</div>"; // b.Datefoal
     echo "<div class='cell'>" . $row['Salecode'] . "</div>"; // b.Salecode
