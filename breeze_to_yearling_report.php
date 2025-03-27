@@ -120,14 +120,15 @@ $sireList = fetchSireListAll_tb($year_param);
                 Sale Type
               </div>
               <div class="cell" style="width: device-width;background-color:#D98880 ">
-                Dam-R
-              </div>
-              <div class="cell" style="width: device-width;background-color:#D98880 ">
-                Sire
+                Dam-Racing
               </div>
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 UTT
               </div>
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Sire
+              </div>
+
 
               <div class="cell"  style="width: device-width;">
                 No.
@@ -142,7 +143,7 @@ $sireList = fetchSireListAll_tb($year_param);
                 Datefoal
               </div>
               <div class="cell"  style="width: device-width;">
-                Dam
+                Dam- Y or W
               </div>
               <div class="cell"  style="width: device-width;">
                 Sex
