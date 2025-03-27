@@ -223,15 +223,6 @@ $sireList = fetchSireListAll_tb($year_param);
         $priceDifference = $offspringRow['Price'] - $row['Price'];
         $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
         echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>"; // 26. Total
-
-        // Purchaser collapsible functionality for offspring
-        $collapseID = "collapse" . $number;
-        echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
-
-        // Collapsible Panel for Purchaser Name for offspring
-        echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
-        echo "</div>";
     }
     
     // Close the row for this horse entry (main data + offspring data)
