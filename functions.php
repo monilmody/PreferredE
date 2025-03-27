@@ -2177,7 +2177,7 @@ function fetchBreezeReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2,
             Horse,
             tSire,
             Datefoal,
-            TDAM AS Dam,      // Fetching the Dam from the query result
+            TDAM AS Dam,
             Sex,
             Type,
             Price,
