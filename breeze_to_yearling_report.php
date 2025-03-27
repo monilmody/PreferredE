@@ -197,20 +197,6 @@ foreach ($resultFound as $row) {
     echo "<div class='cell'>" . $row['SaleType'] . "</div>"; // b.SaleType
     echo "<div class='cell'>" . $row['Dam-R'] . "</div>"; // b.Dam-R
 
-    // Calculate price difference (if needed)
-    $priceDifference = 0; // Modify this as needed if you want price differences
-    $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
-    echo "<div class='cell' style='background-color:$cellColor'>$" . number_format($priceDifference, 0) . "</div>";
-
-    // Purchaser and collapsible functionality
-    $collapseID = "collapse" . $number;
-    echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
-
-    // Collapsible Panel for Purchaser Name
-    echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-    echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $row['Purlname'] . ' ' . $row['Purfname'] . "</i></div>";
-    echo "</div>";
-
     // Close the row for the first function
     echo "</div>";
 
