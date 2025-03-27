@@ -319,8 +319,8 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
             b.Rating,
             b.type AS b_type,
             b.TDAM,
-            b.tSire,
-            b.utt
+            b.utt,
+            b.tSire
         FROM tsales b
         $searchParam 
         $orderByClause
