@@ -18,8 +18,11 @@ $year_param =$_GET['year'];
 $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
+// Capture sorting parameters
+$sortField = isset($_GET['sortField']) ? $_GET['sortField'] : 'Hip';  // Default to 'Hip'
+$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';  // Default to 'ASC'
 
-$resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param);
+$resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sortField, $sortOrder);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
@@ -83,6 +86,21 @@ $sireList = fetchSireListAll_tb($year_param);
   	    echo '<option>'.$row['Sire'].'</option>';
     } ?>
 </select>
+
+<form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
+    <select name="sortField" class="custom-select">
+        <option value="Hip">Sort by Hip</option>
+        <option value="Sex">Sort by Sex</option>
+        <option value="Price">Sort by Price</option>
+    </select>
+
+    <select name="sortOrder" class="custom-select">
+        <option value="ASC">Ascending</option>
+        <option value="DESC">Descending</option>
+    </select>
+
+    <button type="submit">Sort</button>
+</form>
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 

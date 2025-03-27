@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire)
+function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortField, $sortOrder)
 {
     global $mysqli;
 
@@ -305,6 +305,9 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire)
         $searchParam .= " AND tSire = ?";
     }
 
+    // Add sorting condition to the SQL query
+    $orderByClause = " ORDER BY $sortField $sortOrder"; // Default sorting by $sortField in $sortOrder direction
+
     $sql = "
         SELECT
             b.Horse,
@@ -318,7 +321,8 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire)
             b.TDAM,
             b.tSire
         FROM tsales b
-        $searchParam
+        $searchParam 
+        $orderByClause
     ";
 
     // Prepare the statement
