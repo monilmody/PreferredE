@@ -333,7 +333,7 @@ function getValues() {
     							+"&sort5="+sort5;
     //alert(link);
     							
-  	window.open(link,"_self");
+  	window.location(link,"_self");
   	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
   	{
   		alert("Please Select Atleast One Category Filter");
