@@ -2323,41 +2323,61 @@ function fetchBreezeReport1($salecode, $dam)
         return "";
     }
 
-    $sql = 'SELECT
-                b.HIP,
-                b.Horse,
-                b.tSire,
-                b.Datefoal,
-                b.TDAM AS Dam,
-                b.Sex,
-                b.Type,
-                b.Price,
-                b.Salecode,
-                b.Day,
-                b.Consno,
-                b.saletype,
-                b.Age,
-                b.Rating,
-                b.Purlname,
-                b.Purfname
-            FROM tsales a
-            JOIN tsales b ON a.TDAM = b.TDAM
-            WHERE LOWER(a.TDAM) = LOWER("'.$dam.'")  -- Case-insensitive comparison
-            AND a.Salecode = "'.$salecode.'"
-            AND DATEDIFF(b.Saledate, a.Saledate) <= 1
-            AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
-            AND (b.type = "Y" OR b.type = "W")
-            LIMIT 1;';
+    // Prepare the SQL query with placeholders
+    $sql = '
+        SELECT
+            b.HIP,
+            b.Horse,
+            b.tSire,
+            b.Datefoal,
+            b.TDAM AS Dam,
+            b.Sex,
+            b.Type,
+            b.Price,
+            b.Salecode,
+            b.Day,
+            b.Consno,
+            b.saletype,
+            b.Age,
+            b.Rating,
+            b.Purlname,
+            b.Purfname
+        FROM tsales a
+        JOIN tsales b ON a.TDAM = b.TDAM
+        WHERE LOWER(a.TDAM) = LOWER(?)  -- Use placeholders for better security
+        AND a.Salecode = ?
+        AND DATEDIFF(b.Saledate, a.Saledate) <= 1
+        AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
+        AND (b.type = "Y" OR b.type = "W")
+        LIMIT 1;
+    ';
 
-    $result = mysqli_query($mysqli, $sql);
-    
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
+    // Prepare the statement
+    if ($stmt = mysqli_prepare($mysqli, $sql)) {
+
+        // Bind the input parameters
+        mysqli_stmt_bind_param($stmt, "ss", $dam, $salecode);  // "ss" indicates two string parameters
+
+        // Execute the prepared statement
+        mysqli_stmt_execute($stmt);
+
+        // Store the result
+        $result = mysqli_stmt_get_result($stmt);
+
+        if ($result) {
+            $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+            return $json;
+        } else {
+            printf("Errormessage: %s\n", $mysqli->error);
+            return [];
+        }
+
+    } else {
+        printf("Errormessage: %s\n", $mysqli->error);
+        return [];
     }
-
-    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    return $json;
 }
+
 function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
