@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function fetchOffsprings_breeze_tb1()
+function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
 {
     global $mysqli;
     
@@ -285,6 +285,13 @@ function fetchOffsprings_breeze_tb1()
     if (empty($damName)) {
         return "";
     }
+
+        $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
+                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
+                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'") ';
+
 
     // Prepare the SQL query with the required conditions
     $sql = '
@@ -299,7 +306,7 @@ function fetchOffsprings_breeze_tb1()
     b.type AS b_type,
     b.TDAM,
     FROM tsales b
-    WHERE Price > 0;';
+    WHERE Price > 0;' .$searchParam;
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {

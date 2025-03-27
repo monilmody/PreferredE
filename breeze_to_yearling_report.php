@@ -19,7 +19,7 @@ $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
 
-$resultFound = fetchOffsprings_breeze_tb1();
+$resultFound = fetchOffsprings_breeze_tb1($year_param, $salecode_param, $type_param, $sex_param, $sire_param);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
@@ -268,11 +268,6 @@ foreach ($resultFound as $row) {
 	document.getElementById('type').value="<?php echo $type_param;?>";
 	document.getElementById('sex').value="<?php echo $sex_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
-	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
-	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
-	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
-	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
-	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
 	
 </script>
 <script>
