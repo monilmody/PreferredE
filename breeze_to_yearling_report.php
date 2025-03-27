@@ -18,21 +18,14 @@ $year_param =$_GET['year'];
 $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
-$sort1_param =$_GET['sort1'];
-$sort2_param =$_GET['sort2'];
-$sort3_param =$_GET['sort3'];
-$sort4_param =$_GET['sort4'];
-$sort5_param =$_GET['sort5'];
 
-$resultFound = fetchOffsprings_breeze_tb1($damName,  $salecode_param);
+$resultFound = fetchOffsprings_breeze_tb1();
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
 $typeList = fetchTypeList_tb();
 $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
-
-$sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price","Salecode" , "Dym", "Consno", "Saletype", "Age", "Rating","Purlname", "Purfname");
 
 ?>
 <br>
@@ -90,37 +83,6 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
   	    echo '<option>'.$row['Sire'].'</option>';
     } ?>
 </select>
-<br>
- <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
-	<option  value="">Sort By 1st</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort2">
-	<option value="">Sort By 2nd</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort3">
-	<option value="">Sort By 3rd</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort4">
-	<option value="">Sort By 4th</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort5">
-	<option value="">Sort By 5th</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 
@@ -152,6 +114,9 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
               </div> 
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Sale Type
+              </div>
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                Dam-R
               </div>
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Total
@@ -246,8 +211,7 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
                 echo "</div>"; // Close the collapsible panel div
             }
  
-                $offspring_rows = fetchBreezeReport1($row['Salecode'],$year_param,$type_param,
-                $sex_param,$sire_param, $row['Dam']);
+                $offspring_rows = fetchBreezeReport1($row['Salecode'], $row['Dam-R']);
             
                 $number = $number+1;
                 $elementCount = 0;
@@ -294,7 +258,6 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
 
  </div>
 </div>
-<br>
 <script>
 	document.getElementById('year').value="<?php echo $year_param;?>";
 	document.getElementById('salecode').value="<?php echo $salecode_param;?>";

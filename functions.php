@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function fetchOffsprings_breeze_tb1($damName, $salecode)
+function fetchOffsprings_breeze_tb1()
 {
     global $mysqli;
     
@@ -2252,48 +2252,39 @@ function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3
     return $json;
 }
 
-function fetchBreezeReport1($salecode, $year, $type, $sex, $sire, $dam)
+function fetchBreezeReport1($salecode, $dam)
 {
     global $mysqli;
 
-    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
+    if ($dam == "" && $salecode == "") {
         return "";
     }
 
-    // Add the filtering condition for the salecode and date range (1-12 months)
-    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'")
-                     AND TDAM = IF("'.$dam.'"  = "", TDAM, "'.$dam.'")
-                     AND DATEDIFF(Saledate, (
-                        SELECT Saledate
-                        FROM tsales
-                        WHERE Salecode = "'.$salecode.'"
-                        AND Type IN ("Y", "W")  -- Ensure the previous sale was Y or W
-                        LIMIT 1
-                     )) BETWEEN 1 AND 365';  // Date difference between 1 and 365 days
-
     $sql = 'SELECT
-                HIP,
-                Horse,
-                tSire,
-                Datefoal,
-                TDAM AS Dam,
-                Sex,
-                Type,
-                Price,
-                Salecode,
-                Day,
-                Consno,
-                saletype,
-                Age,
-                Rating,
-                Purlname,
-                Purfname
+                b.HIP,
+                b.Horse,
+                b.tSire,
+                b.Datefoal,
+                b.TDAM AS Dam,
+                b.Sex,
+                b.Type,
+                b.Price,
+                b.Salecode,
+                b.Day,
+                b.Consno,
+                b.saletype,
+                b.Age,
+                b.Rating,
+                b.Purlname,
+                b.Purfname
             FROM tsales a
-            WHERE Price > 0' . $searchParam;
+            JOIN tsales b ON a.TDAM = b.TDAM
+            WHERE LOWER(a.TDAM) = LOWER("'.$dam.'")  -- Case-insensitive comparison
+            AND a.Salecode = "'.$salecode.'"
+            AND DATEDIFF(b.Saledate, a.Saledate) <= 1
+            AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
+            AND (b.type = "Y" OR b.type = "W")
+            LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
     
