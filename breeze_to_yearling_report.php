@@ -24,7 +24,7 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$resultFound = fetchOffsprings_breeze_tb1($row['Dam'],  $salecode_param);
+$resultFound = fetchOffsprings_breeze_tb1($damName,  $salecode_param);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
@@ -246,8 +246,8 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
                 echo "</div>"; // Close the collapsible panel div
             }
  
-                $offspring_rows = fetchBreezeReport($row['Salecode'],$year_param,$type_param,
-                $sex_param,$sire_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
+                $offspring_rows = fetchBreezeReport1($row['Salecode'],$year_param,$type_param,
+                $sex_param,$sire_param, $row['Dam']);
             
                 $number = $number+1;
                 $elementCount = 0;

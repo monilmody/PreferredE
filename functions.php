@@ -296,16 +296,10 @@ function fetchOffsprings_breeze_tb1($damName, $salecode)
     b.Salecode,
     b.Price,
     b.Rating,
-    b.type AS b_type
-    FROM tsales a
-    JOIN tsales b ON a.TDAM = b.TDAM
-    WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
-    AND a.Salecode = "'.$salecode.'"
-    AND DATEDIFF(b.Saledate, a.Saledate) <= 1
-    AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
-    AND b.type IN ("Y", "W")  -- Horse was sold previously as either Y (Yearling) or W (Racing Horse)
-    AND a.type = "R"  -- Searching for R horses (Racing Horse)
-    LIMIT 1;';
+    b.type AS b_type,
+    b.TDAM,
+    FROM tsales b
+    WHERE Price > 0;';
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
@@ -2258,6 +2252,58 @@ function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3
     return $json;
 }
 
+function fetchBreezeReport1($salecode, $year, $type, $sex, $sire, $dam)
+{
+    global $mysqli;
+
+    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
+        return "";
+    }
+
+    // Add the filtering condition for the salecode and date range (1-12 months)
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
+                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
+                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'")
+                     AND TDAM = IF("'.$dam.'"  = "", TDAM, "'.$dam.'")
+                     AND DATEDIFF(Saledate, (
+                        SELECT Saledate
+                        FROM tsales
+                        WHERE Salecode = "'.$salecode.'"
+                        AND Type IN ("Y", "W")  -- Ensure the previous sale was Y or W
+                        LIMIT 1
+                     )) BETWEEN 1 AND 365';  // Date difference between 1 and 365 days
+
+    $sql = 'SELECT
+                HIP,
+                Horse,
+                tSire,
+                Datefoal,
+                TDAM AS Dam,
+                Sex,
+                Type,
+                Price,
+                Salecode,
+                Day,
+                Consno,
+                saletype,
+                Age,
+                Rating,
+                Purlname,
+                Purfname
+            FROM tsales a
+            WHERE Price > 0' . $searchParam;
+
+    $result = mysqli_query($mysqli, $sql);
+    
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
+    }
+
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $json;
+}
 function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
