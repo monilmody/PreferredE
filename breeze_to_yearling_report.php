@@ -121,7 +121,7 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
   	    echo '<option>'.$row.'</option>';
     } ?>
 </select>
-<input class="custom-select1" type="submit" name="SUBMITBUTTON" value="Submit" style="font-size:20px; " />
+<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 
 <hr>
@@ -307,13 +307,38 @@ $sortList = array("Hip","Horse","Sire", "Datefoal", "Dam", "Sex", "Type", "Price
 	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
 	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
 	
-  // You can optionally add a form validation before submitting
-  document.getElementById('reportForm').onsubmit = function() {
-    if (document.getElementById('year').value == "" && document.getElementById('salecode').value == "" && 
-        document.getElementById('type').value == "" && document.getElementById('sex').value == "" && 
-        document.getElementById('sire').value == "") {
-      alert("Please Select Atleast One Category Filter");
-      return false; // Prevent form submission
-    }
-  };
 </script>
+<script>
+function getValues() {
+    var year = document.getElementById('year').value;
+	var salecode = document.getElementById('salecode').value;
+	var type = document.getElementById('type').value;
+	var sex = document.getElementById('sex').value;
+	var sire = document.getElementById('sire').value;
+	var sort1 = document.getElementById('sort1').value;
+	var sort2 = document.getElementById('sort2').value;
+	var sort3 = document.getElementById('sort3').value;
+	var sort4 = document.getElementById('sort4').value;
+	var sort5 = document.getElementById('sort5').value;
+
+    var link ="breeze_to_yearling_report.php?year="+year
+    							+"&salecode="+salecode
+    							+"&type="+type
+    							+"&sex="+sex
+    							+"&sire="+sire
+    							+"&sort1="+sort1
+    							+"&sort2="+sort2
+    							+"&sort3="+sort3
+    							+"&sort4="+sort4
+    							+"&sort5="+sort5;
+    //alert(link);
+    							
+  	window.location.href = link;
+  	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
+  	{
+  		alert("Please Select Atleast One Category Filter");
+  	}
+}
+
+</script>
+
