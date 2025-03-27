@@ -263,8 +263,8 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     JOIN tsales b ON a.TDAM = b.TDAM
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND a.Salecode = "'.$salecode.'"
-    AND DATEDIFF(b.Saledate, a.Saledate) >= 1
-    AND DATEDIFF(b.Saledate, a.Saledate) <= 365  -- Sale must be within 12 months (365 days) of the dam
+    AND DATEDIFF(b.Saledate, a.Saledate) <= 1
+    AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
     AND b.type = "R"
     LIMIT 1;';
 
@@ -1610,7 +1610,7 @@ function getYearsList_tb1() {
 
 function getYearsList_tb_breeze() {
     global $mysqli;
-    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "Y" ORDER BY Year(saledate) DESC;';
+    $sql = 'SELECT DISTINCT Year(saledate) AS `Year` FROM tsales WHERE Type = "R" ORDER BY Year(saledate) DESC;';
     
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
