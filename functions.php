@@ -319,7 +319,8 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
             b.Rating,
             b.type AS b_type,
             b.TDAM,
-            b.tSire
+            b.tSire,
+            b.utt
         FROM tsales b
         $searchParam 
         $orderByClause
@@ -2333,7 +2334,6 @@ function fetchBreezeSoldAsYearling($salecode, $dam)
     $sql = '
         SELECT
             b.HIP,
-            b.utt,
             b.Datefoal,
             b.TDAM AS Dam,
             b.Sex,

@@ -125,6 +125,9 @@ $sireList = fetchSireListAll_tb($year_param);
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Sire
               </div>
+              <div class="cell" style="width: device-width;background-color:#D98880 ">
+                UTT
+              </div>
 
               <div class="cell"  style="width: device-width;">
                 No.
@@ -134,9 +137,6 @@ $sireList = fetchSireListAll_tb($year_param);
               </div> 
               <div class="cell"  style="width: device-width;">
                 HIP
-              </div>
-              <div class="cell"  style="width: device-width;">
-                UTT
               </div>
               <div class="cell"  style="width: device-width;">
                 Datefoal
@@ -202,15 +202,16 @@ $sireList = fetchSireListAll_tb($year_param);
     echo "<div class='cell'>" . $row['b_type'] . "</div>";  // 8. Sale Type
     echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // 9. Dam-R
     echo "<div class='cell'>" . $row['tSire'] . "</div>";  // 10. Sire
+    echo "<div class='cell'>" . $row['utt'] . "</div>"; // 11. Horse
+
 
     // Now, loop through the offspring details (second query)
     // and append their data in the same row
     foreach ($offspringRows as $offspringRow) {
         // Display offspring data in the same row as the main horse
-        echo "<div class='cell'>" . $number++ . "</div>";  // 11. No.
-        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 12. Purchaser Name
-        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 13. HIP
-        echo "<div class='cell'>" . $offspringRow['utt'] . "</div>"; // 14. Horse
+        echo "<div class='cell'>" . $number++ . "</div>";  // 12. No.
+        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 13. Purchaser Name
+        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 14. HIP
         echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // 15. Datefoal
         echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // 16. Dam
         echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // 17. Sex
