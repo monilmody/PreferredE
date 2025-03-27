@@ -211,16 +211,16 @@ foreach ($resultFound as $row) {
         echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // Purchaser Name
         echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // HIP
         echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // Horse
-        echo "<div class='cell'>" . $offspringRow['Sire'] . "</div>"; // Sire
+        echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // Sire
         echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // Datefoal
         echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // Dam
         echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // Sex
-        echo "<div class='cell'>" . $offspringRow['Type'] . "</div>"; // Type
+        echo "<div class='cell'>" . $offspringRow['type'] . "</div>"; // Type
         echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // Price
         echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // Salecode
         echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // Day
         echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // Consno
-        echo "<div class='cell'>" . $offspringRow['SaleType'] . "</div>"; // Sale Type
+        echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>"; // Sale Type
         echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // Age
         echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // Rating
 

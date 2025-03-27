@@ -2333,7 +2333,7 @@ function fetchBreezeReport1($salecode, $dam)
             b.Datefoal,
             b.TDAM AS Dam,
             b.Sex,
-            b.Type,
+            b.type,
             b.Price,
             b.Salecode,
             b.Day,
