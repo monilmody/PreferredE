@@ -119,6 +119,55 @@ $sireList = fetchSireListAll_tb($year_param);
                 Dam-R
               </div>
 
+              <div class="cell"  style="width: device-width;">
+                No.
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Purchaser Name
+              </div> 
+              <div class="cell"  style="width: device-width;">
+                HIP
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Horse
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Sire
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Datefoal
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Dam
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Sex
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Type
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Price
+              </div>
+              <div class="cell"  style="width: device-width;">
+                SaleCode
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Day
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Consno
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Sale Type
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Age
+              </div>
+              <div class="cell"  style="width: device-width;">
+                Rating
+              </div>
+
               <div class="cell" style="width: device-width;background-color:#D98880 ">
                 Total
               </div>
@@ -130,8 +179,8 @@ $sireList = fetchSireListAll_tb($year_param);
   setlocale(LC_MONETARY,"en_US");
   $number =0;  
 
-// First loop to display the main fields
-foreach ($resultFound as $row) {
+  // First loop to display the main fields
+  foreach ($resultFound as $row) {
     // Retrieve offspring data
     $offspringRows = fetchBreezeReport1($row['Salecode'], $row['TDAM']);
     
@@ -139,60 +188,60 @@ foreach ($resultFound as $row) {
     echo "<div class='row'>";
 
     // Main fields to display from the first function
-    echo "<div class='cell'>" . $row['Horse'] . "</div>";  // b.Horse
-    echo "<div class='cell'>" . $row['Hip'] . "</div>";    // b.HIP
-    echo "<div class='cell'>" . $row['Sex'] . "</div>";    // b.Sex
-    echo "<div class='cell'>" . date("m/d/y", strtotime($row['Datefoal'])) . "</div>"; // b.Datefoal
-    echo "<div class='cell'>" . $row['Salecode'] . "</div>"; // b.Salecode
-    echo "<div class='cell'>" . "$" . number_format($row['Price'], 0) . "</div>"; // b.Price
-    echo "<div class='cell'>" . $row['Rating'] . "</div>"; // b.Rating
-    echo "<div class='cell'>" . $row['b_type'] . "</div>";  // b.SaleType
-    echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // b.Dam-R
+    echo "<div class='cell'>" . $row['Horse'] . "</div>";  // 1. Offspring Horse
+    echo "<div class='cell'>" . $row['Hip'] . "</div>";    // 2. Hip
+    echo "<div class='cell'>" . $row['Sex'] . "</div>";    // 3. Sex
+    echo "<div class='cell'>" . date("m/d/y", strtotime($row['Datefoal'])) . "</div>"; // 4. Datefoal
+    echo "<div class='cell'>" . $row['Salecode'] . "</div>"; // 5. Salecode
+    echo "<div class='cell'>" . "$" . number_format($row['Price'], 0) . "</div>"; // 6. Price
+    echo "<div class='cell'>" . $row['Rating'] . "</div>"; // 7. Rating
+    echo "<div class='cell'>" . $row['b_type'] . "</div>";  // 8. Sale Type
+    echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // 9. Dam-R
 
     // Close the row for the first function
     echo "</div>";
 
     // Now loop through the offspring details (second function) and display their fields
     foreach ($offspringRows as $offspringRow) {
-        // Start a new row for each offspring
-        echo "<div class='row'>";
+      // Start a new row for each offspring
+      echo "<div class='row'>";
 
-        // Display the requested fields from the second function
-        echo "<div class='cell'>" . $number++ . "</div>";  // No.
-        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // Purchaser Name
-        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // HIP
-        echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // Horse
-        echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // Sire
-        echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // Datefoal
-        echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // Dam
-        echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // Sex
-        echo "<div class='cell'>" . $offspringRow['type'] . "</div>"; // Type
-        echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // Price
-        echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // Salecode
-        echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // Day
-        echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // Consno
-        echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>"; // Sale Type
-        echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // Age
-        echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // Rating
+      // Display the requested fields from the second function
+      echo "<div class='cell'>" . $number++ . "</div>";  // 10. No.
+      echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 11. Purchaser Name
+      echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 12. HIP
+      echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // 13. Horse
+      echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // 14. Sire
+      echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // 15. Datefoal
+      echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // 16. Dam
+      echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // 17. Sex
+      echo "<div class='cell'>" . $offspringRow['type'] . "</div>"; // 18. Type
+      echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // 19. Price
+      echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // 20. SaleCode
+      echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // 21. Day
+      echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // 22. Consno
+      echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>"; // 23. Sale Type
+      echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // 24. Age
+      echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // 25. Rating
 
-        // Calculate and display price difference for each offspring (if needed)
-        $priceDifference = $offspringRow['Price'] - $row['Price'];
-        $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
-        echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>";
+      // Calculate and display price difference for each offspring (if needed)
+      $priceDifference = $offspringRow['Price'] - $row['Price'];
+      $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+      echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>"; // 26. Total
 
-        // Purchaser collapsible functionality for offspring
-        $collapseID = "collapse" . $number;
-        echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
+      // Purchaser collapsible functionality for offspring
+      $collapseID = "collapse" . $number;
+      echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
 
-        // Collapsible Panel for Purchaser Name for offspring
-        echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
-        echo "</div>";
+      // Collapsible Panel for Purchaser Name for offspring
+      echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+      echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
+      echo "</div>";
 
-        // Close the row for the offspring details
-        echo "</div>";
+      // Close the row for the offspring details
+      echo "</div>";
     }
-}
+  }
 ?>
 
     </div>
