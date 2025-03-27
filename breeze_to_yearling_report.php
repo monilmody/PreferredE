@@ -321,7 +321,7 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
-    var link ="yearling_to_breeze_report.php?year="+year
+    var link ="breeze_to_yearling_report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
     							+"&sex="+sex
