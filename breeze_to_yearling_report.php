@@ -179,15 +179,15 @@ $sireList = fetchSireListAll_tb($year_param);
   setlocale(LC_MONETARY,"en_US");
   $number =0;  
 
-  // First loop to display the main fields
+  // Loop through the first set of data (main horse details)
   foreach ($resultFound as $row) {
-    // Retrieve offspring data
+    // Retrieve offspring data (second set of data)
     $offspringRows = fetchBreezeReport1($row['Salecode'], $row['TDAM']);
     
-    // Start a row for each entry
+    // Start a row for the main horse details
     echo "<div class='row'>";
 
-    // Main fields to display from the first function
+    // Display the main horse data (from the first query)
     echo "<div class='cell'>" . $row['Horse'] . "</div>";  // 1. Offspring Horse
     echo "<div class='cell'>" . $row['Hip'] . "</div>";    // 2. Hip
     echo "<div class='cell'>" . $row['Sex'] . "</div>";    // 3. Sex
@@ -198,49 +198,44 @@ $sireList = fetchSireListAll_tb($year_param);
     echo "<div class='cell'>" . $row['b_type'] . "</div>";  // 8. Sale Type
     echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // 9. Dam-R
 
-    // Close the row for the first function
-    echo "</div>";
-
-    // Now loop through the offspring details (second function) and display their fields
+    // Now, loop through the offspring details (second query)
+    // and append their data in the same row
     foreach ($offspringRows as $offspringRow) {
-      // Start a new row for each offspring
-      echo "<div class='row'>";
+        // Display offspring data in the same row as the main horse
+        echo "<div class='cell'>" . $number++ . "</div>";  // 10. No.
+        echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 11. Purchaser Name
+        echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 12. HIP
+        echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // 13. Horse
+        echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // 14. Sire
+        echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // 15. Datefoal
+        echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // 16. Dam
+        echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // 17. Sex
+        echo "<div class='cell'>" . $offspringRow['type'] . "</div>"; // 18. Type
+        echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // 19. Price
+        echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // 20. SaleCode
+        echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // 21. Day
+        echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // 22. Consno
+        echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>"; // 23. Sale Type
+        echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // 24. Age
+        echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // 25. Rating
 
-      // Display the requested fields from the second function
-      echo "<div class='cell'>" . $number++ . "</div>";  // 10. No.
-      echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // 11. Purchaser Name
-      echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // 12. HIP
-      echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // 13. Horse
-      echo "<div class='cell'>" . $offspringRow['tSire'] . "</div>"; // 14. Sire
-      echo "<div class='cell'>" . date("m/d/y", strtotime($offspringRow['Datefoal'])) . "</div>"; // 15. Datefoal
-      echo "<div class='cell'>" . $offspringRow['Dam'] . "</div>"; // 16. Dam
-      echo "<div class='cell'>" . $offspringRow['Sex'] . "</div>"; // 17. Sex
-      echo "<div class='cell'>" . $offspringRow['type'] . "</div>"; // 18. Type
-      echo "<div class='cell'>" . "$" . number_format($offspringRow['Price'], 0) . "</div>"; // 19. Price
-      echo "<div class='cell'>" . $offspringRow['Salecode'] . "</div>"; // 20. SaleCode
-      echo "<div class='cell'>" . $offspringRow['Day'] . "</div>"; // 21. Day
-      echo "<div class='cell'>" . $offspringRow['Consno'] . "</div>"; // 22. Consno
-      echo "<div class='cell'>" . $offspringRow['saletype'] . "</div>"; // 23. Sale Type
-      echo "<div class='cell'>" . $offspringRow['Age'] . "</div>"; // 24. Age
-      echo "<div class='cell'>" . $offspringRow['Rating'] . "</div>"; // 25. Rating
+        // Calculate and display price difference for each offspring
+        $priceDifference = $offspringRow['Price'] - $row['Price'];
+        $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+        echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>"; // 26. Total
 
-      // Calculate and display price difference for each offspring (if needed)
-      $priceDifference = $offspringRow['Price'] - $row['Price'];
-      $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
-      echo "<div class='cell' style='background-color:$cellColor'>" . "$" . number_format($priceDifference, 0) . "</div>"; // 26. Total
+        // Purchaser collapsible functionality for offspring
+        $collapseID = "collapse" . $number;
+        echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
 
-      // Purchaser collapsible functionality for offspring
-      $collapseID = "collapse" . $number;
-      echo "<div class='cell'><button class='btn btn-link' type='button' data-toggle='collapse' data-target='#$collapseID' aria-expanded='false' aria-controls='$collapseID'>Purchaser</button></div>";
-
-      // Collapsible Panel for Purchaser Name for offspring
-      echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
-      echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
-      echo "</div>";
-
-      // Close the row for the offspring details
-      echo "</div>";
+        // Collapsible Panel for Purchaser Name for offspring
+        echo "<div id='$collapseID' class='collapse' style='padding: 0; margin: 0; background-color: #d3d3d3;'>";
+        echo "<div class='cell' style='padding-left: 20px;'><i>BUYER:</i> <i>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</i></div>";
+        echo "</div>";
     }
+    
+    // Close the row for this horse entry (main data + offspring data)
+    echo "</div>";
   }
 ?>
 
