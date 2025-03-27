@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortField, $sortOrder)
+function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortField = 'Hip', $sortOrder = 'DESC')
 {
     global $mysqli;
 
