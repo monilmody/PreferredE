@@ -297,7 +297,7 @@ function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
         b.Price,
         b.Rating,
         b.type AS b_type,
-        b.TDAM
+        b.TDAM AS Dam-R
     FROM tsales b
     WHERE Price > 0
     AND (YEAR(Saledate) = ? OR ? = "")

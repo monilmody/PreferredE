@@ -187,15 +187,15 @@ foreach ($resultFound as $row) {
     echo "<div class='row'>";
 
     // Main fields to display from the first function
-    echo "<div class='cell'>" . $row['Horse'] . "</div>"; // b.Horse
-    echo "<div class='cell'>" . $row['HIP'] . "</div>"; // b.HIP
-    echo "<div class='cell'>" . $row['Sex'] . "</div>"; // b.Sex
+    echo "<div class='cell'>" . $row['Horse'] . "</div>";  // b.Horse
+    echo "<div class='cell'>" . $row['HIP'] . "</div>";    // b.HIP
+    echo "<div class='cell'>" . $row['Sex'] . "</div>";    // b.Sex
     echo "<div class='cell'>" . date("m/d/y", strtotime($row['Datefoal'])) . "</div>"; // b.Datefoal
     echo "<div class='cell'>" . $row['Salecode'] . "</div>"; // b.Salecode
     echo "<div class='cell'>" . "$" . number_format($row['Price'], 0) . "</div>"; // b.Price
     echo "<div class='cell'>" . $row['Rating'] . "</div>"; // b.Rating
-    echo "<div class='cell'>" . $row['SaleType'] . "</div>"; // b.SaleType
-    echo "<div class='cell'>" . $row['Dam-R'] . "</div>"; // b.Dam-R
+    echo "<div class='cell'>" . $row['Type'] . "</div>";  // b.SaleType
+    echo "<div class='cell'>" . $row['Dam-R'] . "</div>";  // b.Dam-R
 
     // Close the row for the first function
     echo "</div>";
@@ -206,7 +206,7 @@ foreach ($resultFound as $row) {
         echo "<div class='row'>";
 
         // Display the requested fields from the second function
-        echo "<div class='cell'>" . $number++ . "</div>"; // No.
+        echo "<div class='cell'>" . $number++ . "</div>";  // No.
         echo "<div class='cell'>" . $offspringRow['Purlname'] . ' ' . $offspringRow['Purfname'] . "</div>"; // Purchaser Name
         echo "<div class='cell'>" . $offspringRow['HIP'] . "</div>"; // HIP
         echo "<div class='cell'>" . $offspringRow['Horse'] . "</div>"; // Horse
