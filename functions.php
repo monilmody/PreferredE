@@ -282,7 +282,7 @@ function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
     global $mysqli;
     
     // Validate input parameters
-    if (empty($year == "")) {
+    if (empty($year)) {
         return "";
     }
 
