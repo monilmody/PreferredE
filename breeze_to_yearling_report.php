@@ -41,6 +41,7 @@ $sireList = fetchSireListAll_tb($year_param);
 <!-- </b> -->
 <br>
 <br>
+<form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
 <select class="custom-select1" id="year" onchange="updateSalecode_tb(this.value)">
 	<option value="">Sale Year</option>
 	<option value="">All Years</option>
@@ -87,7 +88,6 @@ $sireList = fetchSireListAll_tb($year_param);
     } ?>
 </select>
 
-<form method="GET" action="<?php echo $_SERVER['PHP_SELF']; ?>">
     <select name="sortField" class="custom-select">
         <option value="Hip">Sort by Hip</option>
         <option value="Sex">Sort by Sex</option>
@@ -99,10 +99,8 @@ $sireList = fetchSireListAll_tb($year_param);
         <option value="DESC">Descending</option>
     </select>
 
-    <button type="submit">Sort</button>
-</form>
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
-
+</form>
 
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
