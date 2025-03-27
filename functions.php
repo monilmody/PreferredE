@@ -263,9 +263,9 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     JOIN tsales b ON a.TDAM = b.TDAM
     WHERE LOWER(a.TDAM) = LOWER("'.$damName.'")  -- Case-insensitive comparison
     AND a.Salecode = "'.$salecode.'"
-    AND DATEDIFF(b.Saledate, a.Saledate) >= 1
-    AND DATEDIFF(b.Saledate, a.Saledate) <= 365  -- Sale must be within 12 months (365 days) of the dam
-    AND b.type = "R"
+    AND DATEDIFF(b.Saledate, a.Saledate) <= 1
+    AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
+    AND b.type = "Y"
     LIMIT 1;';
 
     $result = mysqli_query($mysqli, $sql);
@@ -2157,15 +2157,14 @@ function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sor
     return $json;
 }
 
-function fetchBreezeReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5)
+function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
     global $mysqli;
 
     if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
         return "";
     }
-
-    // Start building search parameters
+    
     $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
                      AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
                      AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
@@ -2173,54 +2172,52 @@ function fetchBreezeReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2,
                      AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'") ';
     
     $sql = 'SELECT
-            HIP,
-            Horse,
-            tSire,
-            Datefoal,
-            TDAM AS Dam,
-            Sex,
-            Type,
-            Price,
-            Salecode,
-            Day,
-            Consno,
-            saletype,
-            Age,
-            Rating,
-            Purlname,
-            Purfname
-            FROM tsales a
-            WHERE Price > 0'.$searchParam;
-
-    // Now that we're working with rows, the Dam field is fetched as part of the query
+    HIP,
+    Horse,
+    tSire,
+    Datefoal,
+    TDAM AS Dam,
+    Sex,
+    Type,
+    Price,
+    Salecode,
+    Day,
+    Consno,
+    saletype,
+    Age,
+    Rating,
+    Purlname,
+    Purfname
+    FROM tsales a
+    WHERE Price>0'.$searchParam;
+    
+    
+    $orderby1 = ' ORDER BY '.$sort1.' ASC';
+    $orderby2 = ', '.$sort2.' ASC';
+    $orderby3 = ', '.$sort3.' ASC';
+    $orderby4 = ', '.$sort4.' ASC';
+    $orderby5 = ', '.$sort5.' ASC';
+    
+    
+    if ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !="" && $sort5 !="") {
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4.$orderby5;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !="" && $sort4 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3.$orderby4;
+    }elseif ($sort1 !="" && $sort2 !="" && $sort3 !=""){
+        $sql = $sql.$orderby1.$orderby2.$orderby3;
+    }elseif ($sort1 !="" && $sort2 !=""){
+        $sql = $sql.$orderby1.$orderby2;
+    }elseif ($sort1 !=""){
+        $sql = $sql.$orderby1;
+    }
     $result = mysqli_query($mysqli, $sql);
-
+    //echo $sql;
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
     }
-
-    // Iterate through the rows fetched
-    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    foreach ($json as $row) {
-        // Fetch the offspring records to filter by the sale date, passing the current Dam value
-        $offspringRows = fetchOffsprings_breeze_tb($row['Dam'], $salecode);
-
-        // If there are offspring records, filter by sale date range
-        if (count($offspringRows) > 0) {
-            // Get the offspring sale date and filter records within 1 to 12 months before the offspring sale date
-            $offspringSaleDate = $offspringRows[0]['Saledate']; // Assuming 'Saledate' exists in the offspring data
-
-            // Filter the main query based on the date difference
-            $searchParam .= ' AND DATEDIFF(Saledate, "'.$offspringSaleDate.'") >= -365
-                              AND DATEDIFF(Saledate, "'.$offspringSaleDate.'") <= -1';
-        }
-
-        // Add the rest of your code to generate the report as needed
-    }
-
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
 }
-
 
 function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
