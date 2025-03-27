@@ -2319,11 +2319,12 @@ function fetchBreezeReport1($salecode, $dam)
 {
     global $mysqli;
 
+    // Check if the parameters are empty
     if ($dam == "" && $salecode == "") {
-        return "";
+        return [];  // Return an empty array if no parameters are provided
     }
 
-    // Prepare the SQL query with placeholders
+    // SQL query with placeholders
     $sql = '
         SELECT
             b.HIP,
@@ -2344,13 +2345,13 @@ function fetchBreezeReport1($salecode, $dam)
             b.Purfname
         FROM tsales a
         JOIN tsales b ON a.TDAM = b.TDAM
-        WHERE LOWER(a.TDAM) = LOWER(?)  -- Use placeholders for better security
-        AND a.Salecode = ?
-        AND DATEDIFF(b.Saledate, a.Saledate) <= 1
-        AND DATEDIFF(b.Saledate, a.Saledate) >= 365  -- Sale must be within 12 months (365 days) of the dam
-        AND (b.type = "Y" OR b.type = "W")
-        LIMIT 1;
-    ';
+        WHERE LOWER(a.TDAM) = LOWER(?)  -- Case-insensitive comparison
+        AND a.Salecode = ?  -- Sale code of the dam
+        AND b.Saledate < a.Saledate  -- Find sales before the latest sale date
+        AND DATEDIFF(a.Saledate, b.Saledate) <= 365  -- Ensure the sale is within 365 days of the latest sale
+        AND (b.type = "Y" OR b.type = "W")  
+        ORDER BY b.Saledate DESC  -- Order the results to get the most recent sales first
+        LIMIT 1;';
 
     // Prepare the statement
     if ($stmt = mysqli_prepare($mysqli, $sql)) {
@@ -2364,19 +2365,23 @@ function fetchBreezeReport1($salecode, $dam)
         // Store the result
         $result = mysqli_stmt_get_result($stmt);
 
-        if ($result) {
+        // Check if the result contains any rows
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Fetch all the rows and return as an associative array
             $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
             return $json;
         } else {
-            printf("Errormessage: %s\n", $mysqli->error);
-            return [];
+            // Handle the case where no results were found
+            return [];  // Return an empty array if no data is found
         }
 
     } else {
-        printf("Errormessage: %s\n", $mysqli->error);
-        return [];
+        // If there's an error in preparing the statement, print the error
+        printf("Error preparing query: %s\n", $mysqli->error);
+        return [];  // Return an empty array on failure
     }
 }
+
 
 function fetchBroodmaresReport_tb($salecode,$year,$type,$gait,$sex,$sire,$bredto,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
