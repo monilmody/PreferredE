@@ -286,56 +286,91 @@ function fetchOffsprings_breeze_tb1($year, $salecode, $type, $sex, $sire)
         return "";
     }
 
-    // Prepare SQL with placeholders
-    $sql = '
-    SELECT
-        b.Horse,
-        b.Hip,
-        b.Sex,
-        b.Datefoal,
-        b.Salecode,
-        b.Price,
-        b.Rating,
-        b.type AS b_type,
-        b.TDAM AS Dam-R
-    FROM tsales b
-    WHERE Price > 0
-    AND (YEAR(Saledate) = ? OR ? = "")
-    AND (Salecode = ? OR ? = "")
-    AND (Type = ? OR ? = "")
-    AND (Sex = ? OR ? = "")
-    AND (tSire = ? OR ? = "")';
+    $searchParam = "WHERE Price > 0"; // Start with the basic WHERE clause
 
-    // Prepare the statement
-    if ($stmt = mysqli_prepare($mysqli, $sql)) {
-        // Bind parameters
-        mysqli_stmt_bind_param($stmt, 'ssssssssss', $year, $year, $salecode, $salecode, $type, $type, $sex, $sex, $sire, $sire);
-
-        // Execute the statement
-        if (mysqli_stmt_execute($stmt)) {
-            // Get the result
-            $result = mysqli_stmt_get_result($stmt);
-
-            if (!$result) {
-                printf("Error getting result: %s\n", mysqli_error($mysqli));
-            }
-
-            // Fetch all results
-            $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
-
-            // Return results
-            return $json;
-        } else {
-            // Handle execution errors
-            printf("Error executing statement: %s\n", mysqli_stmt_error($stmt));
-        }
-    } else {
-        // Handle SQL preparation errors
-        printf("Error preparing statement: %s\n", mysqli_error($mysqli));
+    // Build the query conditionally based on the provided parameters
+    if (!empty($year)) {
+        $searchParam .= " AND YEAR(Saledate) = ?";
+    }
+    if (!empty($salecode)) {
+        $searchParam .= " AND Salecode = ?";
+    }
+    if (!empty($type)) {
+        $searchParam .= " AND `Type` = ?";
+    }
+    if (!empty($sex)) {
+        $searchParam .= " AND Sex = ?";
+    }
+    if (!empty($sire)) {
+        $searchParam .= " AND tSire = ?";
     }
 
-    return [];
+    $sql = "
+        SELECT
+            b.Horse,
+            b.Hip,
+            b.Sex,
+            b.Datefoal,
+            b.Salecode,
+            b.Price,
+            b.Rating,
+            b.type AS b_type,
+            b.TDAM
+        FROM tsales b
+        $searchParam
+    ";
+
+    // Prepare the statement
+    if ($stmt = $mysqli->prepare($sql)) {
+        // Bind parameters dynamically
+        $types = '';
+        $params = [];
+
+        // Add parameters based on provided input
+        if (!empty($year)) {
+            $types .= 's';
+            $params[] = $year;
+        }
+        if (!empty($salecode)) {
+            $types .= 's';
+            $params[] = $salecode;
+        }
+        if (!empty($type)) {
+            $types .= 's';
+            $params[] = $type;
+        }
+        if (!empty($sex)) {
+            $types .= 's';
+            $params[] = $sex;
+        }
+        if (!empty($sire)) {
+            $types .= 's';
+            $params[] = $sire;
+        }
+
+        // Bind the parameters to the statement
+        if ($params) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        // Execute the query
+        $stmt->execute();
+        $result = $stmt->get_result();
+
+        // Fetch all rows as an associative array
+        $json = $result->fetch_all(MYSQLI_ASSOC);
+
+        // Close the statement
+        $stmt->close();
+
+        return $json;
+    } else {
+        // Handle error if prepare failed
+        printf("Error in preparing statement: %s\n", $mysqli->error);
+        return [];
+    }
 }
+
 
 function fetchOffsprings_tb($damName)
 {

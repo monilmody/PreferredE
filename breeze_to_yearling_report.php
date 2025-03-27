@@ -195,7 +195,7 @@ foreach ($resultFound as $row) {
     echo "<div class='cell'>" . "$" . number_format($row['Price'], 0) . "</div>"; // b.Price
     echo "<div class='cell'>" . $row['Rating'] . "</div>"; // b.Rating
     echo "<div class='cell'>" . $row['Type'] . "</div>";  // b.SaleType
-    echo "<div class='cell'>" . $row['Dam-R'] . "</div>";  // b.Dam-R
+    echo "<div class='cell'>" . $row['TDAM'] . "</div>";  // b.Dam-R
 
     // Close the row for the first function
     echo "</div>";
