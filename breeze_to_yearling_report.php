@@ -88,14 +88,14 @@ $sireList = fetchSireListAll_tb($year_param);
 </select>
 
   <!-- Sorting Fields -->
-  <select name="sortFields" class="custom-select">
+  <select name="sortFields" class="custom-select1">
         <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>>Sort by Hip</option>
         <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
         <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
         <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
     </select>
 
-    <select name="sortOrder" class="custom-select">
+    <select name="sortOrder" class="custom-select1">
         <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
         <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
     </select>
@@ -260,21 +260,28 @@ $sireList = fetchSireListAll_tb($year_param);
 	document.getElementById('type').value="<?php echo $type_param;?>";
 	document.getElementById('sex').value="<?php echo $sex_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
+  document.getElementById('sortFields').value="<?php echo $sex_param;?>";
+	document.getElementById('sortOrder').value="<?php echo $sire_param;?>";
 	
 </script>
 <script>
 function getValues() {
-    var year = document.getElementById('year').value;
+  var year = document.getElementById('year').value;
 	var salecode = document.getElementById('salecode').value;
 	var type = document.getElementById('type').value;
 	var sex = document.getElementById('sex').value;
 	var sire = document.getElementById('sire').value;
+  // Get sort values
+  var sortField = document.getElementById('sortFields').value;
+  var sortOrder = document.getElementById('sortOrder').value;
 
     var link ="breeze_to_yearling_report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
     							+"&sex="+sex
-    							+"&sire="+sire;
+    							+"&sire="+sire
+                  + "&sortFields=" + sortField
+                  + "&sortOrder=" + sortOrder;  // Include sortField and sortOrder in the URL
     							
     window.open(link,"_self");
   	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
