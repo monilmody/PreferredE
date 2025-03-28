@@ -88,23 +88,17 @@ $sireList = fetchSireListAll_tb($year_param);
 </select>
 
   <!-- Sorting Fields -->
-  <select id="sortFields" class="custom-select1">
+  <select id="sortFields" class="custom-select">
         <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>>Sort by Hip</option>
         <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
         <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
         <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
     </select>
 
-    <select id="sortOrder" class="custom-select1">
+    <select id="sortOrder" class="custom-select">
         <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
         <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
     </select>
-
-    <!-- Display the Selected Sort Field and Sort Order -->
-<div>
-    <p><strong>Selected Sort Field: </strong><?php echo $sortField; ?></p>
-    <p><strong>Selected Sort Order: </strong><?php echo $sortOrder; ?></p>
-</div>
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
