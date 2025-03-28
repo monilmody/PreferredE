@@ -272,7 +272,7 @@ function getValues() {
 	var sex = document.getElementById('sex').value;
 	var sire = document.getElementById('sire').value;
   // Get sort values
-  var sortField = document.getElementById('sortFields').value;
+  var sortFields = Array.from(document.getElementById('sortFields').selectedOptions).map(option => option.value).join(',');
   var sortOrder = document.getElementById('sortOrder').value;
 
     var link ="breeze_to_yearling_report.php?year="+year
@@ -280,7 +280,7 @@ function getValues() {
     							+"&type="+type
     							+"&sex="+sex
     							+"&sire="+sire
-                  + "&sortFields=" + sortField
+                  + "&sortFields=" + sortFields
                   + "&sortOrder=" + sortOrder;  // Include sortField and sortOrder in the URL
     							
     window.open(link,"_self");
