@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortField = 'Hip', $sortOrder = 'DESC')
+function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortFields  = 'Hip', $sortOrder = 'DESC')
 {
     global $mysqli;
 
@@ -305,8 +305,27 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
         $searchParam .= " AND tSire = ?";
     }
 
+    $sortFieldsArray = explode(',', $sortFields);
+
     // Add sorting condition to the SQL query
-    $orderByClause = " ORDER BY $sortField $sortOrder"; // Default sorting by $sortField in $sortOrder direction
+    $orderByClause = " ORDER BY"; // Default sorting by $sortField in $sortOrder direction
+
+    $sortList = [];
+
+    foreach ($sortFieldsArray as $field) {
+        // Check for valid fields to prevent SQL injection
+        if (in_array(trim($field), ['Hip', 'Sex', 'Price', 'utt'])) {
+            $sortList[] = trim($field) . ' ' . $sortOrder;
+        }
+    }
+
+    // If no valid sort fields, fall back to default sorting by "Hip"
+    if (empty($sortList)) {
+        $sortList[] = 'Hip ' . $sortOrder;
+    }
+
+    // Combine the sorting fields
+    $orderByClause .= " " . implode(", ", $sortList);
 
     $sql = "
         SELECT
