@@ -19,7 +19,7 @@ $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
 // Capture sorting parameters
-$sortField = isset($_GET['sortField']) ? $_GET['sortField'] : 'Hip';  // Default to 'Hip'
+$sortField = isset($_GET['sortFields']) ? $_GET['sortFields'] : 'Hip';  // Default to 'Hip'
 $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';  // Default to 'ASC'
 
 $resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sortField, $sortOrder);
