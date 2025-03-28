@@ -88,20 +88,66 @@ $sireList = fetchSireListAll_tb($year_param);
 </select>
 
   <!-- Sorting Fields -->
-  <select id="sortFields" class="custom-select">
+  <select id="sortFields" class="custom-select1" onchange="updateSortFieldText();">
         <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>>Sort by Hip</option>
         <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
         <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
         <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
     </select>
 
-    <select id="sortOrder" class="custom-select">
+    <select id="sortOrder" class="custom-select1" onchange="updateSortFieldText();">
         <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
         <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
     </select>
 
-<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
+<!-- Button to Display Selected Sorting Option -->
+<button id="sortButton" class="btn btn-primary">
+    <?php
+    // Initially display selected sort field in the button text
+    if ($sortField == 'Hip') {
+        echo 'Sort by Hip';
+    } elseif ($sortField == 'Sex') {
+        echo 'Sort by Sex';
+    } elseif ($sortField == 'Price') {
+        echo 'Sort by Price';
+    } elseif ($sortField == 'utt') {
+        echo 'Sort by UTT';
+    } else {
+        echo 'Sort by Hip'; // Default option
+    }
+    ?>
+</button>
 
+<script>
+function updateSortFieldText() {
+    // Get selected values
+    var sortField = document.getElementById('sortFields').value;
+    var sortOrder = document.getElementById('sortOrder').value;
+
+    // Set the button text based on selected sort field
+    var sortText = '';
+
+    if (sortField == 'Hip') {
+        sortText = 'Sort by Hip';
+    } else if (sortField == 'Sex') {
+        sortText = 'Sort by Sex';
+    } else if (sortField == 'Price') {
+        sortText = 'Sort by Price';
+    } else if (sortField == 'utt') {
+        sortText = 'Sort by UTT';
+    } else {
+        sortText = 'Sort by Hip'; // Default option
+    }
+
+    // Optionally, append the sort order (Ascending/Descending)
+    sortText += " - " + (sortOrder === 'ASC' ? 'Ascending' : 'Descending');
+
+    // Update the button text
+    document.getElementById('sortButton').innerText = sortText;
+}
+</script>
+
+<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
