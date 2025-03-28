@@ -88,14 +88,14 @@ $sireList = fetchSireListAll_tb($year_param);
 </select>
 
   <!-- Sorting Fields -->
-  <select name="sortFields" class="custom-select1">
+  <select id="sortFields" class="custom-select1">
         <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>>Sort by Hip</option>
         <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
         <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
         <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
     </select>
 
-    <select name="sortOrder" class="custom-select1">
+    <select id="sortOrder" class="custom-select1">
         <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
         <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
     </select>
