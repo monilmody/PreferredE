@@ -87,18 +87,20 @@ $sireList = fetchSireListAll_tb($year_param);
     } ?>
 </select>
 
-  <!-- Sorting Fields -->
-  <select id="sortFields" class="custom-select1">
-        <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>> Sort by Hip</option>
-        <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
-        <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
-        <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
-    </select>
+<!-- Sorting Fields -->
+<select id="sortFields" class="custom-select1">
+      <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>> Sort by Hip</option>
+      <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
+      <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
+      <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
+</select>
 
-    <select id="sortOrder" class="custom-select1">
-        <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
-        <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
-    </select>
+<select id="sortOrder" class="custom-select1">
+    <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
+    <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
+</select>
+
+<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <!-- Display the Selected Sort Field and Sort Order -->
 <div style="font-family: Arial, sans-serif; font-size: 18px; padding: 15px; background-color: #f4f4f4; border-radius: 8px; width: fit-content; border: 1px solid #ddd;">
@@ -111,8 +113,6 @@ $sireList = fetchSireListAll_tb($year_param);
         <?php echo $sortOrder; ?>
     </p>
 </div>
-
-<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
