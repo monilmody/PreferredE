@@ -100,11 +100,18 @@ $sireList = fetchSireListAll_tb($year_param);
         <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
     </select>
 
-    <!-- Display the Selected Sort Field and Sort Order -->
-<div>
-    <p><strong>Selected Sort Field: </strong><?php echo $sortField; ?></p>
-    <p><strong>Selected Sort Order: </strong><?php echo $sortOrder; ?></p>
+<!-- Display the Selected Sort Field and Sort Order -->
+<div style="font-family: Arial, sans-serif; font-size: 18px; padding: 15px; background-color: #f4f4f4; border-radius: 8px; width: fit-content; border: 1px solid #ddd;">
+    <p style="margin: 10px 0; font-weight: bold; font-size: 20px; color: #333;">
+        <span style="color: #007bff;">Selected Sort Field:</span> 
+        <?php echo $sortField; ?>
+    </p>
+    <p style="margin: 10px 0; font-weight: bold; font-size: 20px; color: #333;">
+        <span style="color: #007bff;">Selected Sort Order:</span> 
+        <?php echo $sortOrder; ?>
+    </p>
 </div>
+
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
 <hr>
