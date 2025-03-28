@@ -304,28 +304,14 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
     if (!empty($sire)) {
         $searchParam .= " AND tSire = ?";
     }
+    
+    // Use a single sorting field (no need for array logic)
+    $sortField = isset($_GET['sortFields']) ? $_GET['sortFields'] : $sortFields;
+    $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : $sortOrder;
 
-    $sortFieldsArray = explode(',', $sortFields);
+    // Build the ORDER BY clause with one field
+    $orderByClause = " ORDER BY " . $sortField . " " . $sortOrder;
 
-    // Add sorting condition to the SQL query
-    $orderByClause = " ORDER BY"; // Default sorting by $sortField in $sortOrder direction
-
-    $sortList = [];
-
-    foreach ($sortFieldsArray as $field) {
-        // Check for valid fields to prevent SQL injection
-        if (in_array(trim($field), ['Hip', 'Sex', 'Price', 'utt'])) {
-            $sortList[] = trim($field) . ' ' . $sortOrder;
-        }
-    }
-
-    // If no valid sort fields, fall back to default sorting by "Hip"
-    if (empty($sortList)) {
-        $sortList[] = 'Hip ' . $sortOrder;
-    }
-
-    // Combine the sorting fields
-    $orderByClause .= " " . implode(", ", $sortList);
 
     $sql = "
         SELECT
