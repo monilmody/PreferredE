@@ -304,14 +304,20 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
     if (!empty($sire)) {
         $searchParam .= " AND tSire = ?";
     }
-    
+
     // Use a single sorting field (no need for array logic)
     $sortField = isset($_GET['sortFields']) ? $_GET['sortFields'] : $sortFields;
     $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : $sortOrder;
 
     // Build the ORDER BY clause with one field
-    $orderByClause = " ORDER BY " . $sortField . " " . $sortOrder;
+    $orderByClause = " ORDER BY ";
 
+    // Ensure numeric fields are handled as integers in the ORDER BY clause
+    if ($sortField == 'Price' || $sortField == 'Hip') {
+        $orderByClause .= "CAST($sortField AS SIGNED) $sortOrder";  // Casting to signed integers
+    } else {
+        $orderByClause .= "$sortField $sortOrder";
+    }
 
     $sql = "
         SELECT
