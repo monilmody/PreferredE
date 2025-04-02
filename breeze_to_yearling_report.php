@@ -32,7 +32,7 @@ $typeList = fetchTypeList_tb();
 $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
 
-$sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price Desc");
+$sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 
 
 ?>
