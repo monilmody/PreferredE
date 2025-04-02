@@ -101,8 +101,8 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <select class="custom-select1" id="sort1_order" onchange="updateSortOrder('sort1')">
-    <option value="ASC">ASC</option>
-    <option value="DESC">DESC</option>
+  <option value="ASC" <?php echo $sort1_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo $sort1_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2" onchange="updateSortOrder('sort2')">
@@ -113,8 +113,8 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <select class="custom-select1" id="sort2_order" onchange="updateSortOrder('sort2')">
-    <option value="ASC">ASC</option>
-    <option value="DESC">DESC</option>
+  <option value="ASC" <?php echo $sort2_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo $sort2_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3" onchange="updateSortOrder('sort3')">
@@ -125,8 +125,8 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <select class="custom-select1" id="sort3_order" onchange="updateSortOrder('sort3')">
-    <option value="ASC">ASC</option>
-    <option value="DESC">DESC</option>
+  <option value="ASC" <?php echo $sort3_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo $sort3_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4" onchange="updateSortOrder('sort4')">
@@ -137,8 +137,8 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <select class="custom-select1" id="sort4_order" onchange="updateSortOrder('sort4')">
-    <option value="ASC">ASC</option>
-    <option value="DESC">DESC</option>
+  <option value="ASC" <?php echo $sort4_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo $sort4_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5" onchange="updateSortOrder('sort5')">
@@ -149,8 +149,8 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <select class="custom-select1" id="sort5_order" onchange="updateSortOrder('sort5')">
-    <option value="ASC">ASC</option>
-    <option value="DESC">DESC</option>
+<option value="ASC" <?php echo $sort5_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
+<option value="DESC" <?php echo $sort5_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
 
 <!-- Hidden Fields for Sort Order (ASC or DESC) -->
@@ -340,7 +340,12 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
 	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
 	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
-	
+  document.getElementById('sort1_order').value = "<?php echo $sort1_param_order; ?>";
+  document.getElementById('sort2_order').value = "<?php echo $sort2_param_order; ?>";
+  document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
+  document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
+  document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
+
 </script>
 <script>
 function getValues() {
