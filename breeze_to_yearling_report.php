@@ -129,18 +129,6 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price Desc");
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
-<!-- Display the Selected Sort Field and Sort Order -->
-<div style="font-family: Arial, sans-serif; font-size: 18px; padding: 15px; background-color: #f4f4f4; border-radius: 8px; width: fit-content; border: 1px solid #ddd;">
-    <p style="margin: 10px 0; font-weight: bold; font-size: 20px; color: #333;">
-        <span style="color: #007bff;">Selected Sort Field:</span> 
-        <?php echo $sortField; ?>
-    </p>
-    <p style="margin: 10px 0; font-weight: bold; font-size: 20px; color: #333;">
-        <span style="color: #007bff;">Selected Sort Order:</span> 
-        <?php echo $sortOrder; ?>
-    </p>
-</div>
-
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
 	<div class="table" style="width: device-width">
