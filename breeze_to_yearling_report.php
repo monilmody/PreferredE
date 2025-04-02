@@ -93,42 +93,66 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 </select>
 
 <!-- Sorting Filters (1st to 5th) -->
-<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1"> 
+<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
     <option value="">Sort By 1st</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.strtolower($row).'">'.$row.'</option>'; // Make sure sorting values are lowercase for backend
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2">
+<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2" onchange="updateSortOrder('sort2')">
     <option value="">Sort By 2nd</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3">
+<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3" onchange="updateSortOrder('sort3')">
     <option value="">Sort By 3rd</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4">
+<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4" onchange="updateSortOrder('sort4')">
     <option value="">Sort By 4th</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5">
+<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5" onchange="updateSortOrder('sort5')">
     <option value="">Sort By 5th</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
+
+<!-- Hidden Fields for Sort Order (ASC or DESC) -->
+<input type="hidden" id="sort1_order" name="sort1_order" value="ASC" />
+<input type="hidden" id="sort2_order" name="sort2_order" value="ASC" />
+<input type="hidden" id="sort3_order" name="sort3_order" value="ASC" />
+<input type="hidden" id="sort4_order" name="sort4_order" value="ASC" />
+<input type="hidden" id="sort5_order" name="sort5_order" value="ASC" />
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
+
+<script>
+    // Function to toggle sorting order between ASC and DESC
+    function updateSortOrder(sortField) {
+        let currentSortValue = document.getElementById(sortField).value;
+        let sortOrderField = document.getElementById(sortField + '_order');
+
+        // Toggle between ASC and DESC
+        if (sortOrderField.value === 'ASC') {
+            sortOrderField.value = 'DESC';
+        } else {
+            sortOrderField.value = 'ASC';
+        }
+
+        console.log(`Sorting by ${currentSortValue} in ${sortOrderField.value} order`);
+    }
+</script>
 
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
@@ -307,6 +331,13 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
+  // Sorting orders (ASC or DESC)
+  var sort1_order = document.getElementById('sort1_order').value;
+  var sort2_order = document.getElementById('sort2_order').value;
+  var sort3_order = document.getElementById('sort3_order').value;
+  var sort4_order = document.getElementById('sort4_order').value;
+  var sort5_order = document.getElementById('sort5_order').value;
+
 
     var link ="breeze_to_yearling_report.php?year="+year
     							+"&salecode="+salecode
@@ -314,10 +345,15 @@ function getValues() {
     							+"&sex="+sex
     							+"&sire="+sire
                   +"&sort1="+sort1
+                  + "&sort1_order=" + sort1_order // Added sorting order
     							+"&sort2="+sort2
+                  + "&sort2_order=" + sort2_order // Added sorting order
     							+"&sort3="+sort3
+                  + "&sort3_order=" + sort3_order // Added sorting order
     							+"&sort4="+sort4
-    							+"&sort5="+sort5;
+                  + "&sort4_order=" + sort4_order // Added sorting order
+    							+"&sort5="+sort5
+                  + "&sort5_order=" + sort5_order; // Added sorting order
     							
     window.open(link,"_self");
   	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")

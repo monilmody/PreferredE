@@ -318,16 +318,24 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
     // Build ORDER BY clause
     $orderBy = '';
     $sortColumns = [$sort1, $sort2, $sort3, $sort4, $sort5];
-    $sortOrder = ['ASC', 'DESC']; // Default sort order (ascending)
 
     // Loop through sort columns and build the ORDER BY part
     $sortIndex = 0;
+    // Default sort direction for all columns is ASC unless otherwise specified
     foreach ($sortColumns as $sortColumn) {
-        if (!empty($sortColumn) && isset($sortableColumns[$sortColumn])) {
-            $orderBy .= ($orderBy ? ', ' : ' ORDER BY ') . $sortableColumns[$sortColumn];
-            $orderBy .= (isset($sortOrder[$sortIndex % 2]) ? ' ' . $sortOrder[$sortIndex % 2] : '');
-            $sortIndex++;
+        // Set default direction for sorting columns if not provided by the user
+        if (empty($sortColumn)) {
+            continue;
         }
+        
+        // Check if the direction is set for this sort column in GET request, default to 'ASC'
+        $direction = isset($_GET["sort{$sortIndex}_order"]) && $_GET["sort{$sortIndex}_order"] == 'DESC' ? 'DESC' : 'ASC';
+
+        // If column exists in the sortable columns, add to order
+        if (isset($sortableColumns[strtolower($sortColumn)])) {
+            $sortOrder[] = $sortableColumns[strtolower($sortColumn)] . ' ' . $direction;
+        }
+        $sortIndex++;
     }
 
     $sql = "
