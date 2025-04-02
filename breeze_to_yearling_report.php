@@ -100,11 +100,21 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
     } ?>
 </select>
 
+<select class="custom-select1" id="sort1_order" onchange="updateSortOrder('sort1')">
+    <option value="ASC">ASC</option>
+    <option value="DESC">DESC</option>
+</select>
+
 <select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2" onchange="updateSortOrder('sort2')">
     <option value="">Sort By 2nd</option>
     <?php foreach ($sortList as $row) {
         echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
+</select>
+
+<select class="custom-select1" id="sort2_order" onchange="updateSortOrder('sort2')">
+    <option value="ASC">ASC</option>
+    <option value="DESC">DESC</option>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3" onchange="updateSortOrder('sort3')">
@@ -114,6 +124,11 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
     } ?>
 </select>
 
+<select class="custom-select1" id="sort3_order" onchange="updateSortOrder('sort3')">
+    <option value="ASC">ASC</option>
+    <option value="DESC">DESC</option>
+</select>
+
 <select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4" onchange="updateSortOrder('sort4')">
     <option value="">Sort By 4th</option>
     <?php foreach ($sortList as $row) {
@@ -121,11 +136,21 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
     } ?>
 </select>
 
+<select class="custom-select1" id="sort4_order" onchange="updateSortOrder('sort4')">
+    <option value="ASC">ASC</option>
+    <option value="DESC">DESC</option>
+</select>
+
 <select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5" onchange="updateSortOrder('sort5')">
     <option value="">Sort By 5th</option>
     <?php foreach ($sortList as $row) {
         echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
+</select>
+
+<select class="custom-select1" id="sort5_order" onchange="updateSortOrder('sort5')">
+    <option value="ASC">ASC</option>
+    <option value="DESC">DESC</option>
 </select>
 
 <!-- Hidden Fields for Sort Order (ASC or DESC) -->
@@ -140,12 +165,16 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 <script>
     // Function to toggle sorting order between ASC and DESC
   function updateSortOrder(sortField) {
-    let sortOrderField = document.getElementById(sortField + '_order');
-    if (sortOrderField.value === 'ASC') {
-        sortOrderField.value = 'DESC';
-    } else {
-        sortOrderField.value = 'ASC';
-    }
+    // Get the selected value from the sort dropdown
+    let sortValue = document.getElementById(sortField).value;
+
+    // Get the selected order (ASC or DESC) from the corresponding dropdown
+    let orderValue = document.getElementById(sortField + '_order').value;
+
+    // Update the hidden input fields with the selected values
+    document.getElementById(sortField + '_order').value = orderValue;
+
+    console.log(`Sorting by ${sortValue} in ${orderValue} order`);
   }
 </script>
 
