@@ -139,19 +139,14 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 
 <script>
     // Function to toggle sorting order between ASC and DESC
-    function updateSortOrder(sortField) {
-        let currentSortValue = document.getElementById(sortField).value;
-        let sortOrderField = document.getElementById(sortField + '_order');
-
-        // Toggle between ASC and DESC
-        if (sortOrderField.value === 'ASC') {
-            sortOrderField.value = 'DESC';
-        } else {
-            sortOrderField.value = 'ASC';
-        }
-
-        console.log(`Sorting by ${currentSortValue} in ${sortOrderField.value} order`);
+  function updateSortOrder(sortField) {
+    let sortOrderField = document.getElementById(sortField + '_order');
+    if (sortOrderField.value === 'ASC') {
+        sortOrderField.value = 'DESC';
+    } else {
+        sortOrderField.value = 'ASC';
     }
+  }
 </script>
 
 <hr>

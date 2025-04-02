@@ -320,7 +320,7 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
     $sortColumns = [$sort1, $sort2, $sort3, $sort4, $sort5];
 
     // Loop through sort columns and build the ORDER BY part
-    $sortIndex = 0;
+    $sortIndex = 1;
     // Default sort direction for all columns is ASC unless otherwise specified
     foreach ($sortColumns as $sortColumn) {
         // Set default direction for sorting columns if not provided by the user
@@ -353,8 +353,7 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
             b.tSire
         FROM tsales b
         $searchParam
-        $orderBy
-    ";
+        " . (count($sortOrder) > 0 ? "ORDER BY " . implode(", ", $sortOrder) : "") . " ";
 
     // Prepare the statement
     if ($stmt = $mysqli->prepare($sql)) {
