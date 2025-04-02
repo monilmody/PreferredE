@@ -277,7 +277,7 @@ function fetchOffsprings_breeze_tb($damName, $salecode)
     return $json;
 }
 
-function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sortFields  = 'Hip', $sortOrder = 'DESC')
+function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
 
@@ -305,18 +305,29 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
         $searchParam .= " AND tSire = ?";
     }
 
-    // Use a single sorting field (no need for array logic)
-    $sortField = isset($_GET['sortFields']) ? $_GET['sortFields'] : $sortFields;
-    $sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : $sortOrder;
+    // Define columns that can be sorted
+    $sortableColumns = [
+        'sire' => 'tSire',
+        'dam' => 'TDAM',
+        'hip' => 'Hip',
+        'sex' => 'Sex',
+        'utt' => 'utt',
+        'price' => 'Price'
+    ];
 
-    // Build the ORDER BY clause with one field
-    $orderByClause = " ORDER BY ";
+    // Build ORDER BY clause
+    $orderBy = '';
+    $sortColumns = [$sort1, $sort2, $sort3, $sort4, $sort5];
+    $sortOrder = ['ASC', 'DESC']; // Default sort order (ascending)
 
-    // Ensure numeric fields are handled as integers in the ORDER BY clause
-    if ($sortField == 'Price' || $sortField == 'Hip') {
-        $orderByClause .= "CAST($sortField AS SIGNED) $sortOrder";  // Casting to signed integers
-    } else {
-        $orderByClause .= "$sortField $sortOrder";
+    // Loop through sort columns and build the ORDER BY part
+    $sortIndex = 0;
+    foreach ($sortColumns as $sortColumn) {
+        if (!empty($sortColumn) && isset($sortableColumns[$sortColumn])) {
+            $orderBy .= ($orderBy ? ', ' : ' ORDER BY ') . $sortableColumns[$sortColumn];
+            $orderBy .= (isset($sortOrder[$sortIndex % 2]) ? ' ' . $sortOrder[$sortIndex % 2] : '');
+            $sortIndex++;
+        }
     }
 
     $sql = "
@@ -333,8 +344,8 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
             b.utt,
             b.tSire
         FROM tsales b
-        $searchParam 
-        $orderByClause
+        $searchParam
+        $orderBy
     ";
 
     // Prepare the statement
@@ -387,7 +398,6 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
         return [];
     }
 }
-
 
 function fetchOffsprings_tb($damName)
 {

@@ -18,17 +18,22 @@ $year_param =$_GET['year'];
 $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
-// Capture sorting parameters
-$sortField = isset($_GET['sortFields']) ? $_GET['sortFields'] : 'Hip';  // Default to 'Hip'
-$sortOrder = isset($_GET['sortOrder']) ? $_GET['sortOrder'] : 'ASC';  // Default to 'ASC'
+$sort1_param =$_GET['sort1'];
+$sort2_param =$_GET['sort2'];
+$sort3_param =$_GET['sort3'];
+$sort4_param =$_GET['sort4'];
+$sort5_param =$_GET['sort5'];
 
-$resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sortField, $sortOrder);
+$resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 
 $yearList = getYearsList_tb_breeze();
 $resultList = fetchSalecodeList_tb1($year_param);
 $typeList = fetchTypeList_tb();
 $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
+
+$sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price Desc");
+
 
 ?>
 <br>
@@ -87,17 +92,39 @@ $sireList = fetchSireListAll_tb($year_param);
     } ?>
 </select>
 
-<!-- Sorting Fields -->
-<select id="sortFields" class="custom-select1">
-      <option value="Hip" <?php echo ($sortField == 'Hip') ? 'selected' : ''; ?>> Sort by Hip</option>
-      <option value="Sex" <?php echo ($sortField == 'Sex') ? 'selected' : ''; ?>>Sort by Sex</option>
-      <option value="Price" <?php echo ($sortField == 'Price') ? 'selected' : ''; ?>>Sort by Price</option>
-      <option value="utt" <?php echo ($sortField == 'utt') ? 'selected' : ''; ?>>Sort by UTT</option>
+<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1"> 
+    <option value="">Sort By 1st</option>
+    <?php foreach($sortList as $row) {
+        echo '<option value="'.$row.'">'.$row.'</option>';
+    } ?>
 </select>
 
-<select id="sortOrder" class="custom-select1">
-    <option value="ASC" <?php echo ($sortOrder == 'ASC') ? 'selected' : ''; ?>>Ascending</option>
-    <option value="DESC" <?php echo ($sortOrder == 'DESC') ? 'selected' : ''; ?>>Descending</option>
+<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2">
+    <option value="">Sort By 2nd</option>
+    <?php foreach($sortList as $row) {
+        echo '<option value="'.$row.'">'.$row.'</option>';
+    } ?>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3">
+    <option value="">Sort By 3rd</option>
+    <?php foreach($sortList as $row) {
+        echo '<option value="'.$row.'">'.$row.'</option>';
+    } ?>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4">
+    <option value="">Sort By 4th</option>
+    <?php foreach($sortList as $row) {
+        echo '<option value="'.$row.'">'.$row.'</option>';
+    } ?>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5">
+    <option value="">Sort By 5th</option>
+    <?php foreach($sortList as $row) {
+        echo '<option value="'.$row.'">'.$row.'</option>';
+    } ?>
 </select>
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
@@ -271,8 +298,11 @@ $sireList = fetchSireListAll_tb($year_param);
 	document.getElementById('type').value="<?php echo $type_param;?>";
 	document.getElementById('sex').value="<?php echo $sex_param;?>";
 	document.getElementById('sire').value="<?php echo $sire_param;?>";
-  document.getElementById('sortFields').value="<?php echo $sex_param;?>";
-	document.getElementById('sortOrder').value="<?php echo $sire_param;?>";
+	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
+	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
+	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
+	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
+	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
 	
 </script>
 <script>
@@ -282,17 +312,23 @@ function getValues() {
 	var type = document.getElementById('type').value;
 	var sex = document.getElementById('sex').value;
 	var sire = document.getElementById('sire').value;
-  // Get sort values
-  var sortFields = Array.from(document.getElementById('sortFields').selectedOptions).map(option => option.value).join(',');
-  var sortOrder = document.getElementById('sortOrder').value;
+	var sort1 = document.getElementById('sort1').value;
+	var sort2 = document.getElementById('sort2').value;
+	var sort3 = document.getElementById('sort3').value;
+	var sort4 = document.getElementById('sort4').value;
+	var sort5 = document.getElementById('sort5').value;
+
 
     var link ="breeze_to_yearling_report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
     							+"&sex="+sex
     							+"&sire="+sire
-                  + "&sortFields=" + sortFields
-                  + "&sortOrder=" + sortOrder;  // Include sortField and sortOrder in the URL
+                  +"&sort1="+sort1
+    							+"&sort2="+sort2
+    							+"&sort3="+sort3
+    							+"&sort4="+sort4
+    							+"&sort5="+sort5;
     							
     window.open(link,"_self");
   	if(year== "" && salecode== "" && type == "" && sex== "" && sire == "")
