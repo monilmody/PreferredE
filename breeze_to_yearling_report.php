@@ -92,38 +92,39 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
     } ?>
 </select>
 
+<!-- Sorting Filters (1st to 5th) -->
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1"> 
     <option value="">Sort By 1st</option>
     <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+        echo '<option value="'.strtolower($row).'">'.$row.'</option>'; // Make sure sorting values are lowercase for backend
     } ?>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2">
     <option value="">Sort By 2nd</option>
     <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
     } ?>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3">
     <option value="">Sort By 3rd</option>
     <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
     } ?>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4">
     <option value="">Sort By 4th</option>
     <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
     } ?>
 </select>
 
 <select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5">
     <option value="">Sort By 5th</option>
     <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+        echo '<option value="'.strtolower($row).'">'.$row.'</option>';
     } ?>
 </select>
 
