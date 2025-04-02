@@ -18,11 +18,18 @@ $year_param =$_GET['year'];
 $type_param =$_GET['type'];
 $sex_param =$_GET['sex'];
 $sire_param =$_GET['sire'];
+
 $sort1_param =$_GET['sort1'];
 $sort2_param =$_GET['sort2'];
 $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
+
+$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : 'ASC'; // default to 'ASC' if not set
+$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : 'ASC'; // default to 'ASC' if not set
+$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : 'ASC'; // default to 'ASC' if not set
+$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : 'ASC'; // default to 'ASC' if not set
+$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : 'ASC'; // default to 'ASC' if not set
 
 $resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 
@@ -33,7 +40,6 @@ $sexList = getSexList_tb();
 $sireList = fetchSireListAll_tb($year_param);
 
 $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
-
 
 ?>
 <br>
@@ -152,13 +158,6 @@ $sortList = array("Sire", "Dam", "Hip", "Sex", "utt", "Price");
 <option value="ASC" <?php echo $sort5_param_order == 'ASC' ? 'selected' : ''; ?>>ASC</option>
 <option value="DESC" <?php echo $sort5_param_order == 'DESC' ? 'selected' : ''; ?>>DESC</option>
 </select>
-
-<!-- Hidden Fields for Sort Order (ASC or DESC) -->
-<input type="hidden" id="sort1_order" name="sort1_order" value="ASC" />
-<input type="hidden" id="sort2_order" name="sort2_order" value="ASC" />
-<input type="hidden" id="sort3_order" name="sort3_order" value="ASC" />
-<input type="hidden" id="sort4_order" name="sort4_order" value="ASC" />
-<input type="hidden" id="sort5_order" name="sort5_order" value="ASC" />
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
