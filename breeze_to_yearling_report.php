@@ -25,11 +25,11 @@ $sort3_param =$_GET['sort3'];
 $sort4_param =$_GET['sort4'];
 $sort5_param =$_GET['sort5'];
 
-$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : 'ASC'; // default to 'ASC' if not set
-$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : 'ASC'; // default to 'ASC' if not set
-$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : 'ASC'; // default to 'ASC' if not set
-$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : 'ASC'; // default to 'ASC' if not set
-$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : 'ASC'; // default to 'ASC' if not set
+$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : ''; // default to 'ASC' if not set
+$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : ''; // default to 'ASC' if not set
+$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : ''; // default to 'ASC' if not set
+$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : ''; // default to 'ASC' if not set
+$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; // default to 'ASC' if not set
 
 $resultFound = breezeFromYearlingReport_tb($year_param, $salecode_param, $type_param, $sex_param, $sire_param, $sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 
