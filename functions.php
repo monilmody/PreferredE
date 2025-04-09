@@ -317,6 +317,7 @@ function breezeFromYearlingReport_tb($year, $salecode, $type, $sex, $sire, $sort
 
     // Build ORDER BY clause
     $orderBy = '';
+    $sortOrder = []; 
     $sortColumns = [$sort1, $sort2, $sort3, $sort4, $sort5];
 
     // Loop through sort columns and build the ORDER BY part
