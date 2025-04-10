@@ -240,8 +240,21 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
             $number =0;  
 
             if (isAllDataNull($resultFound)) {
-              echo "<p style='color: red;'>No valid data found for the selected criteria.</p>";
-            } else {
+              echo '
+              <div style="
+                  padding: 12px 20px;
+                  margin: 20px 0;
+                  border: 1px solid #f5c2c7;
+                  background-color: #f8d7da;
+                  color: #842029;
+                  border-radius: 6px;
+                  font-family: Arial, sans-serif;
+                  font-size: 14px;
+                  max-width: 600px;
+              ">
+                  <strong>Notice:</strong> No valid data found for the selected criteria. Please try adjusting your filters.
+              </div>';
+              } else {
                 foreach($resultFound as $row) {
                     $number = $number+1;
                     $elementCount = 0;
