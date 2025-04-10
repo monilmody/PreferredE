@@ -96,41 +96,49 @@ if (!empty($_POST)) {
   <button id="printButton" onclick="window.print()">Print Page</button>
 
   <hr>
-  <div class="table-wrapper">
-  <table id="salesTable" class="styled-table">
-    <thead>
-      <tr>
-        <th>No.</th>
-        <th>
-          Salecode
-          <button onclick="sortTable('Salecode')" class="sort-btn">
-            <img src="assets/images/sort.png" alt="Sort Salecode">
-          </button>
-        </th>
-        <th>Session</th>
-        <th>Saletype</th>
-        <th>
-          Saledate
-          <button onclick="sortTable('Saledate')" class="sort-btn">
-            <img src="assets/images/sort.png" alt="Sort Saledate">
-          </button>
-        </th>
-        <th>
-          Upload-date
-          <button onclick="sortTable('upload_date')" class="sort-btn">
-            <img src="assets/images/sort.png" alt="Sort Uploadtime">
-          </button>
-        </th>
-        <th>Salecount</th>
-        <th class="download-header">Download</th>
-        <th class="delete-header">Delete</th>
-      </tr>
-    </thead>
-    <tbody>
-      <!-- Add your data rows here -->
-    </tbody>
-  </table>
-</div>
+  <div>
+    <div class="table" style="width: device-width;">
+      <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
+        <table id="salesTable">
+          <div class="cell" style="width: device-width;">
+            No.
+          </div>
+          <div class="cell" style="width: device-width;">
+            Salecode
+            <button onclick="sortTable('Salecode')">
+              <img src="assets\images\sort.png" alt="Sort Salecode">
+            </button>
+          </div>
+          <div class="cell" style="width: device-width;">
+            Session
+          </div>
+          <div class="cell" style="width: device-width;">
+            Saletype
+          </div>
+          <div class="cell" style="width: device-width;">
+            Saledate
+            <button onclick="sortTable('Saledate')">
+              <img src="assets\images\sort.png" alt="Sort Saledate">
+            </button>
+          </div>
+          <div class="cell" style="width:device-width;">
+            Upload-date
+            <button onclick="sortTable('upload_date')">
+              <img src="assets\images\sort.png" alt="Sort Uploadtime">
+            </button>
+          </div>
+          <div class="cell" style="width: device-width;">
+            Salecount
+          </div>
+          <div class="cell download-header" style="width: device-width;">
+            Download
+          </div>
+          <div class="cell delete-header" style="width: device-width;">
+            Delete
+          </div>
+          
+        </table>
+      </div>
 
       <?php
       if(!empty($resultFound)) {
@@ -139,8 +147,8 @@ if (!empty($_POST)) {
       foreach ($resultFound as $row) {
         $number = $number + 1;
         $elementCount = 0;
-        echo "<tr>";
-        echo "<td>" . $number . "</td>";
+        echo "<div class='row'>";
+        echo "<div class='cell'>" . $number . "</div>";
         foreach ($row as $elements) {
           $elementCount = $elementCount + 1;
           if ($elements == "0000-00-00") {
@@ -164,8 +172,7 @@ if (!empty($_POST)) {
               }
             }
           }
-          echo "<td>" . $elements . "</td>";
-          echo "</tr>";
+          echo "<div class='cell'>" . $elements . "</div>";
 
         }
 
