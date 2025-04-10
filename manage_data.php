@@ -62,6 +62,10 @@ if (!empty($_POST)) {
     display: none !important;
   }
 
+  h1 {
+    display: none !important;
+  }
+  
   }
 
 </style>
