@@ -73,7 +73,7 @@ if (!empty($_POST)) {
 <div style="margin:5px 30px 30px 30px;">
 <h1 style="
   text-align: center;
-  color:rgb(192, 66, 52);
+  color: #C0392B;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 32px;
   font-weight: 700;
@@ -240,3 +240,16 @@ function confirmDelete(salecode) {
     window.location.href = link;
   }
 </script>
+
+
+<?php
+  if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['salecode'])) {
+    $salecode = $_POST['salecode'];
+    $breed_param = $_POST['breed'];
+
+    $result = deleteSalecode($breed_param, $salecode);
+
+    echo "<script>alert('$result'); window.location.href='manage_data.php?breed=" . urlencode($breed_param) . "';</script>";
+    exit;
+  }
+?>
