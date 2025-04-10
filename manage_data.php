@@ -65,14 +65,24 @@ if (!empty($_POST)) {
   h1 {
     display: none !important;
   }
-  
+
   }
 
 </style>
 
 <div style="margin:5px 30px 30px 30px;">
-  <h1 style="text-align:center;color:#D98880;">Manage File Upload Data</h1>
-
+<h1 style="
+  text-align: center;
+  color: #C0392B;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 32px;
+  font-weight: 700;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+">
+  Manage File Upload Data
+</h1>
   <select style="background-color:#229954;" class="custom-select1" id="breed">
     <option value="">Breed Filter</option>
     <option value="S">S : Standardbred</option>
