@@ -40,7 +40,7 @@ if (!empty($_POST)) {
   color: white;        /* White text color */
   border: none;        /* Remove border */
   border-radius: 10px;  /* Rounded corners */
-  font-size: 18px;     /* Slightly larger font */
+  font-size: 24px;     /* Slightly larger font */
   font-weight: bold;   /* Bold text for emphasis */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   cursor: pointer;    /* Pointer cursor on hover */
