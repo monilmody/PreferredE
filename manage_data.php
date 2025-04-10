@@ -84,7 +84,7 @@ if (!empty($_POST)) {
   <input id="submitButton"class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
     style="font-size:20px; " />
 
-  <button id="printButton" onclick="window.print()">🖨️ Print</button>
+  <button id="printButton" onclick="window.print()">🖨️</button>
 
   <hr>
   <div>
