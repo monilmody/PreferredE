@@ -31,42 +31,21 @@ if (!empty($_POST)) {
 
 <br>
 <style>
+
   #printButton {
-    position: absolute;
-    right: 30px;
-    top: 20px; /* optional: adjust as needed */
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #007BFF, #0056b3);
-    color: #fff;
-    border: none;
-    border-radius: 0.75rem;
-    font-size: 15px;
-    font-weight: 600;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.3);
-    cursor: pointer;
-    transition: all 0.3s ease-in-out;
-    z-index: 10; /* makes sure it appears above content if needed */
+  position: absolute;
+  right:30px;         /* Position on the right */
+  padding: 12px 20px;  /* Increased padding for a larger, more clickable button */
+  background-color: #007BFF; /* Blue background color */
+  color: white;        /* White text color */
+  border: none;        /* Remove border */
+  border-radius: 8px;  /* Rounded corners */
+  font-size: 14px;     /* Slightly larger font */
+  font-weight: bold;   /* Bold text for emphasis */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
+  cursor: pointer;    /* Pointer cursor on hover */
+  transition: opacity 0.3s ease; /* Smooth transition for hiding/showing */
   }
-
-  #printButton:hover {
-    opacity: 0.9;
-    transform: scale(1.03);
-  }
-
-  #printButton:active {
-    transform: scale(0.98);
-    box-shadow: 0 2px 8px rgba(0, 123, 255, 0.2);
-  }
-
-  @media (max-width: 600px) {
-    #printButton {
-      right: 10px;
-      padding: 10px 16px;
-      font-size: 13px;
-    }
-  }
-
 
   @media print {
   /* Hide Download and Delete columns when printing */
@@ -105,7 +84,7 @@ if (!empty($_POST)) {
   <input id="submitButton"class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
     style="font-size:20px; " />
 
-  <button id="printButton" onclick="window.print()">Print Page</button>
+  <button id="printButton" onclick="window.print()">🖨️ Print</button>
 
   <hr>
   <div>
