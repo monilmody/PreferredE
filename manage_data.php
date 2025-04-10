@@ -55,8 +55,13 @@ if (!empty($_POST)) {
   
   /* Optionally, you can also hide the "Print Page" button during printing */
   #printButton {
-    display: none;
+    display: none !important;
   }
+
+  #submitButton {
+    display: none !important;
+  }
+
   }
 
 </style>
@@ -71,7 +76,7 @@ if (!empty($_POST)) {
 
   </select>
 
-  <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
+  <input id="submitButton"class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit"
     style="font-size:20px; " />
 
   <button id="printButton" onclick="window.print()">Print Page</button>
