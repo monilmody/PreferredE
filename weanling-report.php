@@ -239,7 +239,7 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
             setlocale(LC_MONETARY,"en_US");
             $number =0;  
 
-            if (isAllDataNull($data)) {
+            if (isAllDataNull($resultFound)) {
               echo "<p style='color: red;'>No valid data found for the selected criteria.</p>";
             } else {
                 foreach($resultFound as $row) {
@@ -272,6 +272,7 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
                     }
                     
                     $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $row['Salecode']);
+
                     $offspringTotalPrice = 0;
                     foreach ($offspring_rows as $offspring_row) {
                         foreach ($offspring_row as $element) {
