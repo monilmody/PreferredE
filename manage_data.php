@@ -96,49 +96,41 @@ if (!empty($_POST)) {
   <button id="printButton" onclick="window.print()">Print Page</button>
 
   <hr>
-  <div>
-    <div class="table" style="width: device-width;">
-      <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        <table id="salesTable">
-          <div class="cell" style="width: device-width;">
-            No.
-          </div>
-          <div class="cell" style="width: device-width;">
-            Salecode
-            <button onclick="sortTable('Salecode')">
-              <img src="assets\images\sort.png" alt="Sort Salecode">
-            </button>
-          </div>
-          <div class="cell" style="width: device-width;">
-            Session
-          </div>
-          <div class="cell" style="width: device-width;">
-            Saletype
-          </div>
-          <div class="cell" style="width: device-width;">
-            Saledate
-            <button onclick="sortTable('Saledate')">
-              <img src="assets\images\sort.png" alt="Sort Saledate">
-            </button>
-          </div>
-          <div class="cell" style="width:device-width;">
-            Upload-date
-            <button onclick="sortTable('upload_date')">
-              <img src="assets\images\sort.png" alt="Sort Uploadtime">
-            </button>
-          </div>
-          <div class="cell" style="width: device-width;">
-            Salecount
-          </div>
-          <div class="cell download-header" style="width: device-width;">
-            Download
-          </div>
-          <div class="cell delete-header" style="width: device-width;">
-            Delete
-          </div>
-          
-        </table>
-      </div>
+  <div class="table-wrapper">
+  <table id="salesTable" class="styled-table">
+    <thead>
+      <tr>
+        <th>No.</th>
+        <th>
+          Salecode
+          <button onclick="sortTable('Salecode')" class="sort-btn">
+            <img src="assets/images/sort.png" alt="Sort Salecode">
+          </button>
+        </th>
+        <th>Session</th>
+        <th>Saletype</th>
+        <th>
+          Saledate
+          <button onclick="sortTable('Saledate')" class="sort-btn">
+            <img src="assets/images/sort.png" alt="Sort Saledate">
+          </button>
+        </th>
+        <th>
+          Upload-date
+          <button onclick="sortTable('upload_date')" class="sort-btn">
+            <img src="assets/images/sort.png" alt="Sort Uploadtime">
+          </button>
+        </th>
+        <th>Salecount</th>
+        <th class="download-header">Download</th>
+        <th class="delete-header">Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Add your data rows here -->
+    </tbody>
+  </table>
+</div>
 
       <?php
       if(!empty($resultFound)) {
@@ -185,7 +177,7 @@ if (!empty($_POST)) {
     
         // Delete form column
         echo "<div class='cell delete-column' style='width:device-width;'>";
-        echo "<form name='myform' action='" . $_SERVER['PHP_SELF'] . "' method='POST'>";
+        echo "<form name='myform' action='" . $_SERVER['PHP_SELF'] . "' method='POST' onsubmit='return confirmDelete(\"" . $row['Salecode'] . "\")'>";
         echo "<input type='hidden' name='salecode' id='salecode' value='" . $row['Salecode'] . "' />";
         echo "<input type='hidden' name='breed' id='breed' value='" . $breed_param . "' />";
         echo "<button type='submit'>Delete</button>";
@@ -217,6 +209,12 @@ if (!empty($_POST)) {
 
     // Redirect to the page with the updated query parameters for sorting
     window.location.href = '?orderby=' + column + '&sortOrder=' + currentSortOrder + '&breed=<?php echo $breed_param; ?>';
+}
+</script>
+
+<script>
+function confirmDelete(salecode) {
+  return confirm("Are you sure you want to delete: " + salecode + "?");
 }
 </script>
 
