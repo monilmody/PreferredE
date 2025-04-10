@@ -73,7 +73,7 @@ if (!empty($_POST)) {
 <div style="margin:5px 30px 30px 30px;">
 <h1 style="
   text-align: center;
-  color: #C0392B;
+  color:rgb(192, 66, 52);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-size: 32px;
   font-weight: 700;
@@ -222,39 +222,21 @@ if (!empty($_POST)) {
 
 <script>
 function confirmDelete(salecode) {
-  return confirm("Are you sure you want to delete: " + salecode + "?");
+  return confirm("You're sure you want to delete: " + salecode + "?");
 }
 </script>
 
 <script>
   function getValues() {
-    var breed = document.getElementById('breed').value;
+    const breedElement = document.getElementById('breed');
+    const breed = breedElement ? breedElement.value.trim() : "";
 
-    var link = "manage_data.php?breed=" + breed;
-    //alert(link);
-
-    window.open(link, "_self");
-    if (breed == "") {
-      alert("Please Select Breed Category ");
+    if (!breed) {
+      alert("Please select a Breed Category.");
+      return false;
     }
-  }
-</script>
 
-<script>
-  <?php if (!empty($_POST)) { ?>
-    var breed = document.getElementById('breed').value;
-    //alert(bred);
-    //alert('<?php echo $salecode; ?>');
-    var result = "";
-    if (confirm("Are you sure, you want to delete -" + '<?php echo $salecode; ?>' + "?")) {
-      txt = "You pressed OK!";
-      result = "<?php echo deleteSalecode($breed_param, $salecode); ?>";
-    } else {
-      result = "You pressed Cancel!";
-    } alert(result);
-    getValues();
-    //alert("Are You Sure?");
-    <?php
+    const link = "manage_data.php?breed=" + encodeURIComponent(breed);
+    window.location.href = link;
   }
-  ?>
 </script>
