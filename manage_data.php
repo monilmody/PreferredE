@@ -38,7 +38,7 @@ if (!empty($_POST)) {
   padding: 16px 28px;  /* Increased padding for a larger, more clickable button */
   background-color: white; /* Blue background color */
   color: white;        /* White text color */
-  border: none;        /* Remove border */
+  border: 2px solid black;        /* Black border all around */
   border-radius: 10px;  /* Rounded corners */
   font-size: 24px;     /* Slightly larger font */
   font-weight: bold;   /* Bold text for emphasis */
