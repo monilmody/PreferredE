@@ -2223,70 +2223,102 @@ function fetchBroodmaresReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$s
     return $json;
 }
 
-function fetchWeanlingReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
+function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5)
 {
     global $mysqli;
 
-    if ($year == "" && $salecode == "" && $type == "" && $sex == "" && $sire == "") {
-        return "";
+    // Always return an array, even on empty input
+    if (empty($year) && empty($salecode) && empty($type) && empty($sex) && empty($sire)) {
+        return [];
     }
-    
-    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
-                     AND Salecode= IF("'.$salecode.'"  = "", Salecode, "'.$salecode.'")
-                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'")
-                     AND Sex= IF("'.$sex.'"  = "", Sex, "'.$sex.'")
-                     AND tSire= IF("'.$sire.'"  = "", tSire, "'.$sire.'")';
-    
-    $sql = 'SELECT
-    HIP,
-    Horse,
-    tSire,
-    Datefoal,
-    TDAM AS Dam,
-    Sex,
-    Type,
-    Price,
-    Salecode,
-    Day,
-    Consno,
-    saletype,
-    Age,
-    Rating
-    FROM tsales a
-    WHERE Price>0'.$searchParam;
-    
-    // Initialize an array to store sorting clauses
+
+    // Start building WHERE conditions
+    $conditions = ['Price > 0'];
+    $params = [];
+    $types = '';
+
+    if (!empty($year)) {
+        $conditions[] = 'YEAR(Saledate) = ?';
+        $params[] = $year;
+        $types .= 's';
+    }
+    if (!empty($salecode)) {
+        $conditions[] = 'Salecode = ?';
+        $params[] = $salecode;
+        $types .= 's';
+    }
+    if (!empty($type)) {
+        $conditions[] = '`Type` = ?';
+        $params[] = $type;
+        $types .= 's';
+    }
+    if (!empty($sex)) {
+        $conditions[] = 'Sex = ?';
+        $params[] = $sex;
+        $types .= 's';
+    }
+    if (!empty($sire)) {
+        $conditions[] = 'tSire = ?';
+        $params[] = $sire;
+        $types .= 's';
+    }
+
+    $sql = "
+        SELECT
+            HIP,
+            Horse,
+            tSire,
+            Datefoal,
+            TDAM AS Dam,
+            Sex,
+            Type,
+            Price,
+            Salecode,
+            Day,
+            Consno,
+            saletype,
+            Age,
+            Rating
+        FROM tsales
+        WHERE " . implode(" AND ", $conditions);
+
+    // Sorting logic
+    $validSortColumns = ['HIP', 'Horse', 'tSire', 'Datefoal', 'TDAM', 'Sex', 'Type', 'Price', 'Salecode', 'Day', 'Consno', 'saletype', 'Age', 'Rating'];
+    $sortParams = [$sort1, $sort2, $sort3, $sort4, $sort5];
     $orderConditions = [];
 
-    // Sorting parameters mapping
-    $sortParams = [$sort1, $sort2, $sort3, $sort4, $sort5];
-
-    // Loop through the sort parameters and add valid sorting clauses
-    foreach ($sortParams as $index => $sort) {
-        if ($sort != "") {
-            // Special case for Price Desc
-            if ($sort == "Price Desc") {
-                $orderConditions[] = "Price DESC";
-            } else {
-                // For other fields, default sorting is ASC
-                $orderConditions[] = "$sort ASC";
+    foreach ($sortParams as $sort) {
+        if (!empty($sort)) {
+            // Allow "Price Desc" shortcut
+            if (strtolower($sort) == 'price desc') {
+                $orderConditions[] = 'Price DESC';
+            } elseif (in_array($sort, $validSortColumns)) {
+                $orderConditions[] = $sort . ' ASC';
             }
         }
     }
 
-    // If any valid sorting clauses exist, add them to the SQL query
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
 
-    $result = mysqli_query($mysqli, $sql);
-    //echo $sql;
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error.'--SQL--'.$sql);
+    // Prepare, bind and execute the query
+    if ($stmt = $mysqli->prepare($sql)) {
+        if (!empty($params)) {
+            $stmt->bind_param($types, ...$params);
+        }
+
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $json = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $json;
+    } else {
+        error_log("MySQL Error: " . $mysqli->error . " | SQL: " . $sql);
+        return [];
     }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
-    return $json;
 }
+
 
 function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {

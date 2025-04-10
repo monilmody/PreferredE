@@ -13,16 +13,16 @@ include("./header.php");
 </head>
 <?php
 include_once("config.php");
-$salecode_param =$_GET['salecode'];
-$year_param =$_GET['year'];
-$type_param =$_GET['type'];
-$sex_param =$_GET['sex'];
-$sire_param =$_GET['sire'];
-$sort1_param =$_GET['sort1'];
-$sort2_param =$_GET['sort2'];
-$sort3_param =$_GET['sort3'];
-$sort4_param =$_GET['sort4'];
-$sort5_param =$_GET['sort5'];
+$salecode_param =$_GET['salecode'] ?? '';
+$year_param =$_GET['year'] ?? '';
+$type_param =$_GET['type'] ?? '';
+$sex_param =$_GET['sex'] ?? '';
+$sire_param =$_GET['sire'] ?? '';
+$sort1_param =$_GET['sort1'] ?? '';
+$sort2_param =$_GET['sort2'] ?? '';
+$sort3_param =$_GET['sort3'] ?? '';
+$sort4_param =$_GET['sort4'] ?? '';
+$sort5_param =$_GET['sort5'] ?? '';
 
 $resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,
     $sex_param,$sire_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
