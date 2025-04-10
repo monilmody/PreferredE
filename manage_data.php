@@ -35,12 +35,12 @@ if (!empty($_POST)) {
   #printButton {
   position: absolute;
   right:30px;         /* Position on the right */
-  padding: 12px 20px;  /* Increased padding for a larger, more clickable button */
-  background-color: #007BFF; /* Blue background color */
+  padding: 16px 28px;  /* Increased padding for a larger, more clickable button */
+  background-color: white; /* Blue background color */
   color: white;        /* White text color */
   border: none;        /* Remove border */
-  border-radius: 8px;  /* Rounded corners */
-  font-size: 14px;     /* Slightly larger font */
+  border-radius: 10px;  /* Rounded corners */
+  font-size: 18px;     /* Slightly larger font */
   font-weight: bold;   /* Bold text for emphasis */
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow effect */
   cursor: pointer;    /* Pointer cursor on hover */
