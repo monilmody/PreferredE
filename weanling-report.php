@@ -27,6 +27,30 @@ $sort5_param =$_GET['sort5'] ?? '';
 $resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,
     $sex_param,$sire_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
 
+    function isAllDataNull(array $data): bool
+{
+    if (empty($data)) {
+        return true; // No rows at all
+    }
+
+    foreach ($data as $row) {
+        // Check if at least one non-null value exists in this row
+        $hasData = false;
+        foreach ($row as $value) {
+            if (!is_null($value) && $value !== '') {
+                $hasData = true;
+                break;
+            }
+        }
+        if ($hasData) {
+            return false; // Found at least one row with actual data
+        }
+    }
+
+    return true; // All rows are empty/null
+}
+
+
 $yearList = getYearsList_tb1();
 $resultList = fetchSalecodeList_tb1($year_param);
 $typeList = fetchTypeList_tb();
@@ -214,65 +238,69 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
           <?php
             setlocale(LC_MONETARY,"en_US");
             $number =0;  
-            foreach($resultFound as $row) {
-                $number = $number+1;
-                $elementCount = 0;
-                $totalPrice = floatval($row['Price']); // Assuming the price column name is 'Price'
-                $offspringTotalPrice = 0;
 
-                echo "<div class='row'>";
-                echo "<div class='cell'>".$number."</div>";
+            if (isAllDataNull($data)) {
+              echo "<p style='color: red;'>No valid data found for the selected criteria.</p>";
+            } else {
+                foreach($resultFound as $row) {
+                    $number = $number+1;
+                    $elementCount = 0;
+                    $totalPrice = floatval($row['Price']); // Assuming the price column name is 'Price'
+                    $offspringTotalPrice = 0;
 
-                foreach($row as $elements) {
-                    $elementCount =$elementCount+1;
-                    if($elementCount == 8){
-                        $elements = "$".number_format(floatval($elements), 0);
-                    }
-                    if ($elements == "1900-01-01") {
-                        $elements="";
-                    }
-                    if ($elementCount == 14) {
-                        // if ($elements != "") {
-                        //     $date=date_create($elements);
-                        //     $elements = date_format($date,"m/d/y");
-                        // }
-                    }
-                    if ($elementCount == 10) {
-                        // $elements= substr($elements, 0,4);
-                    }
-                    echo "<div class='cell'>".$elements."</div>";
-                }
-                
-                $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $row['Salecode']);
-                $offspringTotalPrice = 0;
-                foreach ($offspring_rows as $offspring_row) {
-                    foreach ($offspring_row as $element) {
-                        $elementCount++;
-                        if ($elementCount == 20) {
-                          $element = intval($element);
-                          $offspringTotalPrice += $element; // Assuming the price column is at index 18
-                          $element = "$" . number_format($element, 0);
+                    echo "<div class='row'>";
+                    echo "<div class='cell'>".$number."</div>";
+
+                    foreach($row as $elements) {
+                        $elementCount =$elementCount+1;
+                        if($elementCount == 8){
+                            $elements = "$".number_format(floatval($elements), 0);
                         }
-                        echo "<div class='cell'>" . $element . "</div>";
+                        if ($elements == "1900-01-01") {
+                            $elements="";
+                        }
+                        if ($elementCount == 14) {
+                            // if ($elements != "") {
+                            //     $date=date_create($elements);
+                            //     $elements = date_format($date,"m/d/y");
+                            // }
+                        }
+                        if ($elementCount == 10) {
+                            // $elements= substr($elements, 0,4);
+                        }
+                        echo "<div class='cell'>".$elements."</div>";
                     }
+                    
+                    $offspring_rows = fetchOffsprings_weanling_tb($row['Dam'], $row['Salecode']);
+                    $offspringTotalPrice = 0;
+                    foreach ($offspring_rows as $offspring_row) {
+                        foreach ($offspring_row as $element) {
+                            $elementCount++;
+                            if ($elementCount == 20) {
+                              $element = intval($element);
+                              $offspringTotalPrice += $element; // Assuming the price column is at index 18
+                              $element = "$" . number_format($element, 0);
+                            }
+                            echo "<div class='cell'>" . $element . "</div>";
+                        }
+                    }
+
+
+                    // Calculate the total price difference
+                    $priceDifference = $offspringTotalPrice - $totalPrice;
+                    
+                    $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
+
+                    // Display the price difference in the "Total" column
+                    if ($offspringTotalPrice > 0) {
+                      echo "<div class='cell' style='width: device-width;background-color:" . $cellColor . "'>$" . number_format($priceDifference, 0) . "</div>";
+                    } else {
+                      echo "";
+                    }
+                    
+                    echo "</div>";
                 }
-
-
-                // Calculate the total price difference
-                $priceDifference = $offspringTotalPrice - $totalPrice;
-                
-                $cellColor = ($priceDifference < 0) ? '#FF6347' : '#32CD32';
-
-                // Display the price difference in the "Total" column
-                if ($offspringTotalPrice > 0) {
-                  echo "<div class='cell' style='width: device-width;background-color:" . $cellColor . "'>$" . number_format($priceDifference, 0) . "</div>";
-                } else {
-                  echo "";
-                }
-                
-                echo "</div>";
-            }
-          
+              }
           ?>
     </div>
  </div>
