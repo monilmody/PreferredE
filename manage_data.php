@@ -139,8 +139,8 @@ if (!empty($_POST)) {
       foreach ($resultFound as $row) {
         $number = $number + 1;
         $elementCount = 0;
-        echo "<div class='row'>";
-        echo "<div class='cell'>" . $number . "</div>";
+        echo "<tr>";
+        echo "<td>" . $number . "</td>";
         foreach ($row as $elements) {
           $elementCount = $elementCount + 1;
           if ($elements == "0000-00-00") {
@@ -164,8 +164,9 @@ if (!empty($_POST)) {
               }
             }
           }
-          echo "<div class='cell'>" . $elements . "</div>";
-          
+          echo "<td>" . $elements . "</td>";
+          echo "</tr>";
+
         }
 
         // Download link column
