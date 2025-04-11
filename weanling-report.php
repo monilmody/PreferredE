@@ -19,11 +19,18 @@ $year_param =$_GET['year'] ?? '';
 $type_param =$_GET['type'] ?? '';
 $sex_param =$_GET['sex'] ?? '';
 $sire_param =$_GET['sire'] ?? '';
-$sort1_param =$_GET['sort1'] ?? '';
-$sort2_param =$_GET['sort2'] ?? '';
-$sort3_param =$_GET['sort3'] ?? '';
-$sort4_param =$_GET['sort4'] ?? '';
-$sort5_param =$_GET['sort5'] ?? '';
+
+$sort1_param = $_GET['sort1'] ?? '';
+$sort2_param = $_GET['sort2'] ?? '';
+$sort3_param = $_GET['sort3'] ?? '';
+$sort4_param = $_GET['sort4'] ?? '';
+$sort5_param = $_GET['sort5'] ?? '';
+
+$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : ''; // default to 'ASC' if not set
+$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : ''; // default to 'ASC' if not set
+$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : ''; // default to 'ASC' if not set
+$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : ''; // default to 'ASC' if not set
+$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; // default to 'ASC' if not set
 
 $resultFound = fetchWeanlingReport($salecode_param,$year_param,$type_param,
     $sex_param,$sire_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param);
@@ -119,43 +126,89 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
 </select>
 <br>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1"> 
+<!-- Sorting Filters (1st to 5th) -->
+<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
     <option value="">Sort By 1st</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2">
+<select style="background-color: #3498db;" class="custom-select1" id="sort1_order" onchange="updateSortOrder('sort1')">
+  <option value="">Select Order</option> <!-- Default option -->
+  <option value="ASC" <?php echo ($sort1_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo ($sort1_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2" onchange="updateSortOrder('sort2')">
     <option value="">Sort By 2nd</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3">
+<select style="background-color: #3498db;" class="custom-select1" id="sort2_order" onchange="updateSortOrder('sort2')">
+  <option value="">Select Order</option> <!-- Default option -->
+  <option value="ASC" <?php echo ($sort2_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo ($sort2_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3" onchange="updateSortOrder('sort3')">
     <option value="">Sort By 3rd</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4">
+<select style="background-color: #3498db;" class="custom-select1" id="sort3_order" onchange="updateSortOrder('sort3')">
+  <option value="">Select Order</option> <!-- Default option -->
+  <option value="ASC" <?php echo ($sort3_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo ($sort3_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4" onchange="updateSortOrder('sort4')">
     <option value="">Sort By 4th</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5">
+<select style="background-color: #3498db;" class="custom-select1" id="sort4_order" onchange="updateSortOrder('sort4')">
+  <option value="">Select Order</option> <!-- Default option -->
+  <option value="ASC" <?php echo ($sort4_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo ($sort4_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option></select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5" onchange="updateSortOrder('sort5')">
     <option value="">Sort By 5th</option>
-    <?php foreach($sortList as $row) {
-        echo '<option value="'.$row.'">'.$row.'</option>';
+    <?php foreach ($sortList as $row) {
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
+
+<select style="background-color: #3498db;" class="custom-select1" id="sort5_order" onchange="updateSortOrder('sort5')">
+  <option value="">Select Order</option> <!-- Default option -->
+  <option value="ASC" <?php echo ($sort5_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+  <option value="DESC" <?php echo ($sort5_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
 
+<script>
+    // Function to toggle sorting order between ASC and DESC
+  function updateSortOrder(sortField) {
+    // Get the selected value from the sort dropdown
+    let sortValue = document.getElementById(sortField).value;
+
+    // Get the selected order (ASC or DESC) from the corresponding dropdown
+    let orderValue = document.getElementById(sortField + '_order').value;
+
+    // Update the hidden input fields with the selected values
+    document.getElementById(sortField + '_order').value = orderValue;
+
+    console.log(`Sorting by ${sortValue} in ${orderValue} order`);
+  }
+</script>
 
 <hr>
 <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
@@ -332,11 +385,16 @@ $sortList = array("Hip","Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Pric
 	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
 	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
 	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
+  document.getElementById('sort1_order').value = "<?php echo $sort1_param_order; ?>";
+  document.getElementById('sort2_order').value = "<?php echo $sort2_param_order; ?>";
+  document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
+  document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
+  document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 	
 </script>
 <script>
 function getValues() {
-    var year = document.getElementById('year').value;
+  var year = document.getElementById('year').value;
 	var salecode = document.getElementById('salecode').value;
 	var type = document.getElementById('type').value;
 	var sex = document.getElementById('sex').value;
@@ -347,16 +405,28 @@ function getValues() {
 	var sort4 = document.getElementById('sort4').value;
 	var sort5 = document.getElementById('sort5').value;
 
+  // Sorting orders (ASC or DESC)
+  var sort1_order = document.getElementById('sort1_order').value;
+  var sort2_order = document.getElementById('sort2_order').value;
+  var sort3_order = document.getElementById('sort3_order').value;
+  var sort4_order = document.getElementById('sort4_order').value;
+  var sort5_order = document.getElementById('sort5_order').value;
+
     var link ="weanling-report.php?year="+year
     							+"&salecode="+salecode
     							+"&type="+type
     							+"&sex="+sex
     							+"&sire="+sire
-    							+"&sort1="+sort1
+                  +"&sort1="+sort1
+                  + "&sort1_order=" + sort1_order // Added sorting order
     							+"&sort2="+sort2
+                  + "&sort2_order=" + sort2_order // Added sorting order
     							+"&sort3="+sort3
+                  + "&sort3_order=" + sort3_order // Added sorting order
     							+"&sort4="+sort4
-    							+"&sort5="+sort5;
+                  + "&sort4_order=" + sort4_order // Added sorting order
+    							+"&sort5="+sort5
+                  + "&sort5_order=" + sort5_order; // Added sorting order
     //alert(link);
     							
   	window.open(link,"_self");

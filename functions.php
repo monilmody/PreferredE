@@ -2263,6 +2263,24 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         $types .= 's';
     }
 
+    // Define columns that can be sorted
+    $sortableColumns = [
+        'hip' => 'HIP',
+        'horse' => 'Horse',
+        'sire' => 'tSire',
+        'dam' => 'TDAM',
+        'sex' => 'Sex',
+        'type' => 'Type',
+        'price' => 'Price',
+        'salecode' => 'Salecode',
+        'day' => 'Day',
+        'consno' => 'Consno',
+        'saletype' => 'saletype',
+        'age' => 'Age',
+        'rating' => 'Rating'
+    ];
+
+    // Build the query base
     $sql = "
         SELECT
             HIP,
@@ -2283,26 +2301,30 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         WHERE " . implode(" AND ", $conditions);
 
     // Sorting logic
-    $validSortColumns = ['HIP', 'Horse', 'tSire', 'Datefoal', 'TDAM', 'Sex', 'Type', 'Price', 'Salecode', 'Day', 'Consno', 'saletype', 'Age', 'Rating'];
     $sortParams = [$sort1, $sort2, $sort3, $sort4, $sort5];
     $orderConditions = [];
+    $sortIndex = 1; // To track sort column and direction
 
-    foreach ($sortParams as $sort) {
-        if (!empty($sort)) {
-            // Allow "Price Desc" shortcut
-            if (strtolower($sort) == 'price desc') {
-                $orderConditions[] = 'Price DESC';
-            } elseif (in_array($sort, $validSortColumns)) {
-                $orderConditions[] = $sort . ' ASC';
+    // Loop through sort columns and build the ORDER BY clause
+    foreach ($sortParams as $sortColumn) {
+        if (!empty($sortColumn)) {
+            // Set default direction for sorting columns if not provided by the user
+            $direction = isset($_GET["sort{$sortIndex}_order"]) && $_GET["sort{$sortIndex}_order"] == 'DESC' ? 'DESC' : 'ASC';
+
+            // If column exists in the sortable columns, add it to order conditions
+            if (isset($sortableColumns[strtolower($sortColumn)])) {
+                $orderConditions[] = $sortableColumns[strtolower($sortColumn)] . ' ' . $direction;
             }
+            $sortIndex++;
         }
     }
 
+    // If sorting is specified, add it to the SQL query
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
 
-    // Prepare, bind and execute the query
+    // Prepare, bind, and execute the query
     if ($stmt = $mysqli->prepare($sql)) {
         if (!empty($params)) {
             $stmt->bind_param($types, ...$params);
@@ -2318,7 +2340,6 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         return [];
     }
 }
-
 
 function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
