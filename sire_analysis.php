@@ -1,5 +1,6 @@
 <?php
 include("./header.php");
+include("./session_page.php");
 ?>
 
 <head>
