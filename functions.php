@@ -1235,7 +1235,7 @@ function fetchConsAnalysis($consno,$year,$elig,$gait)
 function fetchSireAnalysis($sire,$year,$elig,$gait,$salecode)
 {
     global $mysqli;
-    $sql = 'SELECT * FROM sire_sales_allyear_tb';
+    $sql = 'SELECT * FROM sire_sales_allyear';
     
     if ($year != "" && $sire != "" && $elig != "" && $gait != "" && $salecode != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="'.$sire.'" AND Year = '.$year.' AND Elig ="'.$elig.'" AND Gait="'.$gait.'" AND Salecode="'.$salecode.'"';

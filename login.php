@@ -78,6 +78,9 @@ if(!empty($_POST)) {
 				$_SESSION["UserRole"] = $userdetails["USERROLE"];
 				
 				//echo $_SESSION["UserName"];
+
+				setcookie("LoggedInUser", $userdetails["USERNAME"], time() + 3600, "/");
+
 				//now that a session for this user is created
 				//Redirect to this users account page
 				header("Location:index.php?user=".$userdetails["USERNAME"],true);
