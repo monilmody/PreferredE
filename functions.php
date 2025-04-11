@@ -2265,19 +2265,21 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
 
     // Define columns that can be sorted
     $sortableColumns = [
-        'hip' => 'HIP',
-        'horse' => 'Horse',
-        'sire' => 'tSire',
-        'dam' => 'TDAM',
-        'sex' => 'Sex',
-        'type' => 'Type',
-        'price' => 'Price',
-        'salecode' => 'Salecode',
-        'day' => 'Day',
-        'consno' => 'Consno',
-        'saletype' => 'saletype',
-        'age' => 'Age',
-        'rating' => 'Rating'
+        'Hip' => 'HIP',
+        'Horse' => 'Horse',
+        'Sire' => 'tSire',
+        'Datefoal' => 'Datefoal',
+        'Dam' => 'TDAM',
+        'Sex' => 'Sex',
+        'Type' => 'Type',
+        'Price Desc' => 'Price DESC',  // Special case for "Price Desc"
+        'Currency' => 'Currency',
+        'Salecode' => 'Salecode',
+        'Day' => 'Day',
+        'Consno' => 'Consno',
+        'Saletype' => 'saletype',
+        'Age' => 'Age',
+        'Rating' => 'Rating'
     ];
 
     // Build the query base
