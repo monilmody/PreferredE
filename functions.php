@@ -2223,11 +2223,9 @@ function fetchBroodmaresReport($salecode,$year,$type,$gait,$sex,$sire,$bredto,$s
     return $json;
 }
 
-function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5)
-{
+function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort2, $sort3, $sort4, $sort5) {
     global $mysqli;
 
-    // Always return an array, even on empty input
     if (empty($year) && empty($salecode) && empty($type) && empty($sex) && empty($sire)) {
         return [];
     }
@@ -2263,26 +2261,26 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         $types .= 's';
     }
 
-    // Define columns that can be sorted
+    // Define sortable columns
     $sortableColumns = [
-        'Hip' => 'HIP',
-        'Horse' => 'Horse',
-        'Sire' => 'tSire',
-        'Datefoal' => 'Datefoal',
-        'Dam' => 'TDAM',
-        'Sex' => 'Sex',
-        'Type' => 'Type',
-        'Price' => 'Price',  // Special case for "Price Desc"
-        'Currency' => 'Currency',
-        'Salecode' => 'Salecode',
-        'Day' => 'Day',
-        'Consno' => 'Consno',
-        'Saletype' => 'saletype',
-        'Age' => 'Age',
-        'Rating' => 'Rating'
+        'hip' => 'HIP',
+        'horse' => 'Horse',
+        'sire' => 'tSire',
+        'datefoal' => 'Datefoal',
+        'dam' => 'TDAM',
+        'sex' => 'Sex',
+        'type' => 'Type',
+        'price' => 'Price',
+        'currency' => 'Currency',
+        'salecode' => 'Salecode',
+        'day' => 'Day',
+        'consno' => 'Consno',
+        'saletype' => 'saletype',
+        'age' => 'Age',
+        'rating' => 'Rating'
     ];
 
-    // Build the query base
+    // Build the SQL query base
     $sql = "
         SELECT
             HIP,
@@ -2302,26 +2300,26 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         FROM tsales
         WHERE " . implode(" AND ", $conditions);
 
-    // Sorting logic
-    $sortParams = [$sort1, $sort2, $sort3, $sort4, $sort5];
+    // Sorting columns from the GET parameters
     $orderConditions = [];
-    $sortIndex = 1; // To track sort column and direction
+    $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
+    $sortIndex = 1; // To track sort column
 
-    // Loop through sort columns and build the ORDER BY clause
-    foreach ($sortParams as $sortColumn) {
-        if (!empty($sortColumn)) {
-            // Set default direction for sorting columns if not provided by the user
-            $direction = isset($_GET["sort{$sortIndex}_order"]) && $_GET["sort{$sortIndex}_order"] == 'DESC' ? 'DESC' : 'ASC';
+    foreach ($sortParams as $sortParam) {
+        if (!empty($$sortParam)) {
+            // Check if sort order is specified for each sort column
+            $sortOrder = isset($_GET["{$sortParam}_order"]) ? $_GET["{$sortParam}_order"] : 'ASC';
 
-            // If column exists in the sortable columns, add it to order conditions
-            if (isset($sortableColumns[strtolower($sortColumn)])) {
-                $orderConditions[] = $sortableColumns[strtolower($sortColumn)] . ' ' . $direction;
+            // Check if this sort column exists in the sortable columns
+            $column = strtolower($$sortParam);
+            if (isset($sortableColumns[$column])) {
+                $orderConditions[] = $sortableColumns[$column] . ' ' . $sortOrder;
             }
-            $sortIndex++;
         }
+        $sortIndex++;
     }
 
-    // If sorting is specified, add it to the SQL query
+    // If sorting conditions exist, append ORDER BY
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
@@ -2342,6 +2340,7 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         return [];
     }
 }
+
 
 function fetchBreezeReport($salecode,$year,$type,$sex,$sire,$sort1,$sort2,$sort3,$sort4,$sort5)
 {
