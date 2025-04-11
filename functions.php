@@ -2272,7 +2272,7 @@ function fetchWeanlingReport($salecode, $year, $type, $sex, $sire, $sort1, $sort
         'Dam' => 'TDAM',
         'Sex' => 'Sex',
         'Type' => 'Type',
-        'Price Desc' => 'Price DESC',  // Special case for "Price Desc"
+        'Price' => 'Price',  // Special case for "Price Desc"
         'Currency' => 'Currency',
         'Salecode' => 'Salecode',
         'Day' => 'Day',
