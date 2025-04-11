@@ -124,7 +124,6 @@ $sortList = ["Hip", "Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Price", 
   	    echo '<option>'.$row['Sire'].'</option>';
     } ?>
 </select>
-<br>
 
 <!-- Sorting Filters (1st to 5th) -->
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
@@ -193,7 +192,7 @@ $sortList = ["Hip", "Horse", "Sire", "Datefoal", "Dam", "Sex", "Type", "Price", 
 
 
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
-
+<br>
 <script>
     // Function to toggle sorting order between ASC and DESC
   function updateSortOrder(sortField) {
