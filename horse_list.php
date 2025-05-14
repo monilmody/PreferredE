@@ -206,25 +206,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <h3>Photos</h3>
                     <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="horseId" id="hiddenHorseId">
-                        <input type="file" name="file" id="fileInput" accept="*/*">
-                        <button type="submit" class="btn btn-success">
+                        <input type="file" name="file" id="fileInput" accept="image/*">
+                        <button type="submit" class="btn btn-success" style="display:none;">
                             <i class="fas fa-upload"></i> Upload File
                         </button>
                     </form>
-
-                    <hr>
-                    <!-- Camera capture -->
-                    <button id="openCameraBtn" class="btn btn-primary">Take Photo</button>
-                    <div id="cameraContainer" style="display:none; margin-top: 10px;">
-                        <video id="video" width="320" height="240" autoplay style="border: 1px solid #ccc;"></video>
-                        <br>
-                        <button id="captureBtn" class="btn btn-warning">Capture</button>
-                        <canvas id="canvas" width="320" height="240" style="display:none;"></canvas>
-                    </div>
-
-                    <div id="photoPreview" style="margin-top: 10px;"></div>
-                    <p class="no-files-message">No files uploaded yet for this horse.</p>
-                    <button id="closeCameraBtn" class="btn btn-danger">Close Camera</button>
                 </div>
             </div>
         </div>
@@ -296,73 +282,116 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             });
         }
 
-        function addFileToGallery(fileInfo) {
-            const gallery = $('#photoPreview');
+        $(document).ready(function() {
+            // Handle file selection
+            $('#fileInput').on('change', function(event) {
+                const file = event.target.files[0];
 
-            // Remove "no files" message if present
-            gallery.find('.no-files-message').remove();
+                if (!file) {
+                    return;
+                }
 
-            // Check if file is an image
-            const isImage = fileInfo.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                // Show preview of the image
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = `
+                <div class="photo-container">
+                    <img src="${e.target.result}" class="uploaded-photo" />
+                </div>`;
+                    $('#photoPreview').html(img);
 
-            const fileElement = `
-        <div class="file-item" data-id="${fileInfo.id}">
-            ${isImage ? 
-                `<img src="${fileInfo.url}" class="file-thumbnail">` : 
-                `<div class="file-icon">
-                    <i class="fas fa-file"></i>
-                    <span>${fileInfo.name.split('.').pop()}</span>
-                </div>`
-            }
-            <div class="file-details">
-                <a href="${fileInfo.url}" target="_blank" class="file-link">
-                    ${fileInfo.name}
-                </a>
-                <button class="delete-file" data-id="${fileInfo.id}">
-                    <i class="fas fa-trash"></i>
-                </button>
-            </div>
-        </div>`;
+                    // Automatically upload the file
+                    uploadFile(file);
+                };
+                reader.readAsDataURL(file); // Preview the image
+            });
 
-            gallery.append(fileElement);
-        }
+            // Function to upload the file automatically when selected
+            function uploadFile(file) {
+                const formData = new FormData();
+                const horseId = $('#hiddenHorseId').val(); // Get horseId
 
-        // Camera Setup
-        let videoStream;
+                formData.append('file', file);
+                formData.append('horseId', horseId); // Add horseId to the FormData
 
-        $('#openCameraBtn').on('click', function() {
-            navigator.mediaDevices.getUserMedia({
-                    video: true
-                })
-                .then(function(stream) {
-                    videoStream = stream;
-                    $('#cameraContainer').show();
-                    const video = document.getElementById('video');
-                    video.srcObject = stream;
-                })
-                .catch(function() {
-                    alert("Camera access denied or not available.");
+                $.ajax({
+                    url: 'upload_photo.php', // The server-side script to handle file upload
+                    type: 'POST',
+                    data: formData,
+                    processData: false,
+                    contentType: false,
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log('Upload response:', response);
+                        if (response && response.success) {
+                            addFileToGallery(response);
+                            alert('File uploaded successfully!');
+
+                            // Trigger page reload and open the sidebar photo section
+                            window.location.reload(); // Reload the page
+
+                        } else {
+                            alert('Upload failed: ' + (response?.error || 'Unknown error'));
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Upload error:', xhr.responseText);
+                        try {
+                            const errResponse = JSON.parse(xhr.responseText);
+                            alert('Upload failed: ' + (errResponse.error || 'Unknown error'));
+                        } catch (e) {
+                            alert('Upload failed. Server response: ' + xhr.responseText);
+                        }
+                    }
                 });
+            }
+
+            // Adds the uploaded file to the gallery after successful upload
+            function addFileToGallery(fileInfo) {
+                const gallery = $('#photoPreview');
+
+                // Remove "no files" message if present
+                gallery.find('.no-files-message').remove();
+
+                const isImage = fileInfo.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                const fileElement = `
+            <div class="file-item" data-id="${fileInfo.id}">
+                ${isImage ? 
+                    `<img src="${fileInfo.url}" class="file-thumbnail">` : 
+                    `<div class="file-icon">
+                        <i class="fas fa-file"></i>
+                        <span>${fileInfo.name.split('.').pop()}</span>
+                    </div>`}
+                <div class="file-details">
+                    <a href="${fileInfo.url}" target="_blank" class="file-link">
+                        ${fileInfo.name}
+                    </a>
+                    <button class="delete-file" data-id="${fileInfo.id}">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            </div>`;
+
+                gallery.append(fileElement);
+            }
         });
 
-        $('#captureBtn').on('click', function() {
-            const canvas = document.getElementById('canvas');
-            const video = document.getElementById('video');
-            const context = canvas.getContext('2d');
-
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            canvas.style.display = 'block';
-
-            // Show preview
-            const imgData = canvas.toDataURL('image/png');
-            const img = `
-        <div class="photo-container">
-            <img src="${imgData}" class="uploaded-photo" />
-            <button class="delete-photo">Delete</button>
-        </div>`;
-            $('#photoPreview').html(img);
+        // Check if page was just reloaded after upload
+        $(document).ready(function() {
+            // Open the sidebar and show the photo section after reload
+            if (window.location.hash === "#photosTab") {
+                $('#horseDetailsSidebar').addClass('open');
+                $('#photoSection').show(); // Show the photo section of the sidebar
+            }
         });
+
+        // Function to refresh the page and open the sidebar photo section
+        function openSidebarWithPhotos() {
+            // Set the hash to trigger the sidebar to open
+            window.location.hash = "photosTab";
+            $('#horseDetailsSidebar').addClass('open');
+            $('#photoSection').show(); // Make sure the photo section is visible
+        }
 
         // Optional: Stop camera when sidebar closes
         function closeSidebar() {
