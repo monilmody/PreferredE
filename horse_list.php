@@ -124,7 +124,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 
     <!-- Table Section -->
-    <div style="overflow: auto;">
+    <div class="responsive-table-container">
         <table>
             <thead>
                 <tr>

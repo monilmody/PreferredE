@@ -471,6 +471,12 @@ body.modal-open #horseDetailsSidebar .closebtn {
     display: none;
 }
 
+.responsive-table-container {
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    width: 100%;
+}
+
 /* Responsive adjustments for tablets */
 @media screen and (min-width: 350px) and (max-width: 1366px) {
 
@@ -522,4 +528,17 @@ body.modal-open #horseDetailsSidebar .closebtn {
         /* Allow more height for small screens */
     }
 
+    .responsive-table-container {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+    }
+    
+    body, html {
+        overflow-x: hidden;
+    }
+    
+    table {
+        min-width: 600px; /* Or whatever makes sense based on your columns */
+    }
 }
