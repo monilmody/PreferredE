@@ -1,5 +1,7 @@
 <?php
-
+use Aws\S3\S3Client;
+use Dotenv\Dotenv;
+require 'vendor/autoload.php';
 function fetchRecords($horseName)
 {
 	global $mysqli;
@@ -1549,24 +1551,6 @@ function fetchSireAnalysisSummary_tb($year, $elig, $sort1, $sort2, $sort3, $sort
     }
 
     $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
-    return $json;
-}
-
-
-function fetchHorseList()
-{
-    global $mysqli;
-    $sql = 'SELECT DISTINCT Horse from sales
-            UNION
-            SELECT DISTINCT dam from damsire
-            UNION
-            SELECT DISTINCT damofdam from damsire';
-
-    $result = mysqli_query($mysqli, $sql);
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
-    }
-    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
     return $json;
 }
 
@@ -3518,4 +3502,168 @@ function deleteSalecode($breed,$salecode)
     //echo "aaaaa";
     return $result;
 }
-?>
+
+function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
+    global $mysqli;
+
+    // Define sortable columns
+    $sortableColumns = [
+        'horse' => 'Horse',
+        'yearfoal' => 'YEARFOAL',
+        'sex' => 'Sex',
+        'sire' => 'Sire',
+        'dam' => 'Dam'
+    ];
+
+    // Build the SQL query base
+    $sql = "
+        SELECT DISTINCT
+            horse,
+            YEARFOAL,
+            sex,
+            sire,
+            dam
+        FROM sales
+        LIMIT 50;
+    ";
+
+    // Sorting columns from the GET parameters
+    $orderConditions = [];
+    $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
+
+    foreach ($sortParams as $sortParam) {
+        if (!empty($$sortParam)) {
+            // Check if sort order is specified for each sort column
+            $sortOrder = isset($_GET["{$sortParam}_order"]) ? $_GET["{$sortParam}_order"] : 'ASC';
+
+            // Check if this sort column exists in the sortable columns
+            $column = strtolower($$sortParam);
+            if (isset($sortableColumns[$column])) {
+                $orderConditions[] = $sortableColumns[$column] . ' ' . $sortOrder;
+            }
+        }
+    }
+
+    // If sorting conditions exist, append ORDER BY
+    if (!empty($orderConditions)) {
+        $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
+    }
+
+    // Prepare, bind, and execute the query
+    if ($stmt = $mysqli->prepare($sql)) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $json = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $json;
+    } else {
+        error_log("MySQL Error: " . $mysqli->error . " | SQL: " . $sql);
+        return [];
+    }
+}
+
+function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam) {
+    global $mysqli;
+
+    if (!$mysqli) {
+        return ['success' => false, 'error' => 'Invalid database connection'];
+    }
+
+    // Sanitize input to prevent SQL injection
+    $horseId = $mysqli->real_escape_string($horseId);
+    $yearFoal = $mysqli->real_escape_string($yearFoal);
+    $sex = $mysqli->real_escape_string($sex);
+    $sire = $mysqli->real_escape_string($sire);
+    $dam = $mysqli->real_escape_string($dam);
+
+    // Prepare the SQL query to update the horse details
+    $sql = "UPDATE sales SET YEARFOAL = ?, SEX = ?, Sire = ?, DAM = ? WHERE HORSE = ?";
+
+    // Prepare the statement
+    $stmt = $mysqli->prepare($sql);
+    if (!$stmt) {
+        error_log("Failed to prepare SQL statement: " . $mysqli->error);
+        return ['success' => false, 'error' => 'Failed to prepare SQL statement: ' . $mysqli->error];
+    }
+
+    // Bind the parameters to the SQL query
+    $stmt->bind_param('sssss', $yearFoal, $sex, $sire, $dam, $horseId);
+
+    // Execute the query and check if it was successful
+    if ($stmt->execute()) {
+        $result =  ['success' => true, 'message' => 'Horse details updated successfully'];
+    } else {
+        $result = ['success' => false, 'error' => 'Failed to update horse details: ' . $stmt->error];
+    }
+
+    $stmt->close();
+    $mysqli->close();
+
+    return $result;
+}
+
+function getHorseDetails($horseId) {
+    global $mysqli;
+
+    if (!$mysqli) {
+        return ['error' => 'Invalid database connection'];
+    }
+
+    // Sanitize input
+    $horseName = $mysqli->real_escape_string($horseId);
+    
+
+    // Fetch horse details
+    $sql = "SELECT DISTINCT HORSE, YEARFOAL, SEX, Sire, DAM FROM sales WHERE HORSE = '$horseName'";
+    $result = $mysqli->query($sql);
+
+    if (!$result || $result->num_rows === 0) {
+        return ['error' => 'Horse not found'];
+    }
+
+    $horse = $result->fetch_assoc();
+
+    $horseId = preg_replace('/[^a-zA-Z0-9_\-]/', '', $horseName);
+
+    // Load AWS credentials
+    $dotenv = Dotenv::createImmutable(__DIR__);
+    $dotenv->load();
+
+    $s3 = new S3Client([
+        'region' => $_ENV['AWS_REGION'],
+        'version' => 'latest',
+        'credentials' => [
+            'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
+            'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
+        ],
+        'suppress_php_deprecation_warning' => true
+    ]);
+
+    $bucket = $_ENV['AWS_BUCKET'];
+
+    // Fetch stored object keys
+    $sql2 = "SELECT image_url FROM horse_images WHERE horse_id = '$horseId'";
+    $result2 = $mysqli->query($sql2);
+
+    $images = [];
+    if ($result2 && $result2->num_rows > 0) {
+        while ($row = $result2->fetch_assoc()) {
+            $objectKey = $row['image_url'];
+
+            // Generate presigned URL for each image
+            $cmd = $s3->getCommand('GetObject', [
+                'Bucket' => $bucket,
+                'Key'    => $objectKey,
+            ]);
+
+            $request = $s3->createPresignedRequest($cmd, '+1 hour');
+            $presignedUrl = (string)$request->getUri();
+
+            $images[] = $presignedUrl;
+        }
+    }
+
+    $horse['images'] = $images;
+
+    return $horse;
+}
