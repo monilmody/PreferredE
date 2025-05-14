@@ -56,6 +56,7 @@ require_once("config.php");
                                     <a class="dropdown-item" href="individual_sales_report.php">Individual Horse Sales Report</a>
                                     <a class="dropdown-item" href="broodmares_report.php">Broodmares Report</a>
                                     <a class="dropdown-item" href="cons_analysis.php">Consignor Analysis</a>
+                                    <a class="dropdown-item" href="horse_list.php">Horse Inspection</a>
                                 </div>
                             </li>
                             <?php 
