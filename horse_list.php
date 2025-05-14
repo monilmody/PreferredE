@@ -482,6 +482,38 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             $('body').addClass('modal-open');
         });
 
+        $(document).on('click', '.delete-photo', function() {
+            const imageUrl = $(this).data('url');
+            const parentElement = $(this).closest('.photo-card');
+
+            if (confirm("Are you sure you want to delete this image?")) {
+                $.ajax({
+                    url: 'delete_photo.php',
+                    type: 'POST',
+                    data: {
+                        imageUrl: imageUrl
+                    },
+                    success: function(response) {
+                        try {
+                            const res = typeof response === 'string' ? JSON.parse(response) : response;
+                            if (res.success) {
+                                parentElement.remove(); // Remove image from UI
+                                alert('Image deleted successfully.');
+                            } else {
+                                alert('Failed to delete image: ' + (res.error || 'Unknown error'));
+                            }
+                        } catch (e) {
+                            console.error('Invalid response:', response);
+                            alert('Unexpected server response.');
+                        }
+                    },
+                    error: function(xhr) {
+                        console.error('Delete error:', xhr.responseText);
+                        alert('Failed to delete image.');
+                    }
+                });
+            }
+        });
 
         // Close when clicking close button
         $(document).on('click', '.modal-close', function() {
