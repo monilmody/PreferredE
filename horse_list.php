@@ -34,8 +34,16 @@ $sort3_param = $_GET['sort3'] ?? '';
 $sort4_param = $_GET['sort4'] ?? '';
 $sort5_param = $_GET['sort5'] ?? '';
 
+$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : ''; // default to 'ASC' if not set
+$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : ''; // default to 'ASC' if not set
+$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : ''; // default to 'ASC' if not set
+$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : ''; // default to 'ASC' if not set
+$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; // default to 'ASC' if not set
+
 // Fetch horse data using your existing function
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
+$horseSearch = $_GET['horse_search'] ?? '';
+$damSearch = $_GET['dam_search'] ?? '';
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
@@ -62,44 +70,119 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 <h1 style="text-align:center;color:#FF6B35;">HORSE LIST - STANDARDBRED</h1>
 
-<!-- Sorting Dropdowns -->
+<div class="search-container">
+    <form class="form-inline" action="horse_list.php" method="GET">
+        <!-- Preserve sort parameters -->
+        <?php
+        $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
+        foreach ($sortParams as $param) {
+            if (!empty($_GET[$param])) {
+                echo '<input type="hidden" name="' . $param . '" value="' . htmlspecialchars($_GET[$param]) . '">';
+            }
+        }
+        ?>
+
+        <!-- Horse Search -->
+        <input type="text" name="horse_search" class="search-box" placeholder="Search horses..."
+            value="<?php echo isset($_GET['horse_search']) ? htmlspecialchars($_GET['horse_search']) : '' ?>">
+
+        <!-- Dam Search -->
+        <input type="text" name="dam_search" class="search-box" placeholder="Search dams..."
+            value="<?php echo isset($_GET['dam_search']) ? htmlspecialchars($_GET['dam_search']) : '' ?>">
+
+        <button type="submit" class="search-button">Search</button>
+
+        <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search'])): ?>
+            <a href="horse_list.php" class="clear-button">Clear All</a>
+        <?php endif; ?>
+    </form>
+</div>
 <br>
-<select style="background-color:#229954;" class="custom-select1" id="sort1">
+<script>
+    // Function to toggle sorting order between ASC and DESC
+    function updateSortOrder(sortField) {
+        // Get the selected value from the sort dropdown
+        let sortValue = document.getElementById(sortField).value;
+
+        // Get the selected order (ASC or DESC) from the corresponding dropdown
+        let orderValue = document.getElementById(sortField + '_order').value;
+
+        // Update the hidden input fields with the selected values
+        document.getElementById(sortField + '_order').value = orderValue;
+
+        console.log(`Sorting by ${sortValue} in ${orderValue} order`);
+    }
+</script>
+
+<!-- Sorting Filters (1st to 5th) -->
+<select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
     <option value="">Sort By 1st</option>
     <?php foreach ($sortList as $row) {
-        echo '<option value="' . $row . '">' . $row . '</option>';
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort2">
+<select style="background-color: #3498db;" class="custom-select1" id="sort1_order" onchange="updateSortOrder('sort1')">
+    <option value="">Select Order</option> <!-- Default option -->
+    <option value="ASC" <?php echo ($sort1_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+    <option value="DESC" <?php echo ($sort1_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort2" name="sort2" onchange="updateSortOrder('sort2')">
     <option value="">Sort By 2nd</option>
     <?php foreach ($sortList as $row) {
-        echo '<option value="' . $row . '">' . $row . '</option>';
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort3">
+<select style="background-color: #3498db;" class="custom-select1" id="sort2_order" onchange="updateSortOrder('sort2')">
+    <option value="">Select Order</option> <!-- Default option -->
+    <option value="ASC" <?php echo ($sort2_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+    <option value="DESC" <?php echo ($sort2_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort3" name="sort3" onchange="updateSortOrder('sort3')">
     <option value="">Sort By 3rd</option>
     <?php foreach ($sortList as $row) {
-        echo '<option value="' . $row . '">' . $row . '</option>';
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort4">
+<select style="background-color: #3498db;" class="custom-select1" id="sort3_order" onchange="updateSortOrder('sort3')">
+    <option value="">Select Order</option> <!-- Default option -->
+    <option value="ASC" <?php echo ($sort3_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+    <option value="DESC" <?php echo ($sort3_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort4" name="sort4" onchange="updateSortOrder('sort4')">
     <option value="">Sort By 4th</option>
     <?php foreach ($sortList as $row) {
-        echo '<option value="' . $row . '">' . $row . '</option>';
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<select style="background-color:#229954;" class="custom-select1" id="sort5">
+<select style="background-color: #3498db;" class="custom-select1" id="sort4_order" onchange="updateSortOrder('sort4')">
+    <option value="">Select Order</option> <!-- Default option -->
+    <option value="ASC" <?php echo ($sort4_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+    <option value="DESC" <?php echo ($sort4_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+<select style="background-color:#229954;" class="custom-select1" id="sort5" name="sort5" onchange="updateSortOrder('sort5')">
     <option value="">Sort By 5th</option>
     <?php foreach ($sortList as $row) {
-        echo '<option value="' . $row . '">' . $row . '</option>';
+        echo '<option value="' . strtolower($row) . '">' . $row . '</option>';
     } ?>
 </select>
 
-<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px;" />
+<select style="background-color: #3498db;" class="custom-select1" id="sort5_order" onchange="updateSortOrder('sort5')">
+    <option value="">Select Order</option> <!-- Default option -->
+    <option value="ASC" <?php echo ($sort5_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
+    <option value="DESC" <?php echo ($sort5_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
+</select>
+
+
+<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; " />
+
 <br>
 
 <body>
@@ -221,6 +304,17 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 
     <script>
+        document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
+        document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
+        document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
+        document.getElementById('sort4').value = "<?php echo $sort4_param; ?>";
+        document.getElementById('sort5').value = "<?php echo $sort5_param; ?>";
+        document.getElementById('sort1_order').value = "<?php echo $sort1_param_order; ?>";
+        document.getElementById('sort2_order').value = "<?php echo $sort2_param_order; ?>";
+        document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
+        document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
+        document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
+
         // Function to collect selected sort values and pass them as parameters
         function getValues() {
             var sort1 = document.getElementById('sort1').value;
@@ -229,11 +323,39 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             var sort4 = document.getElementById('sort4').value;
             var sort5 = document.getElementById('sort5').value;
 
-            var link = "horse_list.php?sort1=" + sort1 +
+            // Sorting orders (ASC or DESC)
+            var sort1_order = document.getElementById('sort1_order').value;
+            var sort2_order = document.getElementById('sort2_order').value;
+            var sort3_order = document.getElementById('sort3_order').value;
+            var sort4_order = document.getElementById('sort4_order').value;
+            var sort5_order = document.getElementById('sort5_order').value;
+
+            // Get search terms
+            var horseSearch = "<?php echo isset($_GET['horse_search']) ? $_GET['horse_search'] : '' ?>";
+            var damSearch = "<?php echo isset($_GET['dam_search']) ? $_GET['dam_search'] : '' ?>";
+
+            var link = "horse_list.php?&sort1=" + sort1 +
+                "&sort1_order=" + sort1_order // Added sorting order
+                +
                 "&sort2=" + sort2 +
+                "&sort2_order=" + sort2_order // Added sorting order
+                +
                 "&sort3=" + sort3 +
+                "&sort3_order=" + sort3_order // Added sorting order
+                +
                 "&sort4=" + sort4 +
-                "&sort5=" + sort5;
+                "&sort4_order=" + sort4_order // Added sorting order
+                +
+                "&sort5=" + sort5 +
+                "&sort5_order=" + sort5_order; // Added sorting order
+
+            // Add search parameters if they exist
+            if (horseSearch) {
+                link += "&horse_search=" + encodeURIComponent(horseSearch);
+            }
+            if (damSearch) {
+                link += "&dam_search=" + encodeURIComponent(damSearch);
+            }
 
             window.location.href = link;
         }
