@@ -3503,7 +3503,7 @@ function deleteSalecode($breed,$salecode)
     return $result;
 }
 
-function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
+function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $search = '') {
     global $mysqli;
 
     // Define sortable columns
@@ -3524,8 +3524,13 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
             sire,
             dam
         FROM sales
-        LIMIT 50;
     ";
+
+    // Add search condition if provided
+    if (!empty($search)) {
+        $search = $mysqli->real_escape_string($search);
+        $sql .= " WHERE horse LIKE '%$search%' OR dam LIKE '%$search%'";
+    }
 
     // Sorting columns from the GET parameters
     $orderConditions = [];
@@ -3548,6 +3553,9 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
+
+    // Add limit
+    $sql .= ' LIMIT 50';
 
     // Prepare, bind, and execute the query
     if ($stmt = $mysqli->prepare($sql)) {

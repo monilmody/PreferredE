@@ -35,7 +35,8 @@ $sort4_param = $_GET['sort4'] ?? '';
 $sort5_param = $_GET['sort5'] ?? '';
 
 // Fetch horse data using your existing function
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
+$searchQuery = $_GET['search'] ?? '';
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $searchQuery);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
@@ -61,6 +62,18 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 <br>
 
 <h1 style="text-align:center;color:#FF6B35;">HORSE LIST - STANDARDBRED</h1>
+
+<!-- search functionality -->
+<div class="search-container">
+    <form class="form-inline" action="horse_list.php" method="GET">
+        <input type="text" name="search" class="search-box" placeholder="Search Horses Or Dams..." 
+               value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
+        <button type="submit" class="search-button">Search</button>
+        <?php if(isset($_GET['search']) && !empty($_GET['search'])): ?>
+            <a href="horse_list.php" class="clear-button">Clear</a>
+        <?php endif; ?>
+    </form>
+</div>
 
 <!-- Sorting Dropdowns -->
 <br>
