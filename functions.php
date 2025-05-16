@@ -3535,6 +3535,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $search = '') {
     // Sorting columns from the GET parameters
     $orderConditions = [];
     $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
+    $sortIndex = 1; // To track sort column
 
     foreach ($sortParams as $sortParam) {
         if (!empty($$sortParam)) {
@@ -3547,6 +3548,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $search = '') {
                 $orderConditions[] = $sortableColumns[$column] . ' ' . $sortOrder;
             }
         }
+        $sortIndex++;
     }
 
     // If sorting conditions exist, append ORDER BY
