@@ -197,30 +197,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
     <option value="DESC" <?php echo ($sort5_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
 </select>
 
+<br>
+
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px;" />
 <br>
 
 <body>
-    <!-- Button Container -->
-    <div class="button-container">
-        <!-- Column Selector Button -->
-        <button id="columnSelectorBtn">Select Columns</button>
-    </div>
-
-    <!-- Column Checkboxes (will be moved to modal by JavaScript) -->
-    <div id="columnCheckboxes" style="display:none;">
-        <?php foreach ($_SESSION['column_prefs'] as $col => $visible): ?>
-            <div class="column-checkbox">
-                <label>
-                    <input type="checkbox" name="column_prefs[<?php echo $col; ?>]"
-                        <?php echo $visible ? 'checked' : ''; ?>>
-                    <?php echo $col; ?>
-                </label>
-            </div>
-        <?php endforeach; ?>
-    </div>
-
-
     <!-- Table Section -->
     <div class="responsive-table-container">
         <table>
