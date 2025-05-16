@@ -3503,8 +3503,12 @@ function deleteSalecode($breed,$salecode)
     return $result;
 }
 
-function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $search = '') {
+function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
     global $mysqli;
+
+    $search_type = $_GET['search_type'] ?? '';
+    $horse_search = $_GET['horse_search'] ?? '';
+    $dam_search = $_GET['dam_search'] ?? '';
 
     // Define sortable columns
     $sortableColumns = [
@@ -3526,10 +3530,21 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $search = '') {
         FROM sales
     ";
 
-    // Add search condition if provided
-    if (!empty($search)) {
-        $search = $mysqli->real_escape_string($search);
-        $sql .= " WHERE horse LIKE '%$search%' OR dam LIKE '%$search%'";
+    $conditions = [];
+
+    // Horse-specific search
+    if ($search_type === 'horse' && !empty($horse_search)) {
+        $conditions[] = "horse LIKE '%" . $mysqli->real_escape_string($horse_search) . "%'";
+    }
+
+    // Dam-specific search
+    if ($search_type === 'dam' && !empty($dam_search)) {
+        $conditions[] = "dam LIKE '%" . $mysqli->real_escape_string($dam_search) . "%'";
+    }
+
+    // Combine conditions
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(' AND ', $conditions);
     }
 
     // Sorting columns from the GET parameters

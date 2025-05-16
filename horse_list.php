@@ -41,8 +41,7 @@ $sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : ''; //
 $sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; // default to 'ASC' if not set
 
 // Fetch horse data using your existing function
-$searchQuery = $_GET['search'] ?? '';
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $searchQuery);
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
@@ -67,22 +66,72 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 <br>
 
-<h1 style="text-align:center;color:#FF6B35;">HORSE LIST - STANDARDBRED</h1>
+<h1 class="horse-header" style="text-align:center;color:#FF6B35;">HORSE LIST - STANDARDBRED</h1>
 
-<!-- search functionality -->
-<div class="search-container">
-    <form class="form-inline" action="horse_list.php" method="GET">
-        <input type="text" name="search" class="search-box" placeholder="Search Horses Or Dams..."
-            value="<?php echo isset($_GET['search']) ? htmlspecialchars($_GET['search']) : '' ?>">
-        <button type="submit" class="search-button">Search</button>
-        <?php if (isset($_GET['search']) && !empty($_GET['search'])): ?>
-            <a href="horse_list.php" class="clear-button">Clear</a>
-        <?php endif; ?>
-    </form>
+<div class="search-and-buttons-wrapper">
+    <!-- search functionality -->
+    <div class="search-container">
+        <form class="form-inline" action="horse_list.php" method="GET">
+            <!-- Horse Search -->
+            <input
+                type="text"
+                name="horse_search"
+                class="search-box"
+                placeholder="Search horses..."
+                value="<?php echo isset($_GET['horse_search']) ? htmlspecialchars($_GET['horse_search']) : '' ?>">
+            <button
+                type="submit"
+                name="search_type"
+                value="horse"
+                class="search-button horse-button">
+                Search Horses
+            </button>
+
+            <!-- Dam Search -->
+            <input
+                type="text"
+                name="dam_search"
+                class="search-box"
+                placeholder="Search dams..."
+                value="<?php echo isset($_GET['dam_search']) ? htmlspecialchars($_GET['dam_search']) : '' ?>">
+            <button
+                type="submit"
+                name="search_type"
+                value="dam"
+                class="search-button dam-button">
+                Search Dams
+            </button>
+
+            <!-- Clear button (optional) -->
+            <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search'])): ?>
+                <a href="horse_list.php" class="clear-button">Clear All</a>
+            <?php endif; ?>
+        </form>
+    </div>
+
+
+    <!-- Button Container -->
+    <div class="button-container">
+        <!-- Column Selector Button -->
+        <button id="columnSelectorBtn">Select Columns</button>
+    </div>
+
+
+    <!-- Column Checkboxes (will be moved to modal by JavaScript) -->
+    <div id="columnCheckboxes" style="display:none;">
+        <?php foreach ($_SESSION['column_prefs'] as $col => $visible): ?>
+            <div class="column-checkbox">
+                <label>
+                    <input type="checkbox" name="column_prefs[<?php echo $col; ?>]"
+                        <?php echo $visible ? 'checked' : ''; ?>>
+                    <?php echo $col; ?>
+                </label>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </div>
 
 <!-- Sorting Dropdowns -->
-<br>
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
     <option value="">Sort By 1st</option>
     <?php foreach ($sortList as $row) {
@@ -270,7 +319,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 
     <script>
-
         document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
         document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
         document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";

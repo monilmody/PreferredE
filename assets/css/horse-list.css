@@ -1,641 +1,709 @@
 /* File Gallery Styles */
 
 .file-item {
-  width: 200px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  overflow: hidden;
-  background: white;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s;
-}
-
-.file-item:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-}
-
-.file-thumbnail {
-  width: 100%;
-  height: 150px;
-  object-fit: cover;
-  border-bottom: 1px solid #eee;
-}
-
-.file-icon {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 150px;
-  background: #f5f5f5;
-  color: #555;
-  font-size: 40px;
-  border-bottom: 1px solid #eee;
-}
-
-.file-icon span {
-  font-size: 12px;
-  margin-top: 5px;
-  color: #777;
-}
-
-.file-details {
-  padding: 10px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.file-link {
-  color: #333;
-  text-decoration: none;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 140px;
-  display: inline-block;
-}
-
-.file-link:hover {
-  color: #0066cc;
-  text-decoration: underline;
-}
-
-.delete-file {
-  background: none;
-  border: none;
-  color: #ff4444;
-  cursor: pointer;
-  padding: 5px;
-}
-
-.no-files-message {
-  color: #777;
-  font-style: italic;
-  width: 100%;
-  text-align: center;
-  padding: 20px;
-}
-
-#horseDetailsSidebar .btn,
-#horseDetailsSidebar button {
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 10px;
-  padding: 10px;
-  font-size: 16px;
-}
-
-#horseDetailsSidebar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  /* Ensure text content is centered */
-  padding-top: 50px;
-  /* Make space for close button */
-  height: 100%;
-  width: 300px;
-  position: fixed;
-  top: 0;
-  right: -300px;
-  /* Hide sidebar initially */
-  background-color: #f4f4f4;
-  overflow-x: hidden;
-  transition: 0.3s;
-  z-index: 1000;
-  box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.5);
-}
-
-/* Sidebar header (horse name) */
-#horseDetailsSidebar h2 {
-  text-align: center;
-  padding: 20px;
-  background-color: #229954;
-  color: white;
-  margin: 0;
-  width: 100%;
-  /* Ensure the heading stretches across */
-  box-sizing: border-box;
-}
-
-.sidebar #horseDetailsContent {
-  padding: 20px;
-  overflow-y: auto;
-}
-
-#horseDetailsSidebar .closebtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 18px;
-  z-index: 1001;
-  width: 40px;
-  /* Fixed width for a more controlled size */
-  height: 40px;
-  /* Fixed height to make it circular */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Centering the text inside the button */
-}
-
-#horseDetailsSidebar.open {
-  right: 0;
-  width: 60vw;
-  /* Occupies 60% of viewport width when open */
-}
-
-#horseDetailsSidebar.open .sidebar-content {
-  padding: 20px;
-  font-size: 16px;
-}
-
-/* Tabs */
-.tab-buttons {
-  display: flex;
-  margin-bottom: 10px;
-}
-
-.tab-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  background: #f0f0f0;
-  border: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s;
-}
-
-.tab-button.active {
-  border-bottom: 2px solid #007bff;
-  background: #fff;
-  font-weight: bold;
-}
-
-.tab-pane {
-  display: none;
-}
-
-.tab-pane.active {
-  display: block;
-}
-
-/* Improved photo gallery */
-#photoPreview {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  justify-content: center;
-  padding-top: 10px;
-}
-
-.photo-card {
-  position: relative;
-  width: 120px;
-  height: 120px;
-  border-radius: 8px;
-  overflow: hidden;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
-  transition: transform 0.2s ease-in-out;
-}
-
-/* Modal Image Styles */
-#imageModal {
-  display: none;
-  /* Hidden by default */
-  position: fixed;
-  z-index: 10000;
-  /* Sit on top */
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.9);
-  /* Black background with opacity */
-  overflow: auto;
-  /* Enable scroll if the image is too large */
-  display: flex;
-  justify-content: center;
-  /* Center horizontally */
-  align-items: center;
-  /* Center vertically */
-}
-
-#imageModal .modal-content {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  /* Allow the image to expand based on its original width */
-  height: auto;
-  /* Allow the image to expand based on its original height */
-  object-fit: contain;
-  /* Ensure it scales proportionally while fitting in the modal */
-}
-
-.modal-close {
-  position: absolute;
-  top: 10px;
-  right: 20px;
-  color: #fff;
-  font-size: 30px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.modal-close:hover,
-.modal-close:focus {
-  color: #bbb;
-  text-decoration: none;
-  cursor: pointer;
-}
-
-.photo-card:hover {
-  transform: scale(1.03);
-}
-
-.photo-thumbnail {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  display: block;
-  border-radius: 8px;
-}
-
-.photo-card a {
-  display: block;
-  height: 100%;
-}
-
-.delete-photo {
-  position: absolute;
-  top: 4px;
-  right: 4px;
-  background: rgba(255, 0, 0, 0.8);
-  color: white;
-  border: none;
-  border-radius: 50%;
-  font-size: 14px;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  line-height: 1;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 0;
-}
-
-.uploaded-photo {
-  width: 100px;
-  height: 100%;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-}
-
-table th,
-table td {
-  padding: 10px;
-  border: 1px solid #ddd;
-  text-align: left;
-}
-
-table td a {
-  color: black;
-  /* Ensure that the links are also black */
-}
-
-table td span {
-  color: black;
-  /* Ensure the spans inside the table cells are black */
-}
-
-th {
-  background-color: #f2f2f2;
-}
-
-tr:nth-child(even) {
-  background-color: #f9f9f9;
-}
-
-body {
-  padding: 10px;
-}
-
-.uploaded-photo,
-#video,
-#canvas {
-  max-width: 100%;
-  height: auto;
-  border-radius: 4px;
-}
-
-/* Button Container Styles */
-.button-container {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-}
-
-/* Column Selector Button */
-#columnSelectorBtn {
-  /* Base styling */
-  background-color: #ff6b35;
-  /* Vibrant orange that contrasts with green */
-  color: white;
-  border: none;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin: 0;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-
-  /* Optional icon styling */
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* Hover state */
-#columnSelectorBtn:hover {
-  background-color: #ff8c42;
-  /* Lighter orange */
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-/* Active/pressed state */
-#columnSelectorBtn:active {
-  transform: translateY(0);
-  background-color: #e55624;
-  /* Darker orange */
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-/* Focus state for accessibility */
-#columnSelectorBtn:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.4);
-}
-
-/* Optional: Add a subtle shine effect */
-#columnSelectorBtn::after {
-  content: "";
-  position: absolute;
-  top: -50%;
-  left: -60%;
-  width: 50%;
-  height: 200%;
-  background: rgba(255, 255, 255, 0.2);
-  transform: rotate(30deg);
-  transition: all 0.3s;
-}
-
-#columnSelectorBtn:hover::after {
-  left: 120%;
-}
-
-/* Icon styling */
-#columnSelectorBtn::before {
-  content: "☰";
-  font-size: 18px;
-}
-
-/* Modal Styles */
-#columnSelectorModal {
-  display: none;
-  position: fixed;
-  z-index: 1001;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  background-color: rgba(0, 0, 0, 0.4);
-}
-
-.modal-content {
-  background-color: #f8f9fa;
-  margin: 15% auto;
-  padding: 20px;
-  border: 1px solid #888;
-  width: 300px;
-  border-radius: 5px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-}
-
-.close-modal {
-  float: right;
-  font-size: 20px;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.close-modal:hover {
-  color: #000;
-}
-
-/* Column Checkboxes */
-.column-checkbox {
-  margin: 10px 0;
-}
-
-/* Ensure hidden columns stay hidden */
-th[style="display:none;"],
-td[style="display:none;"] {
-  display: none !important;
-}
-
-/* Hide the sidebar close button when the image modal is active */
-body.modal-open #horseDetailsSidebar .closebtn {
-  display: none;
-}
-
-.responsive-table-container {
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  width: 100%;
-}
-
-.search-container {
-  margin: 30px 0;
-  text-align: center;
-  position: relative;
-}
-
-.search-box {
-  padding: 12px 20px;
-  width: 350px;
-  border: none;
-  border-radius: 30px;
-  font-size: 16px;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
-  background: white;
-  transition: all 0.3s ease;
-  outline: none;
-}
-
-.search-box:focus {
-  width: 400px;
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
-}
-
-.search-button {
-  padding: 12px 25px;
-  margin-left: 10px;
-  background: linear-gradient(45deg, #ff6b35, #ff8e53);
-  color: white;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 600;
-  box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-}
-
-.search-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
-}
-
-.search-button:active {
-  transform: translateY(1px);
-}
-
-.search-button::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(45deg, #ff8e53, #ff6b35);
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  z-index: -1;
-}
-
-.search-button:hover::after {
-  opacity: 1;
-}
-
-.clear-button {
-  padding: 12px 20px;
-  margin-left: 10px;
-  background: #f5f5f5;
-  color: #555;
-  border: none;
-  border-radius: 30px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
-}
-
-.clear-button:hover {
-  background: #e0e0e0;
-  color: #333;
-}
-
-/* Add a subtle animation when search results appear */
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Apply to your search results */
-.search-results {
-  animation: fadeIn 0.5s ease-out;
-}
-
-/* Responsive adjustments for tablets */
-@media screen and (min-width: 350px) and (max-width: 1366px) {
-  /* Sidebar for smaller screens */
-  .sidebar {
-    width: 100%;
-    right: -100%;
-  }
-
-  .sidebar.open {
-    right: 0;
-  }
-
-  /* Adjust h2 size */
-  .sidebar h2 {
-    font-size: 20px;
-  }
-
-  /* Uploaded photo size */
-  .uploaded-photo {
-    width: 80px;
-  }
-
-  /* Adjust delete photo size */
-  .delete-photo {
-    font-size: 10px;
-    padding: 2px 4px;
-  }
-
-  #horseDetailsSidebar {
-    width: 100%;
-    max-width: none;
-    right: -100%;
-  }
-
-  #horseDetailsSidebar.open {
-    width: 100vw;
-  }
-
-  body {
+    width: 200px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     overflow: hidden;
-    /* Prevent background scrolling when sidebar is open */
+    background: white;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
   }
-
+  
+  .file-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+  }
+  
+  .file-thumbnail {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .file-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 150px;
+    background: #f5f5f5;
+    color: #555;
+    font-size: 40px;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .file-icon span {
+    font-size: 12px;
+    margin-top: 5px;
+    color: #777;
+  }
+  
+  .file-details {
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .file-link {
+    color: #333;
+    text-decoration: none;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+    display: inline-block;
+  }
+  
+  .file-link:hover {
+    color: #0066cc;
+    text-decoration: underline;
+  }
+  
+  .delete-file {
+    background: none;
+    border: none;
+    color: #ff4444;
+    cursor: pointer;
+    padding: 5px;
+  }
+  
+  .no-files-message {
+    color: #777;
+    font-style: italic;
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+  }
+  
+  #horseDetailsSidebar .btn,
+  #horseDetailsSidebar button {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 10px;
+    padding: 10px;
+    font-size: 16px;
+  }
+  
+  #horseDetailsSidebar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    /* Ensure text content is centered */
+    padding-top: 50px;
+    /* Make space for close button */
+    height: 100%;
+    width: 300px;
+    position: fixed;
+    top: 0;
+    right: -300px;
+    /* Hide sidebar initially */
+    background-color: #f4f4f4;
+    overflow-x: hidden;
+    transition: 0.3s;
+    z-index: 1000;
+    box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.5);
+  }
+  
+  /* Sidebar header (horse name) */
+  #horseDetailsSidebar h2 {
+    text-align: center;
+    padding: 20px;
+    background-color: #229954;
+    color: white;
+    margin: 0;
+    width: 100%;
+    /* Ensure the heading stretches across */
+    box-sizing: border-box;
+  }
+  
+  .sidebar #horseDetailsContent {
+    padding: 20px;
+    overflow-y: auto;
+  }
+  
+  #horseDetailsSidebar .closebtn {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    cursor: pointer;
+    border-radius: 50%;
+    font-size: 18px;
+    z-index: 1001;
+    width: 40px;
+    /* Fixed width for a more controlled size */
+    height: 40px;
+    /* Fixed height to make it circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Centering the text inside the button */
+  }
+  
+  #horseDetailsSidebar.open {
+    right: 0;
+    width: 60vw;
+    /* Occupies 60% of viewport width when open */
+  }
+  
+  #horseDetailsSidebar.open .sidebar-content {
+    padding: 20px;
+    font-size: 16px;
+  }
+  
+  /* Tabs */
+  .tab-buttons {
+    display: flex;
+    margin-bottom: 10px;
+  }
+  
+  .tab-button {
+    padding: 10px 20px;
+    cursor: pointer;
+    background: #f0f0f0;
+    border: none;
+    border-bottom: 2px solid transparent;
+    transition: all 0.3s;
+  }
+  
+  .tab-button.active {
+    border-bottom: 2px solid #007bff;
+    background: #fff;
+    font-weight: bold;
+  }
+  
+  .tab-pane {
+    display: none;
+  }
+  
+  .tab-pane.active {
+    display: block;
+  }
+  
+  /* Improved photo gallery */
+  #photoPreview {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    justify-content: center;
+    padding-top: 10px;
+  }
+  
+  .photo-card {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  /* Modal Image Styles */
+  #imageModal {
+    display: none;
+    /* Hidden by default */
+    position: fixed;
+    z-index: 10000;
+    /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9);
+    /* Black background with opacity */
+    overflow: auto;
+    /* Enable scroll if the image is too large */
+    display: flex;
+    justify-content: center;
+    /* Center horizontally */
+    align-items: center;
+    /* Center vertically */
+  }
+  
   #imageModal .modal-content {
-    max-width: 90%;
-    /* Full screen width on small devices */
-    max-height: 90%;
-    /* Allow more height for small screens */
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    /* Allow the image to expand based on its original width */
+    height: auto;
+    /* Allow the image to expand based on its original height */
+    object-fit: contain;
+    /* Ensure it scales proportionally while fitting in the modal */
   }
-
+  
+  .modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    color: #fff;
+    font-size: 30px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .modal-close:hover,
+  .modal-close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .photo-card:hover {
+    transform: scale(1.03);
+  }
+  
+  .photo-thumbnail {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: 8px;
+  }
+  
+  .photo-card a {
+    display: block;
+    height: 100%;
+  }
+  
+  .delete-photo {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    background: rgba(255, 0, 0, 0.8);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    font-size: 14px;
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    line-height: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+  }
+  
+  .uploaded-photo {
+    width: 100px;
+    height: 100%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  table th,
+  table td {
+    padding: 10px;
+    border: 1px solid #ddd;
+    text-align: left;
+  }
+  
+  table td a {
+    color: black;
+    /* Ensure that the links are also black */
+  }
+  
+  table td span {
+    color: black;
+    /* Ensure the spans inside the table cells are black */
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  body {
+    padding: 10px;
+  }
+  
+  .uploaded-photo,
+  #video,
+  #canvas {
+    max-width: 100%;
+    height: auto;
+    border-radius: 4px;
+  }
+  
+  /* Button Container Styles */
+  .button-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+  }
+  
+  /* Search And Button Wrapper Styles */
+  .search-and-buttons-wrapper {
+    display: flex;
+    justify-content: space-between; /* Pushes children to opposite ends */
+    align-items: flex-start; /* Aligns items at the top */
+    gap: 20px; /* Adds space between containers */
+    margin-bottom: 30px; /* Adjust as needed */
+  }
+  
+  /* Column Selector Button */
+  #columnSelectorBtn {
+    /* Base styling */
+    background-color: #ff6b35;
+    /* Vibrant orange that contrasts with green */
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin: 0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  
+    /* Optional icon styling */
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  
+  /* Hover state */
+  #columnSelectorBtn:hover {
+    background-color: #ff8c42;
+    /* Lighter orange */
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Active/pressed state */
+  #columnSelectorBtn:active {
+    transform: translateY(0);
+    background-color: #e55624;
+    /* Darker orange */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Focus state for accessibility */
+  #columnSelectorBtn:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 107, 53, 0.4);
+  }
+  
+  /* Optional: Add a subtle shine effect */
+  #columnSelectorBtn::after {
+    content: "";
+    position: absolute;
+    top: -50%;
+    left: -60%;
+    width: 50%;
+    height: 200%;
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(30deg);
+    transition: all 0.3s;
+  }
+  
+  #columnSelectorBtn:hover::after {
+    left: 120%;
+  }
+  
+  /* Icon styling */
+  #columnSelectorBtn::before {
+    content: "☰";
+    font-size: 18px;
+  }
+  
+  /* Modal Styles */
+  #columnSelectorModal {
+    display: none;
+    position: fixed;
+    z-index: 1001;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+  
+  .modal-content {
+    background-color: #f8f9fa;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 300px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+  }
+  
+  .close-modal {
+    float: right;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+  
+  .close-modal:hover {
+    color: #000;
+  }
+  
+  /* Column Checkboxes */
+  .column-checkbox {
+    margin: 10px 0;
+  }
+  
+  /* Ensure hidden columns stay hidden */
+  th[style="display:none;"],
+  td[style="display:none;"] {
+    display: none !important;
+  }
+  
+  /* Hide the sidebar close button when the image modal is active */
+  body.modal-open #horseDetailsSidebar .closebtn {
+    display: none;
+  }
+  
   .responsive-table-container {
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
     width: 100%;
   }
-
-  body,
-  html {
-    overflow-x: hidden;
+  
+  .search-container {
+    margin: 30px 0;
+    position: flex; /* Changed from relative to absolute */
+    right: 20px; /* Pushes it to the right */
+    top: 100px; /* Adjust vertical position */
+    z-index: 1000; /* Ensures it stays above other content */
+    display: 1; /* Aligns search box and button horizontally */
+    align-items: center;
+    gap: 10px; /* Adds spacing between elements */
   }
-
-  table {
-    min-width: 600px; /* Or whatever makes sense based on your columns */
+  
+  /* Keep all your existing styles for .search-box, .search-button, etc. */
+  
+  .search-box {
+    padding: 12px 20px;
+    width: 350px;
+    border: none;
+    border-radius: 30px;
+    font-size: 16px;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.2);
+    background: white;
+    transition: all 0.3s ease;
+    outline: none;
   }
-}
+  
+  .search-box:focus {
+    width: 400px;
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.3);
+  }
+  
+  .search-button {
+    padding: 12px 25px;
+    margin-left: 10px;
+    background: linear-gradient(45deg, #ff6b35, #ff8e53);
+    color: white;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 107, 53, 0.3);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .search-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 53, 0.4);
+  }
+  
+  .search-button:active {
+    transform: translateY(1px);
+  }
+  
+  .search-button::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, #ff8e53, #ff6b35);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: -1;
+  }
+  
+  .search-button:hover::after {
+    opacity: 1;
+  }
+  
+  .clear-button {
+    padding: 12px 20px;
+    margin-left: 10px;
+    background: #f5f5f5;
+    color: #555;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+  }
+  
+  .clear-button:hover {
+    background: #e0e0e0;
+    color: #333;
+  }
+  
+  /* Base button styles (shared) */
+  .search-button {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Horse button */
+  .horse-button {
+    background: linear-gradient(45deg, #4caf50, #81c784);
+    color: white;
+  }
+  
+  /* Dam button */
+  .dam-button {
+    background: linear-gradient(45deg, #2196f3, #64b5f6);
+    color: white;
+  }
+  
+  /* Hover effects */
+  .horse-button:hover {
+    background: linear-gradient(45deg, #388e3c, #66bb6a);
+    transform: translateY(-2px);
+  }
+  
+  .dam-button:hover {
+    background: linear-gradient(45deg, #1976d2, #42a5f5);
+    transform: translateY(-2px);
+  }
+  
+  /* Add a subtle animation when search results appear */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Apply to your search results */
+  .search-results {
+    animation: fadeIn 0.5s ease-out;
+  }
+  
+  /* Responsive adjustments for tablets */
+  @media screen and (min-width: 350px) and (max-width: 1366px) {
+    /* Sidebar for smaller screens */
+    .sidebar {
+      width: 100%;
+      right: -100%;
+    }
+  
+    .sidebar.open {
+      right: 0;
+    }
+  
+    /* Adjust h2 size */
+    .sidebar h2 {
+      font-size: 20px;
+    }
+  
+    /* Uploaded photo size */
+    .uploaded-photo {
+      width: 80px;
+    }
+  
+    /* Adjust delete photo size */
+    .delete-photo {
+      font-size: 10px;
+      padding: 2px 4px;
+    }
+  
+    #horseDetailsSidebar {
+      width: 100%;
+      max-width: none;
+      right: -100%;
+    }
+  
+    #horseDetailsSidebar.open {
+      width: 100vw;
+    }
+  
+    body {
+      overflow: hidden;
+      /* Prevent background scrolling when sidebar is open */
+    }
+  
+    #imageModal .modal-content {
+      max-width: 90%;
+      /* Full screen width on small devices */
+      max-height: 90%;
+      /* Allow more height for small screens */
+    }
+  
+    .responsive-table-container {
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      width: 100%;
+    }
+  
+    body,
+    html {
+      overflow-x: hidden;
+    }
+  
+    table {
+      min-width: 600px; /* Or whatever makes sense based on your columns */
+    }
+  
+    .search-and-buttons-wrapper {
+      flex-direction: column;
+      gap: 15px;
+    }
+    .button-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center; /* Center buttons horizontally */
+      gap: 10px;
+      padding: 0 15px; /* Add side padding */
+      width: 100%; /* Full width */
+    }
+  
+    .horse-header {
+      font-size: x-large;
+    }
+  }
+  
