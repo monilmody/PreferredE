@@ -3506,10 +3506,6 @@ function deleteSalecode($breed,$salecode)
 function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
     global $mysqli;
 
-    $search_type = $_GET['search_type'] ?? '';
-    $horse_search = $_GET['horse_search'] ?? '';
-    $dam_search = $_GET['dam_search'] ?? '';
-
     // Define sortable columns
     $sortableColumns = [
         'horse' => 'Horse',
@@ -3528,29 +3524,12 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
             sire,
             dam
         FROM sales
+        LIMIT 50;
     ";
-
-    $conditions = [];
-
-    // Horse-specific search
-    if ($search_type === 'horse' && !empty($horse_search)) {
-        $conditions[] = "horse LIKE '%" . $mysqli->real_escape_string($horse_search) . "%'";
-    }
-
-    // Dam-specific search
-    if ($search_type === 'dam' && !empty($dam_search)) {
-        $conditions[] = "dam LIKE '%" . $mysqli->real_escape_string($dam_search) . "%'";
-    }
-
-    // Combine conditions
-    if (!empty($conditions)) {
-        $sql .= " WHERE " . implode(' AND ', $conditions);
-    }
 
     // Sorting columns from the GET parameters
     $orderConditions = [];
     $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
-    $sortIndex = 1; // To track sort column
 
     foreach ($sortParams as $sortParam) {
         if (!empty($$sortParam)) {
@@ -3563,16 +3542,12 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5) {
                 $orderConditions[] = $sortableColumns[$column] . ' ' . $sortOrder;
             }
         }
-        $sortIndex++;
     }
 
     // If sorting conditions exist, append ORDER BY
     if (!empty($orderConditions)) {
         $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
     }
-
-    // Add limit
-    $sql .= ' LIMIT 50';
 
     // Prepare, bind, and execute the query
     if ($stmt = $mysqli->prepare($sql)) {
