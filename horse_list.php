@@ -725,7 +725,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                 url: 'update_horse_details.php',
                 type: 'POST',
                 data: {
-                    horseId: horseName,
+                    horseId: horseId,
                     YEARFOAL: updatedYearFoal,
                     SEX: updatedSex,
                     Sire: updatedSire,
