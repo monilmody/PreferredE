@@ -286,6 +286,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <h3>Photos</h3>
                     <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="horseId" id="hiddenHorseId">
+                        <input type="hidden" id="hiddenHorseIdSanitized">
                         <input type="file" name="file" id="fileInput" accept="image/*">
                         <button type="submit" class="btn btn-success" style="display:none;">
                             <i class="fas fa-upload"></i> Upload File
@@ -584,7 +585,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
                         // Show the sidebar
                         const horseIdForImages = sanitizeHorseId(response.HORSE);
-                        $('#hiddenHorseId').val(horseIdForImages); // Assuming you have a hidden input for horseId
+                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
                         $('#horseDetailsSidebar').addClass('open');
                         $('#photoSection').show();
 
