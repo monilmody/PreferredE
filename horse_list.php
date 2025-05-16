@@ -34,12 +34,6 @@ $sort3_param = $_GET['sort3'] ?? '';
 $sort4_param = $_GET['sort4'] ?? '';
 $sort5_param = $_GET['sort5'] ?? '';
 
-$sort1_param_order = isset($_GET['sort1_order']) ? $_GET['sort1_order'] : ''; // default to 'ASC' if not set
-$sort2_param_order = isset($_GET['sort2_order']) ? $_GET['sort2_order'] : ''; // default to 'ASC' if not set
-$sort3_param_order = isset($_GET['sort3_order']) ? $_GET['sort3_order'] : ''; // default to 'ASC' if not set
-$sort4_param_order = isset($_GET['sort4_order']) ? $_GET['sort4_order'] : ''; // default to 'ASC' if not set
-$sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; // default to 'ASC' if not set
-
 // Fetch horse data using your existing function
 $result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param);
 
@@ -129,9 +123,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             </div>
         <?php endforeach; ?>
     </div>
-</div>
-
-<!-- Sorting Dropdowns -->
+    </div>
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
     <option value="">Sort By 1st</option>
     <?php foreach ($sortList as $row) {
@@ -196,13 +188,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
     <option value="ASC" <?php echo ($sort5_param_order == 'ASC') ? 'selected' : ''; ?>>ASC</option>
     <option value="DESC" <?php echo ($sort5_param_order == 'DESC') ? 'selected' : ''; ?>>DESC</option>
 </select>
-
 <br>
-
 <input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px;" />
 <br>
 
-<body>
+
     <!-- Table Section -->
     <div class="responsive-table-container">
         <table>
@@ -298,10 +288,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
         <button class="closebtn" onclick="closeSidebar()">X</button>
     </div>
-    <br>
-
 
     <script>
+
         document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
         document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
         document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
@@ -483,20 +472,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                 gallery.append(fileElement);
             }
         });
-
-        // Function to toggle sorting order between ASC and DESC
-        function updateSortOrder(sortField) {
-            // Get the selected value from the sort dropdown
-            let sortValue = document.getElementById(sortField).value;
-
-            // Get the selected order (ASC or DESC) from the corresponding dropdown
-            let orderValue = document.getElementById(sortField + '_order').value;
-
-            // Update the hidden input fields with the selected values
-            document.getElementById(sortField + '_order').value = orderValue;
-
-            console.log(`Sorting by ${sortValue} in ${orderValue} order`);
-        }
 
         // Check if page was just reloaded after upload
         $(document).ready(function() {
@@ -750,7 +725,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                 url: 'update_horse_details.php',
                 type: 'POST',
                 data: {
-                    horseId: horseId,
+                    horseId: horseName,
                     YEARFOAL: updatedYearFoal,
                     SEX: updatedSex,
                     Sire: updatedSire,
@@ -860,30 +835,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     }
                 });
             });
-        });
-
-        // At the bottom of your existing horse_list.php script
-        $(document).ready(function() {
-            // Check for focus parameter in URL
-            const urlParams = new URLSearchParams(window.location.search);
-            const focusHorse = urlParams.get('focus');
-
-            if (focusHorse) {
-                // Find the horse in the table and highlight it
-                $('td.col-horse').each(function() {
-                    if ($(this).text().trim() === focusHorse) {
-                        $(this).closest('tr').css('background-color', '#ffeb3b');
-
-                        // Optional: Scroll to the horse
-                        $('html, body').animate({
-                            scrollTop: $(this).closest('tr').offset().top - 100
-                        }, 500);
-
-                        // Optional: Open the sidebar automatically
-                        openSidebar(focusHorse);
-                    }
-                });
-            }
         });
     </script>
 
