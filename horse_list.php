@@ -384,7 +384,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 
     <script>
-        document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
+                document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
         document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
         document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
         document.getElementById('sort4').value = "<?php echo $sort4_param; ?>";
@@ -609,7 +609,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             // Function to upload the file automatically when selected
             function uploadFile(file) {
                 const formData = new FormData();
-                const horseId = response.HORSE // Get horseId
+                const horseId = $('#hiddenHorseId').val(); // Get horseId
 
                 formData.append('file', file);
                 formData.append('horseId', horseId); // Add horseId to the FormData
@@ -870,7 +870,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
         $(document).on('click', '.horse-link', function(event) {
             event.preventDefault();
             const horseId = $(this).data('horse-id');
-
             openSidebar(horseId);
         });
 
@@ -981,31 +980,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             });
         });
 
-        document.querySelectorAll('.inspection-input').forEach(input => {
-            input.addEventListener('change', function() {
-                const field = this.name;
-                const value = this.value;
-                const horse_name = $('#hiddenHorseId').val();
-
-                console.log('horse_name:', horse_name); // Debugging line to see the value
-
-                fetch('update_inspection.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log("Updated:", data);
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
-                    });
-            });
-        });
-
         $(document).ready(function() {
             // Create modal dialog for column selector
             const modalHTML = `
@@ -1067,6 +1041,31 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         alert('Error saving column preferences');
                     }
                 });
+            });
+        });
+
+        document.querySelectorAll('.inspection-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const field = this.name;
+                const value = this.value;
+                const horse_name = $('#hiddenHorseId').val();
+
+                console.log('horse_name:', horse_name); // Debugging line to see the value
+
+                fetch('update_inspection.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log("Updated:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             });
         });
     </script>
