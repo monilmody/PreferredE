@@ -267,6 +267,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
         <div class="tab-buttons">
             <button class="tab-button active" data-tab="detailsTab">Details</button>
             <button class="tab-button" data-tab="photosTab">Photos</button>
+            <button class="tab-button" data-tab="inspectionTab">Inspection</button>
         </div>
 
         <!-- Tab content -->
@@ -282,6 +283,83 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                 <button id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
                 <button id="cancelBtn" class="btn btn-danger" style="display:none;">Cancel</button>
             </div>
+
+            <div id="inspectionTab" class="tab-pane">
+                <div id="inspectionForm">
+
+                    <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
+
+                    <p><strong>Size:</strong>
+                    <div class="button-group" data-field="size">
+                        <button type="button" class="btn-option">Very Big</button>
+                        <button type="button" class="btn-option">Big</button>
+                        <button type="button" class="btn-option">Good</button>
+                        <button type="button" class="btn-option">Average</button>
+                        <button type="button" class="btn-option">Medium</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Size to Foal Date:</strong>
+                    <div class="button-group" data-field="size_to_foal_date">
+                        <button type="button" class="btn-option">Ok</button>
+                        <button type="button" class="btn-option">Small</button>
+                        <button type="button" class="btn-option">Big</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Short Legged:</strong>
+                    <div class="button-group" data-field="short_legged">
+                        <button type="button" class="btn-option">Yes</button>
+                        <button type="button" class="btn-option">No</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Balance:</strong>
+                    <div class="button-group" data-field="balance">
+                        <button type="button" class="btn-option">Very Good</button>
+                        <button type="button" class="btn-option">Good</button>
+                        <button type="button" class="btn-option">Avg</button>
+                        <button type="button" class="btn-option">Poor</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Girth:</strong>
+                    <div class="button-group" data-field="girth">
+                        <button type="button" class="btn-option">Deep</button>
+                        <button type="button" class="btn-option">Average</button>
+                        <button type="button" class="btn-option">Thin</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Withers:</strong>
+                    <div class="button-group" data-field="withers">
+                        <button type="button" class="btn-option">High</button>
+                        <button type="button" class="btn-option">Average</button>
+                        <button type="button" class="btn-option">Low</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Shoulder Angle:</strong>
+                    <div class="button-group" data-field="shoulder_angle">
+                        <button type="button" class="btn-option">Avg</button>
+                        <button type="button" class="btn-option">Straight</button>
+                        <button type="button" class="btn-option">Sloped</button>
+                    </div>
+                    </p>
+
+                    <p><strong>Body:</strong>
+                    <div class="button-group" data-field="body">
+                        <button type="button" class="btn-option">Average</button>
+                        <button type="button" class="btn-option">Strong</button>
+                        <button type="button" class="btn-option">Heavy</button>
+                        <button type="button" class="btn-option">Weak</button>
+                    </div>
+                    </p>
+
+                </div>
+
+            </div>
+
             <div id="photosTab" class="tab-pane">
                 <div id="photoPreview"></div>
                 <!-- 📸 Photo Upload Section -->
@@ -289,6 +367,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <h3>Photos</h3>
                     <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="horseId" id="hiddenHorseId">
+                        <input type="hidden" id="hiddenHorseIdSanitized">
+
                         <input type="file" name="file" id="fileInput" accept="image/*">
                         <button type="submit" class="btn btn-success" style="display:none;">
                             <i class="fas fa-upload"></i> Upload File
@@ -358,6 +438,104 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             }
 
             window.location.href = link;
+        }
+
+        document.querySelectorAll('.button-group').forEach(group => {
+            const field = group.dataset.field;
+
+            group.querySelectorAll('.btn-option').forEach(button => {
+                button.addEventListener('click', function() {
+                    const horse_name = document.getElementById('hiddenHorseId').value;
+                    if (!horse_name) {
+                        console.error('Horse name is missing.');
+                        return;
+                    }
+
+                    const isSelected = this.classList.contains('selected');
+                    let value = null;
+
+                    if (isSelected) {
+                        // Unselect the button
+                        this.classList.remove('selected');
+                        value = ''; // This will be interpreted as NULL in PHP
+                    } else {
+                        // Deselect others and select this one
+                        group.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('selected'));
+                        this.classList.add('selected');
+                        value = this.textContent.trim();
+                    }
+
+                    fetch('update_inspection.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Updated:", data);
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
+            });
+        });
+
+        function loadHorseInspection(horseName) {
+            console.log("Loading inspection for:", horseName);
+
+            fetch(`get_horse_values.php?horseId=${encodeURIComponent(horseName)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    console.log("Inspection data received:", data);
+
+                    if (!data || Object.keys(data).length === 0) {
+                        console.log("No inspection data found for this horse");
+                        return;
+                    }
+
+                    // Clear all selections first
+                    document.querySelectorAll('.btn-option').forEach(btn => {
+                        btn.classList.remove('selected');
+                    });
+
+                    // Set selections from data
+                    document.querySelectorAll('.button-group').forEach(group => {
+                        const field = group.dataset.field;
+                        const value = data[field];
+
+                        if (!value) {
+                            console.log(`No value for field: ${field}`);
+                            return;
+                        }
+
+                        console.log(`Looking for match: ${field} = ${value}`);
+
+                        let found = false;
+                        group.querySelectorAll('.btn-option').forEach(button => {
+                            const buttonText = button.textContent.trim().toLowerCase();
+                            if (buttonText === value.toLowerCase()) {
+                                button.classList.add('selected');
+                                found = true;
+                                console.log(`Matched button: ${buttonText}`);
+                            }
+                        });
+
+                        if (!found) {
+                            console.warn(`No button matched for ${field} = ${value}`);
+                        }
+                    });
+                })
+                .catch(error => {
+                    console.error("Error loading inspection data:", error);
+                });
         }
 
         // File Upload Handler
@@ -431,7 +609,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             // Function to upload the file automatically when selected
             function uploadFile(file) {
                 const formData = new FormData();
-                const horseId = $('#hiddenHorseId').val(); // Get horseId
+                const horseId = response.HORSE // Get horseId
 
                 formData.append('file', file);
                 formData.append('horseId', horseId); // Add horseId to the FormData
@@ -547,6 +725,10 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         // Set horse details
                         $('#horseName').text(response.HORSE);
 
+                        loadHorseInspection(response.HORSE);
+
+                        $('#hiddenHorseId').val(response.HORSE);
+
                         $('#horseDetailsContent').html(`
     <p><strong>Year of Foal:</strong> 
         <span id="yearFoalDisplay">${response.YEARFOAL}</span>
@@ -585,7 +767,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
                         // Show the sidebar
                         const horseIdForImages = sanitizeHorseId(response.HORSE);
-                        $('#hiddenHorseId').val(horseIdForImages); // Assuming you have a hidden input for horseId
+                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
                         $('#horseDetailsSidebar').addClass('open');
                         $('#photoSection').show();
 
@@ -688,6 +870,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
         $(document).on('click', '.horse-link', function(event) {
             event.preventDefault();
             const horseId = $(this).data('horse-id');
+
             openSidebar(horseId);
         });
 
@@ -795,6 +978,31 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         alert('An error occurred while updating details.');
                     }
                 }
+            });
+        });
+
+        document.querySelectorAll('.inspection-input').forEach(input => {
+            input.addEventListener('change', function() {
+                const field = this.name;
+                const value = this.value;
+                const horse_name = $('#hiddenHorseId').val();
+
+                console.log('horse_name:', horse_name); // Debugging line to see the value
+
+                fetch('update_inspection.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                    })
+                    .then(response => response.text())
+                    .then(data => {
+                        console.log("Updated:", data);
+                    })
+                    .catch(error => {
+                        console.error("Error:", error);
+                    });
             });
         });
 
