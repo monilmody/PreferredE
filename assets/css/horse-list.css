@@ -142,26 +142,26 @@
   overflow-y: auto;
 }
 
-#horseDetailsSidebar .closebtn {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: #f44336;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  cursor: pointer;
-  border-radius: 50%;
-  font-size: 18px;
-  z-index: 1001;
-  width: 40px;
-  /* Fixed width for a more controlled size */
-  height: 40px;
-  /* Fixed height to make it circular */
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* Centering the text inside the button */
+.closebtn {
+    position: sticky;
+    top: 0px;
+    right: 20px;
+    background-color: #f44336;
+    color: white;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    z-index: 1001;
+    width: 10px;
+    /* Fixed width for a more controlled size */
+    height: 30px;
+    /* Fixed height to make it circular */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    /* Centering the text inside the button */
+    margin-left: auto; /* Pushes it to the right */
+    float: right; /* Ensures it stays on the right */
 }
 
 #horseDetailsSidebar.open {
@@ -681,7 +681,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 /* Sticky section that includes both horse name and details */
 .horse-title-section {
     position: sticky;
-    top: 0; /* Stick to the top of the viewport */
+    top: 30; /* Stick to the top of the viewport */
     z-index: 100; /* Ensure it stays above other content */
     background-color: #229954; /* Green background */
     padding: 10px; /* Optional padding */
