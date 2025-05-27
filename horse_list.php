@@ -256,6 +256,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                                             case 'Dam':
                                                 $dbField = 'dam';
                                                 break;
+                                            case 'Datefoal':
+                                                $dbField = 'DATEFOAL';
+                                                break;
                                             default:
                                                 $dbField = strtolower($col);
                                         }
@@ -301,6 +304,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <p><strong>Sex:</strong> <span id="sexDisplay"></span> <input type="text" id="sexInput" style="display:none;"></p>
                     <p><strong>Sire:</strong> <span id="sireDisplay"></span> <input type="text" id="sireInput" style="display:none;"></p>
                     <p><strong>Dam:</strong> <span id="damDisplay"></span> <input type="text" id="damInput" style="display:none;"></p>
+                    <p><strong>Datefoal:</strong> <span id="datefoalDisplay"></span> <input type="text" id="datefoalInput" style="display:none;"></p>
                 </div>
                 <button id="editBtn" class="btn btn-primary">Edit</button>
                 <button id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
