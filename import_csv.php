@@ -124,20 +124,7 @@ if (isset($_POST["import"])) {
             }
             
             $damsire_ID = getDamsireID($csire, $cdam);
-//             echo 'exist--'.$damsire_ID;
-//             echo '<br>';
-            
-            
-//             echo $sire."--".
-//                 $csire."--".
-//                 $dam."--".
-//                 $cdam."--".
-//                 $sireofdam."--".
-//                 $csireofdam."--".
-//                 $damofdam."--".
-//                 $cdamofdam."--".
-//                 $damtatt."--".
-//                 $ddamtatt;
+
             if ($damsire_ID == "") {
                     $sqlInsertDamsire = "INSERT into damsire
                     (SIRE,CSIRE,DAM,CDAM,SIREOFDAM,CSIREOFDAM,DAMOFDAM,CDAMOFDAM,DAMTATT,DAMYOF,DDAMTATT)
@@ -170,37 +157,7 @@ if (isset($_POST["import"])) {
                     $damsire_ID =getLastDamsireID();
                     //echo "|newDamsire_ID--".$damsire_ID;
                 }
-                else
-                {
-//                     $sqlInsertDamsire = "UPDATE damsire SET
-//                     SIRE = ?,CSIRE = ?,DAM = ?,CDAM = ?,SIREOFDAM = ?,CSIREOFDAM = ?,DAMOFDAM = ?,CDAMOFDAM = ?,
-//                     DAMTATT = ?,DAMYOF = ?,DDAMTATT = ? WHERE DAMSIRE_ID = ".$damsire_ID;
-//                     $paramType = "sssssssssis";
-                    
-//                     $update_data_stmt = mysqli_stmt_init($conn);
-                    
-//                     if (!mysqli_stmt_prepare($update_data_stmt, $sqlInsertDamsire)){
-//                         $response = "Error";
-//                         $message = "Problem in Importing CSV Data: Data is not in proper format".mysqli_error($conn);
-//                     } else {
-//                         mysqli_stmt_bind_param($update_data_stmt, $paramType, $sire,
-//                             $csire,
-//                             $dam,
-//                             $cdam,
-//                             $sireofdam,
-//                             $csireofdam,
-//                             $damofdam,
-//                             $cdamofdam,
-//                             $damtatt,
-//                             $damyof,
-//                             $ddamtatt);
-//                         mysqli_stmt_execute($update_data_stmt);
-//                         $response = "Success";
-//                         $message = "CSV Data Updated into the Database";
-//                     }
-//                     $rowCountDamsire = $rowCountDamsire + 1;
-                }
-                
+
                 //--------
                 $saleyear = "";
                 if (isset($column[0])) {
@@ -398,49 +355,25 @@ if (isset($_POST["import"])) {
                     $DAM = mysqli_real_escape_string($conn, $column[51]);
                 }
 
-//                 echo '<br>';
-//                 echo $tattoo.'|'.
-//                     $hip.'|'.
-//                     $horse.'|'.
-//                     $chorse.'|'.
-//                     $sex.'|'.
-//                     $type.'|'.
-//                     $color.'|'.
-//                     $gait.'|'.
-//                     $price.'|'.
-//                     $salecode.'|'.
-//                     $saledate.'|'.
-//                     $record.'|'.
-//                     $datefoal.'|'.
-//                     $bredto.'|'.
-//                     $lastbred.'|'.
-//                     $sbcity.'|'.
-//                     $sbstate.'|'.
-//                     $sbcountry.'|'.
-//                     $purfname.'|'.
-//                     $purlname.'|'.
-//                     $conslname.'|'.
-//                     $consno.'|'.
-//                     $pemcode.'|'.
-//                     $age.'|'.
-//                     $saletype.'|'.
-//                     $et.'|'.
-//                     $hipnum.'|'.
-//                     $day.'|'.
-//                     $elig.'|'.
-//                     $rating.'|'.
-//                     $url.'|'.
-//                     $damsire_ID;
-//                     echo '<br>';
+                 $FARMNAME = "";
+                if (isset($column[52])) {
+                    $FARMNAME = mysqli_real_escape_string($conn, $column[52]);
+                }
+
+                 $FARMCODE = "";
+                if (isset($column[53])) {
+                    $FARMCODE = mysqli_real_escape_string($conn, $column[53]);
+                }
+
             $saleID =checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate);
             
             if ($saleID == "") {
                 $sqlInsert = "INSERT into sales
                 (TATTOO, BREED, HIP,HORSE,CHORSE,SEX,TYPE,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisss";
+                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam,FARMNAME,FARMCODE)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
                 
                 $paramArray = array(
                     $tattoo,
@@ -484,7 +417,9 @@ if (isset($_POST["import"])) {
                     $yearFoal,
                     $Sire,
                     $Sireofdam,
-                    $DAM
+                    $DAM,
+                    $FARMNAME,
+                    $FARMCODE
                 );
                 
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
@@ -506,10 +441,10 @@ if (isset($_POST["import"])) {
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
                 AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,DAY = ?,ELIG = ?,RATING = ?,URL = ?, PRIVATESALE = ?, DAMSIRE_ID = ?,
-                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?
+                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?, FARMNAME = ?, FARMCODE = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisss";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
                 //echo $sqlInsert;
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
@@ -560,7 +495,9 @@ if (isset($_POST["import"])) {
                         $yearFoal,
                         $Sire,
                         $Sireofdam,
-                        $DAM
+                        $DAM,
+                        $FARMNAME,
+                        $FARMCODE
                     );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";
