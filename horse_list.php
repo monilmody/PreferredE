@@ -752,11 +752,57 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     if (response.error) {
                         alert("Error: " + response.error);
                     } else {
-                        // Set horse details
-                        $('#horseName').text(response.HORSE);
-                        $('#sireTitle').html(response.Sire || 'N/A');
-                        $('#damTitle').html(response.DAM || 'N/A');
-                        $('#datefoalTitle').html(response.DATEFOAL || 'N/A');
+                        $(document).ready(function() {
+                            // Assuming you already have a response object with data
+                            $('#horseName').text(response.HORSE);
+                            $('#sireTitle').html(response.Sire || 'N/A');
+                            $('#damTitle').html(response.DAM || 'N/A');
+                            $('#datefoalTitle').html(response.DATEFOAL || 'N/A');
+
+                            // Formatting the datefoal to Month Day, Year
+                            var datefoalText = $('#datefoalTitle').text().trim();
+
+                            if (datefoalText && datefoalText !== 'N/A') {
+                                // Split the date string into parts: year, month, day
+                                var dateParts = datefoalText.split('-');
+                                var year = dateParts[0];
+                                var month = parseInt(dateParts[1], 10); // Get the month as an integer
+                                var day = dateParts[2];
+
+                                // Array of month names to convert the month number to a name
+                                var monthNames = [
+                                    'January', 'February', 'March', 'April', 'May', 'June',
+                                    'July', 'August', 'September', 'October', 'November', 'December'
+                                ];
+
+                                // Format the date as 'Month Day, Year' (e.g., 'May 27, 2025')
+                                var formattedDate = `${monthNames[month - 1]} ${day}, ${year}`;
+
+                                // Set the formatted date in the element
+                                $('#datefoalTitle').text(formattedDate);
+                            }
+
+                            // Once these elements are updated, combine the titles into the sireTitle field
+                            var sireText = $('#sireTitle').text().trim();
+                            var damText = $('#damTitle').text().trim();
+                            var datefoalText = $('#datefoalTitle').text().trim();
+
+                            // Combine the text into one string (with parentheses around it)
+                            var combinedText = '';
+                            if (sireText) combinedText += sireText + ' | ';
+                            if (damText) combinedText += damText + ' | ';
+                            if (datefoalText) combinedText += datefoalText;
+
+                            // Wrap the combined text in parentheses
+                            var finalText = `(${combinedText.trim()})`;
+
+                            // Set the final combined text into the sireTitle
+                            $('#sireTitle').text(finalText);
+
+                            // Hide the damTitle and datefoalTitle if they are empty
+                            $('#damTitle').text('').hide();
+                            $('#datefoalTitle').text('').hide();
+                        });
 
                         loadHorseInspection(response.HORSE);
 
