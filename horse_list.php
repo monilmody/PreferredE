@@ -361,10 +361,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             </div>
 
             <div id="photosTab" class="tab-pane">
-                
+
                 <!-- 📸 Photo Upload Section -->
                 <div id="photoSection" style="margin-top: 20px;">
-                    <h3>Photos</h3>
                     <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
                         <input type="hidden" name="horseId" id="hiddenHorseId">
                         <input type="hidden" id="hiddenHorseIdSanitized">
@@ -375,6 +374,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         </button>
                     </form>
                 </div>
+                
+                <h3 class="sticky-header">Photos</h3>
 
                 <div id="photoPreview"></div>
 
@@ -387,7 +388,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
 
     <script>
-                document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
+        document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
         document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
         document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
         document.getElementById('sort4').value = "<?php echo $sort4_param; ?>";

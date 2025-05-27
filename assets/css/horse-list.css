@@ -1,5 +1,21 @@
-/* File Gallery Styles */
+.sticky-header {
+    position: sticky;
+    top: 0; /* Sticks to the top of its container when scrolling */
+    background-color: #fff; /* Optional: To ensure the header has a background color */
+    padding: 10px 20px; /* Adds padding to make it look better */
+    margin: 0; /* Removes default margin */
+    z-index: 10; /* Ensures it stays above other content while scrolling */
+    display: flex; /* Flexbox to align contents */
+    justify-content: space-between; /* Space between title and other possible elements */
+    align-items: center; /* Vertically align content */
+    border-bottom: 2px solid #ddd; /* Optional: Adds a subtle bottom border */
+}
 
+.sticky-header i {
+    margin-right: 10px; /* Optional: Adds spacing if there’s an icon before the title */
+}
+
+/* File Gallery Styles */
 .file-item {
   width: 200px;
   border: 1px solid #ddd;
