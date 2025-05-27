@@ -598,11 +598,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                 // Show preview of the image
                 const reader = new FileReader();
                 reader.onload = function(e) {
-                    const img = `
-                <div class="photo-container">
-                    <img src="${e.target.result}" class="uploaded-photo" />
-                </div>`;
-                    $('#photoPreview').html(img);
 
                     // Automatically upload the file
                     uploadFile(file);
