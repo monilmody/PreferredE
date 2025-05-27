@@ -88,24 +88,25 @@
 }
 
 #horseDetailsSidebar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  /* Ensure text content is centered */
-  padding-top: 50px;
-  /* Make space for close button */
-  height: 100%;
-  width: 300px;
-  position: fixed;
-  top: 0;
-  right: -300px;
-  /* Hide sidebar initially */
-  background-color: #f4f4f4;
-  overflow-x: hidden;
-  transition: 0.3s;
-  z-index: 1000;
-  box-shadow: -2px 0px 10px rgba(0, 0, 0, 0.5);
+    width: 400px;
+    position: fixed;
+    top: 0;
+    right: -400px;
+    height: 100vh;
+    background: white;
+    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
+    transition: right 0.3s ease;
+    z-index: 1050;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#horseDetailsContent {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
 }
 
 /* Sidebar header (horse name) */
@@ -160,17 +161,40 @@
 
 /* Tabs */
 .tab-buttons {
-  display: flex;
-  margin-bottom: 10px;
+    position: sticky;
+    top: 0;
+    background: white;
+    padding: 10px 0;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    display: flex;
+    gap: 5px;
 }
 
 .tab-button {
-  padding: 10px 20px;
-  cursor: pointer;
-  background: #f0f0f0;
-  border: none;
-  border-bottom: 2px solid transparent;
-  transition: all 0.3s;
+    padding: 8px 15px;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+/* Container for scrollable content */
+.tab-content-container {
+    flex: 1;
+    overflow-y: auto;
+    padding-top: 10px;
+}
+
+/* Action buttons at bottom */
+.action-buttons {
+    padding: 15px 0;
+    background: white;
+    position: sticky;
+    bottom: 0;
+    border-top: 1px solid #eee;
 }
 
 .tab-button.active {
