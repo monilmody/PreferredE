@@ -3542,7 +3542,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
         $conditions[] = "FARMNAME LIKE '%" . $mysqli->real_escape_string($LocationSearch) . "%'";
     }
         if (!empty($FoalSearch)) {
-        $conditions[] = "DATEFOAL LIKE '%" . $mysqli->real_escape_string($FoalSearch) . "%'";
+        $conditions[] = "YEARFOAL LIKE '%" . $mysqli->real_escape_string($FoalSearch) . "%'";
     }
 
     if (!empty($conditions)) {
