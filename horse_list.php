@@ -794,7 +794,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             if (datefoalText) combinedText += datefoalText;
 
                             // Wrap the combined text in parentheses
-                            var finalText = `(${combinedText.trim()})`;
+                            var finalText = `( ${combinedText.trim()} )`;
 
                             // Set the final combined text into the sireTitle
                             $('#sireTitle').text(finalText);
