@@ -7,7 +7,17 @@
  * In essense, you can use it on commercial software, modify and distribute free.
  * Though not mandatory, you are requested to attribute this URL in your code or website.
  */
+
+// Include the Composer autoloader
+require 'vendor/autoload.php';
+
 namespace Phppot;
+
+use Dotenv\Dotenv;
+
+// Load .env
+$dotenv = Dotenv::createImmutable(__DIR__);
+$dotenv->load();
 
 /**
  * Generic datasource class for handling DB operations.
