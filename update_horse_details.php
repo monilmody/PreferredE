@@ -13,9 +13,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $sex = $_POST['SEX'];
     $sire = $_POST['Sire'];
     $dam = $_POST['DAM'];
+    $datefoal = $_POST['DATEFOAL'];
 
     // Call the updateHorseDetails function
-    $result = updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam);
+    $result = updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam, $datefoal);
 
     // Return the result as JSON
     echo json_encode($result);
