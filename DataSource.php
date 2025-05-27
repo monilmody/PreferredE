@@ -20,13 +20,10 @@ class DataSource
 
     // PHP 7.1.0 visibility modifiers are allowed for class constants.
     // when using above 7.1.0, declare the below constants as private
-    const HOST = 'preferredequinesalesresultsdatabase.cdq66kiey6co.us-east-1.rds.amazonaws.com';
-
-    const USERNAME = 'preferredequine';
-
-    const PASSWORD = '914MoniMaker77$$';
-
-    const DATABASENAME = 'horse';
+    const HOST = getenv('DB_HOST');
+    const USERNAME = getenv('DB_USER');
+    const PASSWORD = getenv('DB_PASS');
+    const DATABASENAME = getenv('DB_NAME');
 
     private $conn;
 
