@@ -666,8 +666,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <a href="${fileInfo.url}" target="_blank" class="file-link">
                         ${fileInfo.name}
                     </a>
-                    <button class="delete-file" data-id="${fileInfo.id}">
-                        <i class="fas fa-trash"></i>
+                    <button class="delete-file" data-id="${fileInfo.id}" data-url="${fileInfo.url}">
+                        <i class="fas fa-trash"></i> Delete
                     </button>
                 </div>
             </div>`;
