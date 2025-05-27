@@ -257,6 +257,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                             case 'Dam':
                                                 $dbField = 'dam';
                                                 break;
+                                            case 'Farmname':
+                                                $dbField = 'FARMNAME';
+                                                break;
                                             case 'Datefoal':
                                                 $dbField = 'DATEFOAL';
                                                 break;
