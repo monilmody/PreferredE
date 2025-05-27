@@ -666,7 +666,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     <a href="${fileInfo.url}" target="_blank" class="file-link">
                         ${fileInfo.name}
                     </a>
-                    <button class="delete-photo" data-id="${fileInfo.id}">
+                    <button class="delete-file" data-id="${fileInfo.id}">
                         <i class="fas fa-trash"></i>
                     </button>
                 </div>
@@ -1066,6 +1066,39 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     .catch(error => {
                         console.error("Error:", error);
                     });
+            });
+        });
+
+        $(document).ready(function() {
+            // Handle the delete file action
+            $('.delete-file').on('click', function() {
+                const fileId = $(this).data('id'); // Get the file ID
+                const fileUrl = $(this).data('url'); // Get the image URL
+
+                if (confirm('Are you sure you want to delete this file?')) {
+                    // Send the delete request to the server
+                    $.ajax({
+                        url: 'delete_file.php', // The PHP script that handles deletion
+                        type: 'POST',
+                        data: {
+                            imageUrl: fileUrl // Send the image URL to be deleted
+                        },
+                        dataType: 'json',
+                        success: function(response) {
+                            if (response.success) {
+                                // Remove the file item from the UI
+                                $(`.file-item[data-id="${fileId}"]`).remove();
+                                alert('File deleted successfully!');
+                            } else {
+                                alert('Failed to delete file: ' + (response.error || 'Unknown error'));
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error deleting file:', xhr.responseText);
+                            alert('Error deleting file. Please try again.');
+                        }
+                    });
+                }
             });
         });
     </script>
