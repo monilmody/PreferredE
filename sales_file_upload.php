@@ -110,8 +110,8 @@ include_once("config.php");
               <div class="cell">"Sire" varchar(50) </div> </div> <div class='row'>
               <div class="cell">"Sireofdam" varchar(50) </div> </div> <div class='row'>
               <div class="cell">"DAM" varchar(50) </div> </div> <div class='row'>
-              <div class="cell">"Sireofdam" varchar(255) </div> </div> <div class='row'>
-              <div class="cell">"Sireofdam" varchar(255) </div> </div>
+              <div class="cell">"FARMNAME" varchar(255) </div> </div> <div class='row'>
+              <div class="cell">"FARMCODE" varchar(255) </div> </div>
         </div>
     </div>
 
