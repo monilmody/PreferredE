@@ -361,7 +361,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             </div>
 
             <div id="photosTab" class="tab-pane">
-                <div id="photoPreview"></div>
+                
                 <!-- 📸 Photo Upload Section -->
                 <div id="photoSection" style="margin-top: 20px;">
                     <h3>Photos</h3>
@@ -375,6 +375,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         </button>
                     </form>
                 </div>
+
+                <div id="photoPreview"></div>
+
             </div>
         </div>
 
