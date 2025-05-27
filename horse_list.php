@@ -11,7 +11,8 @@ if (!isset($_SESSION['column_prefs'])) {
         'Yearfoal' => true,
         'Sex' => true,
         'Sire' => true,
-        'Dam' => true
+        'Dam' => true,
+        "Datefoal" => false
     ];
 }
 
@@ -261,7 +262,16 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
     <!-- Right-side Sidebar for Horse Details -->
     <div id="horseDetailsSidebar" class="sidebar">
-        <h2 id="horseName"></h2>
+
+        <!-- Horse details in the title of side bar -->
+        <div class="horse-title-section">
+            <div class="horse-details-title">
+                <h2 id="horseName" class="horse-info"></h2>
+                <h2 id="sireTitle" class="horse-info"></h2>
+                <h2 id="damTitle" class="horse-info"></h2>
+                <h2 id="datefoalTitle" class="horse-info"></h2>
+            </div>
+        </div>
 
         <!-- Tab buttons -->
         <div class="tab-buttons">
@@ -717,6 +727,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     } else {
                         // Set horse details
                         $('#horseName').text(response.HORSE);
+                        $('#sireTitle').html(response.Sire || 'N/A');
+                        $('#damTitle').html(response.DAM || 'N/A');
+                        $('#datefoalTitle').html(response.DATEFOAL || 'N/A');
 
                         loadHorseInspection(response.HORSE);
 
@@ -738,6 +751,10 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
     <p><strong>Dam:</strong> 
         <span id="damDisplay">${response.DAM}</span>
         <input type="text" id="damInput" value="${response.DAM}" style="display:none;">
+    </p>
+    <p><strong>DATEFOAL:</strong> 
+        <span id="damDisplay">${response.DATEFOAL}</span>
+        <input type="text" id="damInput" value="${response.DATEFOAL}" style="display:none;">
     </p>
 `);
 

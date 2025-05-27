@@ -3630,7 +3630,7 @@ function getHorseDetails($horseId) {
     
 
     // Fetch horse details
-    $sql = "SELECT DISTINCT HORSE, YEARFOAL, SEX, Sire, DAM FROM sales WHERE HORSE = '$horseName'";
+    $sql = "SELECT DISTINCT HORSE, YEARFOAL, SEX, Sire, DAM, DATEFOAL FROM sales WHERE HORSE = '$horseName'";
     $result = $mysqli->query($sql);
 
     if (!$result || $result->num_rows === 0) {
