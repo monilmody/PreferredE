@@ -44,7 +44,10 @@ $sort5_param_order = isset($_GET['sort5_order']) ? $_GET['sort5_order'] : ''; //
 // Fetch horse data using your existing function
 $horseSearch = $_GET['horse_search'] ?? '';
 $damSearch = $_GET['dam_search'] ?? '';
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch);
+$LocationSearch = $_GET['location_search'] ?? '';
+$FoalSearch = $_GET['foal_search'] ?? '';
+
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
@@ -91,9 +94,17 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
         <input type="text" name="dam_search" class="search-box" placeholder="Search dams..."
             value="<?php echo isset($_GET['dam_search']) ? htmlspecialchars($_GET['dam_search']) : '' ?>">
 
+        <!-- Location Search -->
+        <input type="text" name="location_search" class="search-box" placeholder="Search Locations..."
+            value="<?php echo isset($_GET['location_search']) ? htmlspecialchars($_GET['location_search']) : '' ?>">
+
+        <!-- Foal Search -->
+        <input type="text" name="foal_search" class="search-box" placeholder="Search Foals..."
+            value="<?php echo isset($_GET['foal_search']) ? htmlspecialchars($_GET['foal_search']) : '' ?>">
+
         <button type="submit" class="search-button">Search</button>
 
-        <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search'])): ?>
+        <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search']) || isset($_GET['location_search']) || isset($_GET['foal_search'])): ?>
             <a href="horse_list.php" class="clear-button">Clear All</a>
         <?php endif; ?>
     </form>
@@ -427,6 +438,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             // Get search terms
             var horseSearch = "<?php echo isset($_GET['horse_search']) ? $_GET['horse_search'] : '' ?>";
             var damSearch = "<?php echo isset($_GET['dam_search']) ? $_GET['dam_search'] : '' ?>";
+            var locationSearch = "<?php echo isset($_GET['location_search']) ? $_GET['location_search'] : '' ?>";
+            var FoalSearch = "<?php echo isset($_GET['foal_search']) ? $_GET['foal_search'] : '' ?>";
 
             var link = "horse_list.php?&sort1=" + sort1 +
                 "&sort1_order=" + sort1_order // Added sorting order
@@ -449,6 +462,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             }
             if (damSearch) {
                 link += "&dam_search=" + encodeURIComponent(damSearch);
+            }
+            if (locationSearch) {
+                link += "&location_search=" + encodeURIComponent(locationSearch);
+            }
+            if (FoalSearch) {
+                link += "&foal_search=" + encodeURIComponent(FoalSearch);
             }
 
             window.location.href = link;
