@@ -374,7 +374,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         </button>
                     </form>
                 </div>
-                
+
                 <h3 class="sticky-header">Photos</h3>
 
                 <div id="photoPreview"></div>
@@ -630,10 +630,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                         if (response && response.success) {
                             addFileToGallery(response);
                             alert('File uploaded successfully!');
-
-                            // Trigger page reload and open the sidebar photo section
-                            window.location.reload(); // Reload the page
-
                         } else {
                             alert('Upload failed: ' + (response?.error || 'Unknown error'));
                         }
