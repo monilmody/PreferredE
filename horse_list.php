@@ -983,7 +983,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                             $('#sexDisplay').show();
                             $('#sireDisplay').show();
                             $('#damDisplay').show();
-                            $('#DatefoalInput').hide();
+                            $('#DatefoalInput').show();
 
                             // Show Edit button and hide Save/Cancel buttons
                             $('#editBtn').show();
