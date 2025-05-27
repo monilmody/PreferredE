@@ -263,6 +263,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
     <!-- Right-side Sidebar for Horse Details -->
     <div id="horseDetailsSidebar" class="sidebar">
 
+        <button class="closebtn" onclick="closeSidebar()">CLOSE</button>
+
         <!-- Horse details in the title of side bar -->
         <div class="horse-title-section">
             <div class="horse-details-title">
@@ -391,8 +393,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
 
             </div>
         </div>
-
-        <button class="closebtn" onclick="closeSidebar()">X</button>
     </div>
     <br>
 
