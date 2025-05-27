@@ -7,17 +7,7 @@
  * In essense, you can use it on commercial software, modify and distribute free.
  * Though not mandatory, you are requested to attribute this URL in your code or website.
  */
-
-// Include the Composer autoloader
-require 'vendor/autoload.php';
-
 namespace Phppot;
-
-use Dotenv\Dotenv;
-
-// Load .env
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
 
 /**
  * Generic datasource class for handling DB operations.
@@ -30,10 +20,13 @@ class DataSource
 
     // PHP 7.1.0 visibility modifiers are allowed for class constants.
     // when using above 7.1.0, declare the below constants as private
-    const HOST = getenv('DB_HOST');
-    const USERNAME = getenv('DB_USER');
-    const PASSWORD = getenv('DB_PASS');
-    const DATABASENAME = getenv('DB_NAME');
+    const HOST = 'preferredequinesalesresultsdatabase.cdq66kiey6co.us-east-1.rds.amazonaws.com';
+
+    const USERNAME = 'preferredequine';
+
+    const PASSWORD = '914MoniMaker77$$';
+
+    const DATABASENAME = 'horse';
 
     private $conn;
 
