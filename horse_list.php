@@ -12,6 +12,7 @@ if (!isset($_SESSION['column_prefs'])) {
         'Sex' => true,
         'Sire' => true,
         'Dam' => true,
+        'Farmname' => false,
         "Datefoal" => false
     ];
 }
@@ -50,7 +51,7 @@ $FoalSearch = $_GET['foal_search'] ?? '';
 $result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch);
 
 // Define sortable columns for the dropdowns
-$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
+$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal");
 ?>
 
 <!DOCTYPE html>
