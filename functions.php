@@ -3578,7 +3578,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
     }
 }
 
-function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam) {
+function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam, $datefoal) {
     global $mysqli;
 
     if (!$mysqli) {
@@ -3591,9 +3591,15 @@ function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam) {
     $sex = $mysqli->real_escape_string($sex);
     $sire = $mysqli->real_escape_string($sire);
     $dam = $mysqli->real_escape_string($dam);
+    $datefoal = $mysqli->real_escape_string($datefoal);
+
+    // Validate the date format (YYYY-MM-DD) for DATEFOAL if needed
+    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $datefoal)) {
+        return ['success' => false, 'error' => 'Invalid date format for DATEFOAL. Use YYYY-MM-DD.'];
+    }
 
     // Prepare the SQL query to update the horse details
-    $sql = "UPDATE sales SET YEARFOAL = ?, SEX = ?, Sire = ?, DAM = ? WHERE HORSE = ?";
+    $sql = "UPDATE sales SET YEARFOAL = ?, SEX = ?, Sire = ?, DAM = ?, DATEFOAL = ? WHERE HORSE = ?";
 
     // Prepare the statement
     $stmt = $mysqli->prepare($sql);
@@ -3603,7 +3609,7 @@ function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam) {
     }
 
     // Bind the parameters to the SQL query
-    $stmt->bind_param('sssss', $yearFoal, $sex, $sire, $dam, $horseId);
+    $stmt->bind_param('ssssss', $yearFoal, $sex, $sire, $dam, $datefoal, $horseId);
 
     // Execute the query and check if it was successful
     if ($stmt->execute()) {

@@ -753,8 +753,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
         <input type="text" id="damInput" value="${response.DAM}" style="display:none;">
     </p>
     <p><strong>DATEFOAL:</strong> 
-        <span id="damDisplay">${response.DATEFOAL}</span>
-        <input type="text" id="damInput" value="${response.DATEFOAL}" style="display:none;">
+        <span id="datefoalDisplay">${response.DATEFOAL}</span>
+        <input type="text" id="datefoalInput" value="${response.DATEFOAL}" style="display:none;">
     </p>
 `);
 
@@ -898,10 +898,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             $('#sexDisplay').hide();
             $('#sireDisplay').hide();
             $('#damDisplay').hide();
+            $('#datefoalDisplay').hide();
             $('#yearFoalInput').show();
             $('#sexInput').show();
             $('#sireInput').show();
             $('#damInput').show();
+            $('#DatefoalInput').show();
 
             // Show Save and Cancel buttons
             $('#editBtn').hide();
@@ -916,10 +918,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             $('#sexDisplay').show();
             $('#sireDisplay').show();
             $('#damDisplay').show();
+            $('#datefoalDisplay').show();
             $('#yearFoalInput').hide();
             $('#sexInput').hide();
             $('#sireInput').hide();
             $('#damInput').hide();
+            $('#DatefoalInput').hide();
 
             // Show Edit button and hide Save/Cancel buttons
             $('#editBtn').show();
@@ -934,6 +938,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
             var updatedSex = $('#sexInput').val();
             var updatedSire = $('#sireInput').val();
             var updatedDam = $('#damInput').val();
+            var updatedDatefoal = $('#DatefoalInput').val();
 
             var horseId = $('#hiddenHorseId').val(); // Assuming you have hidden input with horseId
 
@@ -946,7 +951,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                     YEARFOAL: updatedYearFoal,
                     SEX: updatedSex,
                     Sire: updatedSire,
-                    DAM: updatedDam
+                    DAM: updatedDam,
+                    DATEFOAL: updatedDatefoal
                 },
                 success: function(response) {
                     try {
@@ -964,16 +970,20 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam");
                             $('#sexDisplay').text(updatedSex);
                             $('#sireDisplay').text(updatedSire);
                             $('#damDisplay').text(updatedDam);
+                            $('#datefoalDisplay').text(updatedDatefoal);
+
 
                             // Hide input fields and show updated text
                             $('#yearFoalInput').hide();
                             $('#sexInput').hide();
                             $('#sireInput').hide();
                             $('#damInput').hide();
+                            $('#datefoalDisplay').hide();
                             $('#yearFoalDisplay').show();
                             $('#sexDisplay').show();
                             $('#sireDisplay').show();
                             $('#damDisplay').show();
+                            $('#DatefoalInput').hide();
 
                             // Show Edit button and hide Save/Cancel buttons
                             $('#editBtn').show();
