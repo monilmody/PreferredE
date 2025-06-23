@@ -3525,8 +3525,12 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
             sex,
             sire,
             dam,
-            FARMNAME,
-            DATEFOAL
+            Datefoal,
+            type,
+            color,
+            gait,
+            farmname,
+            bredto
         FROM sales
     ";
 

@@ -275,16 +275,26 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                                 $dbField = 'dam';
                                                 break;
                                             case 'Farmname':
-                                                $dbField = 'FARMNAME';
+                                                $dbField = 'farmname';
                                                 break;
                                             case 'Datefoal':
-                                                $dbField = 'DATEFOAL';
+                                                $dbField = 'Datefoal';
+                                                break;
+                                            case 'Bredto':
+                                                $dbField = 'bredto';
                                                 break;
                                             default:
                                                 $dbField = strtolower($col);
                                         }
-                                        echo htmlspecialchars($row[$dbField] ?? '');
-                                        ?>
+                                        // Safely display dates
+                                        $fieldValue = $row[$dbField] ?? '';
+                                        if (in_array($dbField, ['DATEFOAL'])) {
+                                            echo $fieldValue && strtotime($fieldValue)
+                                                ? date('Y-m-d', strtotime($fieldValue))
+                                                : '';
+                                        } else {
+                                            echo htmlspecialchars($fieldValue);
+                                        }                                        ?>
                                     <?php endif; ?>
                                 </td>
                             <?php endif; ?>
@@ -355,7 +365,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         <h4>Breeding Information</h4>
                         <p><strong>Date Foaled:</strong> <span id="datefoalDisplay"></span> <input type="date" id="datefoalInput" class="edit-field"></p>
                         <p><strong>Bred To:</strong> <span id="bredtoDisplay"></span> <input type="text" id="bredtoInput" class="edit-field"></p>
-                        <p><strong>Last Bred:</strong> <span id="lastbredDisplay"></span></p>
+                        <p><strong>Last Bred:</strong> <span id="lastbredDisplay"></span> <input type="date" id="lastbredInput" class="edit-field"> </p>
                     </div>
 
                     <!-- Farm Info -->
