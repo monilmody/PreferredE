@@ -336,7 +336,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     <!-- Basic Info -->
                     <div class="detail-section">
                         <h4>Basic Information</h4>
-                        <p><strong>Year Foaled:</strong> <span id="yearFoalDisplay"></span> <input type="number" id="yearFoalInput" class="edit-field"></p>
+                        <p><strong>Year Foaled:</strong> <span id="yearFoalDisplay"></span> </p>
                         <p><strong>Sex:</strong> <span id="sexDisplay"></span> <input type="text" id="sexInput" class="edit-field"></p>
                         <p><strong>Type:</strong> <span id="typeDisplay"></span> <input type="text" id="typeInput" class="edit-field"></p>
                         <p><strong>Color:</strong> <span id="colorDisplay"></span> <input type="text" id="colorInput" class="edit-field"></p>
