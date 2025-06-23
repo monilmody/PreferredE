@@ -1030,42 +1030,31 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
         // Edit button: Switch to edit mode
         $(document).on('click', '#editBtn', function() {
-            // Show input fields and hide display text
-            $('#yearFoalDisplay').hide();
-            $('#sexDisplay').hide();
-            $('#sireDisplay').hide();
-            $('#damDisplay').hide();
-            $('#datefoalDisplay').hide();
-            $('#yearFoalInput').show();
-            $('#sexInput').show();
-            $('#sireInput').show();
-            $('#damInput').show();
-            $('#datefoalInput').show();
+            // Hide all display spans
+            $('[id$="Display"]').hide();
 
-            // Show Save and Cancel buttons
+            // Show all input fields and populate them
+            $('[id$="Input"]').show().each(function() {
+                const fieldId = this.id.replace('Input', 'Display');
+                $(this).val($('#' + fieldId).text().trim() || '');
+            });
+
+            // Toggle buttons
             $('#editBtn').hide();
-            $('#saveBtn').show();
-            $('#cancelBtn').show();
+            $('#saveBtn, #cancelBtn').show();
         });
 
         // Cancel button: Revert back to view mode
         $(document).on('click', '#cancelBtn', function() {
-            // Revert back to display text and hide input fields
-            $('#yearFoalDisplay').show();
-            $('#sexDisplay').show();
-            $('#sireDisplay').show();
-            $('#damDisplay').show();
-            $('#datefoalDisplay').show();
-            $('#yearFoalInput').hide();
-            $('#sexInput').hide();
-            $('#sireInput').hide();
-            $('#damInput').hide();
-            $('#datefoalInput').hide();
+            // Show all display spans
+            $('[id$="Display"]').show();
 
-            // Show Edit button and hide Save/Cancel buttons
+            // Hide all input fields
+            $('[id$="Input"]').hide();
+
+            // Toggle buttons
             $('#editBtn').show();
-            $('#saveBtn').hide();
-            $('#cancelBtn').hide();
+            $('#saveBtn, #cancelBtn').hide();
         });
 
         // Save button: Send the updated data to the server
