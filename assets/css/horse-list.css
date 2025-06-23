@@ -565,25 +565,60 @@ body.modal-open #horseDetailsSidebar .closebtn {
   background-color: #f9f9f9;
 }
 
+/* Group wrapper for all fields */
+.field-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px; /* tighter spacing */
+  padding: 12px 0;
+}
+
+/* Individual row: one label + buttons */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 280px;
+  min-width: 260px;
+}
+
+/* Label becomes a top header */
+.form-row label {
+  font-weight: 600;
+  font-size: 13px;
+  margin-bottom: 6px;
+  color: #333;
+  white-space: nowrap;
+}
+
+/* Button group wraps if needed */
+.button-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Compact buttons */
 .btn-option {
-  margin: 4px 6px;
-  padding: 6px 14px;
+  padding: 4px 10px;
+  font-size: 13px;
+  line-height: 1.1;
+  background-color: #f8f8f8;
   border: 1px solid #ccc;
-  background-color: #f0f0f0;
   border-radius: 4px;
+  white-space: nowrap;
   cursor: pointer;
-  font-size: 14px;
-  transition: background-color 0.2s;
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
 .btn-option:hover {
-  background-color: #e0e0e0;
+  background-color: #e6e6e6;
 }
 
 .btn-option.selected {
   background-color: #007bff;
-  color: white;
   border-color: #007bff;
+  color: white;
+  font-weight: 500;
 }
 
 .section-header {
@@ -722,7 +757,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
   /* Makes parentheses bigger */
   color: white;
   font-weight: bold;
-  white-space: nowrap; 
+  white-space: nowrap;
 }
 
 .parent-info:before {

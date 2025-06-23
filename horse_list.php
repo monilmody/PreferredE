@@ -395,75 +395,83 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
 
-                    <p><strong>Size:</strong>
-                    <div class="button-group" data-field="size">
-                        <button type="button" class="btn-option">Very Big</button>
-                        <button type="button" class="btn-option">Big</button>
-                        <button type="button" class="btn-option">Good</button>
-                        <button type="button" class="btn-option">Average</button>
-                        <button type="button" class="btn-option">Medium</button>
-                    </div>
-                    </p>
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>Size:</strong></label>
+                            <div class="button-group" data-field="size">
+                                <button type="button" class="btn-option">Very Big</button>
+                                <button type="button" class="btn-option">Big</button>
+                                <button type="button" class="btn-option">Good</button>
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Medium</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Size to Foal Date:</strong>
-                    <div class="button-group" data-field="size_to_foal_date">
-                        <button type="button" class="btn-option">Ok</button>
-                        <button type="button" class="btn-option">Small</button>
-                        <button type="button" class="btn-option">Big</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Size to Foal Date:</strong></label>
+                            <div class="button-group" data-field="size_to_foal_date">
+                                <button type="button" class="btn-option">Ok</button>
+                                <button type="button" class="btn-option">Small</button>
+                                <button type="button" class="btn-option">Big</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Short Legged:</strong>
-                    <div class="button-group" data-field="short_legged">
-                        <button type="button" class="btn-option">Yes</button>
-                        <button type="button" class="btn-option">No</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Short Legged:</strong></label>
+                            <div class="button-group" data-field="short_legged">
+                                <button type="button" class="btn-option">Yes</button>
+                                <button type="button" class="btn-option">No</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Balance:</strong>
-                    <div class="button-group" data-field="balance">
-                        <button type="button" class="btn-option">Very Good</button>
-                        <button type="button" class="btn-option">Good</button>
-                        <button type="button" class="btn-option">Avg</button>
-                        <button type="button" class="btn-option">Poor</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Balance:</strong></label>
+                            <div class="button-group" data-field="balance">
+                                <button type="button" class="btn-option">Very Good</button>
+                                <button type="button" class="btn-option">Good</button>
+                                <button type="button" class="btn-option">Avg</button>
+                                <button type="button" class="btn-option">Poor</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Girth:</strong>
-                    <div class="button-group" data-field="girth">
-                        <button type="button" class="btn-option">Deep</button>
-                        <button type="button" class="btn-option">Average</button>
-                        <button type="button" class="btn-option">Thin</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Girth:</strong></label>
+                            <div class="button-group" data-field="girth">
+                                <button type="button" class="btn-option">Deep</button>
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Thin</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Withers:</strong>
-                    <div class="button-group" data-field="withers">
-                        <button type="button" class="btn-option">High</button>
-                        <button type="button" class="btn-option">Average</button>
-                        <button type="button" class="btn-option">Low</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Withers:</strong></label>
+                            <div class="button-group" data-field="withers">
+                                <button type="button" class="btn-option">High</button>
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Low</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Shoulder Angle:</strong>
-                    <div class="button-group" data-field="shoulder_angle">
-                        <button type="button" class="btn-option">Avg</button>
-                        <button type="button" class="btn-option">Straight</button>
-                        <button type="button" class="btn-option">Sloped</button>
-                    </div>
-                    </p>
+                        <div class="form-row">
+                            <label><strong>Shoulder Angle:</strong></label>
+                            <div class="button-group" data-field="shoulder_angle">
+                                <button type="button" class="btn-option">Avg</button>
+                                <button type="button" class="btn-option">Straight</button>
+                                <button type="button" class="btn-option">Sloped</button>
+                            </div>
+                        </div>
 
-                    <p><strong>Body:</strong>
-                    <div class="button-group" data-field="body">
-                        <button type="button" class="btn-option">Average</button>
-                        <button type="button" class="btn-option">Strong</button>
-                        <button type="button" class="btn-option">Heavy</button>
-                        <button type="button" class="btn-option">Weak</button>
+                        <div class="form-row">
+                            <label><strong>Body:</strong></label>
+                            <div class="button-group" data-field="body">
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Strong</button>
+                                <button type="button" class="btn-option">Heavy</button>
+                                <button type="button" class="btn-option">Weak</button>
+                            </div>
+                        </div>
                     </div>
-                    </p>
-
                 </div>
-
             </div>
 
             <div id="photosTab" class="tab-pane">
