@@ -608,7 +608,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
   white-space: nowrap;
   cursor: pointer;
   transition: background-color 0.2s, border-color 0.2s;
-  max-width: 70%;          /* Prevents overflow in tight layouts */
+  max-width: 60%;          /* Prevents overflow in tight layouts */
 }
 
 .btn-option:hover {
