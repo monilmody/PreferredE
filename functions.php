@@ -3716,7 +3716,8 @@ function array_key_exists_case_insensitive($key, $array) {
     }
     return false;
 }
-function getHorseDetails($horseId) {
+function getHorseDetails($horseId)
+{
     global $mysqli;
 
     if (!$mysqli) {
@@ -3725,10 +3726,10 @@ function getHorseDetails($horseId) {
 
     // Sanitize input
     $horseName = $mysqli->real_escape_string($horseId);
-    
+
 
     // Fetch horse details
-    $sql = "SELECT DISTINCT HORSE, YEARFOAL, SEX, Sire, DAM, DATEFOAL FROM sales WHERE HORSE = '$horseName'";
+    $sql = "SELECT * FROM sales WHERE HORSE = '$horseName' LIMIT 1";
     $result = $mysqli->query($sql);
 
     if (!$result || $result->num_rows === 0) {
