@@ -318,7 +318,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         </div>
 
         <!-- Tab content -->
-        <!-- Tab content -->
         <div class="tab-content">
             <div id="detailsTab" class="tab-pane active">
                 <div id="horseDetailsContent">
@@ -811,68 +810,86 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 },
                 dataType: 'json',
                 success: function(response) {
-                    console.log("Response:", response); // Debugging log
+                    console.log("Received response:", response); // Debug log
+
+                    if (!response) {
+                        console.error("Empty response received");
+                        alert("Error: Empty response from server");
+                        return;
+                    }
 
                     if (response.error) {
+                        console.error("Server error:", response.error);
                         alert("Error: " + response.error);
-                    } else {
-                        $(document).ready(function() {
-                            // Assuming you already have a response object with data
-                            $('#horseName').text(response.HORSE);
-                            $('#sireTitle').html(response.Sire || 'N/A');
-                            $('#damTitle').html(response.DAM || 'N/A');
-                            $('#datefoalTitle').html(response.DATEFOAL || 'N/A');
+                        return;
+                    }
 
-                            // Formatting the datefoal to Month Day, Year
-                            var datefoalText = $('#datefoalTitle').text().trim();
+                    try {
+                        // Basic Info
+                        $('#horseName').text(response.HORSE || 'N/A');
+                        $('#yearFoalDisplay').text(response.YEARFOAL || 'N/A');
+                        $('#sexDisplay').text(response.SEX || 'N/A');
+                        $('#typeDisplay').text(response.TYPE || 'N/A');
+                        $('#colorDisplay').text(response.COLOR || 'N/A');
+                        $('#gaitDisplay').text(response.GAIT || 'N/A');
 
-                            if (datefoalText && datefoalText !== 'N/A') {
-                                // Split the date string into parts: year, month, day
-                                var dateParts = datefoalText.split('-');
-                                var year = dateParts[0];
-                                var month = parseInt(dateParts[1], 10); // Get the month as an integer
-                                var day = dateParts[2];
+                        // Pedigree
+                        $('#sireTitle').text(response.Sire || 'N/A');
+                        $('#damTitle').text(response.DAM || 'N/A');
+                        $('#sireofdamDisplay').text(response.Sireofdam || 'N/A');
 
-                                // Array of month names to convert the month number to a name
-                                var monthNames = [
-                                    'January', 'February', 'March', 'April', 'May', 'June',
-                                    'July', 'August', 'September', 'October', 'November', 'December'
-                                ];
+                        // Sale Info
+                        $('#priceDisplay').text(response.PRICE ? '$' + parseFloat(response.PRICE).toLocaleString() : 'N/A');
+                        $('#saledateDisplay').text(response.SALEDATE ? new Date(response.SALEDATE).toLocaleDateString() : 'N/A');
+                        $('#salecodeDisplay').text(response.SALECODE || 'N/A');
+                        $('#conslnameDisplay').text(response.CONSLNAME || 'N/A');
 
-                                // Format the date as 'Month Day, Year' (e.g., 'May 27, 2025')
-                                var formattedDate = `${monthNames[month - 1]} ${day}, ${year}`;
+                        // Breeding Info
+                        const datefoalText = response.DATEFOAL || '';
+                        $('#datefoalTitle').text(datefoalText);
+                        $('#datefoalDisplay').text(datefoalText ? new Date(datefoalText).toLocaleDateString() : 'N/A');
+                        $('#bredtoDisplay').text(response.BREDTO || 'N/A');
+                        $('#lastbredDisplay').text(response.LASTBRED ? new Date(response.LASTBRED).toLocaleDateString() : 'N/A');
 
-                                // Set the formatted date in the element
-                                $('#datefoalTitle').text(formattedDate);
-                            }
+                        // Farm Info
+                        $('#farmnameDisplay').text(response.FARMNAME || 'N/A');
+                        $('#locationDisplay').text(
+                            [response.SBCITY, response.SBSTATE, response.SBCOUNTRY]
+                            .filter(Boolean).join(', ') || 'N/A'
+                        );
 
-                            // Once these elements are updated, combine the titles into the sireTitle field
-                            var sireText = $('#sireTitle').text().trim();
-                            var damText = $('#damTitle').text().trim();
-                            var datefoalText = $('#datefoalTitle').text().trim();
+                        // Purchaser Info
+                        const purchaser = [response.PURFNAME, response.PURLNAME].filter(Boolean).join(' ');
+                        $('#purchaserDisplay').text(purchaser || 'N/A');
 
-                            // Combine the text into one string (with parentheses around it)
-                            var combinedText = '';
-                            if (sireText) combinedText += sireText + ' | ';
-                            if (damText) combinedText += damText + ' | ';
-                            if (datefoalText) combinedText += datefoalText;
+                        // Set hidden horse ID
+                        $('#hiddenHorseId').val(response.HORSE || '');
 
-                            // Wrap the combined text in parentheses
-                            var finalText = `( ${combinedText.trim()} )`;
-
-                            // Set the final combined text into the sireTitle
-                            $('#sireTitle').text(finalText);
-
-                            // Hide the damTitle and datefoalTitle if they are empty
-                            $('#damTitle').text('').hide();
-                            $('#datefoalTitle').text('').hide();
-                        });
-
+                        // Load inspection data
                         loadHorseInspection(response.HORSE);
 
-                        $('#hiddenHorseId').val(response.HORSE);
+                        // Show the sidebar
+                        $('#horseDetailsSidebar').addClass('open');
+                        $('#horseDetailsOverlay').show();
 
-                        $('#horseDetailsContent').html(`
+                        console.log("Sidebar opened successfully for:", response.HORSE);
+                    } catch (error) {
+                        console.error("Error processing response:", error);
+                        alert("Error processing horse details");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', status, error);
+                    console.error('Response text:', xhr.responseText);
+                    alert("Failed to load horse details. Please try again.");
+                }
+            });
+
+            loadHorseInspection(response.HORSE);
+
+            $('#hiddenHorseId').val(response.HORSE);
+
+            $('#horseDetailsContent').html(`
     <p><strong>Year of Foal:</strong> 
         <span id="yearFoalDisplay">${response.YEARFOAL}</span>
         <input type="text" id="yearFoalInput" value="${response.YEARFOAL}" style="display:none;">
@@ -889,46 +906,39 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         <span id="damDisplay">${response.DAM}</span>
         <input type="text" id="damInput" value="${response.DAM}" style="display:none;">
     </p>
-    <p><strong>DATEFOAL:</strong> 
+        <p><strong>DATEFOAL:</strong> 
         <span id="datefoalDisplay">${response.DATEFOAL}</span>
-        <input type="text" id="datefoalInput" value="${response.DATEFOAL}" style="display:none;">
+        <input type="text" id="DatefoalInput" value="${response.DATEFOAL}" style="display:none;">
     </p>
 `);
 
-                        // Handle images (display the uploaded images)
-                        let imagesHtml = '';
-                        if (response.images && response.images.length > 0) {
-                            response.images.forEach(imgUrl => {
-                                imagesHtml += `
+            // Handle images (display the uploaded images)
+            let imagesHtml = '';
+            if (response.images && response.images.length > 0) {
+                response.images.forEach(imgUrl => {
+                    imagesHtml += `
 <div class="photo-card">
     <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
     <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
-                            });
-                        } else {
-                            imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
-                        }
+                });
+            } else {
+                imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
+            }
 
-                        // Display images in the sidebar
-                        $('#photoPreview').html(imagesHtml);
+            // Display images in the sidebar
+            $('#photoPreview').html(imagesHtml);
 
-                        // Show the sidebar
-                        const horseIdForImages = sanitizeHorseId(response.HORSE);
-                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
-                        $('#horseDetailsSidebar').addClass('open');
-                        $('#photoSection').show();
+            // Show the sidebar
+            const horseIdForImages = sanitizeHorseId(response.HORSE);
+            $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
+            $('#horseDetailsSidebar').addClass('open');
+            $('#photoSection').show();
 
-                        // Show Edit, Save and Cancel buttons
-                        $('#editBtn').show();
-                        $('#saveBtn').hide();
-                        $('#cancelBtn').hide();
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', error);
-                    alert("Failed to load horse details.");
-                }
-            });
+            // Show Edit, Save and Cancel buttons
+            $('#editBtn').show();
+            $('#saveBtn').hide();
+            $('#cancelBtn').hide();
         }
 
         $(document).on('click', '.tab-button', function() {
