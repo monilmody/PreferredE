@@ -1057,74 +1057,198 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             $('#saveBtn, #cancelBtn').hide();
         });
 
-        // Save button: Send the updated data to the server
         $(document).on('click', '#saveBtn', function() {
-            // Get updated values from input fields
-            var updatedYearFoal = $('#yearFoalInput').val();
-            var updatedSex = $('#sexInput').val();
-            var updatedSire = $('#sireInput').val();
-            var updatedDam = $('#damInput').val();
-            var updatedDatefoal = $('#datefoalInput').val();
+            const updatedData = {};
+            const fields = [{
+                    id: 'yearFoalInput',
+                    db: 'YEARFOAL',
+                    type: 'number'
+                },
+                {
+                    id: 'sexInput',
+                    db: 'SEX',
+                    type: 'string'
+                },
+                {
+                    id: 'sireInput',
+                    db: 'Sire',
+                    type: 'string'
+                },
+                {
+                    id: 'damInput',
+                    db: 'DAM',
+                    type: 'string'
+                },
+                {
+                    id: 'datefoalInput',
+                    db: 'DATEFOAL',
+                    type: 'date'
+                },
+                {
+                    id: 'typeInput',
+                    db: 'TYPE',
+                    type: 'string'
+                },
+                {
+                    id: 'colorInput',
+                    db: 'COLOR',
+                    type: 'string'
+                },
+                {
+                    id: 'gaitInput',
+                    db: 'GAIT',
+                    type: 'string'
+                },
+                {
+                    id: 'bredtoInput',
+                    db: 'BREDTO',
+                    type: 'string'
+                },
+                {
+                    id: 'farmnameInput',
+                    db: 'FARMNAME',
+                    type: 'string'
+                }
+            ];
 
-            var horseId = $('#hiddenHorseId').val(); // Assuming you have hidden input with horseId
+            // Process each field
+            fields.forEach(field => {
+                const inputElement = $(`#${field.id}`);
+                const displayElement = $(`#${field.db.toLowerCase()}Display`);
 
-            // Send AJAX request to update the database
+                let inputValue = inputElement.val().trim();
+                let displayValue = displayElement.text().trim();
+
+                // Skip if no change
+                if (inputValue === displayValue && inputValue !== '') {
+                    return;
+                }
+
+                // Type-specific processing
+                switch (field.type) {
+                    case 'number':
+                        inputValue = inputValue !== '' ? parseInt(inputValue, 10) : null;
+                        // Validate year is reasonable (1900-current year + 1)
+                        if (inputValue !== null && (inputValue < 1900 || inputValue > new Date().getFullYear() + 1)) {
+                            alert(`Please enter a valid year between 1900 and ${new Date().getFullYear() + 1}`);
+                            inputElement.focus();
+                            throw new Error('Invalid year');
+                        }
+                        break;
+
+                    case 'date':
+                        // Convert display format (MM/DD/YYYY) to input format (YYYY-MM-DD) if needed
+                        if (displayValue.includes('/')) {
+                            const [month, day, year] = displayValue.split('/');
+                            displayValue = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                        }
+
+                        // Validate date format
+                        if (inputValue !== '' && !isValidDate(inputValue)) {
+                            alert('Please enter a valid date in YYYY-MM-DD format');
+                            inputElement.focus();
+                            throw new Error('Invalid date');
+                        }
+
+                        inputValue = inputValue !== '' ? inputValue : null;
+                        break;
+
+                    default: // string
+                        inputValue = inputValue !== '' ? inputValue : null;
+                }
+
+                // Only add to update if changed
+                if (inputValue !== null) {
+                    updatedData[field.db] = inputValue;
+                }
+            });
+
+            if (Object.keys(updatedData).length === 0) {
+                alert('No changes detected.');
+                return;
+            }
+
+            const horseId = $('#hiddenHorseId').val();
+
             $.ajax({
                 url: 'update_horse_details.php',
                 type: 'POST',
+                dataType: 'json',
                 data: {
                     horseId: horseId,
-                    YEARFOAL: updatedYearFoal,
-                    SEX: updatedSex,
-                    Sire: updatedSire,
-                    DAM: updatedDam,
-                    DATEFOAL: updatedDatefoal
+                    t: Date.now(),
+                    ...updatedData
                 },
                 success: function(response) {
-                    try {
-                        // If response is a string, try parsing it
-                        if (typeof response === 'string') {
-                            response = JSON.parse(response);
-                        }
-                        console.log('Backend response:', response); // Log the whole response to check its structure
+                    if (response.success) {
+                        // Update display fields with formatted values
+                        fields.forEach(field => {
+                            const displayId = field.db.toLowerCase() + 'Display';
+                            const value = response.updatedData ? response.updatedData[field.db] : updatedData[field.db];
 
-                        if (response.success) {
-                            alert('Horse details updated successfully.');
+                            if (value !== undefined) {
+                                // Special formatting for each type
+                                switch (field.type) {
+                                    case 'date':
+                                        if (value) {
+                                            const [year, month, day] = value.split('-');
+                                            $(`#${displayId}`).text(`${month}/${day}/${year}`);
+                                        } else {
+                                            $(`#${displayId}`).text('N/A');
+                                        }
+                                        break;
+                                    case 'number':
+                                        $(`#${displayId}`).text(value || 'N/A');
+                                        break;
+                                    default:
+                                        $(`#${displayId}`).text(value || 'N/A');
+                                }
+                            }
+                        });
 
-                            // Update the display text with new values
-                            $('#yearFoalDisplay').text(updatedYearFoal);
-                            $('#sexDisplay').text(updatedSex);
-                            $('#sireDisplay').text(updatedSire);
-                            $('#damDisplay').text(updatedDam);
-                            $('#datefoalDisplay').text(updatedDatefoal);
+                        // Visual feedback with color highlight
+                        $('[id$="Display"]').css({
+                            'background-color': '#e6ffe6',
+                            'transition': 'background-color 0.5s'
+                        }).hide().fadeIn(200);
 
+                        setTimeout(() => {
+                            $('[id$="Display"]').css('background-color', '');
+                        }, 1000);
 
-                            // Hide input fields and show updated text
-                            $('#yearFoalInput').hide();
-                            $('#sexInput').hide();
-                            $('#sireInput').hide();
-                            $('#damInput').hide();
-                            $('#datefoalDisplay').hide();
-                            $('#yearFoalDisplay').show();
-                            $('#sexDisplay').show();
-                            $('#sireDisplay').show();
-                            $('#damDisplay').show();
-                            $('#datefoalInput').show();
+                        // Switch to view mode
+                        $('.edit-field').hide();
+                        $('[id$="Display"]').show();
+                        $('#editBtn').show();
+                        $('#saveBtn, #cancelBtn').hide();
 
-                            // Show Edit button and hide Save/Cancel buttons
-                            $('#editBtn').show();
-                            $('#saveBtn').hide();
-                            $('#cancelBtn').hide();
-                        } else {
-                            alert('Failed to update horse details.');
-                        }
-                    } catch (e) {
-                        console.error('Response parsing error:', e);
-                        alert('An error occurred while updating details.');
+                        // Success notification
+                        showNotification('Horse details updated successfully!', 'success');
+                    } else {
+                        showNotification('Update failed: ' + (response.error || 'Unknown error'), 'error');
                     }
+                },
+                error: function(xhr) {
+                    showNotification('Error updating horse details. Please try again.', 'error');
+                    console.error("AJAX error:", xhr.responseText);
                 }
             });
         });
+
+        // Helper function to validate dates
+        function isValidDate(dateString) {
+            const regEx = /^\d{4}-\d{2}-\d{2}$/;
+            if (!dateString.match(regEx)) return false;
+            const d = new Date(dateString);
+            return !isNaN(d.getTime());
+        }
+
+        // Better notification function (replace alerts)
+        function showNotification(message, type) {
+            // Implement your preferred notification system here
+            // Could be Toastr, SweetAlert, or a custom div
+            alert(type.toUpperCase() + ': ' + message);
+        }
 
         $(document).ready(function() {
             // Create modal dialog for column selector
