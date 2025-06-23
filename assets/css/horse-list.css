@@ -1,18 +1,18 @@
 .sticky-header {
-    position: sticky;
-    top: 0; /* Sticks to the top of its container when scrolling */
-    background-color: #fff; /* Optional: To ensure the header has a background color */
-    padding: 10px 20px; /* Adds padding to make it look better */
-    margin: 0; /* Removes default margin */
-    z-index: 10; /* Ensures it stays above other content while scrolling */
-    display: flex; /* Flexbox to align contents */
-    justify-content: space-between; /* Space between title and other possible elements */
-    align-items: center; /* Vertically align content */
-    border-bottom: 2px solid #ddd; /* Optional: Adds a subtle bottom border */
+  position: sticky;
+  top: 0; /* Sticks to the top of its container when scrolling */
+  background-color: #fff; /* Optional: To ensure the header has a background color */
+  padding: 10px 20px; /* Adds padding to make it look better */
+  margin: 0; /* Removes default margin */
+  z-index: 10; /* Ensures it stays above other content while scrolling */
+  display: flex; /* Flexbox to align contents */
+  justify-content: space-between; /* Space between title and other possible elements */
+  align-items: center; /* Vertically align content */
+  border-bottom: 2px solid #ddd; /* Optional: Adds a subtle bottom border */
 }
 
 .sticky-header i {
-    margin-right: 10px; /* Optional: Adds spacing if there’s an icon before the title */
+  margin-right: 10px; /* Optional: Adds spacing if there’s an icon before the title */
 }
 
 /* File Gallery Styles */
@@ -104,25 +104,25 @@
 }
 
 #horseDetailsSidebar {
-    width: 400px;
-    position: fixed;
-    top: 0;
-    right: -400px;
-    height: 100vh;
-    background: white;
-    box-shadow: -2px 0 5px rgba(0,0,0,0.1);
-    transition: right 0.3s ease;
-    z-index: 1050;
-    padding: 20px;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
+  width: 400px;
+  position: fixed;
+  top: 0;
+  right: -400px;
+  height: 100vh;
+  background: white;
+  box-shadow: -2px 0 5px rgba(0, 0, 0, 0.1);
+  transition: right 0.3s ease;
+  z-index: 1050;
+  padding: 20px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
 }
 
 #horseDetailsContent {
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 10px;
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10px;
 }
 
 /* Sidebar header (horse name) */
@@ -143,25 +143,25 @@
 }
 
 .closebtn {
-    position: sticky;
-    top: 0px;
-    right: 20px;
-    background-color: #f44336;
-    color: white;
-    border: none;
-    cursor: pointer;
-    font-size: 18px;
-    z-index: 1001;
-    width: 10px;
-    /* Fixed width for a more controlled size */
-    height: 30px;
-    /* Fixed height to make it circular */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    /* Centering the text inside the button */
-    margin-left: auto; /* Pushes it to the right */
-    float: right; /* Ensures it stays on the right */
+  position: sticky;
+  top: 0px;
+  right: 20px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  z-index: 1001;
+  width: 10px;
+  /* Fixed width for a more controlled size */
+  height: 30px;
+  /* Fixed height to make it circular */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* Centering the text inside the button */
+  margin-left: auto; /* Pushes it to the right */
+  float: right; /* Ensures it stays on the right */
 }
 
 #horseDetailsSidebar.open {
@@ -177,40 +177,40 @@
 
 /* Tabs */
 .tab-buttons {
-    position: sticky;
-    top: 140px;
-    background: white;
-    padding: 10px 0;
-    z-index: 100;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-    display: flex;
-    gap: 5px;
+  position: sticky;
+  top: 140px;
+  background: white;
+  padding: 10px 0;
+  z-index: 100;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  display: flex;
+  gap: 5px;
 }
 
 .tab-button {
-    padding: 8px 15px;
-    background: #f0f0f0;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: all 0.2s;
+  padding: 8px 15px;
+  background: #f0f0f0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.2s;
 }
 
 /* Container for scrollable content */
 .tab-content-container {
-    flex: 1;
-    overflow-y: auto;
-    padding-top: 10px;
+  flex: 1;
+  overflow-y: auto;
+  padding-top: 10px;
 }
 
 /* Action buttons at bottom */
 .action-buttons {
-    padding: 15px 0;
-    background: white;
-    position: sticky;
-    bottom: 0;
-    border-top: 1px solid #eee;
+  padding: 15px 0;
+  background: white;
+  position: sticky;
+  bottom: 0;
+  border-top: 1px solid #eee;
 }
 
 .tab-button.active {
@@ -664,29 +664,67 @@ body.modal-open #horseDetailsSidebar .closebtn {
 }
 
 .horse-info {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    align-items: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  align-items: center;
 }
 
 .horse-details-title {
-    display: flex;
-    justify-content: center;  /* Horizontally center */
-    align-items: center;      /* Vertically center */
-    font-size: 14px;
-    margin-top: 5px;
+  display: flex;
+  justify-content: center; /* Horizontally center */
+  align-items: center; /* Vertically center */
+  font-size: 14px;
+  margin-top: 5px;
 }
 
 /* Sticky section that includes both horse name and details */
 .horse-title-section {
-    position: sticky;
-    top: 30; /* Stick to the top of the viewport */
-    z-index: 100; /* Ensure it stays above other content */
-    background-color: #229954; /* Green background */
-    padding: 10px; /* Optional padding */
-    border-radius: 5px; /* Optional rounded corners */
-    width: 100%; /* Ensure it takes full width */
+  position: sticky;
+  top: 30; /* Stick to the top of the viewport */
+  z-index: 100; /* Ensure it stays above other content */
+  background-color: #229954; /* Green background */
+  padding: 10px; /* Optional padding */
+  border-radius: 5px; /* Optional rounded corners */
+  width: 100%; /* Ensure it takes full width */
+}
+
+.parent-info .horse-info:not(:last-child):after {
+  content: ", ";
+}
+
+.parent-info {
+  display: inline;
+  font-size: 2em;
+  /* Makes parentheses bigger */
+  color: white;
+  font-family: bold;
+}
+
+.parent-info:before {
+  content: "(";
+}
+
+.parent-info:after {
+  content: ")";
+}
+
+.edit-field {
+  display: none;
+  width: 80%;
+  padding: 5px;
+  margin: 3px 0;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+/* When in edit mode */
+.edit-mode .edit-field {
+  display: inline-block;
+}
+
+.edit-mode [id$="Display"] {
+  display: none;
 }
 
 /* Responsive adjustments for tablets */

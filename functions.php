@@ -3588,52 +3588,134 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
     }
 }
 
-function updateHorseDetails($horseId, $yearFoal, $sex, $sire, $dam, $datefoal) {
+function updateHorseDetails($horseId, $data) {
     global $mysqli;
 
-    if (!$mysqli) {
-        return ['success' => false, 'error' => 'Invalid database connection'];
+    // Debug: Log incoming data
+    error_log("updateHorseDetails called with horseId: $horseId and data: " . print_r($data, true));
+
+    // Validate database connection
+    if (!$mysqli || !$mysqli->ping()) {
+        error_log("Database connection failed");
+        return ['success' => false, 'error' => 'Database connection failed'];
     }
 
-    // Sanitize input to prevent SQL injection
-    $horseId = $mysqli->real_escape_string($horseId);
-    $yearFoal = $mysqli->real_escape_string($yearFoal);
-    $sex = $mysqli->real_escape_string($sex);
-    $sire = $mysqli->real_escape_string($sire);
-    $dam = $mysqli->real_escape_string($dam);
-    $datefoal = $mysqli->real_escape_string($datefoal);
-
-    // Validate the date format (YYYY-MM-DD) for DATEFOAL if needed
-    if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $datefoal)) {
-        return ['success' => false, 'error' => 'Invalid date format for DATEFOAL. Use YYYY-MM-DD.'];
+// Validate inputs
+    if (empty($horseId) || empty($data)) {
+        return ['success' => false, 'error' => 'Invalid input'];
     }
 
-    // Prepare the SQL query to update the horse details
-    $sql = "UPDATE sales SET YEARFOAL = ?, SEX = ?, Sire = ?, DAM = ?, DATEFOAL = ? WHERE HORSE = ?";
+    // Define all editable fields with their configurations
+    $editableFields = [
+        'YEARFOAL' => ['type' => 'i', 'allow_null' => true],
+        'SEX' => ['type' => 's', 'allow_null' => true],
+        'Sire' => ['type' => 's', 'allow_null' => true],
+        'DAM' => ['type' => 's', 'allow_null' => true],
+        'DATEFOAL' => ['type' => 's', 'allow_null' => true],
+        'COLOR' => ['type' => 's', 'allow_null' => true],
+        'GAIT' => ['type' => 's', 'allow_null' => true],
+        'TYPE' => ['type' => 's', 'allow_null' => true],
+        'BREDTO' => ['type' => 's', 'allow_null' => true],
+        'FARMNAME' => ['type' => 's', 'allow_null' => true]
+    ];
 
-    // Prepare the statement
-    $stmt = $mysqli->prepare($sql);
-    if (!$stmt) {
-        error_log("Failed to prepare SQL statement: " . $mysqli->error);
-        return ['success' => false, 'error' => 'Failed to prepare SQL statement: ' . $mysqli->error];
+    // Prepare the update fields and values
+    $updates = [];
+    $types = '';
+    $values = [];
+    $updatedFields = [];
+    
+    foreach ($editableFields as $field => $config) {
+        // Check if field exists in data (case-insensitive)
+        $dataKey = array_key_exists_case_insensitive($field, $data);
+        
+        if ($dataKey !== false) {
+            $value = $data[$dataKey];
+            
+            // Handle NULL/empty values
+            if ($value === null || $value === '') {
+                if ($config['allow_null']) {
+                    $value = null;
+                } else {
+                    continue; // Skip this field if empty values not allowed
+                }
+            }
+            
+            // Special handling for YEARFOAL
+            if ($field === 'YEARFOAL' && $value !== null && !is_numeric($value)) {
+                error_log("Invalid YEARFOAL value: $value");
+                return ['success' => false, 'error' => 'YEARFOAL must be a number'];
+            }
+            
+            // Add to updates
+            $updates[] = "$field = ?";
+            $types .= $config['type'];
+            $values[] = $value;
+            $updatedFields[$field] = $value;
+            
+            error_log("Preparing to update $field with value: " . var_export($value, true));
+        }
     }
 
-    // Bind the parameters to the SQL query
-    $stmt->bind_param('ssssss', $yearFoal, $sex, $sire, $dam, $datefoal, $horseId);
-
-    // Execute the query and check if it was successful
-    if ($stmt->execute()) {
-        $result =  ['success' => true, 'message' => 'Horse details updated successfully'];
-    } else {
-        $result = ['success' => false, 'error' => 'Failed to update horse details: ' . $stmt->error];
+    if (empty($updates)) {
+        error_log("No valid fields to update. Data keys: " . print_r(array_keys($data), true));
+        return ['success' => false, 'error' => 'No valid fields to update. Check field names and values.'];
     }
 
-    $stmt->close();
-    $mysqli->close();
+    // Add horseId to values
+    $values[] = $horseId;
+    $types .= 's';
 
-    return $result;
+    try {
+        $sql = "UPDATE sales SET " . implode(', ', $updates) . " WHERE HORSE = ?";
+        error_log("Executing SQL: $sql with types: $types and values: " . print_r($values, true));
+        
+        $stmt = $mysqli->prepare($sql);
+        
+        if (!$stmt) {
+            throw new Exception('Failed to prepare statement: ' . $mysqli->error);
+        }
+
+        // Special handling for binding parameters with NULL values
+        $refValues = [];
+        foreach ($values as $key => $value) {
+            $refValues[$key] = &$values[$key];
+        }
+        
+        $stmt->bind_param($types, ...$refValues);
+        
+        if (!$stmt->execute()) {
+            throw new Exception('Failed to update: ' . $stmt->error);
+        }
+
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+        
+        // Return the updated data along with success status
+        return [
+            'success' => true,
+            'affected_rows' => $affectedRows,
+            'updatedData' => $updatedFields, // Include the updated fields and values
+            'message' => $affectedRows > 0 
+                ? 'Horse details updated successfully' 
+                : 'No changes made (data may be identical)'
+        ];
+        
+    } catch (Exception $e) {
+        error_log("Update failed: " . $e->getMessage());
+        return ['success' => false, 'error' => $e->getMessage()];
+    }
 }
 
+// Helper function for case-insensitive array key check
+function array_key_exists_case_insensitive($key, $array) {
+    foreach (array_keys($array) as $k) {
+        if (strtolower($k) === strtolower($key)) {
+            return $k;
+        }
+    }
+    return false;
+}
 function getHorseDetails($horseId) {
     global $mysqli;
 

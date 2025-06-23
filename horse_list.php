@@ -12,8 +12,12 @@ if (!isset($_SESSION['column_prefs'])) {
         'Sex' => true,
         'Sire' => true,
         'Dam' => true,
+        'Datefoal' => false,
+        'Type' => false,
+        'Color' => false,
+        'Gait' => false,
         'Farmname' => false,
-        "Datefoal" => false
+        'Bredto' => false
     ];
 }
 
@@ -207,17 +211,30 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
     <!-- Column Checkboxes (will be moved to modal by JavaScript) -->
     <div id="columnCheckboxes" style="display:none;">
-        <?php foreach ($_SESSION['column_prefs'] as $col => $visible): ?>
+        <?php
+        $allColumns = [
+            'Horse',
+            'Yearfoal',
+            'Sex',
+            'Sire',
+            'Dam',
+            'Datefoal',
+            'Type',
+            'Color',
+            'Gait',
+            'Farmname',
+            'Bredto'
+        ];
+        foreach ($allColumns as $col): ?>
             <div class="column-checkbox">
                 <label>
                     <input type="checkbox" name="column_prefs[<?php echo $col; ?>]"
-                        <?php echo $visible ? 'checked' : ''; ?>>
+                        <?php echo ($_SESSION['column_prefs'][$col] ?? false) ? 'checked' : ''; ?>>
                     <?php echo $col; ?>
                 </label>
             </div>
         <?php endforeach; ?>
     </div>
-
 
     <!-- Table Section -->
     <div class="responsive-table-container">
@@ -301,18 +318,65 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         </div>
 
         <!-- Tab content -->
+        <!-- Tab content -->
         <div class="tab-content">
             <div id="detailsTab" class="tab-pane active">
                 <div id="horseDetailsContent">
-                    <p><strong>Year of Foal:</strong> <span id="yearFoalDisplay"></span> <input type="text" id="yearFoalInput" style="display:none;"></p>
-                    <p><strong>Sex:</strong> <span id="sexDisplay"></span> <input type="text" id="sexInput" style="display:none;"></p>
-                    <p><strong>Sire:</strong> <span id="sireDisplay"></span> <input type="text" id="sireInput" style="display:none;"></p>
-                    <p><strong>Dam:</strong> <span id="damDisplay"></span> <input type="text" id="damInput" style="display:none;"></p>
-                    <p><strong>Datefoal:</strong> <span id="datefoalDisplay"></span> <input type="text" id="datefoalInput" style="display:none;"></p>
+                    <!-- Basic Info -->
+                    <div class="detail-section">
+                        <h4>Basic Information</h4>
+                        <p><strong>Year Foaled:</strong> <span id="yearFoalDisplay"></span> <input type="number" id="yearFoalInput" class="edit-field"></p>
+                        <p><strong>Sex:</strong> <span id="sexDisplay"></span> <input type="text" id="sexInput" class="edit-field"></p>
+                        <p><strong>Type:</strong> <span id="typeDisplay"></span> <input type="text" id="typeInput" class="edit-field"></p>
+                        <p><strong>Color:</strong> <span id="colorDisplay"></span> <input type="text" id="colorInput" class="edit-field"></p>
+                        <p><strong>Gait:</strong> <span id="gaitDisplay"></span> <input type="text" id="gaitInput" class="edit-field"></p>
+                    </div>
+
+                    <!-- Pedigree -->
+                    <div class="detail-section">
+                        <h4>Pedigree</h4>
+                        <p><strong>Sire:</strong> <span id="sireDisplay"></span> <input type="text" id="sireInput" class="edit-field"></p>
+                        <p><strong>Dam:</strong> <span id="damDisplay"></span> <input type="text" id="damInput" class="edit-field"></p>
+                        <p><strong>Sire of Dam:</strong> <span id="sireofdamDisplay"></span></p>
+                    </div>
+
+                    <!-- Sale Info -->
+                    <div class="detail-section">
+                        <h4>Sale Information</h4>
+                        <p><strong>Sale Price:</strong> <span id="priceDisplay"></span></p>
+                        <p><strong>Sale Date:</strong> <span id="saledateDisplay"></span></p>
+                        <p><strong>Sale Code:</strong> <span id="salecodeDisplay"></span></p>
+                        <p><strong>Consignor:</strong> <span id="conslnameDisplay"></span></p>
+                    </div>
+
+                    <!-- Breeding Info -->
+                    <div class="detail-section">
+                        <h4>Breeding Information</h4>
+                        <p><strong>Date Foaled:</strong> <span id="datefoalDisplay"></span> <input type="date" id="datefoalInput" class="edit-field"></p>
+                        <p><strong>Bred To:</strong> <span id="bredtoDisplay"></span> <input type="text" id="bredtoInput" class="edit-field"></p>
+                        <p><strong>Last Bred:</strong> <span id="lastbredDisplay"></span></p>
+                    </div>
+
+                    <!-- Farm Info -->
+                    <div class="detail-section">
+                        <h4>Farm Information</h4>
+                        <p><strong>Farm Name:</strong> <span id="farmnameDisplay"></span> <input type="text" id="farmnameInput" class="edit-field"></p>
+                        <p><strong>Location:</strong> <span id="locationDisplay"></span></p>
+                    </div>
+
+                    <!-- Purchaser Info -->
+                    <div class="detail-section">
+                        <h4>Purchaser Information</h4>
+                        <p><strong>Purchaser:</strong> <span id="purchaserDisplay"></span></p>
+                    </div>
                 </div>
-                <button id="editBtn" class="btn btn-primary">Edit</button>
-                <button id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
-                <button id="cancelBtn" class="btn btn-danger" style="display:none;">Cancel</button>
+
+                <div class="sticky-action-bar">
+                    <button id="editBtn" class="btn btn-primary">Edit</button>
+                    <button id="saveBtn" class="btn btn-success" style="display:none;">Save</button>
+                    <button id="cancelBtn" class="btn btn-danger" style="display:none;">Cancel</button>
+                </div>
+
             </div>
 
             <div id="inspectionTab" class="tab-pane">
