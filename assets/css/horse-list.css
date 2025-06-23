@@ -721,7 +721,8 @@ body.modal-open #horseDetailsSidebar .closebtn {
   font-size: 2em;
   /* Makes parentheses bigger */
   color: white;
-  font-family: bold;
+  font-weight: bold;
+  white-space: nowrap; 
 }
 
 .parent-info:before {
