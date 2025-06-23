@@ -663,30 +663,53 @@ body.modal-open #horseDetailsSidebar .closebtn {
   background-color: #059669; /* Darker green */
 }
 
+.detail-section {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #f9f9f9;
+  border-radius: 5px;
+}
+
+.detail-section h4 {
+  margin-top: 0;
+  color: #229954;
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 5px;
+}
+
 .horse-info {
   font-size: 24px;
   font-weight: bold;
-  color: #333;
+  color: white;
   align-items: center;
 }
 
 .horse-details-title {
   display: flex;
-  justify-content: center; /* Horizontally center */
-  align-items: center; /* Vertically center */
+  justify-content: center;
+  /* Horizontally center */
+  align-items: center;
+  /* Vertically center */
   font-size: 14px;
   margin-top: 5px;
+  color: white;
 }
 
 /* Sticky section that includes both horse name and details */
 .horse-title-section {
   position: sticky;
-  top: 30; /* Stick to the top of the viewport */
-  z-index: 100; /* Ensure it stays above other content */
-  background-color: #229954; /* Green background */
-  padding: 10px; /* Optional padding */
-  border-radius: 5px; /* Optional rounded corners */
-  width: 100%; /* Ensure it takes full width */
+  top: 30;
+  /* Stick to the top of the viewport */
+  z-index: 100;
+  /* Ensure it stays above other content */
+  background-color: #229954;
+  /* Green background */
+  padding: 10px;
+  /* Optional padding */
+  border-radius: 5px;
+  /* Optional rounded corners */
+  width: 100%;
+  /* Ensure it takes full width */
 }
 
 .parent-info .horse-info:not(:last-child):after {
