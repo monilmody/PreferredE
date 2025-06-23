@@ -304,9 +304,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         <div class="horse-title-section">
             <div class="horse-details-title">
                 <h2 id="horseName" class="horse-info"></h2>
-                <h2 id="sireTitle" class="horse-info"></h2>
-                <h2 id="damTitle" class="horse-info"></h2>
-                <h2 id="datefoalTitle" class="horse-info"></h2>
+                <div class="parent-info">
+                    <span id="sireTitle" class="horse-info"></span>
+                    <span id="damTitle" class="horse-info"></span>
+                    <span id="datefoalTitle" class="horse-info"></span>
+                </div>
             </div>
         </div>
 
