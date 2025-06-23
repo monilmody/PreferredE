@@ -855,7 +855,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         // Pedigree
                         $('#sireTitle').text(response.Sire || 'N/A');
+                        $('#sireDisplay').text(response.Sire || 'N/A');
                         $('#damTitle').text(response.DAM || 'N/A');
+                        $('#damDisplay').text(response.DAM || 'N/A');
                         $('#sireofdamDisplay').text(response.Sireofdam || 'N/A');
 
                         // Sale Info
