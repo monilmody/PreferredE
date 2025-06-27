@@ -97,11 +97,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         ?>
 
         <!-- Horse Search -->
-        <input type="text" name="horse_search" class="search-box" placeholder="Search horses..."
+        <input type="text" name="horse_search" class="search-box" placeholder="Search Horses..."
             value="<?php echo isset($_GET['horse_search']) ? htmlspecialchars($_GET['horse_search']) : '' ?>">
 
         <!-- Dam Search -->
-        <input type="text" name="dam_search" class="search-box" placeholder="Search dams..."
+        <input type="text" name="dam_search" class="search-box" placeholder="Search Dams..."
             value="<?php echo isset($_GET['dam_search']) ? htmlspecialchars($_GET['dam_search']) : '' ?>">
 
         <!-- Location Search -->
