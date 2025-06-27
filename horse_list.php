@@ -845,6 +845,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             if (videoStream) {
                 videoStream.getTracks().forEach(track => track.stop());
             }
+            location.reload(); // Basic page refresh
         }
 
         function sanitizeHorseId(name) {
