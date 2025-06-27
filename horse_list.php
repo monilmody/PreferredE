@@ -842,9 +842,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         // Optional: Stop camera when sidebar closes
         function closeSidebar() {
             $('#horseDetailsSidebar').removeClass('open');
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop());
-            }
             location.reload(); // Basic page refresh
         }
 
