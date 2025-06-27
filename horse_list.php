@@ -7,6 +7,7 @@ include_once("config.php");
 // Initialize column preferences if not set
 if (!isset($_SESSION['column_prefs'])) {
     $_SESSION['column_prefs'] = [
+        'Hip' => true,
         'Horse' => true,
         'Yearfoal' => true,
         'Sex' => true,
@@ -17,7 +18,8 @@ if (!isset($_SESSION['column_prefs'])) {
         'Color' => false,
         'Gait' => false,
         'Farmname' => false,
-        'Bredto' => false
+        'Bredto' => false,
+        'Consigner' => false
     ];
 }
 
@@ -213,6 +215,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <div id="columnCheckboxes" style="display:none;">
         <?php
         $allColumns = [
+            'Hip',
             'Horse',
             'Yearfoal',
             'Sex',
@@ -223,7 +226,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             'Color',
             'Gait',
             'Farmname',
-            'Bredto'
+            'Bredto',
+            'Consigner'
         ];
         foreach ($allColumns as $col): ?>
             <div class="column-checkbox">
@@ -262,6 +266,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                         <?php
                                         $dbField = '';
                                         switch ($col) {
+                                            case 'Hip':
+                                                $dbField = 'HIP';
+                                                break;
                                             case 'Yearfoal':
                                                 $dbField = 'YEARFOAL';
                                                 break;
@@ -282,6 +289,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                                 break;
                                             case 'Bredto':
                                                 $dbField = 'bredto';
+                                                break;
+                                            case 'Consigner':
+                                                $dbField = 'CONSLNAME';
                                                 break;
                                             default:
                                                 $dbField = strtolower($col);

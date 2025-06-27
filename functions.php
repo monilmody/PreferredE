@@ -3520,6 +3520,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
     // Build the SQL query base
     $sql = "
         SELECT DISTINCT
+            Hip,
             horse,
             YEARFOAL,
             sex,
@@ -3530,7 +3531,8 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
             color,
             gait,
             farmname,
-            bredto
+            bredto,
+            CONSLNAME
         FROM sales
     ";
 
