@@ -3533,7 +3533,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
             farmname,
             bredto,
             CONSLNAME,
-            Salecode
+            SALECODE
         FROM sales
     ";
 
@@ -3560,7 +3560,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
     }
 
     if (!empty($SalecodeSearch)) {
-        $conditions[] = "Salecode LIKE '%" . $mysqli->real_escape_string($SalecodeSearch) . "%'";
+        $conditions[] = "SALECODE LIKE '%" . $mysqli->real_escape_string($SalecodeSearch) . "%'";
     }
 
     if (!empty($conditions)) {
