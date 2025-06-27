@@ -57,7 +57,7 @@ $FoalSearch = $_GET['foal_search'] ?? '';
 $ConsignerSearch = $_GET['consigner_search'] ?? '';
 $SalecodeSearch = $_GET['salecode_search'] ?? '';
 
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch , $SalecodeSearch);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal");
@@ -803,18 +803,21 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 gallery.find('.no-files-message').remove();
 
                 const isImage = fileInfo.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+
+                // Constructing the file element HTML
                 const fileElement = `
-        <div class="photo-card">
-            <img src="${fileInfo.url}" class="photo-thumbnail" data-full-url="${fileInfo.url}" />
-            <div class="photo-actions">
-                <button class="btn btn-sm btn-info share-btn" data-url="${fileInfo.url}">
-                    <i class="fas fa-share-alt"></i> Share
-                </button>
-                <button class="btn btn-sm btn-danger delete-file" data-id="${fileInfo.id}" data-url="${fileInfo.url}">
-                    <i class="fas fa-trash"></i> Delete
-                </button>
-            </div>
+        <div class="photo-card" data-id="${fileInfo.id}">
+            ${isImage ? 
+                `<img src="${fileInfo.url}" class="photo-thumbnail" data-full-url="${fileInfo.url}" />` : 
+                `<div class="file-icon">
+                    <i class="fas fa-file"></i>
+                    <span>${fileInfo.name.split('.').pop()}</span>
+                </div>`
+            }
+            <button class="delete-photo" data-id="${fileInfo.id}" data-url="${fileInfo.url}">×</button>
         </div>`;
+
+                // Append the new file element to the gallery
                 gallery.append(fileElement);
             }
         });
@@ -963,21 +966,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 `);
 
             // Handle images (display the uploaded images)
-            // Handle images (display the uploaded images)
             let imagesHtml = '';
             if (response.images && response.images.length > 0) {
                 response.images.forEach(imgUrl => {
                     imagesHtml += `
 <div class="photo-card">
     <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
-    <div class="photo-actions">
-        <button class="btn btn-sm btn-info share-btn" data-url="${imgUrl}">
-            <i class="fas fa-share-alt"></i> Share
-        </button>
-        <button class="btn btn-sm btn-danger delete-photo" data-url="${imgUrl}">
-            <i class="fas fa-trash"></i> Delete
-        </button>
-    </div>
+    <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
                 });
             } else {
@@ -1406,81 +1401,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     });
             });
         });
-
-        // Share button click handler
-        $(document).on('click', '.share-btn', function() {
-            const photoUrl = $(this).data('url');
-            openShareModal(photoUrl);
-        });
-
-        function openShareModal(photoUrl) {
-            // Generate a shareable link (you might want to create a shorter URL)
-            const shareLink = photoUrl; // Or generate a more permanent link if needed
-
-            $('#shareableLink').val(shareLink);
-            $('#shareModal').modal('show');
-        }
-
-        function copyShareLink() {
-            const shareLink = document.getElementById('shareableLink');
-            shareLink.select();
-            document.execCommand('copy');
-            alert('Link copied to clipboard!');
-        }
-
-        function shareOnFacebook() {
-            const shareLink = $('#shareableLink').val();
-            window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareLink)}`, '_blank');
-        }
-
-        function shareOnTwitter() {
-            const shareLink = $('#shareableLink').val();
-            window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(shareLink)}`, '_blank');
-        }
-
-        function shareViaEmail() {
-            const shareLink = $('#shareableLink').val();
-            window.location.href = `mailto:?subject=Check out this horse photo&body=Here's a photo you might like: ${encodeURIComponent(shareLink)}`;
-        }
     </script>
-
-    <!-- Sharing Modal -->
-    <div class="modal fade" id="shareModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Share Photo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <label>Shareable Link</label>
-                        <div class="input-group mb-3">
-                            <input type="text" class="form-control" id="shareableLink" readonly>
-                            <div class="input-group-append">
-                                <button class="btn btn-outline-secondary" onclick="copyShareLink()">
-                                    <i class="fas fa-copy"></i> Copy
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="social-share-buttons text-center">
-                        <button class="btn btn-primary mr-2" onclick="shareOnFacebook()">
-                            <i class="fab fa-facebook"></i> Facebook
-                        </button>
-                        <button class="btn btn-info mr-2" onclick="shareOnTwitter()">
-                            <i class="fab fa-twitter"></i> Twitter
-                        </button>
-                        <button class="btn btn-success" onclick="shareViaEmail()">
-                            <i class="fas fa-envelope"></i> Email
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
 
 </body>
 
