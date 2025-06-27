@@ -1158,8 +1158,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 const inputElement = $(`#${field.id}`);
                 const displayElement = $(`#${field.db.toLowerCase()}Display`);
 
-                let inputValue = inputElement.val().trim();
-                let displayValue = displayElement.text().trim();
+                let inputValue = inputElement.val() ? inputElement.val().trim() : '';
+                let displayValue = displayElement.text() ? displayElement.text().trim() : '';
 
                 // Skip if no change
                 if (inputValue === displayValue && inputValue !== '') {
