@@ -109,7 +109,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             value="<?php echo isset($_GET['location_search']) ? htmlspecialchars($_GET['location_search']) : '' ?>">
 
         <!-- Foal Search -->
-        <input type="text" name="foal_search" class="search-box" placeholder="Search Yearfoals..."
+        <input type="text" name="foal_search" class="search-box" placeholder="Search Yearfoaled..."
             value="<?php echo isset($_GET['foal_search']) ? htmlspecialchars($_GET['foal_search']) : '' ?>">
 
         <!-- Consigner Search -->
