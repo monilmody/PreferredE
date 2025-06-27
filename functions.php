@@ -3503,7 +3503,7 @@ function deleteSalecode($breed,$salecode)
     return $result;
 }
 
-function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '', $damSearch = '', $LocationSearch = '', $FoalSearch = '') {
+function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '', $damSearch = '', $LocationSearch = '', $FoalSearch = '', $ConsignerSearch = '', $SalecodeSearch = '') {
     global $mysqli;
 
     // Define sortable columns
@@ -3532,7 +3532,8 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
             gait,
             farmname,
             bredto,
-            CONSLNAME
+            CONSLNAME,
+            Salecode
         FROM sales
     ";
 
@@ -3541,14 +3542,25 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
     if (!empty($horseSearch)) {
         $conditions[] = "horse LIKE '%" . $mysqli->real_escape_string($horseSearch) . "%'";
     }
+
     if (!empty($damSearch)) {
         $conditions[] = "dam LIKE '%" . $mysqli->real_escape_string($damSearch) . "%'";
     }
-        if (!empty($LocationSearch)) {
+
+    if (!empty($LocationSearch)) {
         $conditions[] = "FARMNAME LIKE '%" . $mysqli->real_escape_string($LocationSearch) . "%'";
     }
-        if (!empty($FoalSearch)) {
+
+    if (!empty($FoalSearch)) {
         $conditions[] = "YEARFOAL LIKE '%" . $mysqli->real_escape_string($FoalSearch) . "%'";
+    }
+
+    if (!empty($ConsignerSearch)) {
+        $conditions[] = "CONSLNAME LIKE '%" . $mysqli->real_escape_string($ConsignerSearch) . "%'";
+    }
+
+    if (!empty($SalecodeSearch)) {
+        $conditions[] = "Salecode LIKE '%" . $mysqli->real_escape_string($SalecodeSearch) . "%'";
     }
 
     if (!empty($conditions)) {

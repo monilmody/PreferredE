@@ -19,7 +19,8 @@ if (!isset($_SESSION['column_prefs'])) {
         'Gait' => false,
         'Farmname' => false,
         'Bredto' => false,
-        'Consigner' => false
+        'Consigner' => false,
+        'Salecode' => false
     ];
 }
 
@@ -53,8 +54,10 @@ $horseSearch = $_GET['horse_search'] ?? '';
 $damSearch = $_GET['dam_search'] ?? '';
 $LocationSearch = $_GET['location_search'] ?? '';
 $FoalSearch = $_GET['foal_search'] ?? '';
+$ConsignerSearch = $_GET['consigner_search'] ?? '';
+$SalecodeSearch = $_GET['salecode_search'] ?? '';
 
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch);
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch , $SalecodeSearch);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal");
@@ -106,12 +109,20 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             value="<?php echo isset($_GET['location_search']) ? htmlspecialchars($_GET['location_search']) : '' ?>">
 
         <!-- Foal Search -->
-        <input type="text" name="foal_search" class="search-box" placeholder="Search Foals..."
+        <input type="text" name="foal_search" class="search-box" placeholder="Search Yearfoals..."
             value="<?php echo isset($_GET['foal_search']) ? htmlspecialchars($_GET['foal_search']) : '' ?>">
+
+        <!-- Consigner Search -->
+        <input type="text" name="consigner_search" class="search-box" placeholder="Search Consigners..."
+            value="<?php echo isset($_GET['consigner_search']) ? htmlspecialchars($_GET['consigner_search']) : '' ?>">
+
+        <!-- Consigner Search -->
+        <input type="text" name="salecode_search" class="search-box" placeholder="Search Salecodes..."
+            value="<?php echo isset($_GET['salecode_search']) ? htmlspecialchars($_GET['salecode_search']) : '' ?>">
 
         <button type="submit" class="search-button">Search</button>
 
-        <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search']) || isset($_GET['location_search']) || isset($_GET['foal_search'])): ?>
+        <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search']) || isset($_GET['location_search']) || isset($_GET['foal_search']) || isset($_GET['consigner_search']) || isset($_GET['salecode_search'])): ?>
             <a href="horse_list.php" class="clear-button">Clear All</a>
         <?php endif; ?>
     </form>
@@ -227,7 +238,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             'Gait',
             'Farmname',
             'Bredto',
-            'Consigner'
+            'Consigner',
+            'Salecode'
         ];
         foreach ($allColumns as $col): ?>
             <div class="column-checkbox">
@@ -292,6 +304,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                                 break;
                                             case 'Consigner':
                                                 $dbField = 'CONSLNAME';
+                                                break;
+                                            case 'Salecode':
+                                                $dbField = 'SALECODE';
                                                 break;
                                             default:
                                                 $dbField = strtolower($col);
@@ -541,6 +556,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             var damSearch = "<?php echo isset($_GET['dam_search']) ? $_GET['dam_search'] : '' ?>";
             var locationSearch = "<?php echo isset($_GET['location_search']) ? $_GET['location_search'] : '' ?>";
             var FoalSearch = "<?php echo isset($_GET['foal_search']) ? $_GET['foal_search'] : '' ?>";
+            var ConsignerSearch = "<?php echo isset($_GET['consigner_search']) ? $_GET['consigner_search'] : '' ?>";
+            var SalecodeSearch = "<?php echo isset($_GET['salecode_search']) ? $_GET['salecode_search'] : '' ?>";
 
             var link = "horse_list.php?&sort1=" + sort1 +
                 "&sort1_order=" + sort1_order // Added sorting order
@@ -569,6 +586,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             }
             if (FoalSearch) {
                 link += "&foal_search=" + encodeURIComponent(FoalSearch);
+            }
+            if (ConsignerSearch) {
+                link += "&consigner_search=" + encodeURIComponent(ConsignerSearch);
+            }
+            if (SalecodeSearch) {
+                link += "&salecode_search=" + encodeURIComponent(SalecodeSearch);
             }
 
             window.location.href = link;
