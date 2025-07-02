@@ -418,6 +418,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             <div id="inspectionTab" class="tab-pane">
                 <div id="inspectionForm">
 
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label for="salecode">Salecode:</label>
+                            <input type="text" id="salecode" name="salecode" readonly>
+                        </div>
+                    </div>
+
                     <div class="section-header">HORSE INFORMATION</div>
 
                     <div class="field-group">
@@ -808,11 +815,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             // Get the horse details from the sidebar (already loaded)
             const horseDetails = {
-                sex: $('#sexDisplay').text().trim()
+                sex: $('#sexDisplay').text().trim(),
+                salecode: $('#salecodeDisplay').text().trim()
             };
 
             // Populate the inspection form fields
             $('#sex').val(horseDetails.sex);
+            $('#salecode').val(horseDetails.salecode);
 
             fetch(`get_horse_values.php?horseId=${encodeURIComponent(horseName)}`)
                 .then(response => {
