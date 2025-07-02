@@ -1012,7 +1012,19 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     });
 
                     // Update known checkbox fields
-                    const checkboxFields = ['neck_upright']; // add more keys here as needed
+                    const checkboxFields = ['neck_upright',
+                        'neck_ok',
+                        'neck_very_nice',
+                        'neck_dr',
+                        'neck_top_horse',
+                        'neck_athletic',
+                        'neck_racey',
+                        'neck_clean_correct',
+                        'neck_needs_grow',
+                        'neck_needs_mature',
+                        'neck_needs_improve',
+                        'neck_nm_ty'
+                    ]; // add more keys here as needed
 
                     checkboxFields.forEach(field => {
                         const checkbox = document.querySelector(`input[type="checkbox"][name="${field}"]`);
