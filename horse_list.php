@@ -482,6 +482,105 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option">DOWN</button>
                             </div>
                         </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_upright">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_ok" value="0">
+                                <input type="checkbox" id="neck_ok" name="neck_ok" value="1">
+                                <label for="neck_ok">Ok</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_very_nice">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_very_nice" value="0">
+                                <input type="checkbox" id="neck_very_nice" name="neck_very_nice" value="1">
+                                <label for="neck_very_nice">Very Nice</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_dr">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_dr" value="0">
+                                <input type="checkbox" id="neck_dr" name="neck_dr" value="1">
+                                <label for="neck_dr">DR</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_top_horse">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_top_horse" value="0">
+                                <input type="checkbox" id="neck_top_horse" name="neck_top_horse" value="1">
+                                <label for="neck_top_horse">Top Horse</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_athletic">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_athletic" value="0">
+                                <input type="checkbox" id="neck_athletic" name="neck_athletic" value="1">
+                                <label for="neck_athletic">Athletic</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_racey">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_racey" value="0">
+                                <input type="checkbox" id="neck_racey" name="neck_racey" value="1">
+                                <label for="neck_racey">Racey</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_clean_correct">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_clean_correct" value="0">
+                                <input type="checkbox" id="neck_clean_correct" name="neck_clean_correct" value="1">
+                                <label for="neck_clean_correct">Clean N Correct</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_needs_grow">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_needs_grow" value="0">
+                                <input type="checkbox" id="neck_needs_grow" name="neck_needs_grow" value="1">
+                                <label for="neck_needs_grow">Needs to GROW</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_needs_mature">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_needs_mature" value="0">
+                                <input type="checkbox" id="neck_needs_mature" name="neck_needs_mature" value="1">
+                                <label for="neck_needs_mature">Needs to Mature</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_needs_improve">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_needs_improve" value="0">
+                                <input type="checkbox" id="neck_needs_improve" name="neck_needs_improve" value="1">
+                                <label for="neck_needs_improve">Needs to Improve</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="neck_nm_ty">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_nm_ty" value="0">
+                                <input type="checkbox" id="neck_nm_ty" name="neck_nm_ty" value="1">
+                                <label for="neck_nm_ty">N M Ty</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>

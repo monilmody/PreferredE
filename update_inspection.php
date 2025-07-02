@@ -17,8 +17,10 @@ $allowedFields = [
     'sex_change',
 
     // DAVE REID RATING
-    'day_rating_indicator', 'dave_reid_rating', 'up_dn_ev',
-    
+    'day_rating_indicator', 'dave_reid_rating', 'up_dn_ev', 'neck_ok', 'neck_very_nice',
+    'neck_dr', 'neck_top_horse', 'neck_athletic', 'neck_racey', 'neck_clean_correct',
+    'neck_needs_grow', 'neck_needs_mature', 'neck_needs_improve', 'neck_nm_ty',
+
     // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
     'size', 'size_to_foal_date', 'short_legged', 'balance',
     'girth', 'withers', 'shoulder_angle', 'body',
