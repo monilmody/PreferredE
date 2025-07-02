@@ -442,6 +442,48 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         </div>
                     </div>
 
+                    <div class="section-header">DAVE REID RATING</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>Day Rating Indicator:</strong></label>
+                            <div class="button-group" data-field="day_rating_indicator">
+                                <button type="button" class="btn-option">Ok</button>
+                                <button type="button" class="btn-option">Move Up</button>
+                                <button type="button" class="btn-option">Move Later</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>DAVE REID (Rat'g 4):</strong></label>
+                            <div class="button-group" data-field="dave_reid_rating">
+                                <button type="button" class="btn-option">1</button>
+                                <button type="button" class="btn-option">2</button>
+                                <button type="button" class="btn-option">2.5</button>
+                                <button type="button" class="btn-option">2.75</button>
+                                <button type="button" class="btn-option">3</button>
+                                <button type="button" class="btn-option">3.15</button>
+                                <button type="button" class="btn-option">3.25</button>
+                                <button type="button" class="btn-option">3.33</button>
+                                <button type="button" class="btn-option">3.5</button>
+                                <button type="button" class="btn-option">3.75</button>
+                                <button type="button" class="btn-option">4</button>
+                                <button type="button" class="btn-option">4.25</button>
+                                <button type="button" class="btn-option">4.5</button>
+                                <button type="button" class="btn-option">5</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>UP / DN / EV:</strong></label>
+                            <div class="button-group" data-field="up_dn_ev">
+                                <button type="button" class="btn-option">EVEN</button>
+                                <button type="button" class="btn-option">UP</button>
+                                <button type="button" class="btn-option">DOWN</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
 
                     <div class="field-group">

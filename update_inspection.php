@@ -15,6 +15,9 @@ if ($field === 'neck_upright') {
 $allowedFields = [
     // HORSE INFORMATION
     'sex_change',
+
+    // DAVE REID RATING
+    'day_rating_indicator', 'dave_reid_rating', 'up_dn_ev',
     
     // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
     'size', 'size_to_foal_date', 'short_legged', 'balance',
