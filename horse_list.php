@@ -429,6 +429,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option">Good</button>
                                 <button type="button" class="btn-option">Average</button>
                                 <button type="button" class="btn-option">Medium</button>
+                                <button type="button" class="btn-option">Small</button>
                             </div>
                         </div>
 
