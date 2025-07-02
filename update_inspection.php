@@ -3,18 +3,26 @@ require_once("db-settings.php");
 
 $horse_name = $_POST['horse_name'] ?? '';  // Horse name from the client
 $field = $_POST['field'] ?? '';            // Field to be updated (e.g., size, balance)
-$value = $_POST['value'] ?? '';            // New value for the field
+// Normalize value, especially for checkbox fields like 'neck_upright'
+if ($field === 'neck_upright') {
+    // Treat 'on', '1', or 'true' (case-insensitive) as true
+    $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
+} else {
+    $value = $_POST['value'] ?? '';
+}
 
 // Allowed fields to update
 $allowedFields = [
-    'size',
-    'size_to_foal_date',
-    'short_legged',
-    'balance',
-    'girth',
-    'withers',
-    'shoulder_angle',
-    'body'
+    // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
+    'size', 'size_to_foal_date', 'short_legged', 'balance',
+    'girth', 'withers', 'shoulder_angle', 'body',
+
+    // HEAD PLACEMENT - NECK
+    'head_placement', 'neck_upright', 'neck_length', 'neck_feature',
+    
+    // LENGTH - BACK - HIP - CROUP
+    'body_length', 'back', 'back_sway', 'behind_high', 
+    'behind_side', 'hips_side', 'hip_short', 'hip_drops'
 ];
 
 // Validate input

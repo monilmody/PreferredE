@@ -57,7 +57,7 @@ $FoalSearch = $_GET['foal_search'] ?? '';
 $ConsignerSearch = $_GET['consigner_search'] ?? '';
 $SalecodeSearch = $_GET['salecode_search'] ?? '';
 
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch , $SalecodeSearch);
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
 
 // Define sortable columns for the dropdowns
 $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal");
@@ -496,6 +496,119 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">HEAD PLACEMENT - NECK</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>HEAD PLACEMENT</strong></label>
+                            <div class="button-group" data-field="head_placement">
+                                <button type="button" class="btn-option">Good</button>
+                                <button type="button" class="btn-option">Avg</button>
+                                <button type="button" class="btn-option">Poor</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Neck Upright:</strong></label>
+                            <div class="checkbox-group" data-field="neck_upright">
+                                <!-- Hidden input to send 0 if checkbox is unchecked -->
+                                <input type="hidden" name="neck_upright" value="0">
+                                <input type="checkbox" id="neck_upright" name="neck_upright" value="1">
+                                <label for="neck_upright">Upright Neck</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>NECK LENGTH</strong></label>
+                            <div class="button-group" data-field="neck_length">
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Short</button>
+                                <button type="button" class="btn-option">Long</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>NECK FEATURE</strong></label>
+                            <div class="button-group" data-field="neck_feature">
+                                <button type="button" class="btn-option">Cresty</button>
+                                <button type="button" class="btn-option">Thin</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">LENGTH - BACK - HIP - CROUP</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>LENGTH</strong></label>
+                            <div class="button-group" data-field="body_length">
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Long</button>
+                                <button type="button" class="btn-option">Short</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>BACK</strong></label>
+                            <div class="button-group" data-field="back">
+                                <button type="button" class="btn-option">Average</button>
+                                <button type="button" class="btn-option">Long</button>
+                                <button type="button" class="btn-option">Short</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>BACK SWAY</strong></label>
+                            <div class="button-group" data-field="back_sway">
+                                <button type="button" class="btn-option">Slightly</button>
+                                <button type="button" class="btn-option">Bad</button>
+                                <button type="button" class="btn-option">none</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>BEHIND HIGH</strong></label>
+                            <div class="button-group" data-field="behind_high">
+                                <button type="button" class="btn-option">No</button>
+                                <button type="button" class="btn-option">Yes</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>BEHIND (SIDE)</strong></label>
+                            <div class="button-group" data-field="behind_side">
+                                <button type="button" class="btn-option">Very Strong</button>
+                                <button type="button" class="btn-option">Strong</button>
+                                <button type="button" class="btn-option">Avg</button>
+                                <button type="button" class="btn-option">Weak</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>HIPS (SIDE)</strong></label>
+                            <div class="button-group" data-field="hips_side">
+                                <button type="button" class="btn-option">Neutral</button>
+                                <button type="button" class="btn-option">Long</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>HIP SHORT</strong></label>
+                            <div class="button-group" data-field="hip_short">
+                                <button type="button" class="btn-option">No</button>
+                                <button type="button" class="btn-option">Yes</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>HIP DROPS</strong></label>
+                            <div class="button-group" data-field="hip_drops">
+                                <button type="button" class="btn-option">No</button>
+                                <button type="button" class="btn-option">Yes</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -597,6 +710,38 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             window.location.href = link;
         }
 
+        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                // This is the value of the checkbox (1 for checked, 0 for unchecked)
+                const isChecked = this.checked ? '1' : '0';
+
+                // Extract horse name from the DOM
+                const horse_name = document.getElementById('horseName').textContent.trim(); // Corrected to get text content
+
+                const data = {
+                    horse_name: horse_name, // Replace with actual variable holding the horse name
+                    field: this.name, // Get the field name (e.g., 'neck_upright')
+                    value: isChecked
+                };
+
+                // Send the data to the server
+                fetch('update_inspection.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded'
+                        },
+                        body: new URLSearchParams(data)
+                    })
+                    .then(response => response.text())
+                    .then(result => {
+                        console.log(result); // Handle success
+                    })
+                    .catch(error => {
+                        console.error('Error updating checkbox:', error); // Handle error
+                    });
+            });
+        });
+
         document.querySelectorAll('.button-group').forEach(group => {
             const field = group.dataset.field;
 
@@ -687,6 +832,18 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         if (!found) {
                             console.warn(`No button matched for ${field} = ${value}`);
+                        }
+                    });
+
+                    // Update known checkbox fields
+                    const checkboxFields = ['neck_upright']; // add more keys here as needed
+
+                    checkboxFields.forEach(field => {
+                        const checkbox = document.querySelector(`input[type="checkbox"][name="${field}"]`);
+                        if (checkbox && data.hasOwnProperty(field)) {
+                            const val = data[field];
+                            checkbox.checked = val === 1 || val === '1' || val === true;
+                            console.log(`Checkbox ${field} set to: ${checkbox.checked}`);
                         }
                     });
                 })
