@@ -13,6 +13,9 @@ if ($field === 'neck_upright') {
 
 // Allowed fields to update
 $allowedFields = [
+    // HORSE INFORMATION
+    'sex_change',
+    
     // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
     'size', 'size_to_foal_date', 'short_legged', 'balance',
     'girth', 'withers', 'shoulder_angle', 'body',

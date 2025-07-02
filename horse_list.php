@@ -418,6 +418,23 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             <div id="inspectionTab" class="tab-pane">
                 <div id="inspectionForm">
 
+                    <div class="section-header">HORSE INFORMATION</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label for="sex">Sex:</label>
+                            <input type="text" id="sex" name="sex" readonly>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Sex Change:</strong></label>
+                            <div class="button-group" data-field="sex_change">
+                                <button type="button" class="btn-option">Ridgling</button>
+                                <button type="button" class="btn-option">Gelding</button>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
 
                     <div class="field-group">
@@ -788,6 +805,14 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
         function loadHorseInspection(horseName) {
             console.log("Loading inspection for:", horseName);
+
+            // Get the horse details from the sidebar (already loaded)
+            const horseDetails = {
+                sex: $('#sexDisplay').text().trim()
+            };
+
+            // Populate the inspection form fields
+            $('#sex').val(horseDetails.sex);
 
             fetch(`get_horse_values.php?horseId=${encodeURIComponent(horseName)}`)
                 .then(response => {
