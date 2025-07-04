@@ -447,7 +447,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     <div class="field-group-vertical">
                         <div class="form-row-vertical">
                             <label><strong>Day Rating Indicator:</strong></label>
-                            <div class="button-group-vertical" data-field="day_rating_indicator">
+                            <div class="button-group button-group-vertical" data-field="day_rating_indicator">
                                 <button type="button" class="btn-option">Ok</button>
                                 <button type="button" class="btn-option">Move Up</button>
                                 <button type="button" class="btn-option">Move Later</button>
@@ -456,7 +456,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row-vertical">
                             <label><strong>DAVE REID (Rat'g 4):</strong></label>
-                            <div class="button-group-vertical" data-field="dave_reid_rating">
+                            <div class="button-group button-group-vertical" data-field="dave_reid_rating">
                                 <button type="button" class="btn-option">1</button>
                                 <button type="button" class="btn-option">2</button>
                                 <button type="button" class="btn-option">2.5</button>
@@ -476,7 +476,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row-vertical">
                             <label><strong>UP / DN / EV:</strong></label>
-                            <div class="button-group-vertical" data-field="up_dn_ev">
+                            <div class="button-group button-group-vertical" data-field="up_dn_ev">
                                 <button type="button" class="btn-option">EVEN</button>
                                 <button type="button" class="btn-option">UP</button>
                                 <button type="button" class="btn-option">DOWN</button>
@@ -986,51 +986,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         btn.classList.remove('selected');
                     });
 
-                    document.querySelectorAll('.button-group-vertical').forEach(group => {
-                        const field = group.dataset.field;
-
-                        group.querySelectorAll('.btn-option').forEach(button => {
-                            button.addEventListener('click', function() {
-                                const horse_name = document.getElementById('hiddenHorseId').value;
-                                if (!horse_name) {
-                                    console.error('Horse name is missing.');
-                                    return;
-                                }
-
-                                const isSelected = this.classList.contains('selected');
-                                let value = null;
-
-                                if (isSelected) {
-                                    this.classList.remove('selected');
-                                    value = ''; // Interpreted as NULL in PHP
-                                } else {
-                                    // Deselect others
-                                    group.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('selected'));
-                                    this.classList.add('selected');
-                                    value = this.textContent.trim();
-                                }
-
-                                // Send update
-                                fetch('update_inspection.php', {
-                                        method: 'POST',
-                                        headers: {
-                                            'Content-Type': 'application/x-www-form-urlencoded'
-                                        },
-                                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
-                                    })
-                                    .then(response => response.text())
-                                    .then(data => {
-                                        console.log("Updated:", data);
-                                    })
-                                    .catch(error => {
-                                        console.error("Error:", error);
-                                    });
-                            });
-                        });
-                    });
-
                     // Set selections from data
-                    document.querySelectorAll('.button-group').forEach(group => {
+                    document.querySelectorAll('.button-group, .button-group-vertical').forEach(group => {
                         const field = group.dataset.field;
                         const value = data[field];
 
