@@ -593,9 +593,10 @@ body.modal-open #horseDetailsSidebar .closebtn {
 /* Group of buttons stays horizontal */
 .button-group-vertical {
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 4px;
+  flex-direction: row;      /* Force buttons in a row */
+  flex-wrap: nowrap;        /* Prevent wrapping to new line */
+  gap: 6px;                 /* Space between buttons */
+  align-items: center;      /* Vertically center the buttons */
 }
 
 /* Each row contains a label and button group */
