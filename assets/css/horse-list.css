@@ -600,7 +600,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 }
 
 /* Each row contains a label and button group */
-.form-row-vertical {
+.form-row-vertical label {
   display: flex;
   flex-direction: row;
   align-items: center;

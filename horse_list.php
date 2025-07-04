@@ -1042,6 +1042,49 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 });
         }
 
+        document.querySelectorAll('.button-group-vertical').forEach(group => {
+            const field = group.dataset.field;
+
+            group.querySelectorAll('.btn-option').forEach(button => {
+                button.addEventListener('click', function() {
+                    const horse_name = document.getElementById('hiddenHorseId').value;
+                    if (!horse_name) {
+                        console.error('Horse name is missing.');
+                        return;
+                    }
+
+                    const isSelected = this.classList.contains('selected');
+                    let value = null;
+
+                    if (isSelected) {
+                        this.classList.remove('selected');
+                        value = ''; // Interpreted as NULL in PHP
+                    } else {
+                        // Deselect others
+                        group.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('selected'));
+                        this.classList.add('selected');
+                        value = this.textContent.trim();
+                    }
+
+                    // Send update
+                    fetch('update_inspection.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Updated:", data);
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
+            });
+        });
+
         // File Upload Handler
         $('#fileUploadForm').on('submit', function(e) {
             e.preventDefault();
