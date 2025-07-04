@@ -584,17 +584,27 @@ body.modal-open #horseDetailsSidebar .closebtn {
 /* Group wrapper for all fields */
 .field-group-vertical {
   display: flex;
+  flex-direction: row; /* Ensure horizontal layout */
   flex-wrap: wrap;
-  gap: 16px 24px; /* tighter spacing */
+  gap: 16px 24px;
   padding: 12px 0;
 }
 
-/* Individual row: one label + buttons */
+/* Group of buttons stays horizontal */
+.button-group-vertical {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* Each row contains a label and button group */
 .form-row-vertical {
   display: flex;
   flex-direction: row;
-  flex: 1 1 280px;
-  min-width: 260px;
+  align-items: center;
+  flex: 0 0 auto; /* Prevents stretching */
+  min-width: auto;
 }
 
 /* Label becomes a top header */

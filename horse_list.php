@@ -447,7 +447,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     <div class="field-group-vertical">
                         <div class="form-row-vertical">
                             <label><strong>Day Rating Indicator:</strong></label>
-                            <div class="button-group" data-field="day_rating_indicator">
+                            <div class="button-group-vertical" data-field="day_rating_indicator">
                                 <button type="button" class="btn-option">Ok</button>
                                 <button type="button" class="btn-option">Move Up</button>
                                 <button type="button" class="btn-option">Move Later</button>
@@ -456,7 +456,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row-vertical">
                             <label><strong>DAVE REID (Rat'g 4):</strong></label>
-                            <div class="button-group" data-field="dave_reid_rating">
+                            <div class="button-group-vertical" data-field="dave_reid_rating">
                                 <button type="button" class="btn-option">1</button>
                                 <button type="button" class="btn-option">2</button>
                                 <button type="button" class="btn-option">2.5</button>
@@ -476,7 +476,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row-vertical">
                             <label><strong>UP / DN / EV:</strong></label>
-                            <div class="button-group" data-field="up_dn_ev">
+                            <div class="button-group-vertical" data-field="up_dn_ev">
                                 <button type="button" class="btn-option">EVEN</button>
                                 <button type="button" class="btn-option">UP</button>
                                 <button type="button" class="btn-option">DOWN</button>
