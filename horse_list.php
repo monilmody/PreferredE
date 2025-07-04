@@ -444,8 +444,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                     <div class="section-header">DAVE REID RATING</div>
 
-                    <div class="field-group">
-                        <div class="form-row">
+                    <div class="field-group-vertical">
+                        <div class="form-row-vertical">
                             <label><strong>Day Rating Indicator:</strong></label>
                             <div class="button-group" data-field="day_rating_indicator">
                                 <button type="button" class="btn-option">Ok</button>
@@ -454,7 +454,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <div class="form-row">
+                        <div class="form-row-vertical">
                             <label><strong>DAVE REID (Rat'g 4):</strong></label>
                             <div class="button-group" data-field="dave_reid_rating">
                                 <button type="button" class="btn-option">1</button>
@@ -474,7 +474,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <div class="form-row">
+                        <div class="form-row-vertical">
                             <label><strong>UP / DN / EV:</strong></label>
                             <div class="button-group" data-field="up_dn_ev">
                                 <button type="button" class="btn-option">EVEN</button>
@@ -482,7 +482,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option">DOWN</button>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="field-group">
                         <div class="form-row">
                             <div class="checkbox-group" data-field="neck_upright">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->

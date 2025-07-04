@@ -581,6 +581,22 @@ body.modal-open #horseDetailsSidebar .closebtn {
   min-width: 260px;
 }
 
+/* Group wrapper for all fields */
+.field-group-vertical {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px 24px; /* tighter spacing */
+  padding: 12px 0;
+}
+
+/* Individual row: one label + buttons */
+.form-row-vertical {
+  display: flex;
+  flex-direction: row;
+  flex: 1 1 280px;
+  min-width: 260px;
+}
+
 /* Label becomes a top header */
 .form-row label {
   font-weight: 600;
