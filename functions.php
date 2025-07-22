@@ -1,7 +1,5 @@
 <?php
-use Aws\S3\S3Client;
-use Dotenv\Dotenv;
-require 'vendor/autoload.php';
+
 function fetchRecords($horseName)
 {
 	global $mysqli;
@@ -3734,69 +3732,91 @@ function array_key_exists_case_insensitive($key, $array) {
     }
     return false;
 }
+
+use Aws\S3\S3Client;
+use Aws\SecretsManager\SecretsManagerClient;
+use Aws\Exception\AwsException;
+
 function getHorseDetails($horseId)
 {
     global $mysqli;
 
     if (!$mysqli) {
-        return ['error' => 'Invalid database connection'];
+        return ['error' => 'Invalid or lost database connection'];
     }
 
-    // Sanitize input
-    $horseName = $mysqli->real_escape_string($horseId);
+    // Validate and sanitize horse ID
+    if (!preg_match('/^[a-zA-Z0-9 _\-\(\)]+$/', $horseId)) {
+        return ['error' => 'Invalid horse ID format'];
+    }
 
-
-    // Fetch horse details
-    $sql = "SELECT * FROM sales WHERE HORSE = '$horseName' LIMIT 1";
-    $result = $mysqli->query($sql);
+    // Fetch horse details using prepared statement
+    $stmt = $mysqli->prepare("SELECT * FROM sales WHERE HORSE = ? LIMIT 1");
+    $stmt->bind_param("s", $horseId);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if (!$result || $result->num_rows === 0) {
         return ['error' => 'Horse not found'];
     }
 
     $horse = $result->fetch_assoc();
+    $stmt->close();
 
-    $horseId = preg_replace('/[^a-zA-Z0-9_\-]/', '', $horseName);
+    try {
 
-    // Load AWS credentials
-    $dotenv = Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
+        // Setup Secrets Manager
+        $region = 'us-east-1'; // Change if needed
+        $secretsClient = new SecretsManagerClient([
+            'version' => 'latest',
+            'region' => $region,
+        ]);
 
-    $s3 = new S3Client([
-        'region' => $_ENV['AWS_REGION'],
-        'version' => 'latest',
-        'credentials' => [
-            'key'    => $_ENV['AWS_ACCESS_KEY_ID'],
-            'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
-        ],
-        'suppress_php_deprecation_warning' => true
-    ]);
+        $secretResult = $secretsClient->getSecretValue([
+            'SecretId' => 'MyApp/S3Credentials',
+        ]);
 
-    $bucket = $_ENV['AWS_BUCKET'];
+        $secretData = json_decode($secretResult['SecretString'], true);
 
-    // Fetch stored object keys
-    $sql2 = "SELECT image_url FROM horse_images WHERE horse_id = '$horseId'";
-    $result2 = $mysqli->query($sql2);
+        $s3 = new S3Client([
+            'region' => $region,
+            'version' => 'latest',
+            'suppress_php_deprecation_warning' => true // ✅ THIS LINE
+        ]);
 
-    $images = [];
-    if ($result2 && $result2->num_rows > 0) {
+        $bucket = $secretData['AWS_BUCKET'];
+
+        // Fetch all image keys for the horse
+        $stmt2 = $mysqli->prepare("SELECT image_url FROM horse_images WHERE horse_id = ?");
+        $stmt2->bind_param("s", $horseId);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+
+        $images = [];
+
         while ($row = $result2->fetch_assoc()) {
             $objectKey = $row['image_url'];
 
-            // Generate presigned URL for each image
+            // Generate presigned URL (valid for 5 minutes)
             $cmd = $s3->getCommand('GetObject', [
                 'Bucket' => $bucket,
                 'Key'    => $objectKey,
             ]);
 
-            $request = $s3->createPresignedRequest($cmd, '+1 hour');
-            $presignedUrl = (string)$request->getUri();
-
-            $images[] = $presignedUrl;
+            $request = $s3->createPresignedRequest($cmd, '+5 minutes');
+            $images[] = (string) $request->getUri();
         }
+
+        $stmt2->close();
+
+        $horse['images'] = $images;
+
+        return $horse;
+    } catch (AwsException $e) {
+        error_log("AWS Error: " . $e->getMessage());
+        return ['error' => 'Failed to load images. Try again later.'];
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        return ['error' => 'Unexpected error retrieving horse details'];
     }
-
-    $horse['images'] = $images;
-
-    return $horse;
 }
