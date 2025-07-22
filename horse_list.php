@@ -457,20 +457,20 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         <div class="form-row-vertical">
                             <label><strong>DAVE REID (Rat'g 4):</strong></label>
                             <div class="button-group button-group-vertical" data-field="dave_reid_rating">
-                                <button type="button" class="btn-option">1</button>
-                                <button type="button" class="btn-option">2</button>
-                                <button type="button" class="btn-option">2.5</button>
+                                <button type="button" class="btn-option">1.00</button>
+                                <button type="button" class="btn-option">2.00</button>
+                                <button type="button" class="btn-option">2.50</button>
                                 <button type="button" class="btn-option">2.75</button>
-                                <button type="button" class="btn-option">3</button>
+                                <button type="button" class="btn-option">3.00</button>
                                 <button type="button" class="btn-option">3.15</button>
                                 <button type="button" class="btn-option">3.25</button>
                                 <button type="button" class="btn-option">3.33</button>
-                                <button type="button" class="btn-option">3.5</button>
+                                <button type="button" class="btn-option">3.50</button>
                                 <button type="button" class="btn-option">3.75</button>
-                                <button type="button" class="btn-option">4</button>
+                                <button type="button" class="btn-option">4.00</button>
                                 <button type="button" class="btn-option">4.25</button>
-                                <button type="button" class="btn-option">4.5</button>
-                                <button type="button" class="btn-option">5</button>
+                                <button type="button" class="btn-option">4.50</button>
+                                <button type="button" class="btn-option">5.00</button>
                             </div>
                         </div>
 
@@ -1264,8 +1264,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Set hidden horse ID
                         $('#hiddenHorseId').val(response.HORSE || '');
 
-                        console.log("horse id for image: ", response.HORSE);
-
                         // Load inspection data
                         loadHorseInspection(response.HORSE);
 
@@ -1275,7 +1273,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Show the sidebar
                         const horseIdForImages = sanitizeHorseId(response.HORSE);
                         $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
-                        console.log("Sanitized Horse ID for Images: ", horseIdForImages);
 
                         if (response.images && response.images.length > 0) {
                             response.images.forEach(imgUrl => {
