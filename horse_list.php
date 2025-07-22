@@ -1277,9 +1277,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
                             });
-                        } else {
+                            } else {
                             imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
                         }
+
+                        console.log("Images HTML:", imagesHtml);
 
                         // Display images in the sidebar
                         $('#photoPreview').html(imagesHtml);
