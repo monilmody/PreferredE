@@ -3737,6 +3737,12 @@ use Aws\S3\S3Client;
 use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
 
+function sanitizeHorseIdForImage($horseId)
+{
+    // Remove any non-alphanumeric characters, spaces, and special characters
+    return preg_replace('/[^a-zA-Z0-9_-]/', '', $horseId);
+}
+
 function getHorseDetails($horseId)
 {
     global $mysqli;
@@ -3785,9 +3791,12 @@ function getHorseDetails($horseId)
 
         $bucket = $secretData['AWS_BUCKET'];
 
+        // Sanitize the horseId specifically for images (remove spaces and special characters)
+        $sanitizedHorseId = sanitizeHorseIdForImage($horseId);
+
         // Fetch all image keys for the horse from the DB
         $stmt2 = $mysqli->prepare("SELECT image_url FROM horse_images WHERE horse_id = ?");
-        $stmt2->bind_param("s", $horseId);
+        $stmt2->bind_param("s", $sanitizedHorseId);
         $stmt2->execute();
         $result2 = $stmt2->get_result();
 
