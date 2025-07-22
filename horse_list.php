@@ -1264,6 +1264,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Set hidden horse ID
                         $('#hiddenHorseId').val(response.HORSE || '');
 
+                        console.log("horse id for image: ", response.HORSE);
+
                         // Load inspection data
                         loadHorseInspection(response.HORSE);
 
