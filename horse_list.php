@@ -1271,6 +1271,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         // Handle images (display the uploaded images)
                         let imagesHtml = '';
+
+                        // Show the sidebar
+                        const horseIdForImages = sanitizeHorseId(response.HORSE);
+                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
+                        console.log("Sanitized Horse ID for Images: ", horseIdForImages);
+
                         if (response.images && response.images.length > 0) {
                             response.images.forEach(imgUrl => {
                                 imagesHtml += `
@@ -1279,7 +1285,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
                             });
-                            } else {
+                        } else {
                             imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
                         }
 
@@ -1288,9 +1294,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Display images in the sidebar
                         $('#photoPreview').html(imagesHtml);
 
-                        // Show the sidebar
-                        const horseIdForImages = sanitizeHorseId(response.HORSE);
-                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
                         $('#horseDetailsSidebar').addClass('open');
                         $('#photoSection').show();
 
