@@ -1,11 +1,9 @@
 <?php
 require 'vendor/autoload.php';
-use Aws\S3\S3Client;
-use Dotenv\Dotenv;
 
-// Load environment variables
-$dotenv = Dotenv::createImmutable(__DIR__);
-$dotenv->load();
+use Aws\S3\S3Client;
+use Aws\SecretsManager\SecretsManagerClient;
+use Aws\Exception\AwsException;
 
 header('Content-Type: application/json');
 
@@ -19,28 +17,72 @@ $imageUrl = $_POST['imageUrl'];
 
 // Parse S3 key from URL
 $parsedUrl = parse_url($imageUrl);
-$path = ltrim($parsedUrl['path'], '/'); // This is your S3 key
+if (!isset($parsedUrl['path'])) {
+    echo json_encode(['success' => false, 'error' => 'Invalid image URL']);
+    exit;
+}
+$path = ltrim($parsedUrl['path'], '/'); // S3 object key
+
+// Fetch AWS credentials and config from Secrets Manager
+$secretName = 'MyApp/S3Credentials'; // Replace with your secret name or env var
+$region = 'us-east-1';               // Replace with your AWS region or env var
+
+try {
+    $secretsClient = new SecretsManagerClient([
+        'version' => 'latest',
+        'region'  => $region,
+        // No explicit credentials here, IAM role or env vars should provide permission
+    ]);
+
+    $result = $secretsClient->getSecretValue([
+        'SecretId' => $secretName,
+    ]);
+
+    if (isset($result['SecretString'])) {
+        $secretData = json_decode($result['SecretString'], true);
+
+        // Expecting secret JSON like:
+        // {
+        //   "AWS_ACCESS_KEY_ID": "...",
+        //   "AWS_SECRET_ACCESS_KEY": "...",
+        //   "AWS_BUCKET": "...",
+        //   "AWS_REGION": "..."
+        // }
+
+        $bucket = $secretData['AWS_BUCKET'] ?? null;
+        $region = $secretData['AWS_REGION'] ?? $region;
+
+        if (!$bucket) {
+            throw new Exception("Incomplete AWS credentials or bucket info in secret");
+        }
+    } else {
+        throw new Exception("SecretString not found in secret");
+    }
+} catch (AwsException $e) {
+    echo json_encode(['success' => false, 'error' => 'Failed to retrieve secrets: ' . $e->getMessage()]);
+    exit;
+} catch (Exception $e) {
+    echo json_encode(['success' => false, 'error' => 'Error: ' . $e->getMessage()]);
+    exit;
+}
 
 // Delete from S3
 try {
     $s3 = new S3Client([
-        'region' => $_ENV['AWS_REGION'],
+        'region' => $region,
         'version' => 'latest',
-        'credentials' => [
-            'key' => $_ENV['AWS_ACCESS_KEY_ID'],
-            'secret' => $_ENV['AWS_SECRET_ACCESS_KEY'],
-        ], 
         'suppress_php_deprecation_warning' => true
     ]);
 
-    $bucket = $_ENV['AWS_BUCKET'];
-
     $s3->deleteObject([
         'Bucket' => $bucket,
-        'Key' => $path
+        'Key' => $path,
     ]);
+} catch (AwsException $e) {
+    echo json_encode(['success' => false, 'error' => 'S3 delete failed: ' . $e->getAwsErrorMessage()]);
+    exit;
 } catch (Exception $e) {
-    echo json_encode(['success' => false, 'error' => 'S3 delete failed: ' . $e->getMessage()]);
+    echo json_encode(['success' => false, 'error' => 'S3 delete error: ' . $e->getMessage()]);
     exit;
 }
 
@@ -48,6 +90,10 @@ try {
 require 'db-settings.php'; // $mysqli should be defined here
 
 $stmt = $mysqli->prepare("DELETE FROM horse_images WHERE image_url = ?");
+if (!$stmt) {
+    echo json_encode(['success' => false, 'error' => 'Database prepare failed']);
+    exit;
+}
 $stmt->bind_param("s", $path);
 $stmt->execute();
 
@@ -56,5 +102,6 @@ if ($stmt->affected_rows > 0) {
 } else {
     echo json_encode(['success' => false, 'error' => 'Database entry not found']);
 }
+
 $stmt->close();
 $mysqli->close();

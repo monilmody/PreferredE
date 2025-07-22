@@ -1196,7 +1196,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             return name.replace(/[^a-zA-Z0-9_-]/g, '');
         }
 
-        // Open Sidebar and fetch horse details
         function openSidebar(horseName) {
             console.log("Horse ID (sanitized): " + horseName); // Debugging log
 
@@ -1268,11 +1267,36 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Load inspection data
                         loadHorseInspection(response.HORSE);
 
+                        // Handle images (display the uploaded images)
+                        let imagesHtml = '';
+                        if (response.images && response.images.length > 0) {
+                            response.images.forEach(imgUrl => {
+                                imagesHtml += `
+<div class="photo-card">
+    <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
+    <button class="delete-photo" data-url="${imgUrl}">×</button>
+</div>`;
+                            });
+                        } else {
+                            imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
+                        }
+
+                        // Display images in the sidebar
+                        $('#photoPreview').html(imagesHtml);
+
                         // Show the sidebar
+                        const horseIdForImages = sanitizeHorseId(response.HORSE);
+                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
                         $('#horseDetailsSidebar').addClass('open');
-                        $('#horseDetailsOverlay').show();
+                        $('#photoSection').show();
+
+                        // Show Edit, Save and Cancel buttons
+                        $('#editBtn').show();
+                        $('#saveBtn').hide();
+                        $('#cancelBtn').hide();
 
                         console.log("Sidebar opened successfully for:", response.HORSE);
+
                     } catch (error) {
                         console.error("Error processing response:", error);
                         alert("Error processing horse details");
@@ -1284,61 +1308,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     alert("Failed to load horse details. Please try again.");
                 }
             });
-
-            loadHorseInspection(response.HORSE);
-
-            $('#hiddenHorseId').val(response.HORSE);
-
-            $('#horseDetailsContent').html(`
-    <p><strong>Year of Foal:</strong> 
-        <span id="yearFoalDisplay">${response.YEARFOAL}</span>
-        <input type="text" id="yearFoalInput" value="${response.YEARFOAL}" style="display:none;">
-    </p>
-    <p><strong>Sex:</strong> 
-        <span id="sexDisplay">${response.SEX}</span>
-        <input type="text" id="sexInput" value="${response.SEX}" style="display:none;">
-    </p>
-    <p><strong>Sire:</strong> 
-        <span id="sireDisplay">${response.Sire}</span>
-        <input type="text" id="sireInput" value="${response.Sire}" style="display:none;">
-    </p>
-    <p><strong>Dam:</strong> 
-        <span id="damDisplay">${response.DAM}</span>
-        <input type="text" id="damInput" value="${response.DAM}" style="display:none;">
-    </p>
-        <p><strong>DATEFOAL:</strong> 
-        <span id="datefoalDisplay">${response.DATEFOAL}</span>
-        <input type="text" id="DatefoalInput" value="${response.DATEFOAL}" style="display:none;">
-    </p>
-`);
-
-            // Handle images (display the uploaded images)
-            let imagesHtml = '';
-            if (response.images && response.images.length > 0) {
-                response.images.forEach(imgUrl => {
-                    imagesHtml += `
-<div class="photo-card">
-    <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
-    <button class="delete-photo" data-url="${imgUrl}">×</button>
-</div>`;
-                });
-            } else {
-                imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
-            }
-
-            // Display images in the sidebar
-            $('#photoPreview').html(imagesHtml);
-
-            // Show the sidebar
-            const horseIdForImages = sanitizeHorseId(response.HORSE);
-            $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
-            $('#horseDetailsSidebar').addClass('open');
-            $('#photoSection').show();
-
-            // Show Edit, Save and Cancel buttons
-            $('#editBtn').show();
-            $('#saveBtn').hide();
-            $('#cancelBtn').hide();
         }
 
         $(document).on('click', '.tab-button', function() {
