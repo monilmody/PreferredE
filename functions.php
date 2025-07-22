@@ -3764,7 +3764,6 @@ function getHorseDetails($horseId)
     $stmt->close();
 
     try {
-
         // Setup Secrets Manager
         $region = 'us-east-1'; // Change if needed
         $secretsClient = new SecretsManagerClient([
@@ -3786,7 +3785,7 @@ function getHorseDetails($horseId)
 
         $bucket = $secretData['AWS_BUCKET'];
 
-        // Fetch all image keys for the horse
+        // Fetch all image keys for the horse from the DB
         $stmt2 = $mysqli->prepare("SELECT image_url FROM horse_images WHERE horse_id = ?");
         $stmt2->bind_param("s", $horseId);
         $stmt2->execute();
@@ -3794,21 +3793,26 @@ function getHorseDetails($horseId)
 
         $images = [];
 
+        // For each image URL (which is an S3 object key)
         while ($row = $result2->fetch_assoc()) {
             $objectKey = $row['image_url'];
 
-            // Generate presigned URL (valid for 5 minutes)
+            // Generate presigned URL for each image (valid for 5 minutes)
             $cmd = $s3->getCommand('GetObject', [
                 'Bucket' => $bucket,
                 'Key'    => $objectKey,
             ]);
 
+            // Generate the presigned URL valid for 5 minutes
             $request = $s3->createPresignedRequest($cmd, '+5 minutes');
+
+            // Add the presigned URL to the images array
             $images[] = (string) $request->getUri();
         }
 
         $stmt2->close();
 
+        // Attach the images array to the horse data
         $horse['images'] = $images;
 
         return $horse;
