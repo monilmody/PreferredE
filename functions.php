@@ -3792,28 +3792,36 @@ function getHorseDetails($horseId)
         $result2 = $stmt2->get_result();
 
         $images = [];
+        
+        // Log the results of the image query to check if data is being retrieved correctly
+        if ($result2 && $result2->num_rows > 0) {
+            while ($row = $result2->fetch_assoc()) {
+                $objectKey = $row['image_url'];
 
-        // For each image URL (which is an S3 object key)
-        while ($row = $result2->fetch_assoc()) {
-            $objectKey = $row['image_url'];
+                // Generate presigned URL for each image (valid for 5 minutes)
+                $cmd = $s3->getCommand('GetObject', [
+                    'Bucket' => $bucket,
+                    'Key'    => $objectKey,
+                ]);
 
-            // Generate presigned URL for each image (valid for 5 minutes)
-            $cmd = $s3->getCommand('GetObject', [
-                'Bucket' => $bucket,
-                'Key'    => $objectKey,
-            ]);
+                // Generate the presigned URL valid for 5 minutes
+                $request = $s3->createPresignedRequest($cmd, '+5 minutes');
 
-            // Generate the presigned URL valid for 5 minutes
-            $request = $s3->createPresignedRequest($cmd, '+5 minutes');
-
-            // Add the presigned URL to the images array
-            $images[] = (string) $request->getUri();
+                // Add the presigned URL to the images array
+                $images[] = (string) $request->getUri();
+            }
+        } else {
+            // If no images found for this horse, log a message
+            error_log("No images found for horse: $horseId");
         }
 
         $stmt2->close();
 
         // Attach the images array to the horse data
         $horse['images'] = $images;
+
+        // Log the images array to verify the result
+        error_log("Images for horse $horseId: " . json_encode($images));
 
         return $horse;
     } catch (AwsException $e) {
