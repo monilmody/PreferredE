@@ -225,6 +225,11 @@
   flex: 1;
 }
 
+/* Hide all tabs by default */
+.tab-pane {
+  display: none;
+}
+
 .tab-pane.active {
   display: block;
 }

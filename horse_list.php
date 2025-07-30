@@ -415,6 +415,27 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             </div>
 
+            <div id="photosTab" class="tab-pane">
+
+                <!-- 📸 Photo Upload Section -->
+                <div id="photoSection" style="margin-top: 20px;">
+                    <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="horseId" id="hiddenHorseId">
+                        <input type="hidden" id="hiddenHorseIdSanitized">
+
+                        <input type="file" name="file" id="fileInput" accept="image/*">
+                        <button type="submit" class="btn btn-success" style="display:none;">
+                            <i class="fas fa-upload"></i> Upload File
+                        </button>
+                    </form>
+                </div>
+
+                <h3 class="sticky-header">Photos</h3>
+
+                <div id="photoPreview"></div>
+
+            </div>
+
             <div id="inspectionTab" class="tab-pane">
                 <div id="inspectionForm">
 
@@ -933,27 +954,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 value="<?= htmlspecialchars($horse['pasterns_notes'] ?? '') ?>">
                         </div>
                     </div>
-                </div>
-
-                <div id="photosTab" class="tab-pane">
-
-                    <!-- 📸 Photo Upload Section -->
-                    <div id="photoSection" style="margin-top: 20px;">
-                        <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
-                            <input type="hidden" name="horseId" id="hiddenHorseId">
-                            <input type="hidden" id="hiddenHorseIdSanitized">
-
-                            <input type="file" name="file" id="fileInput" accept="image/*">
-                            <button type="submit" class="btn btn-success" style="display:none;">
-                                <i class="fas fa-upload"></i> Upload File
-                            </button>
-                        </form>
-                    </div>
-
-                    <h3 class="sticky-header">Photos</h3>
-
-                    <div id="photoPreview"></div>
-
                 </div>
             </div>
         </div>
