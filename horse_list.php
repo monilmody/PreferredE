@@ -972,28 +972,45 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
-            // Auto-save when user stops typing (1 second delay)
-            document.querySelectorAll('.auto-save-field').forEach(field => {
-                let saveTimeout;
+            document.addEventListener('DOMContentLoaded', function() {
+                document.querySelectorAll('.auto-save-field').forEach(field => {
+                    let saveTimeout;
 
-                field.addEventListener('input', function() {
-                    clearTimeout(saveTimeout);
-                    saveTimeout = setTimeout(() => {
-                    const horse_name = document.getElementById('horseName').textContent.trim(); // Corrected to get text content
-                        const fieldName = this.getAttribute('data-field');
-                        const value = this.value;
+                    field.addEventListener('input', function() {
+                        clearTimeout(saveTimeout);
+                        saveTimeout = setTimeout(() => {
+                            // Fetch the horse_name from the hidden span
+                            const horse_name = document.getElementById('horseName').textContent.trim();
+                            console.log("Horse Name fetched from span:", horse_name); // Debugging line
 
-                        fetch('update_inspection.php', {
-                                method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/x-www-form-urlencoded',
-                                },
-                                body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
-                            })
-                            .then(response => response.text())
-                            .then(console.log) // Optional: show success in console
-                            .catch(console.error); // Optional: show errors in console
-                    }, 1000); // 1 second delay after typing stops
+                            if (!horse_name) {
+                                console.error("Horse name is not found!");
+                                return; // Exit if horse_name is not available
+                            }
+
+                            // Get the field name and value
+                            const fieldName = this.getAttribute('data-field');
+                            const value = this.value;
+
+                            // Debug: Log the field name and value
+                            console.log("Field Name:", fieldName);
+                            console.log("Value:", value);
+
+                            // Send POST request to update the database
+                            fetch('update_inspection.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
+                                })
+                                .then(response => response.text())
+                                .then(responseText => {
+                                    console.log("Received response:", responseText); // Debugging line
+                                })
+                                .catch(console.error); // Optional: show errors in console
+                        }, 1000); // 1 second delay after typing stops
+                    });
                 });
             });
 
