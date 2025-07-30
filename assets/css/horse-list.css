@@ -145,7 +145,7 @@
 
 .closebtn {
   position: absolute;
-  top: 20px;
+  top: 0px;
   right: 20px;
   background-color: #f44336;
   color: white;
@@ -179,7 +179,7 @@
 /* Tabs */
 .tab-buttons {
   position: sticky;
-  top: 140px;
+  top: 120px;
   background: white;
   padding: 10px 0;
   z-index: 100;
