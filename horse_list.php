@@ -923,7 +923,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
-                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control" value="<?= isset($horse['pasterns_notes']) ? htmlspecialchars($horse['pasterns_notes']) : '' ?>">
+                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control auto-save-field" value="<?= isset($horse['pasterns_notes']) ? htmlspecialchars($horse['pasterns_notes']) : '' ?>">
                         </div>
                     </div>
                 </div>
@@ -965,21 +965,29 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
-            document.querySelector('[data-field="pasterns_notes"]').addEventListener('blur', function(e) {
-                const field = this.getAttribute('data-field');
-                const value = this.value;
+            // Auto-save when user stops typing (1 second delay)
+            document.querySelectorAll('.auto-save-field').forEach(field => {
+                let saveTimeout;
 
-                // Send the update via AJAX
-                fetch('your_php_script.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded',
-                        },
-                        body: `horse_name=${encodeURIComponent(horseName)}&field=${field}&value=${encodeURIComponent(value)}`
-                    })
-                    .then(response => response.text())
-                    .then(data => console.log(data))
-                    .catch(error => console.error('Error:', error));
+                field.addEventListener('input', function() {
+                    clearTimeout(saveTimeout);
+                    saveTimeout = setTimeout(() => {
+                        const horseName = '<?= $horse_name ?>'; // Make sure this is available
+                        const fieldName = this.getAttribute('data-field');
+                        const value = this.value;
+
+                        fetch('update_inspection.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: `horse_name=${encodeURIComponent(horseName)}&field=${fieldName}&value=${encodeURIComponent(value)}`
+                            })
+                            .then(response => response.text())
+                            .then(console.log) // Optional: show success in console
+                            .catch(console.error); // Optional: show errors in console
+                    }, 1000); // 1 second delay after typing stops
+                });
             });
 
             // Function to collect selected sort values and pass them as parameters
