@@ -817,7 +817,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     <div class="field-group-vertical">
                         <div class="form-row-vertical">
                             <label><strong>Stifle</strong></label>
-                            <div class="button-group" data-field="stifle_quality">
+                            <div class="button-group button-group-vertical" data-field="stifle_quality">
                                 <input type="hidden" name="stifle_quality" value="">
                                 <button type="button" class="btn-option" data-value="strong">Strong</button>
                                 <button type="button" class="btn-option" data-value="avg">Avg</button>
@@ -827,7 +827,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row-vertical">
                             <label><strong>Gaskin</strong></label>
-                            <div class="button-group" data-field="gaskin_quality">
+                            <div class="button-group button-group-vertical" data-field="gaskin_quality">
                                 <input type="hidden" name="gaskin_quality" value="">
                                 <button type="button" class="btn-option" data-value="strong">Strong</button>
                                 <button type="button" class="btn-option" data-value="avg">Avg</button>
