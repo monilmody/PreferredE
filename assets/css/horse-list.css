@@ -114,7 +114,6 @@
   transition: right 0.3s ease;
   z-index: 1050;
   padding: 20px;
-  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -145,7 +144,7 @@
 
 .closebtn {
   position: absolute;
-  top: 0px;
+  top: 20px;
   right: 20px;
   background-color: #f44336;
   color: white;
@@ -160,9 +159,6 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* Centering the text inside the button */
-  margin-left: auto; /* Pushes it to the right */
-  float: right; /* Ensures it stays on the right */
 }
 
 #horseDetailsSidebar.open {
@@ -764,7 +760,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 /* Sticky section that includes both horse name and details */
 .horse-title-section {
   position: sticky;
-  top: 30;
+  top: 0;
   /* Stick to the top of the viewport */
   z-index: 100;
   /* Ensure it stays above other content */
@@ -776,6 +772,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
   /* Optional rounded corners */
   width: 100%;
   /* Ensure it takes full width */
+  box-sizing: border-box; /* Ensure padding is accounted for in the width */
 }
 
 .parent-info .horse-info:not(:last-child):after {
@@ -783,7 +780,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 }
 
 .parent-info {
-  display: inline;
+  display: flex;
   font-size: 2em;
   /* Makes parentheses bigger */
   color: white;
