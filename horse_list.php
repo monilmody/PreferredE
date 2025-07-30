@@ -835,355 +835,392 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">SIDE KNEES (Back, Over, Tied) - PASTERNS</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>BACK on RIGHT Knee</strong></label>
+                            <div class="button-group" data-field="back_right_knee">
+                                <input type="hidden" name="back_right_knee" value="">
+                                <button type="button" class="btn-option" data-value="back_slightly">Back Slightly</button>
+                                <button type="button" class="btn-option" data-value="back_bad">Back Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="tied_in_right_knee">
+                                <input type="hidden" name="tied_in_right_knee" value="0">
+                                <input type="checkbox" id="tied_in_right_knee" name="tied_in_right_knee" value="1">
+                                <label for="tied_in_right_knee">TIED IN Right Knee</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>OVER of RIGHT Knee</strong></label>
+                            <div class="button-group" data-field="over_right_knee">
+                                <input type="hidden" name="over_right_knee" value="">
+                                <button type="button" class="btn-option" data-value="over_slightly">Over Slightly</button>
+                                <button type="button" class="btn-option" data-value="over_bad">Over Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>BACK on LEFT Knee</strong></label>
+                            <div class="button-group" data-field="back_left_knee">
+                                <input type="hidden" name="back_left_knee" value="">
+                                <button type="button" class="btn-option" data-value="back_slightly">Back Slightly</button>
+                                <button type="button" class="btn-option" data-value="back_bad">Back Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="tied_in_left_knee">
+                                <input type="hidden" name="tied_in_left_knee" value="0">
+                                <input type="checkbox" id="tied_in_left_knee" name="tied_in_left_knee" value="1">
+                                <label for="tied_in_left_knee">TIED IN Left Knee</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>OVER on LEFT Knee</strong></label>
+                            <div class="button-group" data-field="over_left_knee">
+                                <input type="hidden" name="over_left_knee" value="">
+                                <button type="button" class="btn-option" data-value="over_slightly">Over Slightly</button>
+                                <button type="button" class="btn-option" data-value="over_bad">Over Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Pasterns LENGTH</strong></label>
+                            <div class="button-group" data-field="pasterns_length">
+                                <input type="hidden" name="pasterns_length" value="">
+                                <button type="button" class="btn-option" data-value="average">Average</button>
+                                <button type="button" class="btn-option" data-value="long">Long</button>
+                                <button type="button" class="btn-option" data-value="short">Short</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Pasterns ANGLE</strong></label>
+                            <div class="button-group" data-field="pasterns_angle">
+                                <input type="hidden" name="pasterns_angle" value="">
+                                <button type="button" class="btn-option" data-value="neutral">Neutral</button>
+                                <button type="button" class="btn-option" data-value="straight">Straight</button>
+                                <button type="button" class="btn-option" data-value="slope">Slope</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Pasterns STRENGTH</strong></label>
+                            <div class="button-group" data-field="pasterns_strength">
+                                <input type="hidden" name="pasterns_strength" value="">
+                                <button type="button" class="btn-option" data-value="neutral">Neutral</button>
+                                <button type="button" class="btn-option" data-value="soft">Soft</button>
+                                <button type="button" class="btn-option" data-value="very_weak">Very Weak</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Notes On Pasterns</strong></label>
+                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control">
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <div id="photosTab" class="tab-pane">
+                <div id="photosTab" class="tab-pane">
 
-                <!-- 📸 Photo Upload Section -->
-                <div id="photoSection" style="margin-top: 20px;">
-                    <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
-                        <input type="hidden" name="horseId" id="hiddenHorseId">
-                        <input type="hidden" id="hiddenHorseIdSanitized">
+                    <!-- 📸 Photo Upload Section -->
+                    <div id="photoSection" style="margin-top: 20px;">
+                        <form id="fileUploadForm" method="POST" enctype="multipart/form-data">
+                            <input type="hidden" name="horseId" id="hiddenHorseId">
+                            <input type="hidden" id="hiddenHorseIdSanitized">
 
-                        <input type="file" name="file" id="fileInput" accept="image/*">
-                        <button type="submit" class="btn btn-success" style="display:none;">
-                            <i class="fas fa-upload"></i> Upload File
-                        </button>
-                    </form>
+                            <input type="file" name="file" id="fileInput" accept="image/*">
+                            <button type="submit" class="btn btn-success" style="display:none;">
+                                <i class="fas fa-upload"></i> Upload File
+                            </button>
+                        </form>
+                    </div>
+
+                    <h3 class="sticky-header">Photos</h3>
+
+                    <div id="photoPreview"></div>
+
                 </div>
-
-                <h3 class="sticky-header">Photos</h3>
-
-                <div id="photoPreview"></div>
-
             </div>
         </div>
-    </div>
-    <br>
+        <br>
 
 
-    <script>
-        document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
-        document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
-        document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
-        document.getElementById('sort4').value = "<?php echo $sort4_param; ?>";
-        document.getElementById('sort5').value = "<?php echo $sort5_param; ?>";
-        document.getElementById('sort1_order').value = "<?php echo $sort1_param_order; ?>";
-        document.getElementById('sort2_order').value = "<?php echo $sort2_param_order; ?>";
-        document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
-        document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
-        document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
+        <script>
+            document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";
+            document.getElementById('sort2').value = "<?php echo $sort2_param; ?>";
+            document.getElementById('sort3').value = "<?php echo $sort3_param; ?>";
+            document.getElementById('sort4').value = "<?php echo $sort4_param; ?>";
+            document.getElementById('sort5').value = "<?php echo $sort5_param; ?>";
+            document.getElementById('sort1_order').value = "<?php echo $sort1_param_order; ?>";
+            document.getElementById('sort2_order').value = "<?php echo $sort2_param_order; ?>";
+            document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
+            document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
+            document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
-        // Function to collect selected sort values and pass them as parameters
-        function getValues() {
-            var sort1 = document.getElementById('sort1').value;
-            var sort2 = document.getElementById('sort2').value;
-            var sort3 = document.getElementById('sort3').value;
-            var sort4 = document.getElementById('sort4').value;
-            var sort5 = document.getElementById('sort5').value;
+            // Function to collect selected sort values and pass them as parameters
+            function getValues() {
+                var sort1 = document.getElementById('sort1').value;
+                var sort2 = document.getElementById('sort2').value;
+                var sort3 = document.getElementById('sort3').value;
+                var sort4 = document.getElementById('sort4').value;
+                var sort5 = document.getElementById('sort5').value;
 
-            // Sorting orders (ASC or DESC)
-            var sort1_order = document.getElementById('sort1_order').value;
-            var sort2_order = document.getElementById('sort2_order').value;
-            var sort3_order = document.getElementById('sort3_order').value;
-            var sort4_order = document.getElementById('sort4_order').value;
-            var sort5_order = document.getElementById('sort5_order').value;
+                // Sorting orders (ASC or DESC)
+                var sort1_order = document.getElementById('sort1_order').value;
+                var sort2_order = document.getElementById('sort2_order').value;
+                var sort3_order = document.getElementById('sort3_order').value;
+                var sort4_order = document.getElementById('sort4_order').value;
+                var sort5_order = document.getElementById('sort5_order').value;
 
-            // Get search terms
-            var horseSearch = "<?php echo isset($_GET['horse_search']) ? $_GET['horse_search'] : '' ?>";
-            var damSearch = "<?php echo isset($_GET['dam_search']) ? $_GET['dam_search'] : '' ?>";
-            var locationSearch = "<?php echo isset($_GET['location_search']) ? $_GET['location_search'] : '' ?>";
-            var FoalSearch = "<?php echo isset($_GET['foal_search']) ? $_GET['foal_search'] : '' ?>";
-            var ConsignerSearch = "<?php echo isset($_GET['consigner_search']) ? $_GET['consigner_search'] : '' ?>";
-            var SalecodeSearch = "<?php echo isset($_GET['salecode_search']) ? $_GET['salecode_search'] : '' ?>";
+                // Get search terms
+                var horseSearch = "<?php echo isset($_GET['horse_search']) ? $_GET['horse_search'] : '' ?>";
+                var damSearch = "<?php echo isset($_GET['dam_search']) ? $_GET['dam_search'] : '' ?>";
+                var locationSearch = "<?php echo isset($_GET['location_search']) ? $_GET['location_search'] : '' ?>";
+                var FoalSearch = "<?php echo isset($_GET['foal_search']) ? $_GET['foal_search'] : '' ?>";
+                var ConsignerSearch = "<?php echo isset($_GET['consigner_search']) ? $_GET['consigner_search'] : '' ?>";
+                var SalecodeSearch = "<?php echo isset($_GET['salecode_search']) ? $_GET['salecode_search'] : '' ?>";
 
-            var link = "horse_list.php?&sort1=" + sort1 +
-                "&sort1_order=" + sort1_order // Added sorting order
-                +
-                "&sort2=" + sort2 +
-                "&sort2_order=" + sort2_order // Added sorting order
-                +
-                "&sort3=" + sort3 +
-                "&sort3_order=" + sort3_order // Added sorting order
-                +
-                "&sort4=" + sort4 +
-                "&sort4_order=" + sort4_order // Added sorting order
-                +
-                "&sort5=" + sort5 +
-                "&sort5_order=" + sort5_order; // Added sorting order
+                var link = "horse_list.php?&sort1=" + sort1 +
+                    "&sort1_order=" + sort1_order // Added sorting order
+                    +
+                    "&sort2=" + sort2 +
+                    "&sort2_order=" + sort2_order // Added sorting order
+                    +
+                    "&sort3=" + sort3 +
+                    "&sort3_order=" + sort3_order // Added sorting order
+                    +
+                    "&sort4=" + sort4 +
+                    "&sort4_order=" + sort4_order // Added sorting order
+                    +
+                    "&sort5=" + sort5 +
+                    "&sort5_order=" + sort5_order; // Added sorting order
 
-            // Add search parameters if they exist
-            if (horseSearch) {
-                link += "&horse_search=" + encodeURIComponent(horseSearch);
+                // Add search parameters if they exist
+                if (horseSearch) {
+                    link += "&horse_search=" + encodeURIComponent(horseSearch);
+                }
+                if (damSearch) {
+                    link += "&dam_search=" + encodeURIComponent(damSearch);
+                }
+                if (locationSearch) {
+                    link += "&location_search=" + encodeURIComponent(locationSearch);
+                }
+                if (FoalSearch) {
+                    link += "&foal_search=" + encodeURIComponent(FoalSearch);
+                }
+                if (ConsignerSearch) {
+                    link += "&consigner_search=" + encodeURIComponent(ConsignerSearch);
+                }
+                if (SalecodeSearch) {
+                    link += "&salecode_search=" + encodeURIComponent(SalecodeSearch);
+                }
+
+                window.location.href = link;
             }
-            if (damSearch) {
-                link += "&dam_search=" + encodeURIComponent(damSearch);
-            }
-            if (locationSearch) {
-                link += "&location_search=" + encodeURIComponent(locationSearch);
-            }
-            if (FoalSearch) {
-                link += "&foal_search=" + encodeURIComponent(FoalSearch);
-            }
-            if (ConsignerSearch) {
-                link += "&consigner_search=" + encodeURIComponent(ConsignerSearch);
-            }
-            if (SalecodeSearch) {
-                link += "&salecode_search=" + encodeURIComponent(SalecodeSearch);
-            }
 
-            window.location.href = link;
-        }
+            document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    // This is the value of the checkbox (1 for checked, 0 for unchecked)
+                    const isChecked = this.checked ? '1' : '0';
 
-        document.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
-            checkbox.addEventListener('change', function() {
-                // This is the value of the checkbox (1 for checked, 0 for unchecked)
-                const isChecked = this.checked ? '1' : '0';
+                    // Extract horse name from the DOM
+                    const horse_name = document.getElementById('horseName').textContent.trim(); // Corrected to get text content
 
-                // Extract horse name from the DOM
-                const horse_name = document.getElementById('horseName').textContent.trim(); // Corrected to get text content
+                    const data = {
+                        horse_name: horse_name, // Replace with actual variable holding the horse name
+                        field: this.name, // Get the field name (e.g., 'neck_upright')
+                        value: isChecked
+                    };
 
-                const data = {
-                    horse_name: horse_name, // Replace with actual variable holding the horse name
-                    field: this.name, // Get the field name (e.g., 'neck_upright')
-                    value: isChecked
-                };
-
-                // Send the data to the server
-                fetch('update_inspection.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: new URLSearchParams(data)
-                    })
-                    .then(response => response.text())
-                    .then(result => {
-                        console.log(result); // Handle success
-                    })
-                    .catch(error => {
-                        console.error('Error updating checkbox:', error); // Handle error
-                    });
-            });
-        });
-
-        document.querySelectorAll('.button-group').forEach(group => {
-            const field = group.dataset.field;
-
-            group.querySelectorAll('.btn-option').forEach(button => {
-                button.addEventListener('click', function() {
-                    const horse_name = document.getElementById('hiddenHorseId').value;
-                    if (!horse_name) {
-                        console.error('Horse name is missing.');
-                        return;
-                    }
-
-                    const isSelected = this.classList.contains('selected');
-                    let value = null;
-
-                    if (isSelected) {
-                        // Unselect the button
-                        this.classList.remove('selected');
-                        value = ''; // This will be interpreted as NULL in PHP
-                    } else {
-                        // Deselect others and select this one
-                        group.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('selected'));
-                        this.classList.add('selected');
-                        value = this.textContent.trim();
-                    }
-
+                    // Send the data to the server
                     fetch('update_inspection.php', {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/x-www-form-urlencoded'
                             },
-                            body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                            body: new URLSearchParams(data)
                         })
                         .then(response => response.text())
-                        .then(data => {
-                            console.log("Updated:", data);
+                        .then(result => {
+                            console.log(result); // Handle success
                         })
                         .catch(error => {
-                            console.error("Error:", error);
+                            console.error('Error updating checkbox:', error); // Handle error
                         });
                 });
             });
-        });
 
-        function loadHorseInspection(horseName) {
-            console.log("Loading inspection for:", horseName);
+            document.querySelectorAll('.button-group').forEach(group => {
+                const field = group.dataset.field;
 
-            // Get the horse details from the sidebar (already loaded)
-            const horseDetails = {
-                sex: $('#sexDisplay').text().trim(),
-                salecode: $('#salecodeDisplay').text().trim()
-            };
-
-            // Populate the inspection form fields
-            $('#sex').val(horseDetails.sex);
-            $('#salecode').val(horseDetails.salecode);
-
-            fetch(`get_horse_values.php?horseId=${encodeURIComponent(horseName)}`)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    return response.json();
-                })
-                .then(data => {
-                    console.log("Inspection data received:", data);
-
-                    if (!data || Object.keys(data).length === 0) {
-                        console.log("No inspection data found for this horse");
-                        return;
-                    }
-
-                    // Clear all selections first
-                    document.querySelectorAll('.btn-option').forEach(btn => {
-                        btn.classList.remove('selected');
-                    });
-
-                    // Set selections from data
-                    document.querySelectorAll('.button-group, .button-group-vertical').forEach(group => {
-                        const field = group.dataset.field;
-                        const value = data[field];
-
-                        if (!value) {
-                            console.log(`No value for field: ${field}`);
+                group.querySelectorAll('.btn-option').forEach(button => {
+                    button.addEventListener('click', function() {
+                        const horse_name = document.getElementById('hiddenHorseId').value;
+                        if (!horse_name) {
+                            console.error('Horse name is missing.');
                             return;
                         }
 
-                        console.log(`Looking for match: ${field} = ${value}`);
+                        const isSelected = this.classList.contains('selected');
+                        let value = null;
 
-                        let found = false;
-                        group.querySelectorAll('.btn-option').forEach(button => {
-                            const buttonText = button.textContent.trim().toLowerCase();
-                            if (buttonText === value.toLowerCase()) {
-                                button.classList.add('selected');
-                                found = true;
-                                console.log(`Matched button: ${buttonText}`);
+                        if (isSelected) {
+                            // Unselect the button
+                            this.classList.remove('selected');
+                            value = ''; // This will be interpreted as NULL in PHP
+                        } else {
+                            // Deselect others and select this one
+                            group.querySelectorAll('.btn-option').forEach(btn => btn.classList.remove('selected'));
+                            this.classList.add('selected');
+                            value = this.textContent.trim();
+                        }
+
+                        fetch('update_inspection.php', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded'
+                                },
+                                body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                            })
+                            .then(response => response.text())
+                            .then(data => {
+                                console.log("Updated:", data);
+                            })
+                            .catch(error => {
+                                console.error("Error:", error);
+                            });
+                    });
+                });
+            });
+
+            function loadHorseInspection(horseName) {
+                console.log("Loading inspection for:", horseName);
+
+                // Get the horse details from the sidebar (already loaded)
+                const horseDetails = {
+                    sex: $('#sexDisplay').text().trim(),
+                    salecode: $('#salecodeDisplay').text().trim()
+                };
+
+                // Populate the inspection form fields
+                $('#sex').val(horseDetails.sex);
+                $('#salecode').val(horseDetails.salecode);
+
+                fetch(`get_horse_values.php?horseId=${encodeURIComponent(horseName)}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        console.log("Inspection data received:", data);
+
+                        if (!data || Object.keys(data).length === 0) {
+                            console.log("No inspection data found for this horse");
+                            return;
+                        }
+
+                        // Clear all selections first
+                        document.querySelectorAll('.btn-option').forEach(btn => {
+                            btn.classList.remove('selected');
+                        });
+
+                        // Set selections from data
+                        document.querySelectorAll('.button-group, .button-group-vertical').forEach(group => {
+                            const field = group.dataset.field;
+                            const value = data[field];
+
+                            if (!value) {
+                                console.log(`No value for field: ${field}`);
+                                return;
+                            }
+
+                            console.log(`Looking for match: ${field} = ${value}`);
+
+                            let found = false;
+                            group.querySelectorAll('.btn-option').forEach(button => {
+                                const buttonText = button.textContent.trim().toLowerCase();
+                                if (buttonText === value.toLowerCase()) {
+                                    button.classList.add('selected');
+                                    found = true;
+                                    console.log(`Matched button: ${buttonText}`);
+                                }
+                            });
+
+                            if (!found) {
+                                console.warn(`No button matched for ${field} = ${value}`);
                             }
                         });
 
-                        if (!found) {
-                            console.warn(`No button matched for ${field} = ${value}`);
-                        }
+                        // Update known checkbox fields
+                        const checkboxFields = ['neck_upright',
+                            'neck_ok',
+                            'neck_very_nice',
+                            'neck_dr',
+                            'neck_top_horse',
+                            'neck_athletic',
+                            'neck_racey',
+                            'neck_clean_correct',
+                            'neck_needs_grow',
+                            'neck_needs_mature',
+                            'neck_needs_improve',
+                            'neck_nm_ty',
+                            'sickle_hock',
+                            'sickle_hock_slightly',
+                            'post_legged',
+                            'camped_out',
+                            'tied_in_right_knee',
+                            'tied_in_left_knee'
+                        ]; // add more keys here as needed
+
+                        checkboxFields.forEach(field => {
+                            const checkbox = document.querySelector(`input[type="checkbox"][name="${field}"]`);
+                            if (checkbox && data.hasOwnProperty(field)) {
+                                const val = data[field];
+                                checkbox.checked = val === 1 || val === '1' || val === true;
+                                console.log(`Checkbox ${field} set to: ${checkbox.checked}`);
+                            }
+                        });
+                    })
+                    .catch(error => {
+                        console.error("Error loading inspection data:", error);
                     });
-
-                    // Update known checkbox fields
-                    const checkboxFields = ['neck_upright',
-                        'neck_ok',
-                        'neck_very_nice',
-                        'neck_dr',
-                        'neck_top_horse',
-                        'neck_athletic',
-                        'neck_racey',
-                        'neck_clean_correct',
-                        'neck_needs_grow',
-                        'neck_needs_mature',
-                        'neck_needs_improve',
-                        'neck_nm_ty',
-                        'sickle_hock',
-                        'sickle_hock_slightly',
-                        'post_legged',
-                        'camped_out'
-                    ]; // add more keys here as needed
-
-                    checkboxFields.forEach(field => {
-                        const checkbox = document.querySelector(`input[type="checkbox"][name="${field}"]`);
-                        if (checkbox && data.hasOwnProperty(field)) {
-                            const val = data[field];
-                            checkbox.checked = val === 1 || val === '1' || val === true;
-                            console.log(`Checkbox ${field} set to: ${checkbox.checked}`);
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error("Error loading inspection data:", error);
-                });
-        }
-
-        // File Upload Handler
-        $('#fileUploadForm').on('submit', function(e) {
-            e.preventDefault();
-
-            const formData = new FormData(this);
-            const fileInput = $('#fileInput')[0];
-
-            if (fileInput.files.length === 0) {
-                alert('Please select a file to upload');
-                return;
             }
 
-            uploadFileToServer(formData);
-        });
+            // File Upload Handler
+            $('#fileUploadForm').on('submit', function(e) {
+                e.preventDefault();
 
-        function uploadFileToServer(formData) {
-            $.ajax({
-                url: 'upload_photo.php',
-                type: 'POST',
-                data: formData,
-                processData: false,
-                contentType: false,
-                dataType: 'json',
-                success: function(response) {
-                    console.log('Raw response:', response); // Debugging line
-                    if (response && response.success) {
-                        addFileToGallery(response);
-                        alert('File uploaded successfully!');
-                    } else {
-                        alert('Upload failed: ' + (response?.error || 'Unknown error'));
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Upload error:', xhr.responseText);
-                    try {
-                        const errResponse = JSON.parse(xhr.responseText);
-                        alert('Upload failed: ' + (errResponse.error || 'Unknown error'));
-                    } catch (e) {
-                        alert('Upload failed. Server response: ' + xhr.responseText);
-                    }
-                }
-            });
-        }
+                const formData = new FormData(this);
+                const fileInput = $('#fileInput')[0];
 
-        $(document).ready(function() {
-            // Handle file selection
-            $('#fileInput').on('change', function(event) {
-                const file = event.target.files[0];
-
-                if (!file) {
+                if (fileInput.files.length === 0) {
+                    alert('Please select a file to upload');
                     return;
                 }
 
-                // Show preview of the image
-                const reader = new FileReader();
-                reader.onload = function(e) {
-
-                    // Automatically upload the file
-                    uploadFile(file);
-                };
-                reader.readAsDataURL(file); // Preview the image
+                uploadFileToServer(formData);
             });
 
-            // Function to upload the file automatically when selected
-            function uploadFile(file) {
-                const formData = new FormData();
-                const horseId = $('#hiddenHorseId').val(); // Get horseId
-
-                formData.append('file', file);
-                formData.append('horseId', horseId); // Add horseId to the FormData
-
+            function uploadFileToServer(formData) {
                 $.ajax({
-                    url: 'upload_photo.php', // The server-side script to handle file upload
+                    url: 'upload_photo.php',
                     type: 'POST',
                     data: formData,
                     processData: false,
                     contentType: false,
                     dataType: 'json',
                     success: function(response) {
-                        console.log('Upload response:', response);
+                        console.log('Raw response:', response); // Debugging line
                         if (response && response.success) {
                             addFileToGallery(response);
                             alert('File uploaded successfully!');
@@ -1203,18 +1240,73 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 });
             }
 
-            // Adds the uploaded file to the gallery after successful upload
-            // Adds the uploaded file to the gallery after successful upload
-            function addFileToGallery(fileInfo) {
-                const gallery = $('#photoPreview');
+            $(document).ready(function() {
+                // Handle file selection
+                $('#fileInput').on('change', function(event) {
+                    const file = event.target.files[0];
 
-                // Remove "no files" message if present
-                gallery.find('.no-files-message').remove();
+                    if (!file) {
+                        return;
+                    }
 
-                const isImage = fileInfo.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+                    // Show preview of the image
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
 
-                // Constructing the file element HTML
-                const fileElement = `
+                        // Automatically upload the file
+                        uploadFile(file);
+                    };
+                    reader.readAsDataURL(file); // Preview the image
+                });
+
+                // Function to upload the file automatically when selected
+                function uploadFile(file) {
+                    const formData = new FormData();
+                    const horseId = $('#hiddenHorseId').val(); // Get horseId
+
+                    formData.append('file', file);
+                    formData.append('horseId', horseId); // Add horseId to the FormData
+
+                    $.ajax({
+                        url: 'upload_photo.php', // The server-side script to handle file upload
+                        type: 'POST',
+                        data: formData,
+                        processData: false,
+                        contentType: false,
+                        dataType: 'json',
+                        success: function(response) {
+                            console.log('Upload response:', response);
+                            if (response && response.success) {
+                                addFileToGallery(response);
+                                alert('File uploaded successfully!');
+                            } else {
+                                alert('Upload failed: ' + (response?.error || 'Unknown error'));
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Upload error:', xhr.responseText);
+                            try {
+                                const errResponse = JSON.parse(xhr.responseText);
+                                alert('Upload failed: ' + (errResponse.error || 'Unknown error'));
+                            } catch (e) {
+                                alert('Upload failed. Server response: ' + xhr.responseText);
+                            }
+                        }
+                    });
+                }
+
+                // Adds the uploaded file to the gallery after successful upload
+                // Adds the uploaded file to the gallery after successful upload
+                function addFileToGallery(fileInfo) {
+                    const gallery = $('#photoPreview');
+
+                    // Remove "no files" message if present
+                    gallery.find('.no-files-message').remove();
+
+                    const isImage = fileInfo.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+
+                    // Constructing the file element HTML
+                    const fileElement = `
         <div class="photo-card" data-id="${fileInfo.id}">
             ${isImage ? 
                 `<img src="${fileInfo.url}" class="photo-thumbnail" data-full-url="${fileInfo.url}" />` : 
@@ -1226,476 +1318,476 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             <button class="delete-photo" data-id="${fileInfo.id}" data-url="${fileInfo.url}">×</button>
         </div>`;
 
-                // Append the new file element to the gallery
-                gallery.append(fileElement);
-            }
-        });
+                    // Append the new file element to the gallery
+                    gallery.append(fileElement);
+                }
+            });
 
-        // Check if page was just reloaded after upload
-        $(document).ready(function() {
-            // Open the sidebar and show the photo section after reload
-            if (window.location.hash === "#photosTab") {
+            // Check if page was just reloaded after upload
+            $(document).ready(function() {
+                // Open the sidebar and show the photo section after reload
+                if (window.location.hash === "#photosTab") {
+                    $('#horseDetailsSidebar').addClass('open');
+                    $('#photoSection').show(); // Show the photo section of the sidebar
+                }
+            });
+
+            // Function to refresh the page and open the sidebar photo section
+            function openSidebarWithPhotos() {
+                // Set the hash to trigger the sidebar to open
+                window.location.hash = "photosTab";
                 $('#horseDetailsSidebar').addClass('open');
-                $('#photoSection').show(); // Show the photo section of the sidebar
+                $('#photoSection').show(); // Make sure the photo section is visible
             }
-        });
 
-        // Function to refresh the page and open the sidebar photo section
-        function openSidebarWithPhotos() {
-            // Set the hash to trigger the sidebar to open
-            window.location.hash = "photosTab";
-            $('#horseDetailsSidebar').addClass('open');
-            $('#photoSection').show(); // Make sure the photo section is visible
-        }
+            // Optional: Stop camera when sidebar closes
+            function closeSidebar() {
+                $('#horseDetailsSidebar').removeClass('open');
+                location.reload(); // Basic page refresh
+            }
 
-        // Optional: Stop camera when sidebar closes
-        function closeSidebar() {
-            $('#horseDetailsSidebar').removeClass('open');
-            location.reload(); // Basic page refresh
-        }
+            function sanitizeHorseId(name) {
+                return name.replace(/[^a-zA-Z0-9_-]/g, '');
+            }
 
-        function sanitizeHorseId(name) {
-            return name.replace(/[^a-zA-Z0-9_-]/g, '');
-        }
+            function openSidebar(horseName) {
+                console.log("Horse ID (sanitized): " + horseName); // Debugging log
 
-        function openSidebar(horseName) {
-            console.log("Horse ID (sanitized): " + horseName); // Debugging log
+                $.ajax({
+                    url: 'get_horse_details.php',
+                    type: 'GET',
+                    data: {
+                        horseId: horseName
+                    },
+                    dataType: 'json',
+                    success: function(response) {
+                        console.log("Received response:", response); // Debug log
 
-            $.ajax({
-                url: 'get_horse_details.php',
-                type: 'GET',
-                data: {
-                    horseId: horseName
-                },
-                dataType: 'json',
-                success: function(response) {
-                    console.log("Received response:", response); // Debug log
+                        if (!response) {
+                            console.error("Empty response received");
+                            alert("Error: Empty response from server");
+                            return;
+                        }
 
-                    if (!response) {
-                        console.error("Empty response received");
-                        alert("Error: Empty response from server");
-                        return;
-                    }
+                        if (response.error) {
+                            console.error("Server error:", response.error);
+                            alert("Error: " + response.error);
+                            return;
+                        }
 
-                    if (response.error) {
-                        console.error("Server error:", response.error);
-                        alert("Error: " + response.error);
-                        return;
-                    }
+                        try {
+                            // Basic Info
+                            $('#horseName').text(response.HORSE || 'N/A');
+                            $('#yearFoalDisplay').text(response.YEARFOAL || 'N/A');
+                            $('#sexDisplay').text(response.SEX || 'N/A');
+                            $('#typeDisplay').text(response.TYPE || 'N/A');
+                            $('#colorDisplay').text(response.COLOR || 'N/A');
+                            $('#gaitDisplay').text(response.GAIT || 'N/A');
 
-                    try {
-                        // Basic Info
-                        $('#horseName').text(response.HORSE || 'N/A');
-                        $('#yearFoalDisplay').text(response.YEARFOAL || 'N/A');
-                        $('#sexDisplay').text(response.SEX || 'N/A');
-                        $('#typeDisplay').text(response.TYPE || 'N/A');
-                        $('#colorDisplay').text(response.COLOR || 'N/A');
-                        $('#gaitDisplay').text(response.GAIT || 'N/A');
+                            // Pedigree
+                            $('#sireTitle').text(response.Sire || 'N/A');
+                            $('#sireDisplay').text(response.Sire || 'N/A');
+                            $('#damTitle').text(response.DAM || 'N/A');
+                            $('#damDisplay').text(response.DAM || 'N/A');
+                            $('#sireofdamDisplay').text(response.Sireofdam || 'N/A');
 
-                        // Pedigree
-                        $('#sireTitle').text(response.Sire || 'N/A');
-                        $('#sireDisplay').text(response.Sire || 'N/A');
-                        $('#damTitle').text(response.DAM || 'N/A');
-                        $('#damDisplay').text(response.DAM || 'N/A');
-                        $('#sireofdamDisplay').text(response.Sireofdam || 'N/A');
+                            // Sale Info
+                            $('#priceDisplay').text(response.PRICE ? '$' + parseFloat(response.PRICE).toLocaleString() : 'N/A');
+                            $('#saledateDisplay').text(response.SALEDATE ? new Date(response.SALEDATE).toLocaleDateString() : 'N/A');
+                            $('#salecodeDisplay').text(response.SALECODE || 'N/A');
+                            $('#conslnameDisplay').text(response.CONSLNAME || 'N/A');
 
-                        // Sale Info
-                        $('#priceDisplay').text(response.PRICE ? '$' + parseFloat(response.PRICE).toLocaleString() : 'N/A');
-                        $('#saledateDisplay').text(response.SALEDATE ? new Date(response.SALEDATE).toLocaleDateString() : 'N/A');
-                        $('#salecodeDisplay').text(response.SALECODE || 'N/A');
-                        $('#conslnameDisplay').text(response.CONSLNAME || 'N/A');
+                            // Breeding Info
+                            const datefoalText = response.DATEFOAL || '';
+                            $('#datefoalTitle').text(datefoalText);
+                            $('#datefoalDisplay').text(datefoalText ? new Date(datefoalText).toLocaleDateString() : 'N/A');
+                            $('#bredtoDisplay').text(response.BREDTO || 'N/A');
+                            $('#lastbredDisplay').text(response.LASTBRED ? new Date(response.LASTBRED).toLocaleDateString() : 'N/A');
 
-                        // Breeding Info
-                        const datefoalText = response.DATEFOAL || '';
-                        $('#datefoalTitle').text(datefoalText);
-                        $('#datefoalDisplay').text(datefoalText ? new Date(datefoalText).toLocaleDateString() : 'N/A');
-                        $('#bredtoDisplay').text(response.BREDTO || 'N/A');
-                        $('#lastbredDisplay').text(response.LASTBRED ? new Date(response.LASTBRED).toLocaleDateString() : 'N/A');
+                            // Farm Info
+                            $('#farmnameDisplay').text(response.FARMNAME || 'N/A');
+                            $('#locationDisplay').text(
+                                [response.SBCITY, response.SBSTATE, response.SBCOUNTRY]
+                                .filter(Boolean).join(', ') || 'N/A'
+                            );
 
-                        // Farm Info
-                        $('#farmnameDisplay').text(response.FARMNAME || 'N/A');
-                        $('#locationDisplay').text(
-                            [response.SBCITY, response.SBSTATE, response.SBCOUNTRY]
-                            .filter(Boolean).join(', ') || 'N/A'
-                        );
+                            // Purchaser Info
+                            const purchaser = [response.PURFNAME, response.PURLNAME].filter(Boolean).join(' ');
+                            $('#purchaserDisplay').text(purchaser || 'N/A');
 
-                        // Purchaser Info
-                        const purchaser = [response.PURFNAME, response.PURLNAME].filter(Boolean).join(' ');
-                        $('#purchaserDisplay').text(purchaser || 'N/A');
+                            // Set hidden horse ID
+                            $('#hiddenHorseId').val(response.HORSE || '');
 
-                        // Set hidden horse ID
-                        $('#hiddenHorseId').val(response.HORSE || '');
+                            // Load inspection data
+                            loadHorseInspection(response.HORSE);
 
-                        // Load inspection data
-                        loadHorseInspection(response.HORSE);
+                            // Handle images (display the uploaded images)
+                            let imagesHtml = '';
 
-                        // Handle images (display the uploaded images)
-                        let imagesHtml = '';
+                            // Show the sidebar
+                            const horseIdForImages = sanitizeHorseId(response.HORSE);
+                            $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
 
-                        // Show the sidebar
-                        const horseIdForImages = sanitizeHorseId(response.HORSE);
-                        $('#hiddenHorseIdSanitized').val(horseIdForImages); // Assuming you have a hidden input for horseId
-
-                        if (response.images && response.images.length > 0) {
-                            response.images.forEach(imgUrl => {
-                                imagesHtml += `
+                            if (response.images && response.images.length > 0) {
+                                response.images.forEach(imgUrl => {
+                                    imagesHtml += `
 <div class="photo-card">
     <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
     <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
-                            });
-                        } else {
-                            imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
+                                });
+                            } else {
+                                imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
+                            }
+
+                            // Display images in the sidebar
+                            $('#photoPreview').html(imagesHtml);
+
+                            $('#horseDetailsSidebar').addClass('open');
+                            $('#photoSection').show();
+
+                            // Show Edit, Save and Cancel buttons
+                            $('#editBtn').show();
+                            $('#saveBtn').hide();
+                            $('#cancelBtn').hide();
+
+                            console.log("Sidebar opened successfully for:", response.HORSE);
+
+                        } catch (error) {
+                            console.error("Error processing response:", error);
+                            alert("Error processing horse details");
                         }
-
-                        // Display images in the sidebar
-                        $('#photoPreview').html(imagesHtml);
-
-                        $('#horseDetailsSidebar').addClass('open');
-                        $('#photoSection').show();
-
-                        // Show Edit, Save and Cancel buttons
-                        $('#editBtn').show();
-                        $('#saveBtn').hide();
-                        $('#cancelBtn').hide();
-
-                        console.log("Sidebar opened successfully for:", response.HORSE);
-
-                    } catch (error) {
-                        console.error("Error processing response:", error);
-                        alert("Error processing horse details");
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', status, error);
+                        console.error('Response text:', xhr.responseText);
+                        alert("Failed to load horse details. Please try again.");
                     }
-                },
-                error: function(xhr, status, error) {
-                    console.error('AJAX Error:', status, error);
-                    console.error('Response text:', xhr.responseText);
-                    alert("Failed to load horse details. Please try again.");
-                }
+                });
+            }
+
+            $(document).on('click', '.tab-button', function() {
+                $('.tab-button').removeClass('active');
+                $(this).addClass('active');
+
+                const tabToShow = $(this).data('tab');
+                $('.tab-pane').removeClass('active');
+                $('#' + tabToShow).addClass('active');
             });
-        }
 
-        $(document).on('click', '.tab-button', function() {
-            $('.tab-button').removeClass('active');
-            $(this).addClass('active');
+            $(document).on('click', '.photo-thumbnail', function() {
+                const fullImageUrl = $(this).data('full-url');
 
-            const tabToShow = $(this).data('tab');
-            $('.tab-pane').removeClass('active');
-            $('#' + tabToShow).addClass('active');
-        });
+                // Remove any existing modal if it exists
+                $('#imageModal').remove();
 
-        $(document).on('click', '.photo-thumbnail', function() {
-            const fullImageUrl = $(this).data('full-url');
-
-            // Remove any existing modal if it exists
-            $('#imageModal').remove();
-
-            // Create modal HTML structure dynamically
-            const modalHtml = `
+                // Create modal HTML structure dynamically
+                const modalHtml = `
         <div id="imageModal" class="modal" style="display: none;">
             <span class="modal-close">&times;</span>
             <img class="modal-content" id="fullImage" src="${fullImageUrl}">
         </div>
     `;
 
-            // Append modal to body
-            $('body').append(modalHtml);
+                // Append modal to body
+                $('body').append(modalHtml);
 
-            // Show modal
-            $('#imageModal').fadeIn();
-            $('body').addClass('modal-open');
-        });
-
-        $(document).on('click', '.delete-photo', function() {
-            const imageUrl = $(this).data('url');
-            const parentElement = $(this).closest('.photo-card');
-
-            if (confirm("Are you sure you want to delete this image?")) {
-                $.ajax({
-                    url: 'delete_photo.php',
-                    type: 'POST',
-                    data: {
-                        imageUrl: imageUrl
-                    },
-                    success: function(response) {
-                        try {
-                            const res = typeof response === 'string' ? JSON.parse(response) : response;
-                            if (res.success) {
-                                parentElement.remove(); // Remove image from UI
-                                alert('Image deleted successfully.');
-                            } else {
-                                alert('Failed to delete image: ' + (res.error || 'Unknown error'));
-                            }
-                        } catch (e) {
-                            console.error('Invalid response:', response);
-                            alert('Unexpected server response.');
-                        }
-                    },
-                    error: function(xhr) {
-                        console.error('Delete error:', xhr.responseText);
-                        alert('Failed to delete image.');
-                    }
-                });
-            }
-        });
-
-        // Close when clicking close button
-        $(document).on('click', '.modal-close', function() {
-            $('#imageModal').fadeOut(function() {
-                $(this).remove();
+                // Show modal
+                $('#imageModal').fadeIn();
+                $('body').addClass('modal-open');
             });
-            $('body').removeClass('modal-open');
-        });
 
-        // Close when clicking outside the image
-        $(document).on('click', '#imageModal', function(e) {
-            if (e.target === this) {
-                $(this).fadeOut(function() {
+            $(document).on('click', '.delete-photo', function() {
+                const imageUrl = $(this).data('url');
+                const parentElement = $(this).closest('.photo-card');
+
+                if (confirm("Are you sure you want to delete this image?")) {
+                    $.ajax({
+                        url: 'delete_photo.php',
+                        type: 'POST',
+                        data: {
+                            imageUrl: imageUrl
+                        },
+                        success: function(response) {
+                            try {
+                                const res = typeof response === 'string' ? JSON.parse(response) : response;
+                                if (res.success) {
+                                    parentElement.remove(); // Remove image from UI
+                                    alert('Image deleted successfully.');
+                                } else {
+                                    alert('Failed to delete image: ' + (res.error || 'Unknown error'));
+                                }
+                            } catch (e) {
+                                console.error('Invalid response:', response);
+                                alert('Unexpected server response.');
+                            }
+                        },
+                        error: function(xhr) {
+                            console.error('Delete error:', xhr.responseText);
+                            alert('Failed to delete image.');
+                        }
+                    });
+                }
+            });
+
+            // Close when clicking close button
+            $(document).on('click', '.modal-close', function() {
+                $('#imageModal').fadeOut(function() {
                     $(this).remove();
                 });
                 $('body').removeClass('modal-open');
-            }
-        });
-
-        // Horse link click
-        $(document).on('click', '.horse-link', function(event) {
-            event.preventDefault();
-            const horseId = $(this).data('horse-id');
-            openSidebar(horseId);
-        });
-
-        // Close camera functionality
-        $('#closeCameraBtn').on('click', function() {
-            if (videoStream) {
-                videoStream.getTracks().forEach(track => track.stop()); // Stop all camera tracks
-            }
-            $('#cameraContainer').hide(); // Hide the camera container
-        });
-
-        // Edit button: Switch to edit mode
-        $(document).on('click', '#editBtn', function() {
-            // Hide all display spans
-            $('[id$="Display"]').hide();
-
-            // Show all input fields and populate them
-            $('[id$="Input"]').show().each(function() {
-                const fieldId = this.id.replace('Input', 'Display');
-                $(this).val($('#' + fieldId).text().trim() || '');
             });
 
-            // Toggle buttons
-            $('#editBtn').hide();
-            $('#saveBtn, #cancelBtn').show();
-        });
-
-        // Cancel button: Revert back to view mode
-        $(document).on('click', '#cancelBtn', function() {
-            // Show all display spans
-            $('[id$="Display"]').show();
-
-            // Hide all input fields
-            $('[id$="Input"]').hide();
-
-            // Toggle buttons
-            $('#editBtn').show();
-            $('#saveBtn, #cancelBtn').hide();
-        });
-
-        $(document).on('click', '#saveBtn', function() {
-            const updatedData = {};
-            const fields = [{
-                    id: 'yearFoalInput',
-                    db: 'YEARFOAL',
-                    type: 'number'
-                },
-                {
-                    id: 'sexInput',
-                    db: 'SEX',
-                    type: 'string'
-                },
-                {
-                    id: 'sireInput',
-                    db: 'Sire',
-                    type: 'string'
-                },
-                {
-                    id: 'damInput',
-                    db: 'DAM',
-                    type: 'string'
-                },
-                {
-                    id: 'datefoalInput',
-                    db: 'DATEFOAL',
-                    type: 'date'
-                },
-                {
-                    id: 'typeInput',
-                    db: 'TYPE',
-                    type: 'string'
-                },
-                {
-                    id: 'colorInput',
-                    db: 'COLOR',
-                    type: 'string'
-                },
-                {
-                    id: 'gaitInput',
-                    db: 'GAIT',
-                    type: 'string'
-                },
-                {
-                    id: 'bredtoInput',
-                    db: 'BREDTO',
-                    type: 'string'
-                },
-                {
-                    id: 'farmnameInput',
-                    db: 'FARMNAME',
-                    type: 'string'
+            // Close when clicking outside the image
+            $(document).on('click', '#imageModal', function(e) {
+                if (e.target === this) {
+                    $(this).fadeOut(function() {
+                        $(this).remove();
+                    });
+                    $('body').removeClass('modal-open');
                 }
-            ];
+            });
 
-            // Process each field
-            fields.forEach(field => {
-                const inputElement = $(`#${field.id}`);
-                const displayElement = $(`#${field.db.toLowerCase()}Display`);
+            // Horse link click
+            $(document).on('click', '.horse-link', function(event) {
+                event.preventDefault();
+                const horseId = $(this).data('horse-id');
+                openSidebar(horseId);
+            });
 
-                let inputValue = inputElement.val() ? inputElement.val().trim() : '';
-                let displayValue = displayElement.text() ? displayElement.text().trim() : '';
+            // Close camera functionality
+            $('#closeCameraBtn').on('click', function() {
+                if (videoStream) {
+                    videoStream.getTracks().forEach(track => track.stop()); // Stop all camera tracks
+                }
+                $('#cameraContainer').hide(); // Hide the camera container
+            });
 
-                // Skip if no change
-                if (inputValue === displayValue && inputValue !== '') {
+            // Edit button: Switch to edit mode
+            $(document).on('click', '#editBtn', function() {
+                // Hide all display spans
+                $('[id$="Display"]').hide();
+
+                // Show all input fields and populate them
+                $('[id$="Input"]').show().each(function() {
+                    const fieldId = this.id.replace('Input', 'Display');
+                    $(this).val($('#' + fieldId).text().trim() || '');
+                });
+
+                // Toggle buttons
+                $('#editBtn').hide();
+                $('#saveBtn, #cancelBtn').show();
+            });
+
+            // Cancel button: Revert back to view mode
+            $(document).on('click', '#cancelBtn', function() {
+                // Show all display spans
+                $('[id$="Display"]').show();
+
+                // Hide all input fields
+                $('[id$="Input"]').hide();
+
+                // Toggle buttons
+                $('#editBtn').show();
+                $('#saveBtn, #cancelBtn').hide();
+            });
+
+            $(document).on('click', '#saveBtn', function() {
+                const updatedData = {};
+                const fields = [{
+                        id: 'yearFoalInput',
+                        db: 'YEARFOAL',
+                        type: 'number'
+                    },
+                    {
+                        id: 'sexInput',
+                        db: 'SEX',
+                        type: 'string'
+                    },
+                    {
+                        id: 'sireInput',
+                        db: 'Sire',
+                        type: 'string'
+                    },
+                    {
+                        id: 'damInput',
+                        db: 'DAM',
+                        type: 'string'
+                    },
+                    {
+                        id: 'datefoalInput',
+                        db: 'DATEFOAL',
+                        type: 'date'
+                    },
+                    {
+                        id: 'typeInput',
+                        db: 'TYPE',
+                        type: 'string'
+                    },
+                    {
+                        id: 'colorInput',
+                        db: 'COLOR',
+                        type: 'string'
+                    },
+                    {
+                        id: 'gaitInput',
+                        db: 'GAIT',
+                        type: 'string'
+                    },
+                    {
+                        id: 'bredtoInput',
+                        db: 'BREDTO',
+                        type: 'string'
+                    },
+                    {
+                        id: 'farmnameInput',
+                        db: 'FARMNAME',
+                        type: 'string'
+                    }
+                ];
+
+                // Process each field
+                fields.forEach(field => {
+                    const inputElement = $(`#${field.id}`);
+                    const displayElement = $(`#${field.db.toLowerCase()}Display`);
+
+                    let inputValue = inputElement.val() ? inputElement.val().trim() : '';
+                    let displayValue = displayElement.text() ? displayElement.text().trim() : '';
+
+                    // Skip if no change
+                    if (inputValue === displayValue && inputValue !== '') {
+                        return;
+                    }
+
+                    // Type-specific processing
+                    switch (field.type) {
+                        case 'number':
+                            inputValue = inputValue !== '' ? parseInt(inputValue, 10) : null;
+                            // Validate year is reasonable (1900-current year + 1)
+                            if (inputValue !== null && (inputValue < 1900 || inputValue > new Date().getFullYear() + 1)) {
+                                alert(`Please enter a valid year between 1900 and ${new Date().getFullYear() + 1}`);
+                                inputElement.focus();
+                                throw new Error('Invalid year');
+                            }
+                            break;
+
+                        case 'date':
+                            // Convert display format (MM/DD/YYYY) to input format (YYYY-MM-DD) if needed
+                            if (displayValue.includes('/')) {
+                                const [month, day, year] = displayValue.split('/');
+                                displayValue = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+                            }
+
+                            // Validate date format
+                            if (inputValue !== '' && !isValidDate(inputValue)) {
+                                alert('Please enter a valid date in YYYY-MM-DD format');
+                                inputElement.focus();
+                                throw new Error('Invalid date');
+                            }
+
+                            inputValue = inputValue !== '' ? inputValue : null;
+                            break;
+
+                        default: // string
+                            inputValue = inputValue !== '' ? inputValue : null;
+                    }
+
+                    // Only add to update if changed
+                    if (inputValue !== null) {
+                        updatedData[field.db] = inputValue;
+                    }
+                });
+
+                if (Object.keys(updatedData).length === 0) {
+                    alert('No changes detected.');
                     return;
                 }
 
-                // Type-specific processing
-                switch (field.type) {
-                    case 'number':
-                        inputValue = inputValue !== '' ? parseInt(inputValue, 10) : null;
-                        // Validate year is reasonable (1900-current year + 1)
-                        if (inputValue !== null && (inputValue < 1900 || inputValue > new Date().getFullYear() + 1)) {
-                            alert(`Please enter a valid year between 1900 and ${new Date().getFullYear() + 1}`);
-                            inputElement.focus();
-                            throw new Error('Invalid year');
+                const horseId = $('#hiddenHorseId').val();
+
+                $.ajax({
+                    url: 'update_horse_details.php',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: {
+                        horseId: horseId,
+                        t: Date.now(),
+                        ...updatedData
+                    },
+                    success: function(response) {
+                        if (response.success) {
+                            // Update display fields with formatted values
+                            fields.forEach(field => {
+                                const displayId = field.db.toLowerCase() + 'Display';
+                                const value = response.updatedData ? response.updatedData[field.db] : updatedData[field.db];
+
+                                if (value !== undefined) {
+                                    // Special formatting for each type
+                                    switch (field.type) {
+                                        case 'date':
+                                            if (value) {
+                                                const [year, month, day] = value.split('-');
+                                                $(`#${displayId}`).text(`${month}/${day}/${year}`);
+                                            } else {
+                                                $(`#${displayId}`).text('N/A');
+                                            }
+                                            break;
+                                        case 'number':
+                                            $(`#${displayId}`).text(value || 'N/A');
+                                            break;
+                                        default:
+                                            $(`#${displayId}`).text(value || 'N/A');
+                                    }
+                                }
+                            });
+
+                            // Visual feedback with color highlight
+                            $('[id$="Display"]').css({
+                                'background-color': '#e6ffe6',
+                                'transition': 'background-color 0.5s'
+                            }).hide().fadeIn(200);
+
+                            setTimeout(() => {
+                                $('[id$="Display"]').css('background-color', '');
+                            }, 1000);
+
+                            // Switch to view mode
+                            $('.edit-field').hide();
+                            $('[id$="Display"]').show();
+                            $('#editBtn').show();
+                            $('#saveBtn, #cancelBtn').hide();
+
+                            // Success notification
+                            showNotification('Horse details updated successfully!', 'success');
+                        } else {
+                            showNotification('Update failed: ' + (response.error || 'Unknown error'), 'error');
                         }
-                        break;
-
-                    case 'date':
-                        // Convert display format (MM/DD/YYYY) to input format (YYYY-MM-DD) if needed
-                        if (displayValue.includes('/')) {
-                            const [month, day, year] = displayValue.split('/');
-                            displayValue = `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-                        }
-
-                        // Validate date format
-                        if (inputValue !== '' && !isValidDate(inputValue)) {
-                            alert('Please enter a valid date in YYYY-MM-DD format');
-                            inputElement.focus();
-                            throw new Error('Invalid date');
-                        }
-
-                        inputValue = inputValue !== '' ? inputValue : null;
-                        break;
-
-                    default: // string
-                        inputValue = inputValue !== '' ? inputValue : null;
-                }
-
-                // Only add to update if changed
-                if (inputValue !== null) {
-                    updatedData[field.db] = inputValue;
-                }
+                    },
+                    error: function(xhr) {
+                        showNotification('Error updating horse details. Please try again.', 'error');
+                        console.error("AJAX error:", xhr.responseText);
+                    }
+                });
             });
 
-            if (Object.keys(updatedData).length === 0) {
-                alert('No changes detected.');
-                return;
+            // Helper function to validate dates
+            function isValidDate(dateString) {
+                const regEx = /^\d{4}-\d{2}-\d{2}$/;
+                if (!dateString.match(regEx)) return false;
+                const d = new Date(dateString);
+                return !isNaN(d.getTime());
             }
 
-            const horseId = $('#hiddenHorseId').val();
+            // Better notification function (replace alerts)
+            function showNotification(message, type) {
+                // Implement your preferred notification system here
+                // Could be Toastr, SweetAlert, or a custom div
+                alert(type.toUpperCase() + ': ' + message);
+            }
 
-            $.ajax({
-                url: 'update_horse_details.php',
-                type: 'POST',
-                dataType: 'json',
-                data: {
-                    horseId: horseId,
-                    t: Date.now(),
-                    ...updatedData
-                },
-                success: function(response) {
-                    if (response.success) {
-                        // Update display fields with formatted values
-                        fields.forEach(field => {
-                            const displayId = field.db.toLowerCase() + 'Display';
-                            const value = response.updatedData ? response.updatedData[field.db] : updatedData[field.db];
-
-                            if (value !== undefined) {
-                                // Special formatting for each type
-                                switch (field.type) {
-                                    case 'date':
-                                        if (value) {
-                                            const [year, month, day] = value.split('-');
-                                            $(`#${displayId}`).text(`${month}/${day}/${year}`);
-                                        } else {
-                                            $(`#${displayId}`).text('N/A');
-                                        }
-                                        break;
-                                    case 'number':
-                                        $(`#${displayId}`).text(value || 'N/A');
-                                        break;
-                                    default:
-                                        $(`#${displayId}`).text(value || 'N/A');
-                                }
-                            }
-                        });
-
-                        // Visual feedback with color highlight
-                        $('[id$="Display"]').css({
-                            'background-color': '#e6ffe6',
-                            'transition': 'background-color 0.5s'
-                        }).hide().fadeIn(200);
-
-                        setTimeout(() => {
-                            $('[id$="Display"]').css('background-color', '');
-                        }, 1000);
-
-                        // Switch to view mode
-                        $('.edit-field').hide();
-                        $('[id$="Display"]').show();
-                        $('#editBtn').show();
-                        $('#saveBtn, #cancelBtn').hide();
-
-                        // Success notification
-                        showNotification('Horse details updated successfully!', 'success');
-                    } else {
-                        showNotification('Update failed: ' + (response.error || 'Unknown error'), 'error');
-                    }
-                },
-                error: function(xhr) {
-                    showNotification('Error updating horse details. Please try again.', 'error');
-                    console.error("AJAX error:", xhr.responseText);
-                }
-            });
-        });
-
-        // Helper function to validate dates
-        function isValidDate(dateString) {
-            const regEx = /^\d{4}-\d{2}-\d{2}$/;
-            if (!dateString.match(regEx)) return false;
-            const d = new Date(dateString);
-            return !isNaN(d.getTime());
-        }
-
-        // Better notification function (replace alerts)
-        function showNotification(message, type) {
-            // Implement your preferred notification system here
-            // Could be Toastr, SweetAlert, or a custom div
-            alert(type.toUpperCase() + ': ' + message);
-        }
-
-        $(document).ready(function() {
-            // Create modal dialog for column selector
-            const modalHTML = `
+            $(document).ready(function() {
+                // Create modal dialog for column selector
+                const modalHTML = `
     <div id="columnSelectorModal" class="modal">
         <div class="modal-content">
             <span class="close-modal">&times;</span>
@@ -1707,81 +1799,81 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         </div>
     </div>`;
 
-            $('body').append(modalHTML);
+                $('body').append(modalHTML);
 
-            // Open modal when button is clicked
-            $('#columnSelectorBtn').click(function() {
-                $('#columnSelectorModal').show();
-            });
-
-            // Close modal when X is clicked
-            $('.close-modal').click(function() {
-                $('#columnSelectorModal').hide();
-            });
-
-            // Close modal when clicking outside
-            $(window).click(function(event) {
-                if (event.target.id === 'columnSelectorModal') {
-                    $('#columnSelectorModal').hide();
-                }
-            });
-
-            // Handle form submission
-            // Handle form submission
-            $('#columnSelectorForm').on('submit', function(e) {
-                e.preventDefault();
-
-                // Collect all checkbox values as booleans
-                var columnPrefs = {};
-                $('input[name^="column_prefs["]').each(function() {
-                    var colName = $(this).attr('name').match(/\[(.*?)\]/)[1];
-                    columnPrefs[colName] = $(this).is(':checked');
+                // Open modal when button is clicked
+                $('#columnSelectorBtn').click(function() {
+                    $('#columnSelectorModal').show();
                 });
 
-                // Submit via AJAX
-                $.ajax({
-                    url: window.location.href,
-                    type: 'POST',
-                    data: {
-                        column_prefs: columnPrefs
-                    },
-                    success: function() {
-                        // Force reload to ensure changes are applied
-                        window.location.reload(true);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error saving preferences:', error);
-                        alert('Error saving column preferences');
+                // Close modal when X is clicked
+                $('.close-modal').click(function() {
+                    $('#columnSelectorModal').hide();
+                });
+
+                // Close modal when clicking outside
+                $(window).click(function(event) {
+                    if (event.target.id === 'columnSelectorModal') {
+                        $('#columnSelectorModal').hide();
                     }
                 });
-            });
-        });
 
-        document.querySelectorAll('.inspection-input').forEach(input => {
-            input.addEventListener('change', function() {
-                const field = this.name;
-                const value = this.value;
-                const horse_name = $('#hiddenHorseId').val();
+                // Handle form submission
+                // Handle form submission
+                $('#columnSelectorForm').on('submit', function(e) {
+                    e.preventDefault();
 
-                console.log('horse_name:', horse_name); // Debugging line to see the value
-
-                fetch('update_inspection.php', {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/x-www-form-urlencoded'
-                        },
-                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
-                    })
-                    .then(response => response.text())
-                    .then(data => {
-                        console.log("Updated:", data);
-                    })
-                    .catch(error => {
-                        console.error("Error:", error);
+                    // Collect all checkbox values as booleans
+                    var columnPrefs = {};
+                    $('input[name^="column_prefs["]').each(function() {
+                        var colName = $(this).attr('name').match(/\[(.*?)\]/)[1];
+                        columnPrefs[colName] = $(this).is(':checked');
                     });
+
+                    // Submit via AJAX
+                    $.ajax({
+                        url: window.location.href,
+                        type: 'POST',
+                        data: {
+                            column_prefs: columnPrefs
+                        },
+                        success: function() {
+                            // Force reload to ensure changes are applied
+                            window.location.reload(true);
+                        },
+                        error: function(xhr, status, error) {
+                            console.error('Error saving preferences:', error);
+                            alert('Error saving column preferences');
+                        }
+                    });
+                });
             });
-        });
-    </script>
+
+            document.querySelectorAll('.inspection-input').forEach(input => {
+                input.addEventListener('change', function() {
+                    const field = this.name;
+                    const value = this.value;
+                    const horse_name = $('#hiddenHorseId').val();
+
+                    console.log('horse_name:', horse_name); // Debugging line to see the value
+
+                    fetch('update_inspection.php', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/x-www-form-urlencoded'
+                            },
+                            body: `horse_name=${encodeURIComponent(horse_name)}&field=${encodeURIComponent(field)}&value=${encodeURIComponent(value)}`
+                        })
+                        .then(response => response.text())
+                        .then(data => {
+                            console.log("Updated:", data);
+                        })
+                        .catch(error => {
+                            console.error("Error:", error);
+                        });
+                });
+            });
+        </script>
 
 </body>
 

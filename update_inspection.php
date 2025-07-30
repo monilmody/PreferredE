@@ -4,8 +4,29 @@ require_once("db-settings.php");
 $horse_name = $_POST['horse_name'] ?? '';  // Horse name from the client
 $field = $_POST['field'] ?? '';            // Field to be updated (e.g., size, balance)
 
+$checkboxFields = [
+    'neck_upright',
+    'neck_ok',
+    'neck_very_nice',
+    'neck_dr',
+    'neck_top_horse',
+    'neck_athletic',
+    'neck_racey',
+    'neck_clean_correct',
+    'neck_needs_grow',
+    'neck_needs_mature',
+    'neck_needs_improve',
+    'neck_nm_ty',
+    'sickle_hock',
+    'sickle_hock_slightly',
+    'post_legged',
+    'camped_out',
+    'tied_in_right_knee',
+    'tied_in_left_knee'
+];
+
 // Normalize value, especially for checkbox fields like 'neck_upright'
-if (in_array($field, ['neck_upright', 'sickle_hock', 'sickle_hock_slightly', 'post_legged', 'camped_out'])) {
+if (in_array($field, $checkboxFields)) {
     // Handle checkbox fields
     $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
 } else {
@@ -18,24 +39,66 @@ $allowedFields = [
     'sex_change',
 
     // DAVE REID RATING
-    'day_rating_indicator', 'dave_reid_rating', 'up_dn_ev', 'neck_ok', 'neck_very_nice',
-    'neck_dr', 'neck_top_horse', 'neck_athletic', 'neck_racey', 'neck_clean_correct',
-    'neck_needs_grow', 'neck_needs_mature', 'neck_needs_improve', 'neck_nm_ty',
+    'day_rating_indicator',
+    'dave_reid_rating',
+    'up_dn_ev',
+    'neck_ok',
+    'neck_very_nice',
+    'neck_dr',
+    'neck_top_horse',
+    'neck_athletic',
+    'neck_racey',
+    'neck_clean_correct',
+    'neck_needs_grow',
+    'neck_needs_mature',
+    'neck_needs_improve',
+    'neck_nm_ty',
 
     // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
-    'size', 'size_to_foal_date', 'short_legged', 'balance',
-    'girth', 'withers', 'shoulder_angle', 'body',
+    'size',
+    'size_to_foal_date',
+    'short_legged',
+    'balance',
+    'girth',
+    'withers',
+    'shoulder_angle',
+    'body',
 
     // HEAD PLACEMENT - NECK
-    'head_placement', 'neck_upright', 'neck_length', 'neck_feature',
-    
+    'head_placement',
+    'neck_upright',
+    'neck_length',
+    'neck_feature',
+
     // LENGTH - BACK - HIP - CROUP
-    'body_length', 'back', 'back_sway', 'behind_high', 
-    'behind_side', 'hips_side', 'hip_short', 'hip_drops',
+    'body_length',
+    'back',
+    'back_sway',
+    'behind_high',
+    'behind_side',
+    'hips_side',
+    'hip_short',
+    'hip_drops',
 
     // SIDE HIPS - STIFLES - GASKIN - HOCKS - SICKLE - POST
-    'sickle_hock', 'sickle_hock_slightly', 'post_legged', 'camped_out',
-    'stifle_quality', 'gaskin_quality'
+    'sickle_hock',
+    'sickle_hock_slightly',
+    'post_legged',
+    'camped_out',
+    'stifle_quality',
+    'gaskin_quality',
+
+    // SIDE KNEES (Back, Over, Tied) - PASTERNS
+    'back_right_knee',
+    'tied_in_right_knee',
+    'over_right_knee',
+    'back_left_knee',
+    'tied_in_left_knee',
+    'over_left_knee',
+    'pasterns_length',
+    'pasterns_angle',
+    'pasterns_strength',
+    'pasterns_notes'
 ];
 
 // Validate input
