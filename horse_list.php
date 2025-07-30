@@ -1197,6 +1197,17 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 console.log(`Checkbox ${field} set to: ${checkbox.checked}`);
                             }
                         });
+
+                        // Populate pasterns_notes if available
+                        const notesField = document.querySelector('[name="pasterns_notes"]');
+                        if (notesField) {
+                            if (data.pasterns_notes) {
+                                notesField.value = data.pasterns_notes;
+                                console.log("Pasterns notes populated:", data.pasterns_notes);
+                            } else {
+                                console.log("No pasterns_notes in the fetched data.");
+                            }
+                        }
                     })
                     .catch(error => {
                         console.error("Error loading inspection data:", error);
