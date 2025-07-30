@@ -3,6 +3,7 @@ require_once("db-settings.php");
 
 $horse_name = $_POST['horse_name'] ?? '';  // Horse name from the client
 $field = $_POST['field'] ?? '';            // Field to be updated (e.g., size, balance)
+$horse = [];
 
 $checkboxFields = [
     'neck_upright',
@@ -108,6 +109,16 @@ if (!in_array($field, $allowedFields) || empty($horse_name)) {
     http_response_code(400);
     echo "Invalid request: Field not allowed or horse name missing.";
     exit;
+}
+
+if ($horse_name) {
+    $query = "SELECT * FROM horse_inspection WHERE horse = ? LIMIT 1";
+    $stmt = $mysqli->prepare($query);
+    $stmt->bind_param('s', $horse_name);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    $horse = $result->fetch_assoc() ?? [];
+    $stmt->close();
 }
 
 // Step 1: Verify that the horse exists in the sales table
