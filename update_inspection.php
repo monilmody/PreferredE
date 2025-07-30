@@ -33,6 +33,13 @@ if (in_array($field, $checkboxFields)) {
     $value = $_POST['value'] ?? '';
 }
 
+// Add this to your value handling logic
+if ($field === 'pasterns_notes') {
+    $value = !empty($_POST['value']) ? trim($_POST['value']) : null;
+    // Optional: sanitize the input
+    $value = $value ? htmlspecialchars($value, ENT_QUOTES) : null;
+}
+
 // Allowed fields to update
 $allowedFields = [
     // HORSE INFORMATION

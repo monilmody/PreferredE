@@ -836,15 +836,15 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         </div>
                     </div>
 
-                    <div class="section-header">SIDE KNEES (Back, Over, Tied) - PASTERNS</div>
+                    <div class="section-header">SIDE - KNEES (Back, Over, Tied) - PASTERNS</div>
 
                     <div class="field-group">
                         <div class="form-row">
                             <label><strong>BACK on RIGHT Knee</strong></label>
                             <div class="button-group" data-field="back_right_knee">
                                 <input type="hidden" name="back_right_knee" value="">
-                                <button type="button" class="btn-option" data-value="back_slightly">Back Slightly</button>
-                                <button type="button" class="btn-option" data-value="back_bad">Back Bad</button>
+                                <button type="button" class="btn-option" data-value="Back Slightly">Back Slightly</button>
+                                <button type="button" class="btn-option" data-value="Back Bad">Back Bad</button>
                             </div>
                         </div>
 
@@ -860,8 +860,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <label><strong>OVER of RIGHT Knee</strong></label>
                             <div class="button-group" data-field="over_right_knee">
                                 <input type="hidden" name="over_right_knee" value="">
-                                <button type="button" class="btn-option" data-value="over_slightly">Over Slightly</button>
-                                <button type="button" class="btn-option" data-value="over_bad">Over Bad</button>
+                                <button type="button" class="btn-option" data-value="Over Slightly">Over Slightly</button>
+                                <button type="button" class="btn-option" data-value="Over Bad">Over Bad</button>
                             </div>
                         </div>
 
@@ -869,8 +869,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <label><strong>BACK on LEFT Knee</strong></label>
                             <div class="button-group" data-field="back_left_knee">
                                 <input type="hidden" name="back_left_knee" value="">
-                                <button type="button" class="btn-option" data-value="back_slightly">Back Slightly</button>
-                                <button type="button" class="btn-option" data-value="back_bad">Back Bad</button>
+                                <button type="button" class="btn-option" data-value="Back Slightly">Back Slightly</button>
+                                <button type="button" class="btn-option" data-value="Back Bad">Back Bad</button>
                             </div>
                         </div>
 
@@ -886,8 +886,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <label><strong>OVER on LEFT Knee</strong></label>
                             <div class="button-group" data-field="over_left_knee">
                                 <input type="hidden" name="over_left_knee" value="">
-                                <button type="button" class="btn-option" data-value="over_slightly">Over Slightly</button>
-                                <button type="button" class="btn-option" data-value="over_bad">Over Bad</button>
+                                <button type="button" class="btn-option" data-value="Over Slightly">Over Slightly</button>
+                                <button type="button" class="btn-option" data-value="Over Bad">Over Bad</button>
                             </div>
                         </div>
 
@@ -917,13 +917,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <input type="hidden" name="pasterns_strength" value="">
                                 <button type="button" class="btn-option" data-value="neutral">Neutral</button>
                                 <button type="button" class="btn-option" data-value="soft">Soft</button>
-                                <button type="button" class="btn-option" data-value="very_weak">Very Weak</button>
+                                <button type="button" class="btn-option" data-value="Very Weak">Very Weak</button>
                             </div>
                         </div>
 
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
-                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control">
+                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control" value="<?= isset($horse['pasterns_notes']) ? htmlspecialchars($horse['pasterns_notes']) : '' ?>">
                         </div>
                     </div>
                 </div>
@@ -964,6 +964,10 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort3_order').value = "<?php echo $sort3_param_order; ?>";
             document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
+
+            document.querySelector('[data-field="pasterns_notes"]').addEventListener('input', (e) => {
+                console.log('Notes value:', e.target.value); // Verify it captures input
+            });
 
             // Function to collect selected sort values and pass them as parameters
             function getValues() {
