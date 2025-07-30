@@ -780,8 +780,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                     <div class="section-header">SIDE HIPS - STIFLES - GASKIN - HOCKS - SICKLE - POST</div>
 
-                    <div class="field-group-vertical">
-                        <div class="form-row-vertical">
+                    <div class="field-group">
+                        <div class="form-row">
                             <div class="checkbox-group" data-field="sickle_hock">
                                 <input type="hidden" name="sickle_hock" value="0">
                                 <input type="checkbox" id="sickle_hock" name="sickle_hock" value="1">
@@ -789,7 +789,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <div class="form-row-vertical">
+                        <div class="form-row">
                             <div class="checkbox-group" data-field="sickle_hock_slightly">
                                 <input type="hidden" name="sickle_hock_slightly" value="0">
                                 <input type="checkbox" id="sickle_hock_slightly" name="sickle_hock_slightly" value="1">
@@ -797,7 +797,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <div class="form-row-vertical">
+                        <div class="form-row">
                             <div class="checkbox-group" data-field="post_legged">
                                 <input type="hidden" name="post_legged" value="0">
                                 <input type="checkbox" id="post_legged" name="post_legged" value="1">
@@ -805,7 +805,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <div class="form-row-vertical">
+                        <div class="form-row">
                             <div class="checkbox-group" data-field="camped_out">
                                 <input type="hidden" name="camped_out" value="0">
                                 <input type="checkbox" id="camped_out" name="camped_out" value="1">
