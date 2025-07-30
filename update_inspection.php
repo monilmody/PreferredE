@@ -3,9 +3,10 @@ require_once("db-settings.php");
 
 $horse_name = $_POST['horse_name'] ?? '';  // Horse name from the client
 $field = $_POST['field'] ?? '';            // Field to be updated (e.g., size, balance)
+
 // Normalize value, especially for checkbox fields like 'neck_upright'
-if ($field === 'neck_upright') {
-    // Treat 'on', '1', or 'true' (case-insensitive) as true
+if (in_array($field, ['neck_upright', 'sickle_hock', 'sickle_hock_slightly', 'post_legged', 'camped_out'])) {
+    // Handle checkbox fields
     $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
 } else {
     $value = $_POST['value'] ?? '';
@@ -30,7 +31,11 @@ $allowedFields = [
     
     // LENGTH - BACK - HIP - CROUP
     'body_length', 'back', 'back_sway', 'behind_high', 
-    'behind_side', 'hips_side', 'hip_short', 'hip_drops'
+    'behind_side', 'hips_side', 'hip_short', 'hip_drops',
+
+    // SIDE HIPS - STIFLES - GASKIN - HOCKS - SICKLE - POST
+    'sickle_hock', 'sickle_hock_slightly', 'post_legged', 'camped_out',
+    'stifle_quality', 'gaskin_quality'
 ];
 
 // Validate input

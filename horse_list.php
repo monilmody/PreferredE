@@ -486,7 +486,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                     <div class="field-group">
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_upright">
+                            <div class="checkbox-group" data-field="neck_ok">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
                                 <input type="hidden" name="neck_ok" value="0">
                                 <input type="checkbox" id="neck_ok" name="neck_ok" value="1">
@@ -777,6 +777,64 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">SIDE HIPS - STIFLES - GASKIN - HOCKS - SICKLE - POST</div>
+
+                    <div class="field-group-vertical">
+                        <div class="form-row-vertical">
+                            <div class="checkbox-group" data-field="sickle_hock">
+                                <input type="hidden" name="sickle_hock" value="0">
+                                <input type="checkbox" id="sickle_hock" name="sickle_hock" value="1">
+                                <label for="sickle_hock">Sickle Hock</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row-vertical">
+                            <div class="checkbox-group" data-field="sickle_hock_slightly">
+                                <input type="hidden" name="sickle_hock_slightly" value="0">
+                                <input type="checkbox" id="sickle_hock_slightly" name="sickle_hock_slightly" value="1">
+                                <label for="sickle_hock_slightly">Sickle Hock SLIGHTLY</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row-vertical">
+                            <div class="checkbox-group" data-field="post_legged">
+                                <input type="hidden" name="post_legged" value="0">
+                                <input type="checkbox" id="post_legged" name="post_legged" value="1">
+                                <label for="post_legged">Post Legged</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row-vertical">
+                            <div class="checkbox-group" data-field="camped_out">
+                                <input type="hidden" name="camped_out" value="0">
+                                <input type="checkbox" id="camped_out" name="camped_out" value="1">
+                                <label for="camped_out">Camped Out</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="field-group-vertical">
+                        <div class="form-row-vertical">
+                            <label><strong>Stifle</strong></label>
+                            <div class="button-group" data-field="stifle_quality">
+                                <input type="hidden" name="stifle_quality" value="">
+                                <button type="button" class="btn-option" data-value="strong">Strong</button>
+                                <button type="button" class="btn-option" data-value="avg">Avg</button>
+                                <button type="button" class="btn-option" data-value="weak">Weak</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row-vertical">
+                            <label><strong>Gaskin</strong></label>
+                            <div class="button-group" data-field="gaskin_quality">
+                                <input type="hidden" name="gaskin_quality" value="">
+                                <button type="button" class="btn-option" data-value="strong">Strong</button>
+                                <button type="button" class="btn-option" data-value="avg">Avg</button>
+                                <button type="button" class="btn-option" data-value="weak">Weak</button>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -1025,7 +1083,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         'neck_needs_grow',
                         'neck_needs_mature',
                         'neck_needs_improve',
-                        'neck_nm_ty'
+                        'neck_nm_ty',
+                        'sickle_hock',
+                        'sickle_hock_slightly',
+                        'post_legged',
+                        'camped_out'
                     ]; // add more keys here as needed
 
                     checkboxFields.forEach(field => {
