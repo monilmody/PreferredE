@@ -26,18 +26,19 @@ $checkboxFields = [
 ];
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
-if (in_array($field, $checkboxFields)) {
-    // Handle checkbox fields
+if ($field === 'pasterns_notes') {
+    $value = isset($_POST['value']) ? trim($_POST['value']) : null;
+} elseif (in_array($field, $checkboxFields)) {
     $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
 } else {
     $value = $_POST['value'] ?? '';
 }
 
-// Add this to your value handling logic
+// Change the parameter binding for pasterns_notes:
 if ($field === 'pasterns_notes') {
-    $value = !empty($_POST['value']) ? trim($_POST['value']) : null;
-    // Optional: sanitize the input
-    $value = $value ? htmlspecialchars($value, ENT_QUOTES) : null;
+    $stmt->bind_param('ss', $value, $found_horse_name);
+} else {
+    $stmt->bind_param('ss', $value, $found_horse_name);
 }
 
 // Allowed fields to update

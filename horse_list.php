@@ -965,8 +965,21 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
-            document.querySelector('[data-field="pasterns_notes"]').addEventListener('input', (e) => {
-                console.log('Notes value:', e.target.value); // Verify it captures input
+            document.querySelector('[data-field="pasterns_notes"]').addEventListener('blur', function(e) {
+                const field = this.getAttribute('data-field');
+                const value = this.value;
+
+                // Send the update via AJAX
+                fetch('your_php_script.php', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/x-www-form-urlencoded',
+                        },
+                        body: `horse_name=${encodeURIComponent(horseName)}&field=${field}&value=${encodeURIComponent(value)}`
+                    })
+                    .then(response => response.text())
+                    .then(data => console.log(data))
+                    .catch(error => console.error('Error:', error));
             });
 
             // Function to collect selected sort values and pass them as parameters
