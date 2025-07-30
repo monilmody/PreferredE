@@ -978,7 +978,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 field.addEventListener('input', function() {
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(() => {
-                        const horse_name = this.dataset.horseName; // Corrected to get text content
+                    const horse_name = document.getElementById('horseName').textContent.trim(); // Corrected to get text content
                         const fieldName = this.getAttribute('data-field');
                         const value = this.value;
 
