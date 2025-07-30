@@ -114,6 +114,7 @@
   transition: right 0.3s ease;
   z-index: 1050;
   padding: 20px;
+  overflow-y: hidden;
   display: flex;
   flex-direction: column;
 }
@@ -122,7 +123,6 @@
   flex: 1;
   overflow-y: auto;
   padding-top: 10px;
-  padding-bottom: 70px; /* Provide space for the action buttons at the bottom */
 }
 
 /* Sidebar header (horse name) */
@@ -143,8 +143,8 @@
 }
 
 .closebtn {
-  position: absolute;
-  top: 20px;
+  position: sticky;
+  top: 0px;
   right: 20px;
   background-color: #f44336;
   color: white;
@@ -152,13 +152,16 @@
   cursor: pointer;
   font-size: 18px;
   z-index: 1001;
-  width: 30px;
+  width: 10px;
   /* Fixed width for a more controlled size */
   height: 30px;
   /* Fixed height to make it circular */
   display: flex;
   justify-content: center;
   align-items: center;
+  /* Centering the text inside the button */
+  margin-left: auto; /* Pushes it to the right */
+  float: right; /* Ensures it stays on the right */
 }
 
 #horseDetailsSidebar.open {
@@ -175,14 +178,13 @@
 /* Tabs */
 .tab-buttons {
   position: sticky;
-  top: 120px;
+  top: 140px;
   background: white;
   padding: 10px 0;
   z-index: 100;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
   display: flex;
   gap: 5px;
-  justify-content: space-between
 }
 
 .tab-button {
@@ -192,7 +194,7 @@
   border-radius: 4px;
   cursor: pointer;
   font-size: 14px;
-  transition: all 0.2s
+  transition: all 0.2s;
 }
 
 /* Container for scrollable content */
@@ -200,7 +202,6 @@
   flex: 1;
   overflow-y: auto;
   padding-top: 10px;
-  margin-top: 10px; /* Add space to prevent content overlap with the sticky tab */
 }
 
 /* Action buttons at bottom */
@@ -760,7 +761,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 /* Sticky section that includes both horse name and details */
 .horse-title-section {
   position: sticky;
-  top: 0;
+  top: 30;
   /* Stick to the top of the viewport */
   z-index: 100;
   /* Ensure it stays above other content */
@@ -772,7 +773,6 @@ body.modal-open #horseDetailsSidebar .closebtn {
   /* Optional rounded corners */
   width: 100%;
   /* Ensure it takes full width */
-  box-sizing: border-box; /* Ensure padding is accounted for in the width */
 }
 
 .parent-info .horse-info:not(:last-child):after {
@@ -780,7 +780,7 @@ body.modal-open #horseDetailsSidebar .closebtn {
 }
 
 .parent-info {
-  display: flex;
+  display: inline;
   font-size: 2em;
   /* Makes parentheses bigger */
   color: white;
