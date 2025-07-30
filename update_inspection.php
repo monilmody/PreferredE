@@ -35,13 +35,6 @@ if ($field === 'pasterns_notes') {
     $value = $_POST['value'] ?? '';
 }
 
-// Change the parameter binding for pasterns_notes:
-if ($field === 'pasterns_notes') {
-    $stmt->bind_param('ss', $value, $found_horse_name);
-} else {
-    $stmt->bind_param('ss', $value, $found_horse_name);
-}
-
 // Allowed fields to update
 $allowedFields = [
     // HORSE INFORMATION
