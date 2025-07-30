@@ -219,12 +219,8 @@
   font-weight: bold;
 }
 
-.tab-pane {
-  display: none;
-}
-
 .tab-pane.active {
-  display: flex;
+  display: block;
 }
 
 /* Improved photo gallery */
