@@ -972,50 +972,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort4_order').value = "<?php echo $sort4_param_order; ?>";
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
-            document.addEventListener('DOMContentLoaded', function() {
-                const hiddenHorseId = document.getElementById('hiddenHorseId').value; // Get horse name from hidden input
-                const notesField = document.querySelector('[name="pasterns_notes"]');
-
-                // Verify if the hiddenHorseId and pasterns_notes field are present
-                console.log("Horse Name from hidden input:", hiddenHorseId);
-                console.log("Notes Field:", notesField);
-
-                // Auto-save functionality (1-second delay)
-                if (notesField) {
-                    let saveTimeout;
-
-                    notesField.addEventListener('input', function() {
-                        clearTimeout(saveTimeout);
-                        saveTimeout = setTimeout(() => {
-                            const horse_name = hiddenHorseId; // Use the value from the hidden input
-                            const fieldName = this.getAttribute('data-field');
-                            const value = this.value;
-
-                            console.log("Auto-saving:", horse_name, fieldName, value); // Debugging log
-
-                            fetch('update_inspection.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/x-www-form-urlencoded',
-                                    },
-                                    body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
-                                })
-                                .then(response => response.text())
-                                .then(console.log)
-                                .catch(console.error);
-                        }, 1000); // 1 second delay after typing stops
-                    });
-                }
-            });
-
-            // Verify the pasterns_notes field has the correct class
-            const notesField = document.querySelector('[name="pasterns_notes"]');
-            console.log("Pasterns notes field:", notesField);
-            if (notesField) {
-                console.log("Field classes:", notesField.className);
-                console.log("Data attributes:", notesField.dataset);
-            }
-
             // Function to collect selected sort values and pass them as parameters
             function getValues() {
                 var sort1 = document.getElementById('sort1').value;
@@ -1245,6 +1201,39 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     .catch(error => {
                         console.error("Error loading inspection data:", error);
                     });
+
+                const notesField = document.querySelector('[name="pasterns_notes"]');
+
+                // Verify if the hiddenHorseId and pasterns_notes field are present
+                console.log("Horse Name from hidden input:", horseName);
+                console.log("Notes Field:", notesField);
+
+                // Auto-save functionality (1-second delay)
+                if (notesField) {
+                    let saveTimeout;
+
+                    notesField.addEventListener('input', function() {
+                        clearTimeout(saveTimeout);
+                        saveTimeout = setTimeout(() => {
+                            const horse_name = horseName; // Use the value from the hidden input
+                            const fieldName = this.getAttribute('data-field');
+                            const value = this.value;
+
+                            console.log("Auto-saving:", horse_name, fieldName, value); // Debugging log
+
+                            fetch('update_inspection.php', {
+                                    method: 'POST',
+                                    headers: {
+                                        'Content-Type': 'application/x-www-form-urlencoded',
+                                    },
+                                    body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
+                                })
+                                .then(response => response.text())
+                                .then(console.log)
+                                .catch(console.error);
+                        }, 1000); // 1 second delay after typing stops
+                    });
+                }
             }
 
             // File Upload Handler
