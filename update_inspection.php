@@ -3,7 +3,6 @@ require_once("db-settings.php");
 
 $horse_name = $_POST['horse_name'] ?? '';  // Horse name from the client
 $field = $_POST['field'] ?? '';            // Field to be updated (e.g., size, balance)
-$value = $_POST['value'] ?? '';
 
 $checkboxFields = [
     'neck_upright',
@@ -27,12 +26,20 @@ $checkboxFields = [
 ];
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
+// Modify your value normalization section:
 if ($field === 'pasterns_notes') {
     $value = isset($_POST['value']) ? trim($_POST['value']) : null;
 } elseif (in_array($field, $checkboxFields)) {
     $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
 } else {
     $value = $_POST['value'] ?? '';
+}
+
+// Change the parameter binding for pasterns_notes:
+if ($field === 'pasterns_notes') {
+    $stmt->bind_param('ss', $value, $found_horse_name);
+} else {
+    $stmt->bind_param('ss', $value, $found_horse_name);
 }
 
 // Allowed fields to update
@@ -141,7 +148,6 @@ $stmt->close();
 // Step 3: Update the specific field in horse_inspection
 $updateQuery = "UPDATE horse_inspection SET `$field` = ? WHERE horse = ?";
 $stmt = $mysqli->prepare($updateQuery);
-$stmt->bind_param('ss', $value, $found_horse_name);
 if (!$stmt) {
     http_response_code(500);
     echo "Prepare failed during update: " . $mysqli->error;
