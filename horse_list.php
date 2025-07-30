@@ -921,6 +921,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
+                        <span id="horseName" style="display: none;"><?= htmlspecialchars($horse_name ?? '') ?></span>
+
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
                             <input
@@ -928,7 +930,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 name="pasterns_notes"
                                 class="form-control auto-save-field"
                                 data-field="pasterns_notes"
-                                data-horse-name="<?= htmlspecialchars($horse_name ?? '') ?>"
                                 value="<?= htmlspecialchars($horse['pasterns_notes'] ?? '') ?>">
                         </div>
                     </div>
