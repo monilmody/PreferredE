@@ -923,7 +923,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
-                            <input type="text" name="pasterns_notes" data-field="pasterns_notes" class="form-control auto-save-field" value="<?= isset($horse['pasterns_notes']) ? htmlspecialchars($horse['pasterns_notes']) : '' ?>">
+                            <input
+                                type="text"
+                                name="pasterns_notes"
+                                class="form-control auto-save-field"
+                                data-field="pasterns_notes"
+                                data-horse-name="<?= htmlspecialchars($horse_name ?? '') ?>"
+                                value="<?= htmlspecialchars($horse['pasterns_notes'] ?? '') ?>">
                         </div>
                     </div>
                 </div>
@@ -972,7 +978,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 field.addEventListener('input', function() {
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(() => {
-                        const horseName = '<?= $horse_name ?>'; // Make sure this is available
+                        const horse_name = this.dataset.horseName; // Corrected to get text content
                         const fieldName = this.getAttribute('data-field');
                         const value = this.value;
 
@@ -981,7 +987,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 headers: {
                                     'Content-Type': 'application/x-www-form-urlencoded',
                                 },
-                                body: `horse_name=${encodeURIComponent(horseName)}&field=${fieldName}&value=${encodeURIComponent(value)}`
+                                body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
                             })
                             .then(response => response.text())
                             .then(console.log) // Optional: show success in console
@@ -989,6 +995,17 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     }, 1000); // 1 second delay after typing stops
                 });
             });
+
+            // Add this debug code right after your existing auto-save code
+            console.log("Auto-save fields found:", document.querySelectorAll('.auto-save-field').length);
+
+            // Verify the pasterns_notes field has the correct class
+            const notesField = document.querySelector('[name="pasterns_notes"]');
+            console.log("Pasterns notes field:", notesField);
+            if (notesField) {
+                console.log("Field classes:", notesField.className);
+                console.log("Data attributes:", notesField.dataset);
+            }
 
             // Function to collect selected sort values and pass them as parameters
             function getValues() {
