@@ -353,7 +353,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             <button class="tab-button" data-tab="photosTab">Photos</button>
             <button class="tab-button" data-tab="inspectionTab">Inspection</button>
         </div>
-        </div>
 
         <!-- Tab content -->
         <div class="tab-content">
@@ -957,6 +956,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                 </div>
             </div>
+        </div>
         <br>
 
 
