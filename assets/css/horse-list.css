@@ -224,7 +224,7 @@
 }
 
 .tab-pane.active {
-  display: block;
+  display: flex;
 }
 
 /* Improved photo gallery */
