@@ -921,7 +921,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <span id="horseName" style="display: none;"><?= htmlspecialchars($horse_name ?? '') ?></span>
+                        <input type="hidden" id="hiddenHorseId" value="<?= htmlspecialchars($horse_name ?? '') ?>">
 
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
@@ -980,7 +980,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         clearTimeout(saveTimeout);
                         saveTimeout = setTimeout(() => {
                             // Fetch the horse_name from the hidden span
-                            const horse_name = document.getElementById('horseName').textContent.trim();
+                            const horse_name = document.getElementById('hiddenHorseId').value;
                             console.log("Horse Name fetched from span:", horse_name); // Debugging line
 
                             if (!horse_name) {
