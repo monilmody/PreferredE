@@ -921,7 +921,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                        <input type="hidden" id="hiddenHorseId" value="<?= htmlspecialchars($horse_name ?? '') ?>">
+                        <input type="hidden" name="horseId" id="hiddenHorseId" value="<?= htmlspecialchars($horse_name ?? '') ?>">
 
                         <div class="form-row">
                             <label><strong>Notes On Pasterns</strong></label>
@@ -973,30 +973,26 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             document.getElementById('sort5_order').value = "<?php echo $sort5_param_order; ?>";
 
             document.addEventListener('DOMContentLoaded', function() {
-                document.querySelectorAll('.auto-save-field').forEach(field => {
+                const hiddenHorseId = document.getElementById('hiddenHorseId').value; // Get horse name from hidden input
+                const notesField = document.querySelector('[name="pasterns_notes"]');
+
+                // Verify if the hiddenHorseId and pasterns_notes field are present
+                console.log("Horse Name from hidden input:", hiddenHorseId);
+                console.log("Notes Field:", notesField);
+
+                // Auto-save functionality (1-second delay)
+                if (notesField) {
                     let saveTimeout;
 
-                    field.addEventListener('input', function() {
+                    notesField.addEventListener('input', function() {
                         clearTimeout(saveTimeout);
                         saveTimeout = setTimeout(() => {
-                            // Fetch the horse_name from the hidden span
-                            const horse_name = document.getElementById('hiddenHorseId').value;
-                            console.log("Horse Name fetched from span:", horse_name); // Debugging line
-
-                            if (!horse_name) {
-                                console.error("Horse name is not found!");
-                                return; // Exit if horse_name is not available
-                            }
-
-                            // Get the field name and value
+                            const horse_name = hiddenHorseId; // Use the value from the hidden input
                             const fieldName = this.getAttribute('data-field');
                             const value = this.value;
 
-                            // Debug: Log the field name and value
-                            console.log("Field Name:", fieldName);
-                            console.log("Value:", value);
+                            console.log("Auto-saving:", horse_name, fieldName, value); // Debugging log
 
-                            // Send POST request to update the database
                             fetch('update_inspection.php', {
                                     method: 'POST',
                                     headers: {
@@ -1005,17 +1001,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                     body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
                                 })
                                 .then(response => response.text())
-                                .then(responseText => {
-                                    console.log("Received response:", responseText); // Debugging line
-                                })
-                                .catch(console.error); // Optional: show errors in console
+                                .then(console.log)
+                                .catch(console.error);
                         }, 1000); // 1 second delay after typing stops
                     });
-                });
+                }
             });
-
-            // Add this debug code right after your existing auto-save code
-            console.log("Auto-save fields found:", document.querySelectorAll('.auto-save-field').length);
 
             // Verify the pasterns_notes field has the correct class
             const notesField = document.querySelector('[name="pasterns_notes"]');
