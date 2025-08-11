@@ -28,7 +28,7 @@ $checkboxFields = [
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
 // Modify your value normalization section:
-if ($field === 'pasterns_notes') {
+if (in_array($field, ['pasterns_notes', 'dave_rating_comments'])) {
     $value = isset($_POST['value']) ? trim($_POST['value']) : null;
 } elseif (in_array($field, $checkboxFields)) {
     $value = isset($_POST['value']) && filter_var($_POST['value'], FILTER_VALIDATE_BOOLEAN) ? '1' : '0';
@@ -56,6 +56,7 @@ $allowedFields = [
     'neck_needs_mature',
     'neck_needs_improve',
     'neck_nm_ty',
+    'dave_rating_comments',
 
     // SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS
     'size',
