@@ -1239,39 +1239,45 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         console.error("Error loading inspection data:", error);
                     });
 
-                const notesField = document.querySelector('[name="pasterns_notes"]');
+                // Add auto-save to multiple fields
+                const autoSaveFields = ['pasterns_notes', 'dave_rating_comments'];
 
                 // Verify if the hiddenHorseId and pasterns_notes field are present
                 console.log("Horse Name from hidden input:", horseName);
-                console.log("Notes Field:", notesField);
+                console.log("Notes Field:", autoSaveFields);
 
                 // Auto-save functionality (1-second delay)
-                if (notesField) {
-                    let saveTimeout;
+                autoSaveFields.forEach(fieldName => {
+                    const field = document.querySelector(`[name="${fieldName}"]`);
+                    if (field) {
+                        let saveTimeout;
 
-                    notesField.addEventListener('input', function() {
-                        clearTimeout(saveTimeout);
-                        saveTimeout = setTimeout(() => {
-                            const horse_name = horseName; // Use the value from the hidden input
-                            const fieldName = this.getAttribute('data-field');
-                            const value = this.value;
+                        field.addEventListener('input', function() {
+                            clearTimeout(saveTimeout);
+                            saveTimeout = setTimeout(() => {
+                                const horse_name = horseName;
+                                const value = this.value;
 
-                            console.log("Auto-saving:", horse_name, fieldName, value); // Debugging log
+                                console.log("Auto-saving:", horse_name, fieldName, value);
 
-                            fetch('update_inspection.php', {
-                                    method: 'POST',
-                                    headers: {
-                                        'Content-Type': 'application/x-www-form-urlencoded',
-                                    },
-                                    body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
-                                })
-                                .then(response => response.text())
-                                .then(console.log)
-                                .catch(console.error);
-                        }, 1000); // 1 second delay after typing stops
-                    });
-                }
+                                fetch('update_inspection.php', {
+                                        method: 'POST',
+                                        headers: {
+                                            'Content-Type': 'application/x-www-form-urlencoded',
+                                        },
+                                        body: `horse_name=${encodeURIComponent(horse_name)}&field=${fieldName}&value=${encodeURIComponent(value)}`
+                                    })
+                                    .then(response => response.text())
+                                    .then(console.log)
+                                    .catch(console.error);
+                            }, 1000);
+                        });
+                    } else {
+                        console.warn(`Auto-save field not found: ${fieldName}`);
+                    }
+                });
             }
+
 
             // File Upload Handler
             $('#fileUploadForm').on('submit', function(e) {
