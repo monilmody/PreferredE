@@ -102,7 +102,14 @@ $allowedFields = [
     'pasterns_length',
     'pasterns_angle',
     'pasterns_strength',
-    'pasterns_notes'
+    'pasterns_notes',
+
+    // FRONT VIEW / HEAD - EYES - EARS - NOSE
+    'head_detail',
+    'head_size',
+    'eyes_width',
+    'eyes',
+    'ears'
 ];
 
 // Validate input

@@ -967,6 +967,70 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 value="<?= htmlspecialchars($horse['pasterns_notes'] ?? '') ?>">
                         </div>
                     </div>
+
+                    <div class="section-header">FRONT VIEW / HEAD - EYES - EARS - NOSE</div>
+
+                    <div class="form-row">
+                        <label><strong>Head Detail</strong></label>
+                        <div class="button-group" data-field="head_detail">
+                            <input type="hidden" name="head_detail" value="">
+                            <button type="button" class="btn-option" data-value="Sharp">Sharp</button>
+                            <button type="button" class="btn-option" data-value="Avg">Avg</button>
+                            <button type="button" class="btn-option" data-value="Plain">Plain</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label><strong>Head Size</strong></label>
+                        <div class="button-group" data-field="head_size">
+                            <input type="hidden" name="head_size" value="">
+                            <button type="button" class="btn-option" data-value="Avg">Avg</button>
+                            <button type="button" class="btn-option" data-value="Big">Big</button>
+                            <button type="button" class="btn-option" data-value="Small">Small</button>
+                        </div>
+                    </div>
+
+                    <!-- <div class="form-row">
+                        <label><strong>Head Roman</strong></label>
+                        <div class="button-group" data-field="head_roman">
+                            <input type="hidden" name="head_roman" value="">
+                            <button type="button" class="btn-option" data-value="Roman">Roman</button>
+                            <button type="button" class="btn-option" data-value="Roman Bad">Roman Bad</button>
+                        </div>
+                    </div> -->
+
+                    <div class="form-row">
+                        <label><strong>Eyes Width</strong></label>
+                        <div class="button-group" data-field="eyes_width">
+                            <input type="hidden" name="eyes_width" value="">
+                            <button type="button" class="btn-option" data-value="Wide">Wide</button>
+                            <button type="button" class="btn-option" data-value="Avg">Avg</button>
+                            <button type="button" class="btn-option" data-value="Narrow">Narrow</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label><strong>Eyes</strong></label>
+                        <div class="button-group" data-field="eyes">
+                            <input type="hidden" name="eyes" value="">
+                            <button type="button" class="btn-option" data-value="Sharp">Sharp</button>
+                            <button type="button" class="btn-option" data-value="Plain">Plain</button>
+                            <button type="button" class="btn-option" data-value="King">King</button>
+                            <button type="button" class="btn-option" data-value="Cloudy">Cloudy</button>
+                            <button type="button" class="btn-option" data-value="Sleepy">Sleepy</button>
+                            <button type="button" class="btn-option" data-value="White">White</button>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <label><strong>Ears</strong></label>
+                        <div class="button-group" data-field="ears">
+                            <input type="hidden" name="ears" value="">
+                            <button type="button" class="btn-option" data-value="Avg">Avg</button>
+                            <button type="button" class="btn-option" data-value="Big">Big</button>
+                            <button type="button" class="btn-option" data-value="Small">Small</button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
