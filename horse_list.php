@@ -604,6 +604,18 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <label for="neck_nm_ty">N M Ty</label>
                             </div>
                         </div>
+
+                        <div class="field-group">
+                            <div class="form-row">
+                                <label><strong>Comments: </strong></label>
+                                <input
+                                    type="text"
+                                    name="dave_rating_comments"
+                                    class="form-control auto-save-field"
+                                    data-field="dave_rating_comments"
+                                    value="<?= htmlspecialchars($horse['dave_rating_comments'] ?? '') ?>">
+                            </div>
+                        </div>
                     </div>
 
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
