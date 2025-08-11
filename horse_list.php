@@ -604,19 +604,20 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <label for="neck_nm_ty">N M Ty</label>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="field-group">
-                            <div class="form-row">
-                                <label><strong>Comments: </strong></label>
-                                <input
-                                    type="text"
-                                    name="dave_rating_comments"
-                                    class="form-control auto-save-field"
-                                    data-field="dave_rating_comments"
-                                    value="<?= htmlspecialchars($horse['dave_rating_comments'] ?? '') ?>">
-                            </div>
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>Comments: </strong></label>
+                            <input
+                                type="text"
+                                name="dave_rating_comments"
+                                class="form-control auto-save-field"
+                                data-field="dave_rating_comments"
+                                value="<?= htmlspecialchars($horse['dave_rating_comments'] ?? '') ?>">
                         </div>
                     </div>
+
 
                     <div class="section-header">SIDE VIEW / SIZE . BALANCE . GIRTH . WITHERS. SHOULDERS</div>
 
@@ -1210,16 +1211,29 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             }
                         });
 
-                        // Populate pasterns_notes if available
-                        const notesField = document.querySelector('[name="pasterns_notes"]');
-                        if (notesField) {
-                            if (data.pasterns_notes) {
-                                notesField.value = data.pasterns_notes;
-                                console.log("Pasterns notes populated:", data.pasterns_notes);
-                            } else {
-                                console.log("No pasterns_notes in the fetched data.");
+                        const fieldsToPopulate = [{
+                                name: "pasterns_notes",
+                                value: data.pasterns_notes
+                            },
+                            {
+                                name: "dave_rating_comments",
+                                value: data.dave_rating_comments
                             }
-                        }
+                        ];
+
+                        fieldsToPopulate.forEach(({
+                            name,
+                            value
+                        }) => {
+                            const field = document.querySelector(`[name="${name}"]`);
+                            if (field && value) {
+                                field.value = value;
+                                console.log(`${name} populated:`, value);
+                            } else {
+                                console.log(`No data for ${name} or field not found.`);
+                            }
+                        });
+
                     })
                     .catch(error => {
                         console.error("Error loading inspection data:", error);
