@@ -1067,7 +1067,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option" data-value="Wide">Wide</button>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="field-group">
                         <div class="form-row">
                             <label><strong>Right Front</strong></label>
                             <div class="button-group" data-field="right_front">
@@ -1113,7 +1115,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <label for="splint_right_front">SPLINT RIGHT Front</label>
                             </div>
                         </div>
+                    </div>
 
+                    <div class="field-group">
                         <div class="form-row">
                             <label><strong>Left Front</strong></label>
                             <div class="button-group" data-field="left_front">
@@ -1164,7 +1168,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             </div>
         </div>
         <br>
-
 
         <script>
             document.getElementById('sort1').value = "<?php echo $sort1_param; ?>";

@@ -124,7 +124,13 @@ $allowedFields = [
     'right_front',
     'right_knee',
     'left_front',
-    'left_knee'
+    'left_knee',
+    'rt_knee_face_out',
+    'rt_knee_face_in',
+    'splint_right_front',
+    'left_knee_face_out',
+    'left_knee_face_in',
+    'splint_left_front'
 ];
 
 // Validate input
