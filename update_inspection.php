@@ -23,7 +23,13 @@ $checkboxFields = [
     'post_legged',
     'camped_out',
     'tied_in_right_knee',
-    'tied_in_left_knee'
+    'tied_in_left_knee',
+    'rt_knee_face_out',
+    'rt_knee_face_in',
+    'splint_right_front',
+    'left_knee_face_out',
+    'left_knee_face_in',
+    'splint_left_front'
 ];
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
@@ -109,7 +115,16 @@ $allowedFields = [
     'head_size',
     'eyes_width',
     'eyes',
-    'ears'
+    'ears',
+
+    // FRONT VIEW / BONE - CHEST - KNEES - SPLINTS (New Fields)
+    'bone',
+    'chest_width',
+    'base_width_front',
+    'right_front',
+    'right_knee',
+    'left_front',
+    'left_knee'
 ];
 
 // Validate input

@@ -1033,6 +1033,133 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">FRONT VIEW / BONE - CHEST - KNEES - SPLINTS</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>Bone</strong></label>
+                            <div class="button-group" data-field="bone">
+                                <input type="hidden" name="bone" value="">
+                                <button type="button" class="btn-option" data-value="Average">Average</button>
+                                <button type="button" class="btn-option" data-value="Medium">Medium</button>
+                                <button type="button" class="btn-option" data-value="Fine">Fine</button>
+                                <button type="button" class="btn-option" data-value="Coarse">Coarse</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Chest Width</strong></label>
+                            <div class="button-group" data-field="chest_width">
+                                <input type="hidden" name="chest_width" value="">
+                                <button type="button" class="btn-option" data-value="Average">Average</button>
+                                <button type="button" class="btn-option" data-value="Narrow">Narrow</button>
+                                <button type="button" class="btn-option" data-value="Wide">Wide</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Base Width Front</strong></label>
+                            <div class="button-group" data-field="base_width_front">
+                                <input type="hidden" name="base_width_front" value="">
+                                <button type="button" class="btn-option" data-value="Average">Average</button>
+                                <button type="button" class="btn-option" data-value="Narrow">Narrow</button>
+                                <button type="button" class="btn-option" data-value="Wide">Wide</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Right Front</strong></label>
+                            <div class="button-group" data-field="right_front">
+                                <input type="hidden" name="right_front" value="">
+                                <button type="button" class="btn-option" data-value="Correct">Correct</button>
+                                <button type="button" class="btn-option" data-value="IN Slightly">IN Slightly</button>
+                                <button type="button" class="btn-option" data-value="IN Bad">IN Bad</button>
+                                <button type="button" class="btn-option" data-value="OUT Slightly">OUT Slightly</button>
+                                <button type="button" class="btn-option" data-value="OUT Bad">OUT Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Right Knee</strong></label>
+                            <div class="button-group" data-field="right_knee">
+                                <input type="hidden" name="right_knee" value="">
+                                <button type="button" class="btn-option" data-value="Good">Good</button>
+                                <button type="button" class="btn-option" data-value="Offset Slightly">Offset Slightly</button>
+                                <button type="button" class="btn-option" data-value="Offset Bad">Offset Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="rt_knee_face_out">
+                                <input type="hidden" name="rt_knee_face_out" value="0">
+                                <input type="checkbox" id="rt_knee_face_out" name="rt_knee_face_out" value="1">
+                                <label for="rt_knee_face_out">RT Knee FACE OUT</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="rt_knee_face_in">
+                                <input type="hidden" name="rt_knee_face_in" value="0">
+                                <input type="checkbox" id="rt_knee_face_in" name="rt_knee_face_in" value="1">
+                                <label for="rt_knee_face_in">RT Knee FACE IN</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="splint_right_front">
+                                <input type="hidden" name="splint_right_front" value="0">
+                                <input type="checkbox" id="splint_right_front" name="splint_right_front" value="1">
+                                <label for="splint_right_front">SPLINT RIGHT Front</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Left Front</strong></label>
+                            <div class="button-group" data-field="left_front">
+                                <input type="hidden" name="left_front" value="">
+                                <button type="button" class="btn-option" data-value="Correct">Correct</button>
+                                <button type="button" class="btn-option" data-value="IN Slightly">IN Slightly</button>
+                                <button type="button" class="btn-option" data-value="IN Bad">IN Bad</button>
+                                <button type="button" class="btn-option" data-value="OUT Slightly">OUT Slightly</button>
+                                <button type="button" class="btn-option" data-value="OUT Bad">OUT Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>Left Knee</strong></label>
+                            <div class="button-group" data-field="left_knee">
+                                <input type="hidden" name="left_knee" value="">
+                                <button type="button" class="btn-option" data-value="Good">Good</button>
+                                <button type="button" class="btn-option" data-value="Offset Slightly">Offset Slightly</button>
+                                <button type="button" class="btn-option" data-value="Offset Bad">Offset Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="left_knee_face_out">
+                                <input type="hidden" name="left_knee_face_out" value="0">
+                                <input type="checkbox" id="left_knee_face_out" name="left_knee_face_out" value="1">
+                                <label for="left_knee_face_out">LEFT Knee FACE OUT</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="left_knee_face_in">
+                                <input type="hidden" name="left_knee_face_in" value="0">
+                                <input type="checkbox" id="left_knee_face_in" name="left_knee_face_in" value="1">
+                                <label for="left_knee_face_in">LEFT Knee FACE IN</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="splint_left_front">
+                                <input type="hidden" name="splint_left_front" value="0">
+                                <input type="checkbox" id="splint_left_front" name="splint_left_front" value="1">
+                                <label for="splint_left_front">SPLINT LEFT Front</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1265,7 +1392,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             'post_legged',
                             'camped_out',
                             'tied_in_right_knee',
-                            'tied_in_left_knee'
+                            'tied_in_left_knee',
+                            'rt_knee_face_out',
+                            'rt_knee_face_in',
+                            'splint_right_front',
+                            'left_knee_face_out',
+                            'left_knee_face_in',
+                            'splint_left_front'
                         ]; // add more keys here as needed
 
                         checkboxFields.forEach(field => {
