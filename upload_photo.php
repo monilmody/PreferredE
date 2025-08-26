@@ -21,6 +21,7 @@ try {
     $stsClient = new StsClient([
         'region' => $region,
         'version' => 'latest',
+        'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
     ]);
 
     error_log("Assuming role: $roleArn");
