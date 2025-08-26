@@ -3782,10 +3782,13 @@ function getHorseDetails($horseId)
             'version' => 'latest',
         ]);
 
+        error_log("Assuming role: $roleArn");
         $assumeRoleResult = $stsClient->assumeRole([
             'RoleArn' => $roleArn,
             'RoleSessionName' => $sessionName,
         ]);
+        
+        error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
 
         $creds = $assumeRoleResult['Credentials'];
 
