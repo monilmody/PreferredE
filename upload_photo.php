@@ -7,16 +7,41 @@ require 'db-settings.php';
 use Aws\S3\S3Client;
 use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
+use Aws\Sts\StsClient;
 
 header('Content-Type: application/json');
 
 try {
     $region = 'us-east-1';
 
+    $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
+    $sessionName = 'GetHorseDetailsSession';
+
+    // Step 1: Assume Role to get temporary credentials
+    $stsClient = new StsClient([
+        'region' => $region,
+        'version' => 'latest',
+    ]);
+
+    error_log("Assuming role: $roleArn");
+    $assumeRoleResult = $stsClient->assumeRole([
+        'RoleArn' => $roleArn,
+        'RoleSessionName' => $sessionName,
+    ]);
+
+    error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
+
+    $creds = $assumeRoleResult['Credentials'];
+
     // Secrets Manager client
     $secretsClient = new SecretsManagerClient([
         'version' => 'latest',
         'region' => $region,
+        'credentials' => [
+            'key'    => $creds['AccessKeyId'],
+            'secret' => $creds['SecretAccessKey'],
+            'token'  => $creds['SessionToken'],
+        ],
     ]);
 
     // Load S3 credentials
@@ -30,6 +55,11 @@ try {
     $s3 = new S3Client([
         'region' => $region,
         'version' => 'latest',
+        'credentials' => [
+            'key'    => $creds['AccessKeyId'],
+            'secret' => $creds['SecretAccessKey'],
+            'token'  => $creds['SessionToken'],
+        ],
         'suppress_php_deprecation_warning' => true // ✅ THIS LINE
     ]);
 
