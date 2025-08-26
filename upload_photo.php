@@ -29,6 +29,7 @@ try {
         'RoleSessionName' => $sessionName,
     ]);
 
+    error_log(message: "AssumeRole result: " . json_encode($assumeRoleResult));
     error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
 
     $creds = $assumeRoleResult['Credentials'];

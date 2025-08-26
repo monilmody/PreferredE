@@ -3787,7 +3787,8 @@ function getHorseDetails($horseId)
             'RoleArn' => $roleArn,
             'RoleSessionName' => $sessionName,
         ]);
-        
+        // Log the raw result to see if the role assumption succeeded
+        error_log(message: "AssumeRole result: " . json_encode($assumeRoleResult));
         error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
 
         $creds = $assumeRoleResult['Credentials'];
