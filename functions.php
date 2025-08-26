@@ -3736,6 +3736,7 @@ function array_key_exists_case_insensitive($key, $array) {
 use Aws\S3\S3Client;
 use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
+use Aws\Sts\StsClient;
 
 function sanitizeHorseIdForImage($horseId)
 {
@@ -3772,9 +3773,30 @@ function getHorseDetails($horseId)
     try {
         // Setup Secrets Manager
         $region = 'us-east-1'; // Change if needed
+        $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
+        $sessionName = 'GetHorseDetailsSession';
+
+        // Step 1: Assume Role to get temporary credentials
+        $stsClient = new StsClient([
+            'region' => $region,
+            'version' => 'latest',
+        ]);
+
+        $assumeRoleResult = $stsClient->assumeRole([
+            'RoleArn' => $roleArn,
+            'RoleSessionName' => $sessionName,
+        ]);
+
+        $creds = $assumeRoleResult['Credentials'];
+
         $secretsClient = new SecretsManagerClient([
             'version' => 'latest',
             'region' => $region,
+            'credentials' => [
+                'key'    => $creds['AccessKeyId'],
+                'secret' => $creds['SecretAccessKey'],
+                'token'  => $creds['SessionToken'],
+            ],
         ]);
 
         $secretResult = $secretsClient->getSecretValue([
@@ -3786,6 +3808,11 @@ function getHorseDetails($horseId)
         $s3 = new S3Client([
             'region' => $region,
             'version' => 'latest',
+            'credentials' => [
+                'key'    => $creds['AccessKeyId'],
+                'secret' => $creds['SecretAccessKey'],
+                'token'  => $creds['SessionToken'],
+            ],
             'suppress_php_deprecation_warning' => true // ✅ THIS LINE
         ]);
 
