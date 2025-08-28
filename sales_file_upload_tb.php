@@ -225,11 +225,14 @@ include_once("config.php");
       <div class='row'>
         <div class="cell">"STATUS" varchar(255) </div>
       </div>
-      <div class="cell">"FARMNAME" varchar(255) </div>
+      <div class='row'>
+        <div class="cell">"FARMNAME" varchar(255) </div>
+      </div>
+      <div class='row'>
+        <div class="cell">"FARMCODE" varchar(255) </div>
+      </div>
     </div>
-    <div class="cell">"FARMCODE" varchar(255) </div>
   </div>
-</div>
 </div>
 </div>
 <br>
