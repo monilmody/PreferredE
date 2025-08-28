@@ -231,36 +231,32 @@ if (isset($_POST["import"])) {
             if ($column[42] != "" and isset($column[42])) {
                 $price = mysqli_real_escape_string($conn, $column[42]);
             }
+
             $saledate = "0000-00-00";
             if ($column[3] != "" && isset($column[3])) {
                 $saledate = mysqli_real_escape_string($conn, $column[3]);
                 $date = date_create($saledate);
-                $saledate = date_format($date, "Y-m-d");
-            }
-
-            if ($saledate === "0000-00-00") {
-                // Here you can set a default value. Choose what is appropriate for your application
-                $saledate = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                // Or simply choose to log an error or skip this entry
-                // echo "No valid SALEDATE provided. Setting to default value.";
+                if ($date !== false) {
+                    $saledate = date_format($date, "Y-m-d");
+                } else {
+                    $saledate = "1901-01-01"; // Set default value for invalid date
+                }
             }
 
             $record = "";
             if (isset($column[18])) {
                 $record = mysqli_real_escape_string($conn, $column[18]);
             }
+
             $datefoal = "0000-00-00";
             if ($column[12] != "" && isset($column[12])) {
                 $datefoal = mysqli_real_escape_string($conn, $column[12]);
                 $date = date_create($datefoal);
-                $datefoal = date_format($date, "Y-m-d");
-            }
-
-            if ($datefoal === "0000-00-00") {
-                // Here you can set a default value. Choose what is appropriate for your application
-                $datefoal = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                // Or simply choose to log an error or skip this entry
-                // echo "No valid SALEDATE provided. Setting to default value.";
+                if ($date !== false) {
+                    $datefoal = date_format($date, "Y-m-d");
+                } else {
+                    $datefoal = "1901-01-01"; // Set default value for invalid date
+                }
             }
 
             $bredto = "";
@@ -269,20 +265,14 @@ if (isset($_POST["import"])) {
             }
 
             $lastbred = "0000-00-00";
-            if ($column[33] != "" and isset($column[33])) {
+            if (!empty($column[33]) && isset($column[33])) {
                 $lastbred = mysqli_real_escape_string($conn, $column[33]);
                 $date = date_create($lastbred);
-                $lastbred = date_format($date, "Y-m-d");
-                if ($lastbred == "") {
-                    $lastbred = "0000-00-00";
+                if ($date !== false) {
+                    $lastbred = date_format($date, "Y-m-d");
+                } else {
+                    $lastbred = "1901-01-01"; // Set default value for invalid date
                 }
-            }
-
-            if ($lastbred === "0000-00-00") {
-                // Here you can set a default value. Choose what is appropriate for your application
-                $lastbred = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                // Or simply choose to log an error or skip this entry
-                // echo "No valid SALEDATE provided. Setting to default value.";
             }
 
             $sbcity = "";
