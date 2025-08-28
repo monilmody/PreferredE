@@ -3,15 +3,16 @@ include("./header.php");
 echo '<br>';
 echo '<br>';
 ?>
+
 <head>
-  <meta name="viewport" content="width=device-width</h4> initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="assets/css/table.css">
-  
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <meta name="viewport" content="width=device-width</h4> initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="assets/css/table.css">
+
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
+    <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
 
 
 </head>
@@ -23,13 +24,13 @@ use Phppot\DataSource;
 require_once 'DataSource.php';
 $db = new DataSource();
 $conn = $db->getConnection();
-$rowCount=0;
-$rowCountSales=0;
-$rowCountDamsire=0;
-$response="";
-$message="";
+$rowCount = 0;
+$rowCountSales = 0;
+$rowCountDamsire = 0;
+$response = "";
+$message = "";
 if (isset($_POST["import"])) {
-    
+
     $fileName = $_FILES["file"]["tmp_name"];
 
     $targetDir = 'uploads/';
@@ -53,31 +54,30 @@ if (isset($_POST["import"])) {
         // Delete the file from the codebase
         unlink($targetFilePath);
     }
-    
+
     if (move_uploaded_file($_FILES["file"]["tmp_name"], $targetFilePath)) {
         // Insert file details into the database with the current timestamp
         $sql = "INSERT INTO documents (file_name, upload_date) VALUES ('$fileNameWithoutExtension', NOW())";
-        
+
         $result = mysqli_query($mysqli, $sql);
     }
-    
+
     if ($_FILES["file"]["size"] > 0) {
-        
+
         $file = fopen($targetFilePath, "r");
-        
+
         while (($column = fgetcsv($file, 10000, ",")) !== FALSE) {
-            
-            
+
+
             $rowCount = $rowCount + 1;
-            if($rowCount == 1)
-            {
+            if ($rowCount == 1) {
                 continue;
             }
-            
+
             $sire = "";
             if (isset($column[21])) {
                 $sire = mysqli_real_escape_string($conn, $column[21]);
-                $sire = str_replace("\\","",$sire);
+                $sire = str_replace("\\", "", $sire);
                 //echo $sire."|";
             }
             $csire = "";
@@ -87,7 +87,7 @@ if (isset($_POST["import"])) {
             $dam = "";
             if (isset($column[23])) {
                 $dam = mysqli_real_escape_string($conn, $column[23]);
-                $dam = str_replace("\\","",$dam);
+                $dam = str_replace("\\", "", $dam);
             }
             $cdam = "";
             if (isset($column[24])) {
@@ -96,7 +96,7 @@ if (isset($_POST["import"])) {
             $sireofdam = "";
             if (isset($column[25])) {
                 $sireofdam = mysqli_real_escape_string($conn, $column[25]);
-                $sireofdam = str_replace("\\","",$sireofdam);
+                $sireofdam = str_replace("\\", "", $sireofdam);
             }
             $csireofdam = "";
             if (isset($column[26])) {
@@ -105,7 +105,7 @@ if (isset($_POST["import"])) {
             $damofdam = "";
             if (isset($column[27])) {
                 $damofdam = mysqli_real_escape_string($conn, $column[27]);
-                $damofdam = str_replace("\\","",$damofdam);
+                $damofdam = str_replace("\\", "", $damofdam);
             }
             $cdamofdam = "";
             if (isset($column[28])) {
@@ -123,319 +123,330 @@ if (isset($_POST["import"])) {
             if (isset($column[31])) {
                 $ddamtatt = mysqli_real_escape_string($conn, $column[31]);
             }
-            
+
             $damsire_ID = getTDamsireID($csire, $cdam);
-//             echo 'exist--'.$damsire_ID;
-//             echo '<br>';
-            
-            
-//             echo $sire."--".
-//                 $csire."--".
-//                 $dam."--".
-//                 $cdam."--".
-//                 $sireofdam."--".
-//                 $csireofdam."--".
-//                 $damofdam."--".
-//                 $cdamofdam."--".
-//                 $damtatt."--".
-//                 $ddamtatt;
+            //             echo 'exist--'.$damsire_ID;
+            //             echo '<br>';
+
+
+            //             echo $sire."--".
+            //                 $csire."--".
+            //                 $dam."--".
+            //                 $cdam."--".
+            //                 $sireofdam."--".
+            //                 $csireofdam."--".
+            //                 $damofdam."--".
+            //                 $cdamofdam."--".
+            //                 $damtatt."--".
+            //                 $ddamtatt;
             if ($damsire_ID == "") {
-                    $sqlInsertDamsire = "INSERT into tdamsire
+                $sqlInsertDamsire = "INSERT into tdamsire
                     (SIRE,CSIRE,DAM,CDAM,SIREOFDAM,CSIREOFDAM,DAMOFDAM,CDAMOFDAM,DAMTATT,DAMYOF,DDAMTATT)
                     VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-                    $paramType = "sssssssssis";
-                    
-                    $paramArray1 = array(
-                        $sire,
-                        $csire,
-                        $dam,
-                        $cdam,
-                        $sireofdam,
-                        $csireofdam,
-                        $damofdam,
-                        $cdamofdam,
-                        $damtatt,
-                        $damyof,
-                        $ddamtatt
-                    );
-                    $insertId = $db->insert($sqlInsertDamsire, $paramType, $paramArray1);
-                    
-                    if (! empty($insertId)) {
-                        $response = "Success";
-                        $message = "CSV Data Imported into the Database";
-                    } else {
-                        $response = "Error";
-                        $message = "Problem in Importing CSV Data: Data in not in proper format";
-                    }
-                    $rowCountDamsire = $rowCountDamsire + 1;
-                    $damsire_ID =getLastTDamsireID();
-                    //echo "|newDamsire_ID--".$damsire_ID;
-                }
-                
-                //--------
-                
-                $saleyear = "";
-                if (isset($column[0])) {
-                    $saleyear = mysqli_real_escape_string($conn, $column[0]);
-                }
-                $currency = "";
-                if (isset($column[43])) {
-                    $saleyear = mysqli_real_escape_string($conn, $column[43]);
-                }
-                $saletype = "";
-                if (isset($column[1])) {
-                    $saletype = mysqli_real_escape_string($conn, $column[1]);
-                }
-                $salecode = "";
-                if (isset($column[2])) {
-                    $salecode = mysqli_real_escape_string($conn, $column[2]);
-                }
-                $book = "";
-                if (isset($column[4])) {
-                    $book = mysqli_real_escape_string($conn, $column[4]);
-                }
-                $tattoo = "";
-                if (isset($column[11])) {
-                    $tattoo = mysqli_real_escape_string($conn, $column[11]);
-                }
-                $hip = "";
-                if (isset($column[6])) {
-                    $hip = mysqli_real_escape_string($conn, $column[6]);
-                }
-                $horse = "";
-                if (isset($column[8])) {
-                    $horse = mysqli_real_escape_string($conn, $column[8]);
-                    $horse = str_replace("\\","",$horse);
-                }
-                $chorse = "";
-                if (isset($column[9])) {
-                    $chorse = mysqli_real_escape_string($conn, $column[9]);
-                }
-                $sex = "";
-                if (isset($column[15])) {
-                    $sex = mysqli_real_escape_string($conn, $column[15]);
-                }
-                $type = "";
-                if (isset($column[17])) {
-                    $type = mysqli_real_escape_string($conn, $column[17]);
-                }
-                $color = "";
-                if (isset($column[14])) {
-                    $color = mysqli_real_escape_string($conn, $column[14]);
-                }
-                $gait = "";
-                if (isset($column[16])) {
-                    $gait = mysqli_real_escape_string($conn, $column[16]);
-                }
-                $price = 0;
-                if ($column[42] != "" and isset($column[42])) {
-                    $price = mysqli_real_escape_string($conn, $column[42]);
-                }
-                $saledate = "0000-00-00";
-                if ($column[3] != "" && isset($column[3])) {
-                    $saledate = mysqli_real_escape_string($conn, $column[3]);
-                    $date=date_create($saledate);
-                    $saledate = date_format($date,"Y-m-d");
-                }
+                $paramType = "sssssssssis";
 
-                if ($saledate === "0000-00-00") {
-                    // Here you can set a default value. Choose what is appropriate for your application
-                    $saledate = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                    // Or simply choose to log an error or skip this entry
-                    // echo "No valid SALEDATE provided. Setting to default value.";
-                }
-                
-                $record = "";
-                if (isset($column[18])) {
-                    $record = mysqli_real_escape_string($conn, $column[18]);
-                }
-                $datefoal = "0000-00-00";
-                if ($column[12] != "" && isset($column[12])) {
-                    $datefoal = mysqli_real_escape_string($conn, $column[12]);
-                    $date=date_create($datefoal);
-                    $datefoal = date_format($date,"Y-m-d");
-                }
+                $paramArray1 = array(
+                    $sire,
+                    $csire,
+                    $dam,
+                    $cdam,
+                    $sireofdam,
+                    $csireofdam,
+                    $damofdam,
+                    $cdamofdam,
+                    $damtatt,
+                    $damyof,
+                    $ddamtatt
+                );
+                $insertId = $db->insert($sqlInsertDamsire, $paramType, $paramArray1);
 
-                if ($datefoal === "0000-00-00") {
-                    // Here you can set a default value. Choose what is appropriate for your application
-                    $datefoal = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                    // Or simply choose to log an error or skip this entry
-                    // echo "No valid SALEDATE provided. Setting to default value.";
+                if (! empty($insertId)) {
+                    $response = "Success";
+                    $message = "CSV Data Imported into the Database";
+                } else {
+                    $response = "Error";
+                    $message = "Problem in Importing CSV Data: Data in not in proper format";
                 }
+                $rowCountDamsire = $rowCountDamsire + 1;
+                $damsire_ID = getLastTDamsireID();
+                //echo "|newDamsire_ID--".$damsire_ID;
+            }
 
-                $bredto = "";
-                if (isset($column[32])) {
-                    $bredto = mysqli_real_escape_string($conn, $column[32]);
-                }
+            //--------
 
-                $lastbred = "0000-00-00";
-                if ($column[33] != "" and isset($column[33])) {
-                    $lastbred = mysqli_real_escape_string($conn, $column[33]);
-                    $date=date_create($lastbred);
-                    $lastbred = date_format($date,"Y-m-d");
-                    if ($lastbred == "") {
-                        $lastbred="0000-00-00";
-                    }
-                }
+            $saleyear = "";
+            if (isset($column[0])) {
+                $saleyear = mysqli_real_escape_string($conn, $column[0]);
+            }
+            $currency = "";
+            if (isset($column[43])) {
+                $saleyear = mysqli_real_escape_string($conn, $column[43]);
+            }
+            $saletype = "";
+            if (isset($column[1])) {
+                $saletype = mysqli_real_escape_string($conn, $column[1]);
+            }
+            $salecode = "";
+            if (isset($column[2])) {
+                $salecode = mysqli_real_escape_string($conn, $column[2]);
+            }
+            $book = "";
+            if (isset($column[4])) {
+                $book = mysqli_real_escape_string($conn, $column[4]);
+            }
+            $tattoo = "";
+            if (isset($column[11])) {
+                $tattoo = mysqli_real_escape_string($conn, $column[11]);
+            }
+            $hip = "";
+            if (isset($column[6])) {
+                $hip = mysqli_real_escape_string($conn, $column[6]);
+            }
+            $horse = "";
+            if (isset($column[8])) {
+                $horse = mysqli_real_escape_string($conn, $column[8]);
+                $horse = str_replace("\\", "", $horse);
+            }
+            $chorse = "";
+            if (isset($column[9])) {
+                $chorse = mysqli_real_escape_string($conn, $column[9]);
+            }
+            $sex = "";
+            if (isset($column[15])) {
+                $sex = mysqli_real_escape_string($conn, $column[15]);
+            }
+            $type = "";
+            if (isset($column[17])) {
+                $type = mysqli_real_escape_string($conn, $column[17]);
+            }
+            $color = "";
+            if (isset($column[14])) {
+                $color = mysqli_real_escape_string($conn, $column[14]);
+            }
+            $gait = "";
+            if (isset($column[16])) {
+                $gait = mysqli_real_escape_string($conn, $column[16]);
+            }
+            $price = 0;
+            if ($column[42] != "" and isset($column[42])) {
+                $price = mysqli_real_escape_string($conn, $column[42]);
+            }
+            $saledate = "0000-00-00";
+            if ($column[3] != "" && isset($column[3])) {
+                $saledate = mysqli_real_escape_string($conn, $column[3]);
+                $date = date_create($saledate);
+                $saledate = date_format($date, "Y-m-d");
+            }
 
-                if ($lastbred === "0000-00-00") {
-                    // Here you can set a default value. Choose what is appropriate for your application
-                    $lastbred = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
-                    // Or simply choose to log an error or skip this entry
-                    // echo "No valid SALEDATE provided. Setting to default value.";
-                }
+            if ($saledate === "0000-00-00") {
+                // Here you can set a default value. Choose what is appropriate for your application
+                $saledate = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                // Or simply choose to log an error or skip this entry
+                // echo "No valid SALEDATE provided. Setting to default value.";
+            }
 
-                $sbcity = "";
-                if (isset($column[39])) {
-                    $sbcity = mysqli_real_escape_string($conn, $column[39]);
-                }
-                $sbstate = "";
-                if (isset($column[40])) {
-                    $sbstate = mysqli_real_escape_string($conn, $column[40]);
-                }
-                $sbcountry = "";
-                if (isset($column[41])) {
-                    $sbcountry = mysqli_real_escape_string($conn, $column[41]);
-                }
-                $purfname = "";
-                if (isset($column[37])) {
-                    $purfname = mysqli_real_escape_string($conn, $column[37]);
-                    $purfname = str_replace("\\","",$purfname);
-                }
-                $purlname = "";
-                if (isset($column[38])) {
-                    $purlname = mysqli_real_escape_string($conn, $column[38]);
-                    $purlname = str_replace("\\","",$purlname);
-                }
-                $conslname = "";
-                if (isset($column[34])) {
-                    $conslname = mysqli_real_escape_string($conn, $column[34]);
-                    $conslname = str_replace("\\","",$conslname);
-                }
-                $consno = "";
-                if (isset($column[35])) {
-                    $consno = mysqli_real_escape_string($conn, $column[35]);
-                }
-                $pemcode = "";
-                if (isset($column[36])) {
-                    $pemcode = mysqli_real_escape_string($conn, $column[36]);
-                }
-                $age = 0;
-                if ($column[13] != "" and isset($column[13])) {
-                    $age = mysqli_real_escape_string($conn, $column[13]);
-                }
-                $et = "";
-                if (isset($column[19])) {
-                    $et = mysqli_real_escape_string($conn, $column[19]);
-                }
-                $hipnum = 0;
-                if ($column[7] != "" and isset($column[7])) {
-                    $hipnum = mysqli_real_escape_string($conn, $column[7]);
-                }
-                $day = 0;
-                if ($column[5] != "" and isset($column[5])) {
-                    $day = mysqli_real_escape_string($conn, $column[5]);
-                }
-                $elig = "";
-                if (isset($column[20])) {
-                    $elig = mysqli_real_escape_string($conn, $column[20]);
-                }
-                $rating = "";
-                if (isset($column[10])) {
-                    $rating = mysqli_real_escape_string($conn, $column[10]);
-                }
-                $url = "";
-                if (isset($column[44])) {
-                    $url = mysqli_real_escape_string($conn, $column[44]);
-                }
-                $NFFM = "";
-                if (isset($column[45])) {
-                    $NFFM = mysqli_real_escape_string($conn, $column[45]);
-                }
-                $privatesale = "";
-                if (isset($column[46])) {
-                    $privatesale = mysqli_real_escape_string($conn, $column[46]);
-                }
-                $breed = "";
-                if (isset($column[47])) {
-                    $breed = mysqli_real_escape_string($conn, $column[47]);
-                }
-                $yearFoal = 0;
-                if (isset($column[48])) {
-                    $yearFoal = mysqli_real_escape_string($conn, $column[48]);
-                }
+            $record = "";
+            if (isset($column[18])) {
+                $record = mysqli_real_escape_string($conn, $column[18]);
+            }
+            $datefoal = "0000-00-00";
+            if ($column[12] != "" && isset($column[12])) {
+                $datefoal = mysqli_real_escape_string($conn, $column[12]);
+                $date = date_create($datefoal);
+                $datefoal = date_format($date, "Y-m-d");
+            }
 
-                $tSire = "";
-                if (isset($column[49])) {
-                    $tSire = mysqli_real_escape_string($conn, $column[49]);
-                }
+            if ($datefoal === "0000-00-00") {
+                // Here you can set a default value. Choose what is appropriate for your application
+                $datefoal = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                // Or simply choose to log an error or skip this entry
+                // echo "No valid SALEDATE provided. Setting to default value.";
+            }
 
-                $tSireofdam = "";
-                if (isset($column[50])) {
-                    $tSireofdam = mysqli_real_escape_string($conn, $column[50]);
-                }
+            $bredto = "";
+            if (isset($column[32])) {
+                $bredto = mysqli_real_escape_string($conn, $column[32]);
+            }
 
-                $TDAM = "";
-                if (isset($column[51])) {
-                    $TDAM = mysqli_real_escape_string($conn, $column[51]);
+            $lastbred = "0000-00-00";
+            if ($column[33] != "" and isset($column[33])) {
+                $lastbred = mysqli_real_escape_string($conn, $column[33]);
+                $date = date_create($lastbred);
+                $lastbred = date_format($date, "Y-m-d");
+                if ($lastbred == "") {
+                    $lastbred = "0000-00-00";
                 }
+            }
 
-                $UTT = 0.0;
-                if (isset($column[52])) {
-                    $UTT = mysqli_real_escape_string($conn, $column[52]);
-                }
+            if ($lastbred === "0000-00-00") {
+                // Here you can set a default value. Choose what is appropriate for your application
+                $lastbred = date("Y-m-d", strtotime('1970-01-01')); // Example: Set to '1970-01-01' or any valid date
+                // Or simply choose to log an error or skip this entry
+                // echo "No valid SALEDATE provided. Setting to default value.";
+            }
 
-                $STATUS = "";
-                if (isset($column[53])) {
-                    $STATUS = mysqli_real_escape_string($conn, $column[53]);
-                }
+            $sbcity = "";
+            if (isset($column[39])) {
+                $sbcity = mysqli_real_escape_string($conn, $column[39]);
+            }
+            $sbstate = "";
+            if (isset($column[40])) {
+                $sbstate = mysqli_real_escape_string($conn, $column[40]);
+            }
+            $sbcountry = "";
+            if (isset($column[41])) {
+                $sbcountry = mysqli_real_escape_string($conn, $column[41]);
+            }
+            $purfname = "";
+            if (isset($column[37])) {
+                $purfname = mysqli_real_escape_string($conn, $column[37]);
+                $purfname = str_replace("\\", "", $purfname);
+            }
+            $purlname = "";
+            if (isset($column[38])) {
+                $purlname = mysqli_real_escape_string($conn, $column[38]);
+                $purlname = str_replace("\\", "", $purlname);
+            }
+            $conslname = "";
+            if (isset($column[34])) {
+                $conslname = mysqli_real_escape_string($conn, $column[34]);
+                $conslname = str_replace("\\", "", $conslname);
+            }
+            $consno = "";
+            if (isset($column[35])) {
+                $consno = mysqli_real_escape_string($conn, $column[35]);
+            }
+            $pemcode = "";
+            if (isset($column[36])) {
+                $pemcode = mysqli_real_escape_string($conn, $column[36]);
+            }
+            $age = 0;
+            if ($column[13] != "" and isset($column[13])) {
+                $age = mysqli_real_escape_string($conn, $column[13]);
+            }
+            $et = "";
+            if (isset($column[19])) {
+                $et = mysqli_real_escape_string($conn, $column[19]);
+            }
+            $hipnum = 0;
+            if ($column[7] != "" and isset($column[7])) {
+                $hipnum = mysqli_real_escape_string($conn, $column[7]);
+            }
+            $day = 0;
+            if ($column[5] != "" and isset($column[5])) {
+                $day = mysqli_real_escape_string($conn, $column[5]);
+            }
+            $elig = "";
+            if (isset($column[20])) {
+                $elig = mysqli_real_escape_string($conn, $column[20]);
+            }
+            $rating = "";
+            if (isset($column[10])) {
+                $rating = mysqli_real_escape_string($conn, $column[10]);
+            }
+            $url = "";
+            if (isset($column[44])) {
+                $url = mysqli_real_escape_string($conn, $column[44]);
+            }
+            $NFFM = "";
+            if (isset($column[45])) {
+                $NFFM = mysqli_real_escape_string($conn, $column[45]);
+            }
+            $privatesale = "";
+            if (isset($column[46])) {
+                $privatesale = mysqli_real_escape_string($conn, $column[46]);
+            }
+            $breed = "";
+            if (isset($column[47])) {
+                $breed = mysqli_real_escape_string($conn, $column[47]);
+            }
+            $yearFoal = 0;
+            if (isset($column[48])) {
+                $yearFoal = mysqli_real_escape_string($conn, $column[48]);
+            }
 
-                
-                
-//                 echo '<br>';
-//                 echo $tattoo.'|'.
-//                     $hip.'|'.
-//                     $horse.'|'.
-//                     $chorse.'|'.
-//                     $sex.'|'.
-//                     $type.'|'.
-//                     $color.'|'.
-//                     $gait.'|'.
-//                     $price.'|'.
-//                     $salecode.'|'.
-//                     $saledate.'|'.
-//                     $record.'|'.
-//                     $datefoal.'|'.
-//                     $bredto.'|'.
-//                     $lastbred.'|'.
-//                     $sbcity.'|'.
-//                     $sbstate.'|'.
-//                     $sbcountry.'|'.
-//                     $purfname.'|'.
-//                     $purlname.'|'.
-//                     $conslname.'|'.
-//                     $consno.'|'.
-//                     $pemcode.'|'.
-//                     $age.'|'.
-//                     $saletype.'|'.
-//                     $et.'|'.
-//                     $hipnum.'|'.
-//                     $day.'|'.
-//                     $elig.'|'.
-//                     $rating.'|'.
-//                     $url.'|'.
-//                     $damsire_ID;
-//                     echo '<br>';
-            $saleID =checkTSalesData($tattoo,$hip,$chorse,$salecode,$saledate);
-            
-            
+            $tSire = "";
+            if (isset($column[49])) {
+                $tSire = mysqli_real_escape_string($conn, $column[49]);
+            }
+
+            $tSireofdam = "";
+            if (isset($column[50])) {
+                $tSireofdam = mysqli_real_escape_string($conn, $column[50]);
+            }
+
+            $TDAM = "";
+            if (isset($column[51])) {
+                $TDAM = mysqli_real_escape_string($conn, $column[51]);
+            }
+
+            $UTT = 0.0;
+            if (isset($column[52])) {
+                $UTT = mysqli_real_escape_string($conn, $column[52]);
+            }
+
+            $STATUS = "";
+            if (isset($column[53])) {
+                $STATUS = mysqli_real_escape_string($conn, $column[53]);
+            }
+
+            $farmname = "";
+            if (isset($column[54])) { // Adjust the column index based on your CSV structure
+                $farmname = mysqli_real_escape_string($conn, $column[54]);
+                $farmname = str_replace("\\", "", $farmname);
+            }
+
+            $farmcode = "";
+            if (isset($column[55])) { // Adjust the column index based on your CSV structure
+                $farmcode = mysqli_real_escape_string($conn, $column[55]);
+            }
+
+
+
+            //                 echo '<br>';
+            //                 echo $tattoo.'|'.
+            //                     $hip.'|'.
+            //                     $horse.'|'.
+            //                     $chorse.'|'.
+            //                     $sex.'|'.
+            //                     $type.'|'.
+            //                     $color.'|'.
+            //                     $gait.'|'.
+            //                     $price.'|'.
+            //                     $salecode.'|'.
+            //                     $saledate.'|'.
+            //                     $record.'|'.
+            //                     $datefoal.'|'.
+            //                     $bredto.'|'.
+            //                     $lastbred.'|'.
+            //                     $sbcity.'|'.
+            //                     $sbstate.'|'.
+            //                     $sbcountry.'|'.
+            //                     $purfname.'|'.
+            //                     $purlname.'|'.
+            //                     $conslname.'|'.
+            //                     $consno.'|'.
+            //                     $pemcode.'|'.
+            //                     $age.'|'.
+            //                     $saletype.'|'.
+            //                     $et.'|'.
+            //                     $hipnum.'|'.
+            //                     $day.'|'.
+            //                     $elig.'|'.
+            //                     $rating.'|'.
+            //                     $url.'|'.
+            //                     $damsire_ID;
+            //                     echo '<br>';
+            $saleID = checkTSalesData($tattoo, $hip, $chorse, $salecode, $saledate);
+
+
             if ($saleID == "") {
                 $sqlInsert = "INSERT into tsales
                 (TATTOO,BREED,HIP,HORSE,CHORSE,SEX,`TYPE`,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,`DAY`,ELIG,RATING,`URL`,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,tSire,tSireofdam,TDAM,UTT,`STATUS`)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssds";
+                AGE,SALETYPE,ET,HIPNUM,`DAY`,ELIG,RATING,`URL`,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,tSire,tSireofdam,TDAM,UTT,`STATUS`,FARMNAME,FARMCODE)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdsss";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -480,11 +491,13 @@ if (isset($_POST["import"])) {
                     $tSireofdam,
                     $TDAM,
                     $UTT,
-                    $STATUS
+                    $STATUS,
+                    $farmname,
+                    $farmcode
                 );
-                
+
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
-                
+
                 if (! empty($insertId)) {
                     $response = "Success";
                     $message = "CSV Data Imported into the Database";
@@ -493,8 +506,7 @@ if (isset($_POST["import"])) {
                     $message = "Problem in Importing CSV Data: Data in not in proper format";
                 }
                 $rowCountSales = $rowCountSales + 1;
-            } else 
-            {
+            } else {
                 //                 $response = "Success";
                 //                 $message = "Data Already Exist";
                 $sqlInsert = "UPDATE tsales SET
@@ -502,19 +514,21 @@ if (isset($_POST["import"])) {
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
                 AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,`DAY` = ?,ELIG = ?,RATING = ?,`URL` = ?,PRIVATESALE = ?,
-                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, tSire = ?, tSireofdam = ?, TDAM = ?, UTT = ?, `STATUS` = ?
-                WHERE SALEID =".$saleID;
-                
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssds";
+                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, tSire = ?, tSireofdam = ?, TDAM = ?, UTT = ?, `STATUS` = ?, FARMNAME = ?, FARMCODE = ?
+                WHERE SALEID =" . $saleID;
+
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdsss";
                 //echo $sqlInsert;
-                
+
                 $update_data_stmt = mysqli_stmt_init($conn);
-                
-                if (!mysqli_stmt_prepare($update_data_stmt, $sqlInsert)){
+
+                if (!mysqli_stmt_prepare($update_data_stmt, $sqlInsert)) {
                     $response = "Error";
-                    $message = "Problem in Importing CSV Data: Data is not in proper format".mysqli_error($conn);
+                    $message = "Problem in Importing CSV Data: Data is not in proper format" . mysqli_error($conn);
                 } else {
-                    mysqli_stmt_bind_param($update_data_stmt, $paramType,
+                    mysqli_stmt_bind_param(
+                        $update_data_stmt,
+                        $paramType,
                         $tattoo,
                         $breed,
                         $hip,
@@ -558,23 +572,23 @@ if (isset($_POST["import"])) {
                         $tSireofdam,
                         $TDAM,
                         $UTT,
-                        $STATUS
+                        $STATUS,
+                        $farmname,
+                        $farmcode
                     );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";
                     $message = "CSV Data Updated into the Database";
                 }
-                
+
                 $rowCountSales = $rowCountSales + 1;
             }
-            
-            
         }
-        echo "<h1 style='text-align:center;color:#D98880;'>".$response." :- ".$message."</h3>";
+        echo "<h1 style='text-align:center;color:#D98880;'>" . $response . " :- " . $message . "</h3>";
         echo '<br>';
-        echo "<h3 style='text-align:center;color:#D98880;'>"."Thorough Breed Damsire Rows Inserted:- ".$rowCountDamsire."</h2>";
+        echo "<h3 style='text-align:center;color:#D98880;'>" . "Thorough Breed Damsire Rows Inserted:- " . $rowCountDamsire . "</h2>";
         echo '<br>';
-        echo "<h3 style='text-align:center;color:#D98880;'>"."Thorough Breed Sales Rows Inserted:- ".$rowCountSales."</h2>";
+        echo "<h3 style='text-align:center;color:#D98880;'>" . "Thorough Breed Sales Rows Inserted:- " . $rowCountSales . "</h2>";
     }
 }
 
