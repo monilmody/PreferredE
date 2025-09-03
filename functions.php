@@ -3793,6 +3793,7 @@ function getHorseDetails($horseId)
 
         $creds = $assumeRoleResult['Credentials'];
         error_log("Temporary credentials received");
+        error_log("Access Key ID: " . $assumeRoleResult['Credentials']['AccessKeyId']);
 
         $s3 = new S3Client([
             'region' => $region,
