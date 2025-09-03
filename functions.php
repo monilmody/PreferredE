@@ -3734,7 +3734,6 @@ function array_key_exists_case_insensitive($key, $array) {
 }
 
 use Aws\S3\S3Client;
-use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
 use Aws\Sts\StsClient;
 
