@@ -3790,6 +3790,117 @@ function sanitizeHorseIdForImage($horseId)
     return preg_replace('/[^a-zA-Z0-9_-]/', '', $horseId);
 }
 
+// function getHorseDetails($horseId)
+// {
+//     global $mysqli;
+
+//     if (!$mysqli) {
+//         return ['error' => 'Invalid or lost database connection'];
+//     }
+
+//     // Validate and sanitize horse ID
+//     if (!preg_match('/^[a-zA-Z0-9 _\-\(\)]+$/', $horseId)) {
+//         return ['error' => 'Invalid horse ID format'];
+//     }
+
+//     // Fetch horse details using prepared statement
+//     $stmt = $mysqli->prepare("SELECT * FROM sales WHERE HORSE = ? LIMIT 1");
+//     $stmt->bind_param("s", $horseId);
+//     $stmt->execute();
+//     $result = $stmt->get_result();
+
+//     if (!$result || $result->num_rows === 0) {
+//         return ['error' => 'Horse not found'];
+//     }
+
+//     $horse = $result->fetch_assoc();
+//     $stmt->close();
+
+//     try {
+//         // Setup Secrets Manager
+//         $region = 'us-east-1'; // Change the region if needed
+//         $bucket = 'horse-list-photos-and-details'; // bucket name
+//         $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
+//         $sessionName = 'GetHorseDetailsSession';
+
+//         // Step 1: Assume Role to get temporary credentials
+//         $stsClient = new StsClient([
+//             'region' => $region,
+//             'version' => 'latest',
+//         ]);
+
+//         error_log("Assuming role: $roleArn");
+//         $assumeRoleResult = $stsClient->assumeRole([
+//             'RoleArn' => $roleArn,
+//             'RoleSessionName' => $sessionName,
+//             'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
+//         ]);
+//         // Log the raw result to see if the role assumption succeeded
+//         error_log("AssumeRole successful - Role: $roleArn");
+//         if (isset($assumeRoleResult['Credentials']['AccessKeyId'])) {
+//             error_log("Access Key: " . $assumeRoleResult['Credentials']['AccessKeyId']);
+//             error_log("Session Token: " . substr($assumeRoleResult['Credentials']['SessionToken'], 0, 20) . "...");
+//         }
+//         $creds = $assumeRoleResult['Credentials'];
+//         error_log("Temporary credentials received");
+
+//         $s3 = new S3Client([
+//             'region' => $region,
+//             'version' => 'latest',
+//             'suppress_php_deprecation_warning' => true // ✅ THIS LINE
+//         ]);
+
+//         // Sanitize the horseId specifically for images (remove spaces and special characters)
+//         $sanitizedHorseId = sanitizeHorseIdForImage($horseId);
+
+//         // Fetch all image keys for the horse from the DB
+//         $stmt2 = $mysqli->prepare("SELECT image_url FROM horse_images WHERE horse_id = ?");
+//         $stmt2->bind_param("s", $sanitizedHorseId);
+//         $stmt2->execute();
+//         $result2 = $stmt2->get_result();
+
+//         $images = [];
+
+//         // Log the results of the image query to check if data is being retrieved correctly
+//         if ($result2 && $result2->num_rows > 0) {
+//             while ($row = $result2->fetch_assoc()) {
+//                 $objectKey = $row['image_url'];
+
+//                 // Generate presigned URL for each image (valid for 5 minutes)
+//                 $cmd = $s3->getCommand('GetObject', [
+//                     'Bucket' => $bucket,
+//                     'Key'    => $objectKey,
+//                 ]);
+
+//                 // Generate the presigned URL valid for 5 minutes
+//                 $request = $s3->createPresignedRequest($cmd, '+5 minutes');
+
+//                 // Add the presigned URL to the images array
+//                 $images[] = (string) $request->getUri();
+//             }
+//         } else {
+//             // If no images found for this horse, log a message
+//             error_log("No images found for horse: $horseId");
+//         }
+
+//         $stmt2->close();
+
+//         // Attach the images array to the horse data
+//         $horse['images'] = $images;
+
+//         // Log the images array to verify the result
+//         error_log("Images for horse $horseId: " . json_encode($images));
+
+//         return $horse;
+//     } catch (AwsException $e) {
+//         error_log("AWS Error: " . $e->getMessage());
+//         return ['error' => 'Failed to load images. Try again later.'];
+//     } catch (Exception $e) {
+//         error_log("Error: " . $e->getMessage());
+//         return ['error' => 'Unexpected error retrieving horse details'];
+//     }
+// }
+
 function getHorseDetails($horseId)
 {
     global $mysqli;
@@ -3835,19 +3946,27 @@ function getHorseDetails($horseId)
             'RoleSessionName' => $sessionName,
             'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
         ]);
+        
         // Log the raw result to see if the role assumption succeeded
         error_log("AssumeRole successful - Role: $roleArn");
         if (isset($assumeRoleResult['Credentials']['AccessKeyId'])) {
             error_log("Access Key: " . $assumeRoleResult['Credentials']['AccessKeyId']);
             error_log("Session Token: " . substr($assumeRoleResult['Credentials']['SessionToken'], 0, 20) . "...");
         }
+        
         $creds = $assumeRoleResult['Credentials'];
         error_log("Temporary credentials received");
 
+        // FIX: Add credentials to S3Client
         $s3 = new S3Client([
             'region' => $region,
             'version' => 'latest',
-            'suppress_php_deprecation_warning' => true // ✅ THIS LINE
+            'credentials' => [
+                'key'    => $creds['AccessKeyId'],
+                'secret' => $creds['SecretAccessKey'],
+                'token'  => $creds['SessionToken']
+            ],
+            'suppress_php_deprecation_warning' => true
         ]);
 
         // Sanitize the horseId specifically for images (remove spaces and special characters)
