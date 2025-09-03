@@ -3780,19 +3780,19 @@ function getHorseDetails($horseId)
         $stsClient = new StsClient([
             'region' => $region,
             'version' => 'latest',
-            'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
         ]);
 
         error_log("Assuming role: $roleArn");
         $assumeRoleResult = $stsClient->assumeRole([
             'RoleArn' => $roleArn,
             'RoleSessionName' => $sessionName,
+            'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
         ]);
         // Log the raw result to see if the role assumption succeeded
-        error_log(message: "AssumeRole result: " . json_encode($assumeRoleResult));
-        error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
+        error_log("AssumeRole result: " . json_encode($assumeRoleResult->toArray()));
 
         $creds = $assumeRoleResult['Credentials'];
+        error_log("Temporary credentials received");
 
         $secretsClient = new SecretsManagerClient([
             'version' => 'latest',
