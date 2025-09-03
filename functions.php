@@ -3772,7 +3772,8 @@ function getHorseDetails($horseId)
 
     try {
         // Setup Secrets Manager
-        $region = 'us-east-1'; // Change if needed
+        $region = 'us-east-1'; // Change the region if needed
+        $bucket = 'horse-list-photos-and-details'; // bucket name
         $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
         $sessionName = 'GetHorseDetailsSession';
 
@@ -3794,22 +3795,6 @@ function getHorseDetails($horseId)
         $creds = $assumeRoleResult['Credentials'];
         error_log("Temporary credentials received");
 
-        $secretsClient = new SecretsManagerClient([
-            'version' => 'latest',
-            'region' => $region,
-            'credentials' => [
-                'key'    => $creds['AccessKeyId'],
-                'secret' => $creds['SecretAccessKey'],
-                'token'  => $creds['SessionToken'],
-            ],
-        ]);
-
-        $secretResult = $secretsClient->getSecretValue([
-            'SecretId' => 'MyApp/S3Credentials',
-        ]);
-
-        $secretData = json_decode($secretResult['SecretString'], true);
-
         $s3 = new S3Client([
             'region' => $region,
             'version' => 'latest',
@@ -3820,8 +3805,6 @@ function getHorseDetails($horseId)
             ],
             'suppress_php_deprecation_warning' => true // ✅ THIS LINE
         ]);
-
-        $bucket = $secretData['AWS_BUCKET'];
 
         // Sanitize the horseId specifically for images (remove spaces and special characters)
         $sanitizedHorseId = sanitizeHorseIdForImage($horseId);
