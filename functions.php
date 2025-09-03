@@ -3847,11 +3847,6 @@ function getHorseDetails($horseId)
         $s3 = new S3Client([
             'region' => $region,
             'version' => 'latest',
-            'credentials' => [
-                'key'    => $creds['AccessKeyId'],
-                'secret' => $creds['SecretAccessKey'],
-                'token'  => $creds['SessionToken'],
-            ],
             'suppress_php_deprecation_warning' => true // ✅ THIS LINE
         ]);
 
