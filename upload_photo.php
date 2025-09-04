@@ -5,63 +5,21 @@ require 'vendor/autoload.php';
 require 'db-settings.php';
 
 use Aws\S3\S3Client;
-use Aws\SecretsManager\SecretsManagerClient;
 use Aws\Exception\AwsException;
-use Aws\Sts\StsClient;
+
 
 header('Content-Type: application/json');
 
 try {
     $region = 'us-east-1';
+    $bucket = 'horse-list-photos-and-details'; // bucket name
 
-    $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
-    $sessionName = 'GetHorseDetailsSession';
-
-    // Step 1: Assume Role to get temporary credentials
-    $stsClient = new StsClient([
-        'region' => $region,
-        'version' => 'latest',
-        'DurationSeconds' => 3600,  // Set the session duration (1 hour in this case)
-    ]);
-
-    error_log("Assuming role: $roleArn");
-    $assumeRoleResult = $stsClient->assumeRole([
-        'RoleArn' => $roleArn,
-        'RoleSessionName' => $sessionName,
-    ]);
-
-    error_log(message: "AssumeRole result: " . json_encode($assumeRoleResult));
-    error_log("Temporary credentials received: " . json_encode($assumeRoleResult['Credentials']));
-
-    $creds = $assumeRoleResult['Credentials'];
-
-    // Secrets Manager client
-    $secretsClient = new SecretsManagerClient([
-        'version' => 'latest',
-        'region' => $region,
-        'credentials' => [
-            'key'    => $creds['AccessKeyId'],
-            'secret' => $creds['SecretAccessKey'],
-            'token'  => $creds['SessionToken'],
-        ],
-    ]);
-
-    // Load S3 credentials
-    $s3SecretResult = $secretsClient->getSecretValue([
-        'SecretId' => 'MyApp/S3Credentials',
-    ]);
-    $s3Secrets = json_decode($s3SecretResult['SecretString'], true);
-
-    $bucket = $s3Secrets['AWS_BUCKET'];
+    // $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
+    // $sessionName = 'GetHorseDetailsSession';
 
     $s3 = new S3Client([
         'region' => $region,
         'version' => 'latest',
-        'credentials' => [
-            'key'    => $creds['AccessKeyId'],
-            'secret' => $creds['SecretAccessKey'],
-            'token'  => $creds['SessionToken'],
-        ],
         'suppress_php_deprecation_warning' => true // ✅ THIS LINE
     ]);
 
