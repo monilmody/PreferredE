@@ -36,7 +36,7 @@ $salcodeList = fetchSalecodeList_tb($year_param);
 
 
 $sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
-                  "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
+                  "Sex","Color","Type", "Elig", "Hip", "Price", "ConsNo","Purlname","Purfname");
 
 echo "<br>";
 
