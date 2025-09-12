@@ -1360,7 +1360,7 @@ function fetchSireAnalysis_tb($sire, $year, $elig, $gait, $salecode)
     } elseif ($sire != "" && $salecode != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Sire ="' . $sire . '" AND Salecode="' . $salecode . '"';
     } elseif ($year != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Year = ' . $year . ' AND Salecode="' . $salecode . '"';
+        $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE `Year` = "' . $year . '" AND Salecode="' . $salecode . '"';
     } elseif ($elig != "" && $salecode != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Elig ="' . $elig . '" AND Salecode="' . $salecode . '"';
     } elseif ($gait != "" && $salecode != "") {
@@ -1368,7 +1368,7 @@ function fetchSireAnalysis_tb($sire, $year, $elig, $gait, $salecode)
     } elseif ($sire != "") {
         $sql = 'SELECT * FROM sire_sales_allyear_tb WHERE Sire ="' . $sire . '"';
     } elseif ($year != "") {
-        $sql = 'SELECT * FROM sire_sales_tb WHERE Year = ' . $year;
+        $sql = 'SELECT * FROM sire_sales_tb WHERE `Year` = "' . $year . '"';
     } elseif ($elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear_tb WHERE Elig ="' . $elig . '"';
     } elseif ($gait != "") {
