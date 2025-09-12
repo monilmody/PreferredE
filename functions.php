@@ -913,7 +913,7 @@ function fetchSireData1($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sor
 function sanitizeSort(?string $sort, array $allowedSortColumns): ?string
 {
     // Handle numeric sorting for HIP column
-    if ($sort === 'HIP') {
+    if ($sort === 'Hip' || $sort === 'HIP') {
         return 'CAST(HIP AS UNSIGNED)'; // Convert HIP to number for proper sorting
     }
 
