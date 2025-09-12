@@ -1114,7 +1114,7 @@ function fetchSireData_tb($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $s
     }
 
     // Construct ORDER BY clause
-    $orderBy = !empty($sorts) ? ' ORDER BY ' . implode(', ', $sorts) : ' ORDER BY tSire, Price DESC';
+    $orderBy = !empty($sorts) ? ' ORDER BY ' . implode(', ', $sorts) : ' ORDER BY HIP';
 
     // Construct SQL query with placeholders
     $sql = "
