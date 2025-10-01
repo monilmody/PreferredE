@@ -912,14 +912,35 @@ function fetchSireData1($sire, $year, $elig, $gait, $sort1, $sort2, $sort3, $sor
 
 function sanitizeSort(?string $sort, array $allowedSortColumns): ?string
 {
-    // Handle numeric sorting for HIP column
-    if ($sort === 'Hip' || $sort === 'HIP') {
-        return 'CAST(HIP AS UNSIGNED)'; // Convert HIP to number for proper sorting
+    if (empty($sort)) {
+        return null;
     }
 
-    if ($sort && in_array($sort, $allowedSortColumns, true)) {
-        return "`$sort`"; // Enclose column names in backticks to prevent SQL errors
+    // Parse the sort parameter to extract column and direction
+    $parts = explode(' ', $sort);
+    $column = trim($parts[0]);
+    $direction = 'ASC'; // Default direction
+    
+    // Check for direction in the second part
+    if (count($parts) > 1) {
+        $dir = strtoupper(trim($parts[1]));
+        if ($dir === 'DESC' || $dir === 'ASC') {
+            $direction = $dir;
+        }
     }
+
+    // Validate column name
+    if (in_array($column, $allowedSortColumns, true)) {
+        // Special handling for HIP column (needs casting)
+        if ($column === 'HIP') {
+            return "CAST(HIP AS UNSIGNED) $direction";
+        }
+        
+        // For all other columns, use backticks and include direction
+        return "`$column` $direction";
+    }
+    
+    // If column is not in allowed list, return null
     return null;
 }
 
