@@ -16,16 +16,16 @@ include("./session_page.php");
 <?php
 
 include_once("config.php");
-$sire_param =$_GET['sire'];
-$year_param =$_GET['year'];
-$elig_param =$_GET['elig'];
+$sire_param = isset($_GET['sire']) ? $_GET['sire'] : '';
+$year_param = isset($_GET['year']) ? $_GET['year'] : '';
+$elig_param = isset($_GET['elig']) ? $_GET['elig'] : '';
 $gait_param = isset($_GET['gait']) ? $_GET['gait'] : '';
-$salecode_param = $_GET['salecode'];
-$sort1_param =$_GET['sort1'];
-$sort2_param =$_GET['sort2'];
-$sort3_param =$_GET['sort3'];
-$sort4_param =$_GET['sort4'];
-$sort5_param =$_GET['sort5'];
+$salecode_param = isset($_GET['salecode']) ? $_GET['salecode'] : '';
+$sort1_param = isset($_GET['sort1']) ? $_GET['sort1'] : '';
+$sort2_param = isset($_GET['sort2']) ? $_GET['sort2'] : '';
+$sort3_param = isset($_GET['sort3']) ? $_GET['sort3'] : '';
+$sort4_param = isset($_GET['sort4']) ? $_GET['sort4'] : '';
+$sort5_param = isset($_GET['sort5']) ? $_GET['sort5'] : '';
 
 $resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param, $salecode_param);
 $resultList = fetchSireList($year_param);
