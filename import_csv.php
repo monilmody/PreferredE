@@ -159,7 +159,7 @@ if (isset($_POST["import"])) {
                 }
 
                 //--------
-                $saleyear = "";
+                $saleyear = 0;
                 if (isset($column[0])) {
                     $saleyear = mysqli_real_escape_string($conn, $column[0]);
                 }
@@ -195,6 +195,7 @@ if (isset($_POST["import"])) {
                 $chorse = "";
                 if (isset($column[9])) {
                     $chorse = mysqli_real_escape_string($conn, $column[9]);
+                    $chorse = str_replace("\\","",$chorse);
                 }
                 $sex = "";
                 if (isset($column[15])) {
@@ -343,26 +344,31 @@ if (isset($_POST["import"])) {
                 $Sire = "";
                 if (isset($column[49])) {
                     $Sire = mysqli_real_escape_string($conn, $column[49]);
+                    $Sire = str_replace("\\","",$Sire);
                 }
 
                 $Sireofdam = "";
                 if (isset($column[50])) {
                     $Sireofdam = mysqli_real_escape_string($conn, $column[50]);
+                    $Sireofdam = str_replace("\\","",$Sireofdam);
                 }
 
                 $DAM = "";
                 if (isset($column[51])) {
                     $DAM = mysqli_real_escape_string($conn, $column[51]);
+                    $DAM = str_replace("\\","",$DAM);
                 }
 
                  $FARMNAME = "";
                 if (isset($column[52])) {
                     $FARMNAME = mysqli_real_escape_string($conn, $column[52]);
+                    $FARMNAME = str_replace("\\","",$FARMNAME);
                 }
 
                  $FARMCODE = "";
                 if (isset($column[53])) {
                     $FARMCODE = mysqli_real_escape_string($conn, $column[53]);
+                    $FARMCODE = str_replace("\\","",$FARMCODE);
                 }
 
             $saleID =checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate);
@@ -373,8 +379,7 @@ if (isset($_POST["import"])) {
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
                 AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam,FARMNAME,FARMCODE)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
-                
+                $paramType = "sssssssssdssssssssssssssissiiissssiisssisssss";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -444,8 +449,7 @@ if (isset($_POST["import"])) {
                 SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?, FARMNAME = ?, FARMCODE = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
-                //echo $sqlInsert;
+                $paramType = "sssssssssdssssssssssssssissiiissssiisssisssss";
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
                 

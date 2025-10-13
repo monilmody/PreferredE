@@ -1301,18 +1301,16 @@ function fetchSireAnalysis($sire, $year, $elig, $gait, $salecode)
     global $mysqli;
     $sql = 'SELECT * FROM sire_sales_allyear';
 
-    if ($year != "" && $sire != "" && $elig != "" && $gait != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Elig ="' . $elig . '" AND Gait="' . $gait . '" AND Salecode="' . $salecode . '"';
-    } elseif ($year != "" && $sire != "" && $gait != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Gait="' . $gait . '" AND Salecode="' . $salecode . '"';
-    } elseif ($year != "" && $sire != "" && $elig != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Elig ="' . $elig . '" AND Salecode="' . $salecode . '"';
-    } elseif ($sire != "" && $elig != "" && $gait != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="' . $sire . '" AND Elig ="' . $elig . '" AND Gait="' . $gait . '" AND Salecode="' . $salecode . '"';
-    } elseif ($year != "" && $elig != "" && $gait != "") {
-        $sql = 'SELECT * FROM sire_sales_elig WHERE Elig ="' . $elig . '" AND Year = ' . $year . ' AND Gait="' . $gait . '"';
+    if ($year != "" && $sire != "" && $elig != "" && $gait != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Elig ="' . $elig . '" AND Gait="' . $gait . '"';
+    } elseif ($year != "" && $sire != "" && $gait != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Gait="' . $gait . '"';
     } elseif ($year != "" && $sire != "" && $elig != "") {
         $sql = 'SELECT * FROM sire_sales_elig WHERE Sire ="' . $sire . '" AND Year = ' . $year . ' AND Elig ="' . $elig . '"';
+    } elseif ($sire != "" && $elig != "" && $gait != "") {
+        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="' . $sire . '" AND Elig ="' . $elig . '" AND Gait="' . $gait . '"';
+    } elseif ($year != "" && $elig != "" && $gait != "") {
+        $sql = 'SELECT * FROM sire_sales_elig WHERE Elig ="' . $elig . '" AND Year = ' . $year . ' AND Gait="' . $gait . '"';
     } elseif ($year != "" && $sire != "") {
         $sql = 'SELECT * FROM sire_sales WHERE Sire ="' . $sire . '" AND Year = ' . $year;
     } elseif ($year != "" && $elig != "") {
@@ -1325,14 +1323,6 @@ function fetchSireAnalysis($sire, $year, $elig, $gait, $salecode)
         $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="' . $sire . '" AND Gait="' . $gait . '"';
     } elseif ($elig != "" && $gait != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="' . $elig . '" AND Gait="' . $gait . '"';
-    } elseif ($sire != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Sire ="' . $sire . '" AND Salecode="' . $salecode . '"';
-    } elseif ($year != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Year = ' . $year . ' AND Salecode="' . $salecode . '"';
-    } elseif ($elig != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="' . $elig . '" AND Salecode="' . $salecode . '"';
-    } elseif ($gait != "" && $salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait="' . $gait . '" AND Salecode="' . $salecode . '"';
     } elseif ($sire != "") {
         $sql = 'SELECT * FROM sire_sales_allyear WHERE Sire ="' . $sire . '"';
     } elseif ($year != "") {
@@ -1341,8 +1331,12 @@ function fetchSireAnalysis($sire, $year, $elig, $gait, $salecode)
         $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Elig ="' . $elig . '"';
     } elseif ($gait != "") {
         $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Gait="' . $gait . '"';
+    } elseif ($salecode != "" && $year != "" && $sire != "") {
+        $sql = 'SELECT * FROM sales WHERE SALEYEAR="' . $year . '" AND SALECODE="' . $salecode . '" Sire="' . $salecode . '"';
+    } elseif ($salecode != "" && $year != "") {
+        $sql = 'SELECT * FROM sales WHERE SALEYEAR="' . $year . '" AND SALECODE="' . $salecode . '"';
     } elseif ($salecode != "") {
-        $sql = 'SELECT * FROM sire_sales_elig_allyear WHERE Salecode="' . $salecode . '"';
+        $sql = 'SELECT * FROM sales WHERE SALECODE="' . $salecode . '"';
     }
 
     $result = mysqli_query($mysqli, $sql);
