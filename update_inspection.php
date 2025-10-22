@@ -29,7 +29,15 @@ $checkboxFields = [
     'splint_right_front',
     'left_knee_face_out',
     'left_knee_face_in',
-    'splint_left_front'
+    'splint_left_front',
+    'left_prom_sesamoids',
+    'right_prom_sesamoids',
+    'boss_attitude',
+    'tough_attitude',
+    'willing_attitude',
+    'nervous_attitude',
+    'sour_attitude',
+    'dumb_attitude'
 ];
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
@@ -130,7 +138,22 @@ $allowedFields = [
     'splint_right_front',
     'left_knee_face_out',
     'left_knee_face_in',
-    'splint_left_front'
+    'splint_left_front',
+
+    // FRONT ANKLES / SESMOIDS
+    'round_ankles_right',
+    'round_ankles_left',
+    'left_prom_sesamoids',
+    'right_prom_sesamoids',
+
+    // ATTITUDE SECTION
+    'attitude',
+    'boss_attitude',
+    'tough_attitude',
+    'willing_attitude',
+    'nervous_attitude',
+    'sour_attitude',
+    'dumb_attitude'
 ];
 
 // Validate input

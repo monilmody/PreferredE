@@ -1164,6 +1164,101 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">FRONT ANKLES / SESMOIDS</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>ROUND Ankle Right</strong></label>
+                            <div class="button-group" data-field="round_ankles_right">
+                                <button type="button" class="btn-option">Rd Slightly</button>
+                                <button type="button" class="btn-option">RD Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <label><strong>ROUND Ankle left</strong></label>
+                            <div class="button-group" data-field="round_ankles_left">
+                                <button type="button" class="btn-option">Rd Slightly</button>
+                                <button type="button" class="btn-option">RD Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="right_prom_sesamoids">
+                                <input type="hidden" name="right_prom_sesamoids" value="0">
+                                <input type="checkbox" id="right_prom_sesamoids" name="right_prom_sesamoids" value="1">
+                                <label for="right_prom_sesamoids">Right PROM SESamoids</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="left_prom_sesamoids">
+                                <input type="hidden" name="left_prom_sesamoids" value="0">
+                                <input type="checkbox" id="left_prom_sesamoids" name="left_prom_sesamoids" value="1">
+                                <label for="left_prom_sesamoids">Left PROM SESamoids</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-header">ATTITUDE</div>
+                    <div class="field-group">
+                        <div class="form-row">
+                            <label><strong>Attitude</strong></label>
+                            <div class="button-group" data-field="attitude">
+                                <button type="button" class="btn-option">Good</button>
+                                <button type="button" class="btn-option">Bad</button>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="boss_attitude">
+                                <input type="hidden" name="boss_attitude" value="0">
+                                <input type="checkbox" id="boss_attitude" name="boss_attitude" value="1">
+                                <label for="boss_attitude">Attitude BOSS</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="tough_attitude">
+                                <input type="hidden" name="tough_attitude" value="0">
+                                <input type="checkbox" id="tough_attitude" name="tough_attitude" value="1">
+                                <label for="tough_attitude">Attitude TOUGH</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="willing_attitude">
+                                <input type="hidden" name="willing_attitude" value="0">
+                                <input type="checkbox" id="willing_attitude" name="willing_attitude" value="1">
+                                <label for="willing_attitude">Attitude WILLING</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="nervous_attitude">
+                                <input type="hidden" name="nervous_attitude" value="0">
+                                <input type="checkbox" id="nervous_attitude" name="nervous_attitude" value="1">
+                                <label for="nervous_attitude">NERVOUS Attitude</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="sour_attitude">
+                                <input type="hidden" name="sour_attitude" value="0">
+                                <input type="checkbox" id="sour_attitude" name="sour_attitude" value="1">
+                                <label for="sour_attitude">SOUR Attitude</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="dumb_attitude">
+                                <input type="hidden" name="dumb_attitude" value="0">
+                                <input type="checkbox" id="dumb_attitude" name="dumb_attitude" value="1">
+                                <label for="dumb_attitude">Attitude BOSS</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1401,7 +1496,15 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             'splint_right_front',
                             'left_knee_face_out',
                             'left_knee_face_in',
-                            'splint_left_front'
+                            'splint_left_front',
+                            'left_prom_sesamoids',
+                            'right_prom_sesamoids',
+                            'boss_attitude',
+                            'tough_attitude',
+                            'willing_attitude',
+                            'nervous_attitude',
+                            'sour_attitude',
+                            'dumb_attitude'
                         ]; // add more keys here as needed
 
                         checkboxFields.forEach(field => {
