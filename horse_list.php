@@ -1255,7 +1255,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <div class="checkbox-group" data-field="dumb_attitude">
                                 <input type="hidden" name="dumb_attitude" value="0">
                                 <input type="checkbox" id="dumb_attitude" name="dumb_attitude" value="1">
-                                <label for="dumb_attitude">Attitude BOSS</label>
+                                <label for="dumb_attitude">DUMB !</label>
                             </div>
                         </div>
                     </div>
