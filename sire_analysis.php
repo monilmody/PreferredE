@@ -51,13 +51,15 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
 	    echo '<option>'.$row['Year'].'</option>';
     } ?>
 </select>
- <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
-	<option value="">Sire Filter</option>
-	<option value="">All Sire</option>
-	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row['Sire'].'</option>';
+<!-- Replace the select with input + datalist -->
+<input class="custom-select1" list="sire-options" id="sire" name="sire" placeholder="Sire Filter" autocomplete="off">
+<datalist id="sire-options">
+    <option value="">All Sire</option>
+    <?php foreach($resultList as $row) {
+        echo '<option value="'.htmlspecialchars($row['Sire']).'">';
     } ?>
-</select>
+</datalist>
+
 <select class="custom-select1" id="elig"> 
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
