@@ -60,6 +60,20 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
     } ?>
 </datalist>
 
+<style>
+  /* Specifically for the input to match select */
+input.custom-select1 {
+    appearance: none; /* Remove default input appearance */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background-image: url('data:image/svg+xml;utf8,<svg fill="black" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/></svg>');
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+    padding-right: 30px;
+}
+</style>
+
 <select class="custom-select1" id="elig"> 
 	<option value="">Elig Filter</option>
 	<option  value="">All Elig</option>
