@@ -60,7 +60,7 @@ $SalecodeSearch = $_GET['salecode_search'] ?? '';
 $result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
 
 // Define sortable columns for the dropdowns
-$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal");
+$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode");
 ?>
 
 <!DOCTYPE html>
@@ -1175,7 +1175,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option">RD Bad</button>
                             </div>
                         </div>
-                                        
+
                         <div class="form-row">
                             <label><strong>ROUND Ankle left</strong></label>
                             <div class="button-group" data-field="round_ankles_left">
