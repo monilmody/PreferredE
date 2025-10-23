@@ -113,35 +113,22 @@ echo '<h1 style="text-align:center;">SIRE ANALYSIS
 <?php
         setlocale(LC_MONETARY,"en_US");
 		foreach($resultFound as $row) {
-    // Use null coalescing to handle missing keys
-    $count = $row['Count'] ?? 0;
-    $total = $row['Total'] ?? 0;
-    $avg = $row['Avg'] ?? 0;
-    $top = $row['Top'] ?? 0;
-    $ccount = $row['CCount'] ?? 0;
-    $ctotal = $row['CTotal'] ?? 0;
-    $cavg = $row['CAvg'] ?? 0;
-    $ctop = $row['CTop'] ?? 0;
-    $fcount = $row['FCount'] ?? 0;
-    $ftotal = $row['FTotal'] ?? 0;
-    $favg = $row['FAvg'] ?? 0;
-    $ftop = $row['FTop'] ?? 0;
-    echo '<div class="sire-header">';
-    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Sire'].'</u></B></h4>';
-    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$count.'</label> | 
-            Total- <label style="color:#E74C3C";>$'.number_format($total).'</label> | 
-            Average - <label style="color:#E74C3C";>$'.number_format($avg).'</label> | 
-            Top Seller - <label style="color:#E74C3C";>$'.number_format($top).'</label></B></h5>';
-    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$ccount.'</label> | 
-            Colts Total- <label style="color:#E74C3C";>$'.number_format($ctotal).'</label> | 
-            Colts Average - <label style="color:#E74C3C";>$'.number_format($cavg).'</label> | 
-            Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($ctop).'</label>
-            </B></h5>
-            <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$fcount.'</label> | 
-            Fillies Total- <label style="color:#E74C3C";>$'.number_format($ftotal).'</label> | 
-            Fillies Average - <label style="color:#E74C3C";>$'.number_format($favg).'</label> | 
-            Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($ftop).'</label></B></h5>';
-    echo '</div>';
+    		    echo '<div class="sire-header">';
+    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Sire'].'</u></B></h4>';
+    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row['Count'].'</label> | 
+                        Total- <label style="color:#E74C3C";>$'.number_format($row['Total']).'</label> | 
+                        Average - <label style="color:#E74C3C";>$'.number_format($row['Avg']).'</label> | 
+                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row['Top']).'</label></B></h5>';
+    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row['CCount'].'</label> | 
+                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row['CTotal']).'</label> | 
+                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row['CAvg']).'</label> | 
+                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row['CTop']).'</label>
+                        </B></h5>
+                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row['FCount'].'</label> | 
+                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row['FTotal']).'</label> | 
+                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row['FAvg']).'</label> | 
+                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
+    		    echo '</div>';
     		    
 if ($year_param != "" or $sire_param != "" or $elig_param != "") {
 ?>
