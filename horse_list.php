@@ -60,7 +60,7 @@ $SalecodeSearch = $_GET['salecode_search'] ?? '';
 $result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
 
 // Define sortable columns for the dropdowns
-$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode");
+$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "farmname", "datefoal", "salecode");
 ?>
 
 <!DOCTYPE html>
