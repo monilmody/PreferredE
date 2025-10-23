@@ -379,7 +379,7 @@ if (isset($_POST["import"])) {
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
                 AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam,FARMNAME,FARMCODE)
                 VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiiissssiisssisssss";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -449,7 +449,7 @@ if (isset($_POST["import"])) {
                 SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?, FARMNAME = ?, FARMCODE = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiiissssiisssisssss";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
                 
