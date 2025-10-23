@@ -20,7 +20,7 @@ if (!isset($_SESSION['column_prefs'])) {
         'Farmname' => false,
         'Bredto' => false,
         'Consigner' => false,
-        'Salecode' => false
+        'Salecode' => true
     ];
 }
 
