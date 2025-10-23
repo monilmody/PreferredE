@@ -1175,7 +1175,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <button type="button" class="btn-option">RD Bad</button>
                             </div>
                         </div>
-
+                                        
                         <div class="form-row">
                             <label><strong>ROUND Ankle left</strong></label>
                             <div class="button-group" data-field="round_ankles_left">
@@ -1202,6 +1202,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     </div>
 
                     <div class="section-header">ATTITUDE</div>
+
                     <div class="field-group">
                         <div class="form-row">
                             <label><strong>Attitude</strong></label>
