@@ -174,7 +174,7 @@ if (isset($_POST["import"])) {
 
             //--------
 
-            $saleyear = "";
+            $saleyear = 0;
             if (isset($column[0])) {
                 $saleyear = mysqli_real_escape_string($conn, $column[0]);
             }
