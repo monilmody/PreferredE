@@ -1790,7 +1790,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 </div>`;
                                 });
                             } else {
-                                imagesHtml = '<p>No photos uploaded yet for this horse.</p>';
+                                imagesHtml = "";
                             }
 
                             // Display images in the sidebar
