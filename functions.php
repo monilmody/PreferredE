@@ -2322,7 +2322,8 @@ function fetchBroodmaresReport($salecode, $year, $type, $gait, $sex, $sire, $bre
     Bredto,
     LastBred,
     Age,
-    Rating
+    Rating,
+    Sire
     FROM sales a
     LEFT JOIN damsire b
     ON a.damsire_Id=b.damsire_ID WHERE Price>0 ' . $searchParam;
