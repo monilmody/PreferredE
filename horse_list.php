@@ -430,7 +430,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     </form>
                 </div>
 
-                <!-- <h3 class="sticky-header">Photos</h3> -->
+                <h3 class="sticky-header">Photos</h3>
 
                 <div id="photoPreview"></div>
 

@@ -250,6 +250,7 @@
 .photo-card {
   width: 120px;
   height: 120px;
+  position: relative;
   border-radius: 8px;
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
@@ -277,11 +278,17 @@
   /* Black background with opacity */
   overflow: auto;
   /* Enable scroll if the image is too large */
-  display: flex;
   justify-content: center;
   /* Center horizontally */
   align-items: center;
   /* Center vertically */
+}
+
+/* Add this separate rule for when the modal is active */
+#imageModal.active {
+  display: flex; /* Show as flex when active */
+  justify-content: center;
+  align-items: center;
 }
 
 #imageModal .modal-content {
