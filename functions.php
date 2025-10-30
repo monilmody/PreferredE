@@ -2328,11 +2328,11 @@ function fetchBroodmaresReport($salecode, $year, $type, $gait, $sex, $sire, $bre
     ON a.damsire_Id=b.damsire_ID WHERE Price>0 ' . $searchParam;
 
 
-    $orderby1 = ' ORDER BY ' . $sort1 . ' ASC';
-    $orderby2 = ', ' . $sort2 . ' ASC';
-    $orderby3 = ', ' . $sort3 . ' ASC';
-    $orderby4 = ', ' . $sort4 . ' ASC';
-    $orderby5 = ', ' . $sort5 . ' ASC';
+    $orderby1 = ' ORDER BY ' . $sort1;
+    $orderby2 = ', ' . $sort2;
+    $orderby3 = ', ' . $sort3;
+    $orderby4 = ', ' . $sort4;
+    $orderby5 = ', ' . $sort5;
 
 
     if ($sort1 != "" && $sort2 != "" && $sort3 != "" && $sort4 != "" && $sort5 != "") {
@@ -2638,13 +2638,11 @@ function fetchBroodmaresReport_tb($salecode, $year, $type, $gait, $sex, $sire, $
     LEFT JOIN tdamsire b
     ON a.damsire_Id=b.damsire_ID WHERE Price>0 ' . $searchParam;
 
-
-    $orderby1 = ' ORDER BY ' . $sort1 . ' ASC';
-    $orderby2 = ', ' . $sort2 . ' ASC';
-    $orderby3 = ', ' . $sort3 . ' ASC';
-    $orderby4 = ', ' . $sort4 . ' ASC';
-    $orderby5 = ', ' . $sort5 . ' ASC';
-
+    $orderby1 = ' ORDER BY ' . $sort1;
+    $orderby2 = ', ' . $sort2;
+    $orderby3 = ', ' . $sort3;
+    $orderby4 = ', ' . $sort4;
+    $orderby5 = ', ' . $sort5;
 
     if ($sort1 != "" && $sort2 != "" && $sort3 != "" && $sort4 != "" && $sort5 != "") {
         $sql = $sql . $orderby1 . $orderby2 . $orderby3 . $orderby4 . $orderby5;
@@ -2848,94 +2846,27 @@ function fetchSalesAuctionReport_tb($year, $type, $salecode)
     return $json;
 }
 
-function fetchPacersSummary($year, $type, $salecode)
+function fetchSalesSummary($year,$type,$salecode)
 {
     global $mysqli;
-
-    $conditions = [];
     
-    if (!empty($year)) {
-        $conditions[] = "YEAR(Saledate) = '" . $mysqli->real_escape_string($year) . "'";
-    }
+    $searchParam = ' AND YEAR(Saledate)= IF("'.$year.'" = "", YEAR(Saledate), "'.$year.'")
+                     AND Type= IF("'.$type.'"  = "", Type, "'.$type.'") 
+                     AND left(Salecode,4)= IF("'.$salecode.'"  = "", left(Salecode,4), "'.$salecode.'") ';
     
-    if (!empty($type)) {
-        $conditions[] = "Type = '" . $mysqli->real_escape_string($type) . "'";
-    }
-    
-    if (!empty($salecode)) {
-        $conditions[] = "LEFT(Salecode, 4) = '" . $mysqli->real_escape_string($salecode) . "'";
-    }
-    
-    $whereClause = '';
-    if (!empty($conditions)) {
-        $whereClause = ' AND ' . implode(' AND ', $conditions);
-    }
-
-    // Fixed query - use subquery to get the horse with max price per salecode
-    $sql = 'SELECT s.Salecode, s.Horse AS PACER, s.Price AS PMax
-            FROM sales s
-            INNER JOIN (
-                SELECT Salecode, MAX(Price) as MaxPrice
-                FROM sales 
-                WHERE GAIT = "P" ' . $whereClause . '
-                GROUP BY Salecode
-            ) AS max_prices 
-            ON s.Salecode = max_prices.Salecode AND s.Price = max_prices.MaxPrice
-            WHERE s.GAIT = "P" ' . $whereClause . '
-            ORDER BY s.Salecode';
+    $sql = 'SELECT a.Salecode,a.Horse As PACER, a.Max AS PMax,b.Horse As Trotter,b.Max As TMax FROM 
+    (SELECT Salecode, Horse, Price as Max FROM sales WHERE GAIT ="P" '.$searchParam.'
+        GROUP BY Salecode,horse ORDER BY salecode,Price Desc) a
+    LEFT JOIN 
+    (SELECT Salecode, Horse, Price AS Max FROM sales WHERE GAIT ="T" '.$searchParam.'
+        GROUP BY Salecode,Horse ORDER BY Salecode,Price Desc) b on a.Salecode=b.Salecode Group by salecode';
 
     $result = mysqli_query($mysqli, $sql);
     if (!$result) {
         printf("Errormessage: %s\n", $mysqli->error);
-        return [];
     }
-    
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
-}
-
-function fetchTrottersSummary($year, $type, $salecode)
-{
-    global $mysqli;
-
-    $conditions = [];
-    
-    if (!empty($year)) {
-        $conditions[] = "YEAR(Saledate) = '" . $mysqli->real_escape_string($year) . "'";
-    }
-    
-    if (!empty($type)) {
-        $conditions[] = "Type = '" . $mysqli->real_escape_string($type) . "'";
-    }
-    
-    if (!empty($salecode)) {
-        $conditions[] = "LEFT(Salecode, 4) = '" . $mysqli->real_escape_string($salecode) . "'";
-    }
-    
-    $whereClause = '';
-    if (!empty($conditions)) {
-        $whereClause = ' AND ' . implode(' AND ', $conditions);
-    }
-
-    // Fixed query - use subquery to get the horse with max price per salecode
-    $sql = 'SELECT s.Salecode, s.Horse AS Trotter, s.Price AS TMax
-            FROM sales s
-            INNER JOIN (
-                SELECT Salecode, MAX(Price) as MaxPrice
-                FROM sales 
-                WHERE GAIT = "T" ' . $whereClause . '
-                GROUP BY Salecode
-            ) AS max_prices 
-            ON s.Salecode = max_prices.Salecode AND s.Price = max_prices.MaxPrice
-            WHERE s.GAIT = "T" ' . $whereClause . '
-            ORDER BY s.Salecode';
-
-    $result = mysqli_query($mysqli, $sql);
-    if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
-        return [];
-    }
-    
-    return mysqli_fetch_all($result, MYSQLI_ASSOC);
+    $json = mysqli_fetch_all ($result, MYSQLI_ASSOC);
+    return $json;
 }
 
 function fetchSalesSummary_tb($year, $type, $salecode)

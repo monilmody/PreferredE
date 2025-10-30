@@ -21,21 +21,19 @@ table, th, td {
 </head>
 <?php
 include_once("config.php");
-$year_param =$_GET['year'];
-$type_param =$_GET['type'];
-$salecode_param =$_GET['salecode'];
+$year_param =$_GET['year'] ?? '';
+$type_param =$_GET['type'] ?? '';
+$salecode_param =$_GET['salecode'] ?? '';
 
 $resultFound = fetchSalesAuctionReport($year_param,$type_param,$salecode_param);
 
 // Check if any parameter is selected
-if (!empty($year_param) || !empty($type_param) || !empty($salecode_param)) {
-  // Call separate functions for pacers and trotters
-  $resultPacers = fetchPacersSummary($year_param,$type_param,$salecode_param);
-  $resultTrotters = fetchTrottersSummary($year_param,$type_param,$salecode_param);
+if (!empty($year_param) || !empty($elig_param) || !empty($salecode_param)) {
+  // Call the function to fetch filtered data based on the selected parameters
+$resultFound21 = fetchSalesSummary($year_param,$type_param,$salecode_param);
 } else {
-  // If no parameter is selected, set to empty arrays
-  $resultPacers = array();
-  $resultTrotters = array();
+  // If no parameter is selected, set $resultFound to an empty array
+  $resultFound = array();
 }
 
 $yearList = getYearsList();
@@ -159,73 +157,52 @@ $resultList = fetchSalecodeWithoutYear($year_param);
  
  <h1 style="text-align:center;color:#D98880;">AUCTION REPORT - MAX & AVG SALES</h1>
  <hr>
- 
- <!-- Pacers Table -->
- <h3 style="text-align:center;color:#35CC03;">TOP-PRICE PACERS</h3>
- <div style="height:300px;overflow:auto;">
+ <div style="height:500px;overflow:auto;">
 	<div class="table" style="width: 100%;table-layout: fixed;">
           <div class="row header blue" style="line-height: 25px;font-size: 12px;border: 1px solid white;position: sticky;top: 0;">
         	  <div class="cell" style="width: 5%;">
                 NO
               </div>
-              <div class="cell" style="width: 25%;">
+              <div class="cell" style="width: 15%;">
                 SALECODE
               </div>
               <div class="cell" style="width: 40%;">
-                TOP-PACER HORSE
+                TOP-PRICE PACER
               </div>
-              <div class="cell" style="width: 30%;">
-                TOP-PACER PRICE
+              <div class="cell" style="width: 40%;">
+                TOP-PRICE TROTTER
               </div>
           </div>
           
           <?php
               setlocale(LC_MONETARY,"en_US");
               $number =0;
-              foreach($resultPacers as $row) {
+              $var ="";
+              foreach($resultFound21 as $row) {
                   $number = $number+1;
+                  $elementCount = 0;
                   echo "<div class='row style='font-size:14px;border: 1px solid white;'>";
                   echo "<div class='cell' style='font-size:12px;border: 1px solid white;'>".$number."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$row['Salecode']."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$row['PACER']."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'><b>$".number_format($row['PMax'])."</b></div>";
-                  echo "</div>";
-              }
-          ?>
-    </div>
- </div>
- 
- <br>
- 
- <!-- Trotters Table -->
- <h3 style="text-align:center;color:#FF5733;">TOP-PRICE TROTTERS</h3>
- <div style="height:300px;overflow:auto;">
-	<div class="table" style="width: 100%;table-layout: fixed;">
-          <div class="row header blue" style="line-height: 25px;font-size: 12px;border: 1px solid white;position: sticky;top: 0;">
-        	  <div class="cell" style="width: 5%;">
-                NO
-              </div>
-              <div class="cell" style="width: 25%;">
-                SALECODE
-              </div>
-              <div class="cell" style="width: 40%;">
-                TOP-TROTTER HORSE
-              </div>
-              <div class="cell" style="width: 30%;">
-                TOP-TROTTER PRICE
-              </div>
-          </div>
-          
-          <?php
-              setlocale(LC_MONETARY,"en_US");
-              $number =0;
-              foreach($resultTrotters as $row) {
-                  $number = $number+1;
-                  echo "<div class='row style='font-size:14px;border: 1px solid white;'>";
-                  echo "<div class='cell' style='font-size:12px;border: 1px solid white;'>".$number."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$row['Salecode']."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$row['Trotter']."</div>";
-                  echo "<div class='cell' style='font-size:13px;border: 1px solid white;'><b>$".number_format($row['TMax'])."</b></div>";
+                  foreach($row as $elements) {
+                      $elementCount =$elementCount+1;
+                      if($elementCount == 2){
+                          $var =$elements;
+                          continue;
+                      }
+                      if($elementCount == 3){
+                          $elements = "$".number_format($elements);
+                          $elements = "<b>".$elements."</b> - ".$var;
+                      }
+                      if($elementCount == 4){
+                          $var =$elements;
+                          continue;
+                      }
+                      if($elementCount == 5){
+                          $elements = "$".number_format($elements);
+                          $elements = "<b>".$elements."</b> - ".$var;
+                      }
+                      echo "<div class='cell' style='font-size:13px;border: 1px solid white;'>".$elements."</div>";
+                  }
                   echo "</div>";
               }
           ?>
