@@ -17,7 +17,7 @@ include("./session_page.php");
 </head>
 <?php
 include_once("config.php");
-$breed_param = $_GET['breed'];
+$breed_param = $_GET['breed'] ?? '';
 
 $resultFound = getsaledata($breed_param);
 

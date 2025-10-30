@@ -41,7 +41,7 @@ $sexList = getSexList();
 $sireList = fetchSireListAll($year_param);
 $bredtoList = getBredtoList($year_param);
 $defaultType = 'B';
-$sortList = array("Hip","Horse","Type", "Gait", "Price", "Salecode", "Day", "Consno","Sire" ,"Dam" , "Bredto", "Lastbred", "Age","Rating","Sire");
+$sortList = array("Hip","Horse","Type", "Gait", "Price Desc", "Salecode", "Day", "Consno","Sire" ,"Dam" , "Bredto", "Lastbred", "Age","Rating","Sire");
 
 ?>
 <br>
