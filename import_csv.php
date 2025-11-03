@@ -421,8 +421,8 @@ if (isset($_POST["import"])) {
                     $NFFM,
                     $yearFoal,
                     $Sire,
-                    $Sireofdam,
                     $DAM,
+                    $Sireofdam,
                     $FARMNAME,
                     $FARMCODE
                 );
@@ -498,8 +498,8 @@ if (isset($_POST["import"])) {
                         $NFFM,
                         $yearFoal,
                         $Sire,
-                        $Sireofdam,
                         $DAM,
+                        $Sireofdam,
                         $FARMNAME,
                         $FARMCODE
                     );
