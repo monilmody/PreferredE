@@ -1625,7 +1625,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                 const formData = new FormData();
                 const file = fileInput.files[0];
-                const horseId = $('#hiddenHorseId').val();
+                const horseId = $('#hiddenHorseIdSanitized').val();
 
                 formData.append('file', file);
                 formData.append('horseId', horseId);
