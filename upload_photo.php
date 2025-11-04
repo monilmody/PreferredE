@@ -10,18 +10,25 @@ use Aws\Exception\AwsException;
 
 header('Content-Type: application/json');
 
+// Simple static caching for S3 client
+function getS3Client() {
+    static $s3Client = null;
+    
+    if ($s3Client === null) {
+        $s3Client = new S3Client([
+            'region' => 'us-east-1',
+            'version' => 'latest',
+            'suppress_php_deprecation_warning' => true
+        ]);
+    }
+    
+    return $s3Client;
+}
+
 try {
-    $region = 'us-east-1';
     $bucket = 'horse-list-photos-and-details'; // bucket name
 
-    // $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
-    // $sessionName = 'GetHorseDetailsSession';
-
-    $s3 = new S3Client([
-        'region' => $region,
-        'version' => 'latest',
-        'suppress_php_deprecation_warning' => true // ✅ THIS LINE
-    ]);
+    $s3 = getS3Client();
 
     if (!isset($_FILES['file']) || $_FILES['file']['error'] !== UPLOAD_ERR_OK || !isset($_POST['horseId'])) {
         throw new Exception('Missing file or horse ID.');

@@ -3857,6 +3857,20 @@ function sanitizeHorseIdForImage($horseId)
     return preg_replace('/[^a-zA-Z0-9_-]/', '', $horseId);
 }
 
+function getS3Client() {
+    static $s3Client = null;
+    
+    if ($s3Client === null) {
+        $s3Client = new S3Client([
+            'region' => 'us-east-1',
+            'version' => 'latest',
+            'suppress_php_deprecation_warning' => true
+        ]);
+    }
+    
+    return $s3Client;
+}
+
 function getHorseDetails($horseId)
 {
     global $mysqli;
@@ -3890,11 +3904,7 @@ function getHorseDetails($horseId)
         // $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
         // $sessionName = 'GetHorseDetailsSession';
 
-        $s3 = new S3Client([
-            'region' => $region,
-            'version' => 'latest',
-            'suppress_php_deprecation_warning' => true // ✅ THIS LINE
-        ]);
+        $s3 = getS3Client();
 
         // Sanitize the horseId specifically for images (remove spaces and special characters)
         $sanitizedHorseId = sanitizeHorseIdForImage($horseId);
