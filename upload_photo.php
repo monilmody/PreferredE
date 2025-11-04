@@ -13,13 +13,27 @@ header('Content-Type: application/json');
 // Simple static caching for S3 client
 function getS3Client() {
     static $s3Client = null;
+    static $counter = 0;
+    
+    $counter++;
+    $pid = getmypid();
+    
+    error_log("📞 S3 Client call #$counter in PID: $pid");
     
     if ($s3Client === null) {
+        error_log("❌ S3 Client is NULL - creating new instance");
+        $start = microtime(true);
+        
         $s3Client = new S3Client([
             'region' => 'us-east-1',
             'version' => 'latest',
             'suppress_php_deprecation_warning' => true
         ]);
+        
+        $time = round(microtime(true) - $start, 2);
+        error_log("⏰ S3 Client creation took: {$time}s");
+    } else {
+        error_log("✅ S3 Client EXISTS - reusing instance");
     }
     
     return $s3Client;
