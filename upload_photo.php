@@ -75,13 +75,6 @@ try {
         throw new Exception("Unsupported MIME type: $fileMimeType");
     }
 
-    // 🔍 Scan file for viruses using ClamAV
-    $clamScanResult = shell_exec("clamscan " . escapeshellarg($fileTmpPath));
-
-    if (strpos($clamScanResult, 'Infected files: 1') !== false) {
-        throw new Exception("Virus detected in uploaded file. Upload blocked.");
-    }
-
     $horseId = preg_replace('/[^a-zA-Z0-9_\-]/', '', $_POST['horseId']);
     $uniqueFilename = "uploads/horse_" . $horseId . "_" . time() . "." . $fileExtension;
 
