@@ -147,7 +147,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     }
 </script>
 
-<select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
+<select class="custom-select1" id="salecodeList"> <!--onchange="location = this.value;" -->
     <option value="">Salecode Filter</option>
     <option value="">All Salecode</option>
     <?php foreach ($salcodeList as $row) {
