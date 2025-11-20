@@ -58,9 +58,12 @@ $ConsignerSearch = $_GET['consigner_search'] ?? '';
 $SalecodeSearch = $_GET['salecode_search'] ?? '';
 
 $result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
+$salcodeList = fetchSalecodeList($year_param);
+$farmnameList = fetchFarmnameList($year_param);
+$farmcodeList = fetchFarmcodeList($year_param);
 
 // Define sortable columns for the dropdowns
-$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode");
+$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode", "Hip");
 ?>
 
 <!DOCTYPE html>
@@ -143,6 +146,33 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         console.log(`Sorting by ${sortValue} in ${orderValue} order`);
     }
 </script>
+
+<select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
+    <option value="">Salecode Filter</option>
+    <option value="">All Salecode</option>
+    <?php foreach ($salcodeList as $row) {
+        echo '<option>'.$row['Salecode'].'</option>';
+
+    } ?>
+</select>
+
+<select class="custom-select1" id="farmname"> <!--onchange="location = this.value;" -->
+    <option value="">Farm Name Filter</option>
+    <option value="">All Farm Name</option>
+    <?php foreach ($farmnameList as $row) {
+        echo '<option>'.$row['FARMNAME'].'</option>';
+
+    } ?>
+</select>
+
+<select class="custom-select1" id="farmcode"> <!--onchange="location = this.value;" -->
+    <option value="">Farm Code Filter</option>
+    <option value="">All Farm Code</option>
+    <?php foreach ($farmcodeList as $row) {
+        echo '<option>'.$row['FARMCODE'].'</option>';
+
+    } ?>
+</select>
 
 <!-- Sorting Filters (1st to 5th) -->
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">

@@ -2063,6 +2063,44 @@ function fetchBuyersReport_tb($salecode, $year, $type, $sort1, $sort2, $sort3, $
     return $json;
 }
 
+function fetchFarmnameList($year)
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT FARMNAME FROM sales 
+            WHERE FARMNAME <> "" 
+            ORDER BY FARMNAME';
+    if ($year != "") {
+        $sql = 'SELECT DISTINCT FARMNAME FROM sales WHERE YEAR(`SALEDATE`) = "' . $year . '"
+                AND FARMNAME <> "" 
+                ORDER BY FARMNAME';
+    }
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchFarmcodeList($year)
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT FARMCODE FROM sales 
+            WHERE FARMCODE <> "" 
+            ORDER BY FARMCODE';
+    if ($year != "") {
+        $sql = 'SELECT DISTINCT FARMCODE FROM sales WHERE YEAR(`SALEDATE`) = "' . $year . '"
+                AND FARMCODE <> "" 
+                ORDER BY FARMCODE';
+    }
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function fetchSalecodeList($year)
 {
     global $mysqli;
@@ -3645,7 +3683,8 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
         'dam' => 'Dam',
         'farmname' => 'FARMNAME',
         'datefoal' => "DATEFOAL",
-        'salecode' => 'SALECODE'
+        'salecode' => 'SALECODE',
+        'hip' => 'HIP'
     ];
 
     // Build the SQL query base
