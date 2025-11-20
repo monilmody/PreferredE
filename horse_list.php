@@ -63,7 +63,7 @@ $farmnameList = fetchFarmnameList($year_param);
 $farmcodeList = fetchFarmcodeList($year_param);
 
 // Define sortable columns for the dropdowns
-$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode", "Hip");
+$sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefoal", "Salecode", "Hip", "Consigner");
 ?>
 
 <!DOCTYPE html>

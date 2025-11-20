@@ -3684,7 +3684,8 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
         'farmname' => 'FARMNAME',
         'datefoal' => "DATEFOAL",
         'salecode' => 'SALECODE',
-        'hip' => 'HIP'
+        'hip' => 'HIP',
+        'consigner' => 'CONSLNAME' 
     ];
 
     // Build the SQL query base
