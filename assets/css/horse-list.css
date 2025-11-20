@@ -152,7 +152,7 @@
   cursor: pointer;
   font-size: 18px;
   z-index: 1001;
-  width: 30px;
+  width: 40px;
   /* Fixed width for a more controlled size */
   height: 30px;
   /* Fixed height to make it circular */
