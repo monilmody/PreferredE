@@ -7,6 +7,35 @@ use Aws\Exception\AwsException;
 
 header('Content-Type: application/json');
 
+// S3 Client with static caching
+function getS3Client($region) {
+    static $s3Client = null;
+    
+    if ($s3Client === null) {
+        $s3Client = new S3Client([
+            'region' => $region,
+            'version' => 'latest',
+            'suppress_php_deprecation_warning' => true
+        ]);
+    }
+    
+    return $s3Client;
+}
+
+// Secrets Manager Client with static caching  
+function getSecretsManagerClient($region) {
+    static $secretsClient = null;
+    
+    if ($secretsClient === null) {
+        $secretsClient = new SecretsManagerClient([
+            'version' => 'latest',
+            'region'  => $region,
+        ]);
+    }
+    
+    return $secretsClient;
+}
+
 // Validate request
 if (!isset($_POST['imageUrl'])) {
     echo json_encode(['success' => false, 'error' => 'Missing image URL']);
@@ -28,11 +57,7 @@ $secretName = 'MyApp/S3Credentials'; // Replace with your secret name or env var
 $region = 'us-east-1';               // Replace with your AWS region or env var
 
 try {
-    $secretsClient = new SecretsManagerClient([
-        'version' => 'latest',
-        'region'  => $region,
-        // No explicit credentials here, IAM role or env vars should provide permission
-    ]);
+    $secretsClient = getSecretsManagerClient($region);
 
     $result = $secretsClient->getSecretValue([
         'SecretId' => $secretName,
@@ -68,12 +93,7 @@ try {
 
 // Delete from S3
 try {
-    $s3 = new S3Client([
-        'region' => $region,
-        'version' => 'latest',
-        'suppress_php_deprecation_warning' => true
-    ]);
-
+    $s3 = getS3Client($region);
     $s3->deleteObject([
         'Bucket' => $bucket,
         'Key' => $path,
