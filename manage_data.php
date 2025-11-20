@@ -202,13 +202,23 @@ if (!empty($_POST)) {
 </script>
 
 <script>
-  function sortTable(column) {
-    // Get the current sort order (ascending or descending) from the URL
+function sortTable(column) {
     var urlParams = new URLSearchParams(window.location.search);
-    var currentSortOrder = urlParams.get('sortOrder') === 'ASC' ? 'DESC' : 'ASC'; // Toggle the sort order
+    var currentSortOrder = urlParams.get('sortOrder');
+    var currentOrderBy = urlParams.get('orderby');
+    
+    var newSortOrder;
+    
+    if (currentOrderBy === column && currentSortOrder === 'ASC') {
+        newSortOrder = 'DESC';
+    } else if (currentOrderBy === column && currentSortOrder === 'DESC') {
+        newSortOrder = 'ASC';
+    } else {
+        // New column or first click - default to DESC since data starts as ASC
+        newSortOrder = 'DESC';
+    }
 
-    // Redirect to the page with the updated query parameters for sorting
-    window.location.href = '?orderby=' + column + '&sortOrder=' + currentSortOrder + '&breed=<?php echo $breed_param; ?>';
+    window.location.href = '?orderby=' + column + '&sortOrder=' + newSortOrder + '&breed=<?php echo $breed_param; ?>';
 }
 </script>
 

@@ -3566,31 +3566,50 @@ function getsaledata($breed)
 
     global $mysqli;
 
-    // Default query for the 'sales' table
+    // Validate orderBy to prevent SQL injection
+    $allowed_columns = ['Salecode', 'DAY', 'Saletype', 'Saledate', 'upload_date'];
+    if (!in_array($orderBy, $allowed_columns)) {
+        $orderBy = 'Saledate';
+    }
+
+    // Validate sortOrder
+    $sortOrder = strtoupper($sortOrder) === 'DESC' ? 'DESC' : 'ASC';
+
+    // Default query for the 'sales' table - FIXED GROUP BY
     $sql = "
-        SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) 
+        SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
         FROM sales s
-        LEFT JOIN documents d ON s.Salecode = d.file_name  -- Assuming salecode matches the file_name in documents
-        GROUP BY s.Salecode, s.Saledate, d.upload_date
+        LEFT JOIN documents d ON s.Salecode = d.file_name
+        GROUP BY s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date
         ORDER BY $orderBy $sortOrder
     ";
 
-    // If the breed is 'T', use the 'tsales' table
+    // If the breed is 'T', use the 'tsales' table - FIXED GROUP BY
     if ($breed == "T") {
         $sql = "
-            SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) 
+            SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
             FROM tsales s
-            LEFT JOIN documents d ON s.Salecode = d.file_name -- Assuming salecode matches the file_name in documents
-            GROUP BY s.Salecode, s.Saledate, d.upload_date
+            LEFT JOIN documents d ON s.Salecode = d.file_name
+            GROUP BY s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date
             ORDER BY $orderBy $sortOrder
         ";
     }
 
+    // Debug: Uncomment these lines to see the actual error
+    // echo "SQL: " . $sql . "<br>";
+    
     $result = mysqli_query($mysqli, $sql);
+    
     if (!$result) {
-        printf("Errormessage: %s\n", $mysqli->error);
+        // Get the actual MySQL error
+        $error = mysqli_error($mysqli);
+        error_log("MySQL Error in getsaledata: " . $error);
+        error_log("Failed SQL: " . $sql);
+        return []; // Return empty array instead of proceeding
     }
+    
     $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    mysqli_free_result($result);
     return $json;
 }
 
