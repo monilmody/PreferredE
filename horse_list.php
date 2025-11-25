@@ -2295,12 +2295,14 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     const diff = startX - currentX;
                     const newWidth = startWidth + diff;
 
-                    // Apply constraints
-                    const minWidth = 400;
+                    // Calculate minimum width based on content
+                    const minWidth = calculateMinimumWidth();
                     const maxWidth = window.innerWidth * 0.9;
 
                     if (newWidth >= minWidth && newWidth <= maxWidth) {
                         sidebar.style.width = newWidth + 'px';
+                        // Update tab heights when resizing
+                        fixTabContentHeight();
                     }
                 }
 
@@ -2317,6 +2319,34 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 });
             }
 
+            // Calculate minimum width based on content
+            function calculateMinimumWidth() {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+                if (!sidebar) return 400; // Default fallback
+
+                // Calculate based on content requirements
+                let minWidth = 350; // Base minimum
+
+                // Check if tabs exist and adjust minimum
+                const tabButtons = sidebar.querySelector('.tab-buttons');
+                if (tabButtons) {
+                    const buttons = tabButtons.querySelectorAll('.tab-button');
+                    const buttonTextWidth = Array.from(buttons).reduce((total, button) => {
+                        return total + button.scrollWidth;
+                    }, 0);
+                    minWidth = Math.max(minWidth, buttonTextWidth + 100); // Add padding
+                }
+
+                // Check table content
+                const tables = sidebar.querySelectorAll('table');
+                tables.forEach(table => {
+                    const tableMinWidth = table.scrollWidth;
+                    minWidth = Math.max(minWidth, tableMinWidth + 50); // Add padding
+                });
+
+                return Math.min(Math.max(minWidth, 350), 500); // Between 350px and 500px
+            }
+
             // Fix tab content height issue
             function fixTabContentHeight() {
                 const sidebar = document.getElementById('horseDetailsSidebar');
@@ -2329,14 +2359,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     const tabButtonsHeight = tabButtons ? tabButtons.offsetHeight : 0;
                     const actionButtonsHeight = actionButtons ? actionButtons.offsetHeight : 0;
                     const headerHeight = sidebar.querySelector('h2') ? sidebar.querySelector('h2').offsetHeight : 0;
-                    const padding = 40; // Additional padding
+                    const padding = 40;
 
                     const availableHeight = sidebarHeight - tabButtonsHeight - actionButtonsHeight - headerHeight - padding;
 
                     tabContentContainer.style.height = Math.max(availableHeight, 200) + 'px';
                     tabContentContainer.style.overflowY = 'auto';
 
-                    // Also set height for individual tab panes
                     const tabPanes = sidebar.querySelectorAll('.tab-pane');
                     tabPanes.forEach(pane => {
                         pane.style.overflowY = 'auto';
@@ -2357,7 +2386,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     mutations.forEach(function(mutation) {
                         if (mutation.attributeName === 'class') {
                             if (sidebar.classList.contains('open')) {
-                                // Small delay to ensure DOM is updated
                                 setTimeout(() => {
                                     fixTabContentHeight();
                                 }, 100);
@@ -2370,14 +2398,12 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     attributes: true
                 });
 
-                // Also fix height on window resize
                 window.addEventListener('resize', function() {
                     if (sidebar.classList.contains('open')) {
                         fixTabContentHeight();
                     }
                 });
 
-                // Fix height when tabs are switched
                 const tabButtons = sidebar.querySelectorAll('.tab-button');
                 tabButtons.forEach(button => {
                     button.addEventListener('click', function() {
@@ -2390,14 +2416,10 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             // Call this function when your page loads
             document.addEventListener('DOMContentLoaded', function() {
-                // Wait a bit for the sidebar to be fully loaded
                 setTimeout(() => {
                     initSidebarFunctions();
                 }, 1000);
             });
-
-            // If you need to call it manually when sidebar is created dynamically:
-            // initSidebarFunctions();
         </script>
 
 </body>
