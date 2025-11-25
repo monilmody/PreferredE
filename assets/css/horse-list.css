@@ -103,9 +103,8 @@
   font-size: 16px;
 }
 
-/* Sidebar Base Styling with Resize */
 #horseDetailsSidebar {
-  width: 400px; /* Original width */
+  width: 400px;
   position: fixed;
   top: 0;
   right: -400px;
@@ -115,103 +114,14 @@
   transition: right 0.3s ease;
   z-index: 1050;
   padding: 20px;
-  overflow-y: auto; /* Only vertical scrolling */
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  resize: horizontal; /* Enable horizontal resizing */
-  min-width: 300px; /* Minimum width */
-  max-width: 90vw; /* Maximum width */
-  overflow: hidden;
-}
-
-/* Resize handle styling */
-#horseDetailsSidebar::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 8px;
-  height: 100%;
-  cursor: col-resize;
-  background: transparent;
-  z-index: 1051;
-}
-
-/* Visual indicator for resize handle on hover */
-#horseDetailsSidebar:hover::after {
-  background: linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 100%);
-}
-
-/* When sidebar is open and being resized */
-#horseDetailsSidebar.open:active::after,
-#horseDetailsSidebar.open.resizing::after {
-  background: linear-gradient(to right, rgba(34, 153, 84, 0.3) 0%, transparent 100%);
-}
-
-/* Ensure content adjusts properly during resize */
-#horseDetailsSidebar.open .sidebar-content,
-#horseDetailsSidebar.open #horseDetailsContent {
-  width: 100%;
-  min-width: 0; /* Allow content to shrink */
-}
-
-/* Adjust tab buttons container during resize */
-#horseDetailsSidebar.open .tab-buttons {
-  flex-wrap: wrap;
-  gap: 2px;
-}
-
-#horseDetailsSidebar.open .tab-button {
-  flex: 1;
-  min-width: 60px;
-  font-size: 12px;
-  padding: 6px 8px;
-}
-
-/* Photo gallery adjustments for resizing */
-#horseDetailsSidebar.open #photoPreview {
-  gap: 8px;
-}
-
-#horseDetailsSidebar.open .photo-card {
-  width: calc(50% - 10px);
-  min-width: 80px;
-}
-
-/* Table adjustments for narrower sidebar */
-#horseDetailsSidebar.open table {
-  font-size: 14px;
-}
-
-#horseDetailsSidebar.open table th,
-#horseDetailsSidebar.open table td {
-  padding: 6px 8px;
-}
-
-/* Action buttons stack vertically when narrow */
-#horseDetailsSidebar.open .action-buttons {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-#horseDetailsSidebar.open .action-buttons .btn {
-  margin-bottom: 0;
-}
-
-/* Close button remains accessible */
-#horseDetailsSidebar.open .closebtn {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1052;
 }
 
 #horseDetailsContent {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden; /* Prevent content overflow */
+  overflow-y: auto;
   padding-top: 10px;
 }
 
@@ -223,22 +133,13 @@
   color: white;
   margin: 0;
   width: 100%;
+  /* Ensure the heading stretches across */
   box-sizing: border-box;
 }
 
 .sidebar #horseDetailsContent {
   padding: 20px;
   overflow-y: auto;
-}
-
-/* Original open state - keep this important rule */
-#horseDetailsSidebar.open {
-  right: 0;
-}
-
-#horseDetailsSidebar.open .sidebar-content {
-  padding: 20px;
-  font-size: 16px;
 }
 
 .closebtn {
@@ -251,7 +152,7 @@
   cursor: pointer;
   font-size: 18px;
   z-index: 1001;
-  width: 40px;
+  width: 10px;
   /* Fixed width for a more controlled size */
   height: 30px;
   /* Fixed height to make it circular */
@@ -263,10 +164,21 @@
   float: right; /* Ensures it stays on the right */
 }
 
+#horseDetailsSidebar.open {
+  right: 0;
+  width: 60vw;
+  /* Occupies 60% of viewport width when open */
+}
+
+#horseDetailsSidebar.open .sidebar-content {
+  padding: 20px;
+  font-size: 16px;
+}
+
 /* Tabs */
 .tab-buttons {
   position: sticky;
-  top: 80px;
+  top: 140px;
   background: white;
   padding: 10px 0;
   z-index: 100;
@@ -283,17 +195,13 @@
   cursor: pointer;
   font-size: 14px;
   transition: all 0.2s;
-  flex: 1;
-  min-width: 60px;
 }
 
 /* Container for scrollable content */
 .tab-content-container {
   flex: 1;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  margin-top: 10px;
+  overflow-y: auto;
+  padding-top: 10px;
 }
 
 /* Action buttons at bottom */
@@ -303,7 +211,6 @@
   position: sticky;
   bottom: 0;
   border-top: 1px solid #eee;
-  margin-top: auto;
 }
 
 .tab-button.active {
@@ -321,43 +228,19 @@
 /* Hide all tabs by default */
 .tab-pane {
   display: none;
-  flex: 1;
-  overflow-y: auto; /* Allow scrolling within each tab */
-  padding: 10px;
 }
 
 .tab-pane.active {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Responsive adjustments for resize */
-@media (max-width: 500px) {
-  #horseDetailsSidebar.open {
-    width: 95vw !important;
-    right: 0;
-  }
-  
-  .tab-button {
-    font-size: 12px;
-    padding: 6px 8px;
-  }
-  
-  .photo-card {
-    width: 100px;
-    height: 100px;
-  }
+  display: block;
 }
 
 /* Improved photo gallery */
 #photoPreview {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
   justify-content: center;
-  padding: 10px;
-  overflow-y: auto;
-  flex: 1;
+  padding-top: 10px;
 }
 
 #fileUploadForm {
@@ -372,7 +255,6 @@
   overflow: hidden;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease-in-out;
-  flex-shrink: 0;
 }
 
 .photo-card img {
@@ -981,6 +863,16 @@ body.modal-open #horseDetailsSidebar .closebtn {
   .delete-photo {
     font-size: 10px;
     padding: 2px 4px;
+  }
+
+  #horseDetailsSidebar {
+    width: 100%;
+    max-width: none;
+    right: -100%;
+  }
+
+  #horseDetailsSidebar.open {
+    width: 100vw;
   }
 
   body {
