@@ -2308,9 +2308,15 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                 function stopResize() {
                     isResizing = false;
+                    const sidebar = document.getElementById('horseDetailsSidebar');
                     sidebar.classList.remove('resizing');
                     document.removeEventListener('mousemove', handleResize);
                     document.removeEventListener('mouseup', stopResize);
+
+                    // Add a small delay to prevent immediate click detection after resize
+                    setTimeout(() => {
+                        isResizing = false;
+                    }, 50);
                 }
 
                 // Prevent text selection while resizing
@@ -2318,6 +2324,16 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     e.preventDefault();
                 });
             }
+
+            document.addEventListener('mousedown', function(event) {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+                const isResizeHandle = event.target.classList.contains('resize-handle');
+
+                if (isResizeHandle) {
+                    // Don't do anything - let the resize handle handle it
+                    return;
+                }
+            });
 
             // Calculate minimum width based on content
             function calculateMinimumWidth() {
@@ -2382,16 +2398,19 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     // Check if sidebar is open
                     if (!sidebar.classList.contains('open')) return;
 
+                    // Check if we're currently resizing - don't close during resize
+                    if (isResizing) return;
+
                     // Check if click is outside sidebar
                     const isClickInsideSidebar = sidebar.contains(event.target);
                     const isClickOnSidebar = event.target === sidebar;
+                    const isClickOnResizeHandle = event.target.classList.contains('resize-handle');
 
-                    if (!isClickInsideSidebar && !isClickOnSidebar) {
+                    if (!isClickInsideSidebar && !isClickOnSidebar && !isClickOnResizeHandle) {
                         closeSidebar();
                     }
                 });
             }
-
             // Initialize when sidebar opens
             function initSidebarFunctions() {
                 const sidebar = document.getElementById('horseDetailsSidebar');
