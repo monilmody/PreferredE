@@ -3670,7 +3670,7 @@ function deleteSalecode($breed, $salecode)
     return $result;
 }
 
-function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '', $damSearch = '', $LocationSearch = '', $FoalSearch = '', $ConsignerSearch = '', $SalecodeSearch = '')
+function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '', $damSearch = '', $LocationSearch = '', $FoalSearch = '', $ConsignerSearch = '', $SalecodeSearch = '', $salecodeFilter = '', $farmnameFilter = '', $farmcodeFilter = '')
 {
     global $mysqli;
 
@@ -3702,6 +3702,7 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
             color,
             gait,
             FARMNAME,
+            FARMCODE,
             bredto,
             CONSLNAME,
             SALECODE
@@ -3732,6 +3733,18 @@ function fetchHorseList($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '
 
     if (!empty($SalecodeSearch)) {
         $conditions[] = "SALECODE LIKE '%" . $mysqli->real_escape_string($SalecodeSearch) . "%'";
+    }
+
+    if (!empty($salecodeFilter)) {
+        $conditions[] = "SALECODE = '" . $mysqli->real_escape_string($salecodeFilter) . "'";
+    }
+
+    if (!empty($farmnameFilter)) {
+        $conditions[] = "FARMNAME = '" . $mysqli->real_escape_string($farmnameFilter) . "'";
+    }
+
+    if (!empty($farmcodeFilter)) {
+        $conditions[] = "FARMCODE = '" . $mysqli->real_escape_string($farmcodeFilter) . "'";
     }
 
     if (!empty($conditions)) {

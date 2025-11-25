@@ -57,7 +57,11 @@ $FoalSearch = $_GET['foal_search'] ?? '';
 $ConsignerSearch = $_GET['consigner_search'] ?? '';
 $SalecodeSearch = $_GET['salecode_search'] ?? '';
 
-$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch);
+$salecodeFilter = $_GET['salecode_filter'] ?? '';
+$farmnameFilter = $_GET['farmname_filter'] ?? '';
+$farmcodeFilter = $_GET['farmcode_filter'] ?? '';
+
+$result = fetchHorseList($sort1_param, $sort2_param, $sort3_param, $sort4_param, $sort5_param, $horseSearch, $damSearch, $LocationSearch, $FoalSearch, $ConsignerSearch, $SalecodeSearch, $salecodeFilter, $farmnameFilter, $farmcodeFilter);
 $salcodeList = fetchSalecodeList($year_param);
 $farmnameList = fetchFarmnameList($year_param);
 $farmcodeList = fetchFarmcodeList($year_param);
@@ -123,6 +127,39 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         <input type="text" name="salecode_search" class="search-box" placeholder="Search Salecodes..."
             value="<?php echo isset($_GET['salecode_search']) ? htmlspecialchars($_GET['salecode_search']) : '' ?>">
 
+        <!-- Salecode Dropdown Filter -->
+        <select class="custom-select1" name="salecode_filter">
+            <option value="">All Salecode</option>
+            <?php
+            foreach ($salcodeList as $row) {
+                $selected = (isset($_GET['salecode_filter']) && $_GET['salecode_filter'] == $row['Salecode']) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($row['Salecode']) . '" ' . $selected . '>' . $row['Salecode'] . '</option>';
+            }
+            ?>
+        </select>
+
+        <!-- Farm Name Dropdown Filter -->
+        <select class="custom-select1" name="farmname_filter">
+            <option value="">All Farm Name</option>
+            <?php
+            foreach ($farmnameList as $row) {
+                $selected = (isset($_GET['farmname_filter']) && $_GET['farmname_filter'] == $row['FARMNAME']) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($row['FARMNAME']) . '" ' . $selected . '>' . $row['FARMNAME'] . '</option>';
+            }
+            ?>
+        </select>
+
+        <!-- Farm Code Dropdown Filter -->
+        <select class="custom-select1" name="farmcode_filter">
+            <option value="">All Farm Code</option>
+            <?php
+            foreach ($farmcodeList as $row) {
+                $selected = (isset($_GET['farmcode_filter']) && $_GET['farmcode_filter'] == $row['FARMCODE']) ? 'selected' : '';
+                echo '<option value="' . htmlspecialchars($row['FARMCODE']) . '" ' . $selected . '>' . $row['FARMCODE'] . '</option>';
+            }
+            ?>
+        </select>
+
         <button type="submit" class="search-button">Search</button>
 
         <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search']) || isset($_GET['location_search']) || isset($_GET['foal_search']) || isset($_GET['consigner_search']) || isset($_GET['salecode_search'])): ?>
@@ -146,30 +183,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         console.log(`Sorting by ${sortValue} in ${orderValue} order`);
     }
 </script>
-
-<select class="custom-select1" id="salecodeList"> <!--onchange="location = this.value;" -->
-    <option value="">Salecode Filter</option>
-    <option value="">All Salecode</option>
-    <?php foreach ($salcodeList as $row) {
-        echo '<option>' . $row['Salecode'] . '</option>';
-    } ?>
-</select>
-
-<select class="custom-select1" id="farmname"> <!--onchange="location = this.value;" -->
-    <option value="">Farm Name Filter</option>
-    <option value="">All Farm Name</option>
-    <?php foreach ($farmnameList as $row) {
-        echo '<option>' . $row['FARMNAME'] . '</option>';
-    } ?>
-</select>
-
-<select class="custom-select1" id="farmcode"> <!--onchange="location = this.value;" -->
-    <option value="">Farm Code Filter</option>
-    <option value="">All Farm Code</option>
-    <?php foreach ($farmcodeList as $row) {
-        echo '<option>' . $row['FARMCODE'] . '</option>';
-    } ?>
-</select>
 
 <!-- Sorting Filters (1st to 5th) -->
 <select style="background-color:#229954;" class="custom-select1" id="sort1" name="sort1" onchange="updateSortOrder('sort1')">
@@ -1326,6 +1339,9 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 var FoalSearch = "<?php echo isset($_GET['foal_search']) ? $_GET['foal_search'] : '' ?>";
                 var ConsignerSearch = "<?php echo isset($_GET['consigner_search']) ? $_GET['consigner_search'] : '' ?>";
                 var SalecodeSearch = "<?php echo isset($_GET['salecode_search']) ? $_GET['salecode_search'] : '' ?>";
+                var salecodeFilter = "<?php echo isset($_GET['salecode_filter']) ? $_GET['salecode_filter'] : '' ?>";
+                var farmnameFilter = "<?php echo isset($_GET['farmname_filter']) ? $_GET['farmname_filter'] : '' ?>";
+                var farmcodeFilter = "<?php echo isset($_GET['farmcode_filter']) ? $_GET['farmcode_filter'] : '' ?>";
 
                 var link = "horse_list.php?&sort1=" + sort1 +
                     "&sort1_order=" + sort1_order // Added sorting order
@@ -1360,6 +1376,15 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 }
                 if (SalecodeSearch) {
                     link += "&salecode_search=" + encodeURIComponent(SalecodeSearch);
+                }
+                if (salecodeFilter) {
+                    link += "&salecode_filter=" + encodeURIComponent(salecodeFilter);
+                }
+                if (farmnameFilter) {
+                    link += "&farmname_filter=" + encodeURIComponent(farmnameFilter);
+                }
+                if (farmcodeFilter) {
+                    link += "&farmcode_filter=" + encodeURIComponent(farmcodeFilter);
                 }
 
                 window.location.href = link;
