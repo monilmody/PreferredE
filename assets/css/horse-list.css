@@ -142,6 +142,20 @@
   overflow-y: auto;
 }
 
+/* Add only these CSS rules - don't change existing ones */
+.resize-handle:hover {
+    background: linear-gradient(to right, rgba(0,0,0,0.1) 0%, transparent 100%) !important;
+}
+
+#horseDetailsSidebar.resizing {
+    transition: none !important;
+    user-select: none !important;
+}
+
+#horseDetailsSidebar.resizing .resize-handle {
+    background: linear-gradient(to right, rgba(34, 153, 84, 0.3) 0%, transparent 100%) !important;
+}
+
 .closebtn {
   position: sticky;
   top: 0px;

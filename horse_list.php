@@ -151,8 +151,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <option value="">Salecode Filter</option>
     <option value="">All Salecode</option>
     <?php foreach ($salcodeList as $row) {
-        echo '<option>'.$row['Salecode'].'</option>';
-
+        echo '<option>' . $row['Salecode'] . '</option>';
     } ?>
 </select>
 
@@ -160,8 +159,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <option value="">Farm Name Filter</option>
     <option value="">All Farm Name</option>
     <?php foreach ($farmnameList as $row) {
-        echo '<option>'.$row['FARMNAME'].'</option>';
-
+        echo '<option>' . $row['FARMNAME'] . '</option>';
     } ?>
 </select>
 
@@ -169,8 +167,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
     <option value="">Farm Code Filter</option>
     <option value="">All Farm Code</option>
     <?php foreach ($farmcodeList as $row) {
-        echo '<option>'.$row['FARMCODE'].'</option>';
-
+        echo '<option>' . $row['FARMCODE'] . '</option>';
     } ?>
 </select>
 
@@ -2256,6 +2253,151 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         });
                 });
             });
+
+            // Add resize functionality to sidebar
+            let isResizing = false;
+            let startX, startWidth;
+
+            function initSidebarResize() {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+                if (!sidebar) return;
+
+                // Create resize handle
+                const resizeHandle = document.createElement('div');
+                resizeHandle.style.position = 'absolute';
+                resizeHandle.style.top = '0';
+                resizeHandle.style.left = '0';
+                resizeHandle.style.width = '8px';
+                resizeHandle.style.height = '100%';
+                resizeHandle.style.cursor = 'col-resize';
+                resizeHandle.style.zIndex = '1051';
+                resizeHandle.style.backgroundColor = 'transparent';
+                resizeHandle.className = 'resize-handle';
+
+                sidebar.appendChild(resizeHandle);
+
+                // Mouse down event
+                resizeHandle.addEventListener('mousedown', function(e) {
+                    isResizing = true;
+                    startX = e.clientX;
+                    startWidth = parseInt(document.defaultView.getComputedStyle(sidebar).width, 10);
+                    sidebar.classList.add('resizing');
+
+                    document.addEventListener('mousemove', handleResize);
+                    document.addEventListener('mouseup', stopResize);
+                    e.preventDefault();
+                });
+
+                function handleResize(e) {
+                    if (!isResizing) return;
+
+                    const currentX = e.clientX;
+                    const diff = startX - currentX;
+                    const newWidth = startWidth + diff;
+
+                    // Apply constraints
+                    const minWidth = 300;
+                    const maxWidth = window.innerWidth * 0.9;
+
+                    if (newWidth >= minWidth && newWidth <= maxWidth) {
+                        sidebar.style.width = newWidth + 'px';
+                    }
+                }
+
+                function stopResize() {
+                    isResizing = false;
+                    sidebar.classList.remove('resizing');
+                    document.removeEventListener('mousemove', handleResize);
+                    document.removeEventListener('mouseup', stopResize);
+                }
+
+                // Prevent text selection while resizing
+                resizeHandle.addEventListener('selectstart', function(e) {
+                    e.preventDefault();
+                });
+            }
+
+            // Fix tab content height issue
+            function fixTabContentHeight() {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+                const tabContentContainer = sidebar.querySelector('.tab-content-container');
+                const tabButtons = sidebar.querySelector('.tab-buttons');
+                const actionButtons = sidebar.querySelector('.action-buttons');
+
+                if (tabContentContainer) {
+                    const sidebarHeight = sidebar.clientHeight;
+                    const tabButtonsHeight = tabButtons ? tabButtons.offsetHeight : 0;
+                    const actionButtonsHeight = actionButtons ? actionButtons.offsetHeight : 0;
+                    const headerHeight = sidebar.querySelector('h2') ? sidebar.querySelector('h2').offsetHeight : 0;
+                    const padding = 40; // Additional padding
+
+                    const availableHeight = sidebarHeight - tabButtonsHeight - actionButtonsHeight - headerHeight - padding;
+
+                    tabContentContainer.style.height = Math.max(availableHeight, 200) + 'px';
+                    tabContentContainer.style.overflowY = 'auto';
+
+                    // Also set height for individual tab panes
+                    const tabPanes = sidebar.querySelectorAll('.tab-pane');
+                    tabPanes.forEach(pane => {
+                        pane.style.overflowY = 'auto';
+                        pane.style.maxHeight = availableHeight + 'px';
+                    });
+                }
+            }
+
+            // Initialize when sidebar opens
+            function initSidebarFunctions() {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+
+                // Initialize resize functionality
+                initSidebarResize();
+
+                // Fix tab height when sidebar opens
+                const observer = new MutationObserver(function(mutations) {
+                    mutations.forEach(function(mutation) {
+                        if (mutation.attributeName === 'class') {
+                            if (sidebar.classList.contains('open')) {
+                                // Small delay to ensure DOM is updated
+                                setTimeout(() => {
+                                    fixTabContentHeight();
+                                }, 100);
+                            }
+                        }
+                    });
+                });
+
+                observer.observe(sidebar, {
+                    attributes: true
+                });
+
+                // Also fix height on window resize
+                window.addEventListener('resize', function() {
+                    if (sidebar.classList.contains('open')) {
+                        fixTabContentHeight();
+                    }
+                });
+
+                // Fix height when tabs are switched
+                const tabButtons = sidebar.querySelectorAll('.tab-button');
+                tabButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        setTimeout(() => {
+                            fixTabContentHeight();
+                        }, 50);
+                    });
+                });
+            }
+
+            // Call this function when your page loads
+            document.addEventListener('DOMContentLoaded', function() {
+                // Wait a bit for the sidebar to be fully loaded
+                setTimeout(() => {
+                    initSidebarFunctions();
+                }, 1000);
+            });
+
+            // If you need to call it manually when sidebar is created dynamically:
+            // initSidebarFunctions();
         </script>
 
 </body>
