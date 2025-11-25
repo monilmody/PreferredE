@@ -1,0 +1,6 @@
+Hip,Horse,Yearfoal,Sex,Sire,Dam,Datefoal,Type,Color,Gait,Farmname,Bredto,Consigner,Salecode
+1001,Speedy Runner,2020,M,SIRE_123,DAM_456,2020-04-15,Harness,Bay,Standard,Smith Farms,John Doe,Consigner A,KEENLAND-2023
+1002,Midnight Dream,2020,F,SIRE_789,DAM_012,2020-05-20,Saddle,Black,Gaited,Jones Ranch,Jane Smith,Consigner B,FTJULY-2023
+1003,Thunder Strike,2021,M,SIRE_345,DAM_678,2021-03-10,Harness,Chestnut,Standard,Happy Acres,Bob Johnson,Consigner A,KEENLAND-2023
+1004,Golden Star,2020,F,SIRE_901,DAM_234,2020-06-05,Saddle,Palomino,Gaited,Smith Farms,Alice Brown,Consigner C,FTJULY-2023
+1005,Silver Moon,2021,M,SIRE_567,DAM_890,2021-02-14,Harness,Gray,Standard,Prairie View,Charles White,Consigner B,KEENLAND-2023
