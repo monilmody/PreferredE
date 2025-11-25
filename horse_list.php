@@ -2374,12 +2374,33 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 }
             }
 
+            // Add click outside to close functionality
+            function initClickOutsideToClose() {
+                const sidebar = document.getElementById('horseDetailsSidebar');
+
+                document.addEventListener('click', function(event) {
+                    // Check if sidebar is open
+                    if (!sidebar.classList.contains('open')) return;
+
+                    // Check if click is outside sidebar
+                    const isClickInsideSidebar = sidebar.contains(event.target);
+                    const isClickOnSidebar = event.target === sidebar;
+
+                    if (!isClickInsideSidebar && !isClickOnSidebar) {
+                        closeSidebar();
+                    }
+                });
+            }
+
             // Initialize when sidebar opens
             function initSidebarFunctions() {
                 const sidebar = document.getElementById('horseDetailsSidebar');
 
                 // Initialize resize functionality
                 initSidebarResize();
+
+                // Initialize click outside to close
+                initClickOutsideToClose();
 
                 // Fix tab height when sidebar opens
                 const observer = new MutationObserver(function(mutations) {
