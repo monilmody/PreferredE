@@ -2296,7 +2296,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                     const newWidth = startWidth + diff;
 
                     // Apply constraints
-                    const minWidth = 300;
+                    const minWidth = 400;
                     const maxWidth = window.innerWidth * 0.9;
 
                     if (newWidth >= minWidth && newWidth <= maxWidth) {
