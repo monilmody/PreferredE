@@ -1300,6 +1300,42 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
                     </div>
+
+                    <div class="section-header">EQUILOX</div>
+
+                    <div class="field-group">
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="right_front_equilox">
+                                <input type="hidden" name="right_front_equilox" value="0">
+                                <input type="checkbox" id="right_front_equilox" name="right_front_equilox" value="1">
+                                <label for="right_front_equilox">RIGHT FRONT Equilox</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="right_hind_equilox">
+                                <input type="hidden" name="right_hind_equilox" value="0">
+                                <input type="checkbox" id="right_hind_equilox" name="right_hind_equilox" value="1">
+                                <label for="right_hind_equilox">RIGHT HIND Equilox</label>
+                            </div>
+                        </div>
+
+                         <div class="form-row">
+                            <div class="checkbox-group" data-field="left_front_equilox">
+                                <input type="hidden" name="left_front_equilox" value="0">
+                                <input type="checkbox" id="left_front_equilox" name="left_front_equilox" value="1">
+                                <label for="left_front_equilox">LEFT FRONT Equilox</label>
+                            </div>
+                        </div>
+
+                        <div class="form-row">
+                            <div class="checkbox-group" data-field="left_hind_equilox">
+                                <input type="hidden" name="left_hind_equilox" value="0">
+                                <input type="checkbox" id="left_hind_equilox" name="left_hind_equilox" value="1">
+                                <label for="left_hind_equilox">LEFT HIND Equilox</label>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -1557,7 +1593,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             'willing_attitude',
                             'nervous_attitude',
                             'sour_attitude',
-                            'dumb_attitude'
+                            'dumb_attitude',
+                            'right_front_equilox',
+                            'right_hind_equilox',
+                            'left_front_equilox',
+                            'left_hind_equilox'
                         ]; // add more keys here as needed
 
                         checkboxFields.forEach(field => {

@@ -37,7 +37,11 @@ $checkboxFields = [
     'willing_attitude',
     'nervous_attitude',
     'sour_attitude',
-    'dumb_attitude'
+    'dumb_attitude',
+    'right_front_equilox',
+    'right_hind_equilox',
+    'left_front_equilox',
+    'left_hind_equilox'
 ];
 
 // Normalize value, especially for checkbox fields like 'neck_upright'
@@ -153,7 +157,13 @@ $allowedFields = [
     'willing_attitude',
     'nervous_attitude',
     'sour_attitude',
-    'dumb_attitude'
+    'dumb_attitude',
+
+    // EQUILOX FIELDS
+    'right_front_equilox',
+    'right_hind_equilox',
+    'left_front_equilox',
+    'left_hind_equilox',
 ];
 
 // Validate input
