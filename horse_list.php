@@ -485,13 +485,13 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <input type="text" id="salecode" name="salecode" readonly>
 
                             <label for="salebarn" style="margin-left: 20px;">Sale Barn:</label>
-                            <input type="text" id="salebarn" name="salebarn" readonly style="width: 100px;">
+                            <input type="text" id="salebarn" name="salebarn" readonly>
                             
                             <label for="salesection" style="margin-left: 10px;">Sale Section:</label>
-                            <input type="text" id="salesection" name="salesection" readonly style="width: 80px;">
+                            <input type="text" id="salesection" name="salesection" readonly>
                             
                             <label for="salestall" style="margin-left: 10px;">Sale Stall:</label>
-                            <input type="text" id="salestall" name="salestall" readonly style="width: 80px;">
+                            <input type="text" id="salestall" name="salestall" readonly>
                         </div>
                     </div>
 
