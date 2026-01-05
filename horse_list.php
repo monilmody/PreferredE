@@ -483,6 +483,15 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         <div class="form-row">
                             <label for="salecode">Salecode:</label>
                             <input type="text" id="salecode" name="salecode" readonly>
+
+                            <label for="salebarn" style="margin-left: 20px;">Sale Barn:</label>
+                            <input type="text" id="salebarn" name="salebarn" readonly style="width: 100px;">
+                            
+                            <label for="salesection" style="margin-left: 10px;">Sale Section:</label>
+                            <input type="text" id="salesection" name="salesection" readonly style="width: 80px;">
+                            
+                            <label for="salestall" style="margin-left: 10px;">Sale Stall:</label>
+                            <input type="text" id="salestall" name="salestall" readonly style="width: 80px;">
                         </div>
                     </div>
 
@@ -1507,7 +1516,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 // Get the horse details from the sidebar (already loaded)
                 const horseDetails = {
                     sex: $('#sexDisplay').text().trim(),
-                    salecode: $('#salecodeDisplay').text().trim()
+                    salecode: $('#salecodeDisplay').text().trim(),
                 };
 
                 // Populate the inspection form fields
