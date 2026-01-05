@@ -111,11 +111,11 @@ include_once("config.php");
               <div class="cell">"Sireofdam" varchar(50) </div> </div> <div class='row'>
               <div class="cell">"DAM" varchar(50) </div> </div> <div class='row'>
               <div class="cell">"FARMNAME" varchar(255) </div> </div> <div class='row'>
-              <div class="cell">"FARMCODE" varchar(255) </div> </div>
+              <div class="cell">"FARMCODE" varchar(255) </div> </div> <div class='row'>
+              <div class="cell">"SaleBarn" varchar(255) </div> </div> <div class='row'>
+              <div class="cell">"SaleSection" varchar(255) </div> </div> <div class='row'>
+              <div class="cell">"SaleStall" varchar(255) </div> </div>
         </div>
     </div>
-
-
-
 </div>
 <br>

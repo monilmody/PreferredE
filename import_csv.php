@@ -359,16 +359,31 @@ if (isset($_POST["import"])) {
                     $DAM = str_replace("\\","",$DAM);
                 }
 
-                 $FARMNAME = "";
+                $FARMNAME = "";
                 if (isset($column[52])) {
                     $FARMNAME = mysqli_real_escape_string($conn, $column[52]);
                     $FARMNAME = str_replace("\\","",$FARMNAME);
                 }
 
-                 $FARMCODE = "";
+                $FARMCODE = "";
                 if (isset($column[53])) {
                     $FARMCODE = mysqli_real_escape_string($conn, $column[53]);
                     $FARMCODE = str_replace("\\","",$FARMCODE);
+                }
+
+                $salebarn = "";
+                if (isset($column[54])) {
+                    $salebarn = mysqli_real_escape_string($conn, $column[54]);
+                }
+
+                $salesection = "";
+                if (isset($column[55])) {
+                    $salesection = mysqli_real_escape_string($conn, $column[55]);
+                }
+
+                $salestall = "";
+                if (isset($column[56])) {
+                    $salestall = mysqli_real_escape_string($conn, $column[56]);
                 }
 
             $saleID =checkSalesData($tattoo,$hip,$chorse,$salecode,$saledate);
@@ -377,9 +392,9 @@ if (isset($_POST["import"])) {
                 $sqlInsert = "INSERT into sales
                 (TATTOO, BREED, HIP,HORSE,CHORSE,SEX,TYPE,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,DAM,Sireofdam,FARMNAME,FARMCODE)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
+                AGE,SALETYPE,ET,HIPNUM,DAY,ELIG,RATING,URL, PRIVATESALE, DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,Sire,Sireofdam,DAM,FARMNAME,FARMCODE,SaleBarn,SaleSection,SaleStall)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssissssssss";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -421,10 +436,13 @@ if (isset($_POST["import"])) {
                     $NFFM,
                     $yearFoal,
                     $Sire,
-                    $DAM,
                     $Sireofdam,
+                    $DAM,
                     $FARMNAME,
-                    $FARMCODE
+                    $FARMCODE,
+                    $salebarn,
+                    $salesection,
+                    $salestall
                 );
                 
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
@@ -446,10 +464,10 @@ if (isset($_POST["import"])) {
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
                 AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,DAY = ?,ELIG = ?,RATING = ?,URL = ?, PRIVATESALE = ?, DAMSIRE_ID = ?,
-                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?, FARMNAME = ?, FARMCODE = ?
+                SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, Sire = ?, Sireofdam = ?, DAM = ?, FARMNAME = ?, FARMCODE = ?, SaleBarn = ?, SaleSection = ?, SaleStall = ?
                 WHERE SALEID =".$saleID;
                 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssss";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssissssssss";
                 
                 $update_data_stmt = mysqli_stmt_init($conn);
                 
@@ -498,10 +516,13 @@ if (isset($_POST["import"])) {
                         $NFFM,
                         $yearFoal,
                         $Sire,
-                        $DAM,
                         $Sireofdam,
+                        $DAM,
                         $FARMNAME,
-                        $FARMCODE
+                        $FARMCODE,
+                        $salebarn,
+                        $salesection,
+                        $salestall
                     );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";
