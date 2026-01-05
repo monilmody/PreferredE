@@ -1878,6 +1878,10 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             // Set hidden horse ID
                             $('#hiddenHorseId').val(response.HORSE || '');
 
+                            $('#salebarn').val(response.salebarn || 'N/A');
+                            $('#salesection').val(response.salesection || 'N/A');
+                            $('#salestall').val(response.salestall || 'N/A');
+
                             // Load inspection data
                             loadHorseInspection(response.HORSE);
 
