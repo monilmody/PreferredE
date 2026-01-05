@@ -3615,7 +3615,7 @@ function getsaledata($breed)
 
     // Default query for the 'sales' table - FIXED GROUP BY
     $sql = "
-        SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
+        SELECT s.Salecode, s.DAY as Session, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
         FROM sales s
         LEFT JOIN documents d ON s.Salecode = d.file_name
         GROUP BY s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date
@@ -3625,7 +3625,7 @@ function getsaledata($breed)
     // If the breed is 'T', use the 'tsales' table - FIXED GROUP BY
     if ($breed == "T") {
         $sql = "
-            SELECT s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
+            SELECT s.Salecode, s.DAY as Session, s.Saletype, s.Saledate, d.upload_date, COUNT(*) as count
             FROM tsales s
             LEFT JOIN documents d ON s.Salecode = d.file_name
             GROUP BY s.Salecode, s.DAY, s.Saletype, s.Saledate, d.upload_date
