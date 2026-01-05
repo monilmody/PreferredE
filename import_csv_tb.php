@@ -180,7 +180,7 @@ if (isset($_POST["import"])) {
             }
             $currency = "";
             if (isset($column[43])) {
-                $saleyear = mysqli_real_escape_string($conn, $column[43]);
+                $currency = mysqli_real_escape_string($conn, $column[43]);
             }
             $saletype = "";
             if (isset($column[1])) {
@@ -391,6 +391,21 @@ if (isset($_POST["import"])) {
                 $farmcode = mysqli_real_escape_string($conn, $column[55]);
             }
 
+            $salebarn = "";
+            if (isset($column[56])) {
+                $salebarn = mysqli_real_escape_string($conn, $column[56]);
+            }
+
+            $salesection = "";
+            if (isset($column[57])) {
+                $salesection = mysqli_real_escape_string($conn, $column[57]);
+            }
+
+            $salestall = "";
+            if (isset($column[58])) {
+                $salestall = mysqli_real_escape_string($conn, $column[58]);
+            }
+
 
 
             //                 echo '<br>';
@@ -434,9 +449,9 @@ if (isset($_POST["import"])) {
                 $sqlInsert = "INSERT into tsales
                 (TATTOO,BREED,HIP,HORSE,CHORSE,SEX,`TYPE`,COLOR,GAIT,PRICE,SALECODE,SALEDATE,RECORD,DATEFOAL,
                 BREDTO,LASTBRED,SBCITY,SBSTATE,SBCOUNTRY,PURFNAME,PURLNAME,CONSLNAME,CONSNO,PEMCODE,
-                AGE,SALETYPE,ET,HIPNUM,`DAY`,ELIG,RATING,`URL`,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,tSire,tSireofdam,TDAM,UTT,`STATUS`,FARMNAME,FARMCODE)
-                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdsss";
+                AGE,SALETYPE,ET,HIPNUM,`DAY`,ELIG,RATING,`URL`,PRIVATESALE,DAMSIRE_ID,SALEYEAR,BOOK,CURRENCY,NFFM,YEARFOAL,tSire,tSireofdam,TDAM,UTT,`STATUS`,FARMNAME,FARMCODE,salebarn,salesection,salestall)
+                VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdssssss";
                 $paramArray = array(
                     $tattoo,
                     $breed,
@@ -483,7 +498,10 @@ if (isset($_POST["import"])) {
                     $UTT,
                     $STATUS,
                     $farmname,
-                    $farmcode
+                    $farmcode,
+                    $salebarn,
+                    $salesection,
+                    $salestall
                 );
 
                 $insertId = $db->insert($sqlInsert, $paramType, $paramArray);
@@ -504,10 +522,10 @@ if (isset($_POST["import"])) {
                 SALECODE = ?,SALEDATE = ?,RECORD = ?,DATEFOAL = ?,BREDTO = ?,LASTBRED = ?,SBCITY = ?,SBSTATE = ?,
                 SBCOUNTRY = ?,PURFNAME = ?,PURLNAME = ?,CONSLNAME = ?,CONSNO = ?,PEMCODE = ?,
                 AGE = ?,SALETYPE = ?,ET = ?,HIPNUM = ?,`DAY` = ?,ELIG = ?,RATING = ?,`URL` = ?,PRIVATESALE = ?,
-                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, tSire = ?, tSireofdam = ?, TDAM = ?, UTT = ?, `STATUS` = ?, FARMNAME = ?, FARMCODE = ?
+                DAMSIRE_ID = ?,SALEYEAR = ?,BOOK = ?,CURRENCY = ?,NFFM = ?, YEARFOAL = ?, tSire = ?, tSireofdam = ?, TDAM = ?, UTT = ?, `STATUS` = ?, FARMNAME = ?, FARMCODE = ?, salebarn = ?, salesection = ?, salestall = ?
                 WHERE SALEID =" . $saleID;
 
-                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdsss";
+                $paramType = "sssssssssdssssssssssssssissiissssiisssisssdssssss";
                 //echo $sqlInsert;
 
                 $update_data_stmt = mysqli_stmt_init($conn);
@@ -564,7 +582,10 @@ if (isset($_POST["import"])) {
                         $UTT,
                         $STATUS,
                         $farmname,
-                        $farmcode
+                        $farmcode,
+                        $salebarn,
+                        $salesection,
+                        $salestall
                     );
                     mysqli_stmt_execute($update_data_stmt);
                     $response = "Success";

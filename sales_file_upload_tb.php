@@ -231,6 +231,15 @@ include_once("config.php");
       <div class='row'>
         <div class="cell">"FARMCODE" varchar(255) </div>
       </div>
+      <div class='row'>
+        <div class="cell">"salebarn" varchar(255) </div>
+      </div>
+      <div class='row'>
+        <div class="cell">"salesection" varchar(255) </div>
+      </div>
+      <div class='row'>
+        <div class="cell">"salestall" varchar(255) </div>
+      </div>
     </div>
   </div>
 </div>
