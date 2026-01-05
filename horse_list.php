@@ -483,13 +483,19 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         <div class="form-row">
                             <label for="salecode">Salecode:</label>
                             <input type="text" id="salecode" name="salecode" readonly>
+                        </div>
 
+                        <div class="form-row">
                             <label for="salebarn">Sale Barn:</label>
                             <input type="text" id="salebarn" name="salebarn" readonly>
-                            
+                        </div>
+
+                        <div class="form-row">
                             <label for="salesection">Sale Section:</label>
                             <input type="text" id="salesection" name="salesection" readonly>
-                            
+                        </div>
+                        
+                        <div class="form-row">
                             <label for="salestall">Sale Stall:</label>
                             <input type="text" id="salestall" name="salestall" readonly>
                         </div>
