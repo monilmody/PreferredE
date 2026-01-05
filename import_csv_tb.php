@@ -323,8 +323,14 @@ if (isset($_POST["import"])) {
                 $hipnum = mysqli_real_escape_string($conn, $column[7]);
             }
             $day = 0;
-            if ($column[5] != "" and isset($column[5])) {
-                $day = mysqli_real_escape_string($conn, $column[5]);
+            if (isset($column[5]) && $column[5] !== "") {
+                // Direct conversion to int (PHP handles string to int conversion)
+                $day = (int)$column[5];
+                
+                // Safety check
+                if ($day < 1) {
+                    $day = 1; // Minimum day
+                }
             }
             $elig = "";
             if (isset($column[20])) {
