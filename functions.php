@@ -3955,9 +3955,9 @@ function fetchHorseListTb($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch =
     $sortableColumns = [
         'horse' => 'Horse',
         'yearfoal' => 'YEARFOAL',
-        'sex' => 'Sex',
-        'sire' => 'Sire',
-        'dam' => 'Dam',
+        'sex' => 'SEX',
+        'sire' => 'tSire',
+        'dam' => 'TDAM',
         'farmname' => 'FARMNAME',
         'datefoal' => "DATEFOAL",
         'salecode' => 'SALECODE',
@@ -3971,16 +3971,16 @@ function fetchHorseListTb($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch =
             HIP,
             horse,
             YEARFOAL,
-            sex,
-            sire,
-            dam,
+            SEX,
+            tSire,
+            TDAM,
             DATEFOAL,
-            type,
-            color,
-            gait,
+            TYPE as type,
+            COLOR as color,
+            GAIT as gait,
             FARMNAME,
             FARMCODE,
-            bredto,
+            BREDTO as bredto,
             CONSLNAME,
             SALECODE
         FROM tsales
@@ -3993,7 +3993,7 @@ function fetchHorseListTb($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch =
     }
 
     if (!empty($damSearch)) {
-        $conditions[] = "dam LIKE '%" . $mysqli->real_escape_string($damSearch) . "%'";
+        $conditions[] = "TDAM LIKE '%" . $mysqli->real_escape_string($damSearch) . "%'";
     }
 
     if (!empty($LocationSearch)) {
@@ -4089,8 +4089,8 @@ function updateHorseDetailsTb($horseId, $data)
     $editableFields = [
         'YEARFOAL' => ['type' => 'i', 'allow_null' => true],
         'SEX' => ['type' => 's', 'allow_null' => true],
-        'Sire' => ['type' => 's', 'allow_null' => true],
-        'DAM' => ['type' => 's', 'allow_null' => true],
+        'tSire' => ['type' => 's', 'allow_null' => true],
+        'TDAM' => ['type' => 's', 'allow_null' => true],
         'DATEFOAL' => ['type' => 's', 'allow_null' => true],
         'COLOR' => ['type' => 's', 'allow_null' => true],
         'GAIT' => ['type' => 's', 'allow_null' => true],

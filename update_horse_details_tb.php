@@ -13,7 +13,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Build the data array from known expected fields
-    $expectedFields = ['YEARFOAL', 'SEX', 'Sire', 'DAM', 'DATEFOAL', 'TYPE', 'COLOR', 'GAIT', 'BREDTO', 'FARMNAME'];
+    $expectedFields = ['YEARFOAL', 'SEX', 'tSire', 'TDAM', 'DATEFOAL', 'TYPE', 'COLOR', 'GAIT', 'BREDTO', 'FARMNAME'];
     $data = [];
 
     foreach ($expectedFields as $field) {

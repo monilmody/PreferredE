@@ -53,8 +53,8 @@ if (!isset($parsedUrl['path'])) {
 $path = ltrim($parsedUrl['path'], '/'); // S3 object key
 
 // Fetch AWS credentials and config from Secrets Manager
-$secretName = 'MyApp/S3Credentials'; // Replace with your secret name or env var
-$region = 'us-east-1';               // Replace with your AWS region or env var
+$secretName = 'MyApp/S3Credentials';
+$region = 'us-east-1';
 
 $bucket = "horse-list-photos-and-details-tb";
 
