@@ -81,7 +81,7 @@ require_once("config.php");
                                     <a class="dropdown-item" href="breeze_to_yearling_report.php">Breeze From Yearling Report</a>
                                     <a class="dropdown-item" href="individual_sales_report_tb.php">Individual Horse Sales Report</a>
                                     <a class="dropdown-item" href="broodmares_report_tb.php">Broodmares Report</a>
-                                    <a class="dropdown-item" href="horse_list_tb.php">Horse Inspection</a>
+                                    <!-- <a class="dropdown-item" href="horse_list_tb.php">Horse Inspection</a> -->
                                 </div>
                             </li>
                             <?php 
