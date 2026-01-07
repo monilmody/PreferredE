@@ -163,7 +163,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
         <button type="submit" class="search-button">Search</button>
 
         <?php if (isset($_GET['horse_search']) || isset($_GET['dam_search']) || isset($_GET['location_search']) || isset($_GET['foal_search']) || isset($_GET['consigner_search']) || isset($_GET['salecode_search'])): ?>
-            <a href="horse_list.php" class="clear-button">Clear All</a>
+            <a href="horse_list_tb.php" class="clear-button">Clear All</a>
         <?php endif; ?>
     </form>
 </div>
