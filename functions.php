@@ -2082,6 +2082,25 @@ function fetchFarmnameList($year)
     return $json;
 }
 
+function fetchFarmnameList_tb($year)
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT FARMNAME FROM tsales 
+            WHERE FARMNAME <> "" 
+            ORDER BY FARMNAME';
+    if ($year != "") {
+        $sql = 'SELECT DISTINCT FARMNAME FROM tsales WHERE YEAR(`SALEDATE`) = "' . $year . '"
+                AND FARMNAME <> "" 
+                ORDER BY FARMNAME';
+    }
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $json;
+}
+
 function fetchFarmcodeList($year)
 {
     global $mysqli;
@@ -2090,6 +2109,25 @@ function fetchFarmcodeList($year)
             ORDER BY FARMCODE';
     if ($year != "") {
         $sql = 'SELECT DISTINCT FARMCODE FROM sales WHERE YEAR(`SALEDATE`) = "' . $year . '"
+                AND FARMCODE <> "" 
+                ORDER BY FARMCODE';
+    }
+    $result = mysqli_query($mysqli, $sql);
+    if (!$result) {
+        printf("Errormessage: %s\n", $mysqli->error);
+    }
+    $json = mysqli_fetch_all($result, MYSQLI_ASSOC);
+    return $json;
+}
+
+function fetchFarmcodeList_tb($year)
+{
+    global $mysqli;
+    $sql = 'SELECT DISTINCT FARMCODE FROM tsales 
+            WHERE FARMCODE <> "" 
+            ORDER BY FARMCODE';
+    if ($year != "") {
+        $sql = 'SELECT DISTINCT FARMCODE FROM tsales WHERE YEAR(`SALEDATE`) = "' . $year . '"
                 AND FARMCODE <> "" 
                 ORDER BY FARMCODE';
     }
@@ -3909,6 +3947,245 @@ function updateHorseDetails($horseId, $data)
     }
 }
 
+function fetchHorseListTb($sort1, $sort2, $sort3, $sort4, $sort5, $horseSearch = '', $damSearch = '', $LocationSearch = '', $FoalSearch = '', $ConsignerSearch = '', $SalecodeSearch = '', $salecodeFilter = '', $farmnameFilter = '', $farmcodeFilter = '')
+{
+    global $mysqli;
+
+    // Define sortable columns
+    $sortableColumns = [
+        'horse' => 'Horse',
+        'yearfoal' => 'YEARFOAL',
+        'sex' => 'Sex',
+        'sire' => 'Sire',
+        'dam' => 'Dam',
+        'farmname' => 'FARMNAME',
+        'datefoal' => "DATEFOAL",
+        'salecode' => 'SALECODE',
+        'hip' => 'HIP',
+        'consigner' => 'CONSLNAME' 
+    ];
+
+    // Build the SQL query base
+    $sql = "
+        SELECT DISTINCT
+            HIP,
+            horse,
+            YEARFOAL,
+            sex,
+            sire,
+            dam,
+            DATEFOAL,
+            type,
+            color,
+            gait,
+            FARMNAME,
+            FARMCODE,
+            bredto,
+            CONSLNAME,
+            SALECODE
+        FROM tsales
+    ";
+
+    // Add search conditions if provided
+    $conditions = [];
+    if (!empty($horseSearch)) {
+        $conditions[] = "horse LIKE '%" . $mysqli->real_escape_string($horseSearch) . "%'";
+    }
+
+    if (!empty($damSearch)) {
+        $conditions[] = "dam LIKE '%" . $mysqli->real_escape_string($damSearch) . "%'";
+    }
+
+    if (!empty($LocationSearch)) {
+        $conditions[] = "FARMNAME LIKE '%" . $mysqli->real_escape_string($LocationSearch) . "%'";
+    }
+
+    if (!empty($FoalSearch)) {
+        $conditions[] = "YEARFOAL LIKE '%" . $mysqli->real_escape_string($FoalSearch) . "%'";
+    }
+
+    if (!empty($ConsignerSearch)) {
+        $conditions[] = "CONSLNAME LIKE '%" . $mysqli->real_escape_string($ConsignerSearch) . "%'";
+    }
+
+    if (!empty($SalecodeSearch)) {
+        $conditions[] = "SALECODE LIKE '%" . $mysqli->real_escape_string($SalecodeSearch) . "%'";
+    }
+
+    if (!empty($salecodeFilter)) {
+        $conditions[] = "SALECODE = '" . $mysqli->real_escape_string($salecodeFilter) . "'";
+    }
+
+    if (!empty($farmnameFilter)) {
+        $conditions[] = "FARMNAME = '" . $mysqli->real_escape_string($farmnameFilter) . "'";
+    }
+
+    if (!empty($farmcodeFilter)) {
+        $conditions[] = "FARMCODE = '" . $mysqli->real_escape_string($farmcodeFilter) . "'";
+    }
+
+    if (!empty($conditions)) {
+        $sql .= " WHERE " . implode(' AND ', $conditions);
+    }
+
+    // Sorting columns from the GET parameters
+    $orderConditions = [];
+    $sortParams = ['sort1', 'sort2', 'sort3', 'sort4', 'sort5'];
+    $sortIndex = 1;
+
+    foreach ($sortParams as $sortParam) {
+        if (!empty($$sortParam)) {
+            // Check if sort order is specified for each sort column
+            $sortOrder = isset($_GET["{$sortParam}_order"]) ? $_GET["{$sortParam}_order"] : 'ASC';
+
+            // Check if this sort column exists in the sortable columns
+            $column = strtolower($$sortParam);
+            if (isset($sortableColumns[$column])) {
+                $orderConditions[] = $sortableColumns[$column] . ' ' . $sortOrder;
+            }
+        }
+        $sortIndex++;
+    }
+
+    // If sorting conditions exist, append ORDER BY
+    if (!empty($orderConditions)) {
+        $sql .= ' ORDER BY ' . implode(', ', $orderConditions);
+    }
+
+    $sql .= ' LIMIT 500';
+
+    // Prepare, bind, and execute the query
+    if ($stmt = $mysqli->prepare($sql)) {
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $json = $result->fetch_all(MYSQLI_ASSOC);
+        $stmt->close();
+        return $json;
+    } else {
+        error_log("MySQL Error: " . $mysqli->error . " | SQL: " . $sql);
+        return [];
+    }
+}
+
+function updateHorseDetailsTb($horseId, $data)
+{
+    global $mysqli;
+
+    // Debug: Log incoming data
+    error_log("updateHorseDetails called with horseId: $horseId and data: " . print_r($data, true));
+
+    // Validate database connection
+    if (!$mysqli || !$mysqli->ping()) {
+        error_log("Database connection failed");
+        return ['success' => false, 'error' => 'Database connection failed'];
+    }
+
+    // Validate inputs
+    if (empty($horseId) || empty($data)) {
+        return ['success' => false, 'error' => 'Invalid input'];
+    }
+
+    // Define all editable fields with their configurations
+    $editableFields = [
+        'YEARFOAL' => ['type' => 'i', 'allow_null' => true],
+        'SEX' => ['type' => 's', 'allow_null' => true],
+        'Sire' => ['type' => 's', 'allow_null' => true],
+        'DAM' => ['type' => 's', 'allow_null' => true],
+        'DATEFOAL' => ['type' => 's', 'allow_null' => true],
+        'COLOR' => ['type' => 's', 'allow_null' => true],
+        'GAIT' => ['type' => 's', 'allow_null' => true],
+        'TYPE' => ['type' => 's', 'allow_null' => true],
+        'BREDTO' => ['type' => 's', 'allow_null' => true],
+        'FARMNAME' => ['type' => 's', 'allow_null' => true]
+    ];
+
+    // Prepare the update fields and values
+    $updates = [];
+    $types = '';
+    $values = [];
+    $updatedFields = [];
+
+    foreach ($editableFields as $field => $config) {
+        // Check if field exists in data (case-insensitive)
+        $dataKey = array_key_exists_case_insensitive($field, $data);
+
+        if ($dataKey !== false) {
+            $value = $data[$dataKey];
+
+            // Handle NULL/empty values
+            if ($value === null || $value === '') {
+                if ($config['allow_null']) {
+                    $value = null;
+                } else {
+                    continue; // Skip this field if empty values not allowed
+                }
+            }
+
+            // Special handling for YEARFOAL
+            if ($field === 'YEARFOAL' && $value !== null && !is_numeric($value)) {
+                error_log("Invalid YEARFOAL value: $value");
+                return ['success' => false, 'error' => 'YEARFOAL must be a number'];
+            }
+
+            // Add to updates
+            $updates[] = "$field = ?";
+            $types .= $config['type'];
+            $values[] = $value;
+            $updatedFields[$field] = $value;
+
+            error_log("Preparing to update $field with value: " . var_export($value, true));
+        }
+    }
+
+    if (empty($updates)) {
+        error_log("No valid fields to update. Data keys: " . print_r(array_keys($data), true));
+        return ['success' => false, 'error' => 'No valid fields to update. Check field names and values.'];
+    }
+
+    // Add horseId to values
+    $values[] = $horseId;
+    $types .= 's';
+
+    try {
+        $sql = "UPDATE tsales SET " . implode(', ', $updates) . " WHERE HORSE = ?";
+        error_log("Executing SQL: $sql with types: $types and values: " . print_r($values, true));
+
+        $stmt = $mysqli->prepare($sql);
+
+        if (!$stmt) {
+            throw new Exception('Failed to prepare statement: ' . $mysqli->error);
+        }
+
+        // Special handling for binding parameters with NULL values
+        $refValues = [];
+        foreach ($values as $key => $value) {
+            $refValues[$key] = &$values[$key];
+        }
+
+        $stmt->bind_param($types, ...$refValues);
+
+        if (!$stmt->execute()) {
+            throw new Exception('Failed to update: ' . $stmt->error);
+        }
+
+        $affectedRows = $stmt->affected_rows;
+        $stmt->close();
+
+        // Return the updated data along with success status
+        return [
+            'success' => true,
+            'affected_rows' => $affectedRows,
+            'updatedData' => $updatedFields, // Include the updated fields and values
+            'message' => $affectedRows > 0
+                ? 'Horse details updated successfully'
+                : 'No changes made (data may be identical)'
+        ];
+    } catch (Exception $e) {
+        error_log("Update failed: " . $e->getMessage());
+        return ['success' => false, 'error' => $e->getMessage()];
+    }
+}
+
 // Helper function for case-insensitive array key check
 function array_key_exists_case_insensitive($key, $array)
 {
@@ -4029,3 +4306,88 @@ function getHorseDetails($horseId)
     }
 }
 
+function getHorseDetailsTb($horseId)
+{
+    global $mysqli;
+
+    if (!$mysqli) {
+        return ['error' => 'Invalid or lost database connection'];
+    }
+
+    // Validate and sanitize horse ID
+    if (!preg_match('/^[a-zA-Z0-9 _\-\(\)]+$/', $horseId)) {
+        return ['error' => 'Invalid horse ID format'];
+    }
+
+    // Fetch horse details using prepared statement
+    $stmt = $mysqli->prepare("SELECT * FROM tsales WHERE HORSE = ? LIMIT 1");
+    $stmt->bind_param("s", $horseId);
+    $stmt->execute();
+    $result = $stmt->get_result();
+
+    if (!$result || $result->num_rows === 0) {
+        return ['error' => 'Horse not found'];
+    }
+
+    $horse = $result->fetch_assoc();
+    $stmt->close();
+
+    try {
+        // Setup Secrets Manager
+        $region = 'us-east-1'; // Change the region if needed
+        $bucket = 'horse-list-photos-and-details-tb'; // bucket name
+        // $roleArn = 'arn:aws:iam::211125609145:role/python-website-logs'; // Role to assume
+        // $sessionName = 'GetHorseDetailsSession';
+
+        $s3 = getS3Client();
+
+        // Sanitize the horseId specifically for images (remove spaces and special characters)
+        $sanitizedHorseId = sanitizeHorseIdForImage($horseId);
+
+        // Fetch all image keys for the horse from the DB
+        $stmt2 = $mysqli->prepare("SELECT image_url FROM horse_images_tb WHERE horse_id = ?");
+        $stmt2->bind_param("s", $sanitizedHorseId);
+        $stmt2->execute();
+        $result2 = $stmt2->get_result();
+
+        $images = [];
+
+        // Log the results of the image query to check if data is being retrieved correctly
+        if ($result2 && $result2->num_rows > 0) {
+            while ($row = $result2->fetch_assoc()) {
+                $objectKey = $row['image_url'];
+
+                // Generate presigned URL for each image (valid for 5 minutes)
+                $cmd = $s3->getCommand('GetObject', [
+                    'Bucket' => $bucket,
+                    'Key'    => $objectKey,
+                ]);
+
+                // Generate the presigned URL valid for 5 minutes
+                $request = $s3->createPresignedRequest($cmd, '+5 minutes');
+
+                // Add the presigned URL to the images array
+                $images[] = (string) $request->getUri();
+            }
+        } else {
+            // If no images found for this horse, log a message
+            error_log("No images found for horse: $horseId");
+        }
+
+        $stmt2->close();
+
+        // Attach the images array to the horse data
+        $horse['images'] = $images;
+
+        // Log the images array to verify the result
+        error_log("Images for horse $horseId: " . json_encode($images));
+
+        return $horse;
+    } catch (AwsException $e) {
+        error_log("AWS Error: " . $e->getMessage());
+        return ['error' => 'Failed to load images. Try again later.'];
+    } catch (Exception $e) {
+        error_log("Error: " . $e->getMessage());
+        return ['error' => 'Unexpected error retrieving horse details'];
+    }
+}
