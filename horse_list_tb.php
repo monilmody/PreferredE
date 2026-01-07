@@ -1897,7 +1897,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                     imagesHtml += `
 <div class="photo-card">
     <img src="${imgUrl}" class="photo-thumbnail" data-full-url="${imgUrl}" />
-    <button class="delete-photo-tb" data-url="${imgUrl}">×</button>
+    <button class="delete-photo" data-url="${imgUrl}">×</button>
 </div>`;
                                 });
                             } else {
@@ -1961,7 +1961,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                 $('body').addClass('modal-open');
             });
 
-            $(document).on('click', '.delete-photo-tb', function() {
+            $(document).on('click', '.delete-photo', function() {
                 const imageUrl = $(this).data('url');
                 const parentElement = $(this).closest('.photo-card');
 
