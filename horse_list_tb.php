@@ -494,7 +494,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             <label for="salesection">Sale Section:</label>
                             <input type="text" id="salesection" name="salesection" readonly>
                         </div>
-                        
+
                         <div class="form-row">
                             <label for="salestall">Sale Stall:</label>
                             <input type="text" id="salestall" name="salestall" readonly>
@@ -1326,7 +1326,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                                 <label for="right_front_equilox">RIGHT FRONT Equilox</label>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="checkbox-group" data-field="right_hind_equilox">
                                 <input type="hidden" name="right_hind_equilox" value="0">
@@ -1335,7 +1335,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                             </div>
                         </div>
 
-                         <div class="form-row">
+                        <div class="form-row">
                             <div class="checkbox-group" data-field="left_front_equilox">
                                 <input type="hidden" name="left_front_equilox" value="0">
                                 <input type="checkbox" id="left_front_equilox" name="left_front_equilox" value="1">
@@ -1795,7 +1795,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             // Function to refresh the page and open the sidebar photo section
             function openSidebarWithPhotos() {
-                window.location.hash = "photosTab";
                 $('#horseDetailsSidebar').addClass('open');
                 $('#photoSection').show();
             }
@@ -1940,7 +1939,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             });
 
             $(document).on('click', '.photo-thumbnail', function() {
-                event.preventDefault();
+
                 const fullImageUrl = $(this).data('full-url');
 
                 // Remove any existing modal if it exists
