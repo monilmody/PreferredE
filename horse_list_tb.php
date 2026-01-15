@@ -1940,6 +1940,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             });
 
             $(document).on('click', '.photo-thumbnail', function() {
+                event.preventDefault();
                 const fullImageUrl = $(this).data('full-url');
 
                 // Remove any existing modal if it exists
