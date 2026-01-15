@@ -1795,6 +1795,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             // Function to refresh the page and open the sidebar photo section
             function openSidebarWithPhotos() {
+                window.location.hash = "photosTab";
                 $('#horseDetailsSidebar').addClass('open');
                 $('#photoSection').show();
             }
@@ -1802,7 +1803,6 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
             // Optional: Stop camera when sidebar closes
             function closeSidebar() {
                 $('#horseDetailsSidebar').removeClass('open');
-                location.reload();
             }
 
             function sanitizeHorseId(name) {
