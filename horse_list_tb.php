@@ -562,11 +562,11 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                     <div class="field-group">
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_ok">
+                            <div class="checkbox-group" data-field="ok">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_ok" value="0">
-                                <input type="checkbox" id="neck_ok" name="neck_ok" value="1">
-                                <label for="neck_ok">Ok</label>
+                                <input type="hidden" name="ok" value="0">
+                                <input type="checkbox" id="ok" name="ok" value="1">
+                                <label for="ok">Ok</label>
                             </div>
                         </div>
 
@@ -1578,7 +1578,7 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
                         // Update known checkbox fields
                         const checkboxFields = ['neck_upright',
-                            'neck_ok',
+                            'ok',
                             'neck_very_nice',
                             'neck_dr',
                             'neck_top_horse',

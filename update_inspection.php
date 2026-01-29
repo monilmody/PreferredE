@@ -7,7 +7,7 @@ $horse = [];
 
 $checkboxFields = [
     'neck_upright',
-    'neck_ok',
+    'ok',
     'neck_very_nice',
     'neck_dr',
     'neck_top_horse',
@@ -63,7 +63,7 @@ $allowedFields = [
     'day_rating_indicator',
     'dave_reid_rating',
     'up_dn_ev',
-    'neck_ok',
+    'ok',
     'neck_very_nice',
     'neck_dr',
     'neck_top_horse',
