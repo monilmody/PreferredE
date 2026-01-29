@@ -571,92 +571,92 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_very_nice">
+                            <div class="checkbox-group" data-field="very_nice">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_very_nice" value="0">
-                                <input type="checkbox" id="neck_very_nice" name="neck_very_nice" value="1">
-                                <label for="neck_very_nice">Very Nice</label>
+                                <input type="hidden" name="very_nice" value="0">
+                                <input type="checkbox" id="very_nice" name="very_nice" value="1">
+                                <label for="very_nice">Very Nice</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_dr">
+                            <div class="checkbox-group" data-field="dr">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_dr" value="0">
-                                <input type="checkbox" id="neck_dr" name="neck_dr" value="1">
-                                <label for="neck_dr">DR</label>
+                                <input type="hidden" name="dr" value="0">
+                                <input type="checkbox" id="dr" name="dr" value="1">
+                                <label for="dr">DR</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_top_horse">
+                            <div class="checkbox-group" data-field="top_horse">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_top_horse" value="0">
-                                <input type="checkbox" id="neck_top_horse" name="neck_top_horse" value="1">
-                                <label for="neck_top_horse">Top Horse</label>
+                                <input type="hidden" name="top_horse" value="0">
+                                <input type="checkbox" id="top_horse" name="top_horse" value="1">
+                                <label for="top_horse">Top Horse</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_athletic">
+                            <div class="checkbox-group" data-field="athletic">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_athletic" value="0">
-                                <input type="checkbox" id="neck_athletic" name="neck_athletic" value="1">
-                                <label for="neck_athletic">Athletic</label>
+                                <input type="hidden" name="athletic" value="0">
+                                <input type="checkbox" id="athletic" name="athletic" value="1">
+                                <label for="athletic">Athletic</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_racey">
+                            <div class="checkbox-group" data-field="racey">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_racey" value="0">
-                                <input type="checkbox" id="neck_racey" name="neck_racey" value="1">
-                                <label for="neck_racey">Racey</label>
+                                <input type="hidden" name="racey" value="0">
+                                <input type="checkbox" id="racey" name="racey" value="1">
+                                <label for="racey">Racey</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_clean_correct">
+                            <div class="checkbox-group" data-field="clean_correct">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_clean_correct" value="0">
-                                <input type="checkbox" id="neck_clean_correct" name="neck_clean_correct" value="1">
-                                <label for="neck_clean_correct">Clean N Correct</label>
+                                <input type="hidden" name="clean_correct" value="0">
+                                <input type="checkbox" id="clean_correct" name="clean_correct" value="1">
+                                <label for="clean_correct">Clean N Correct</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_needs_grow">
+                            <div class="checkbox-group" data-field="needs_grow">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_needs_grow" value="0">
-                                <input type="checkbox" id="neck_needs_grow" name="neck_needs_grow" value="1">
-                                <label for="neck_needs_grow">Needs to GROW</label>
+                                <input type="hidden" name="needs_grow" value="0">
+                                <input type="checkbox" id="needs_grow" name="needs_grow" value="1">
+                                <label for="needs_grow">Needs to GROW</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_needs_mature">
+                            <div class="checkbox-group" data-field="needs_mature">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_needs_mature" value="0">
-                                <input type="checkbox" id="neck_needs_mature" name="neck_needs_mature" value="1">
-                                <label for="neck_needs_mature">Needs to Mature</label>
+                                <input type="hidden" name="needs_mature" value="0">
+                                <input type="checkbox" id="needs_mature" name="needs_mature" value="1">
+                                <label for="needs_mature">Needs to Mature</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_needs_improve">
+                            <div class="checkbox-group" data-field="needs_improve">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_needs_improve" value="0">
-                                <input type="checkbox" id="neck_needs_improve" name="neck_needs_improve" value="1">
-                                <label for="neck_needs_improve">Needs to Improve</label>
+                                <input type="hidden" name="needs_improve" value="0">
+                                <input type="checkbox" id="needs_improve" name="needs_improve" value="1">
+                                <label for="needs_improve">Needs to Improve</label>
                             </div>
                         </div>
 
                         <div class="form-row">
-                            <div class="checkbox-group" data-field="neck_nm_ty">
+                            <div class="checkbox-group" data-field="nm_ty">
                                 <!-- Hidden input to send 0 if checkbox is unchecked -->
-                                <input type="hidden" name="neck_nm_ty" value="0">
-                                <input type="checkbox" id="neck_nm_ty" name="neck_nm_ty" value="1">
-                                <label for="neck_nm_ty">N M Ty</label>
+                                <input type="hidden" name="nm_ty" value="0">
+                                <input type="checkbox" id="nm_ty" name="nm_ty" value="1">
+                                <label for="nm_ty">N M Ty</label>
                             </div>
                         </div>
                     </div>
@@ -1579,16 +1579,16 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         // Update known checkbox fields
                         const checkboxFields = ['neck_upright',
                             'ok',
-                            'neck_very_nice',
-                            'neck_dr',
-                            'neck_top_horse',
-                            'neck_athletic',
-                            'neck_racey',
-                            'neck_clean_correct',
-                            'neck_needs_grow',
-                            'neck_needs_mature',
-                            'neck_needs_improve',
-                            'neck_nm_ty',
+                            'very_nice',
+                            'dr',
+                            'top_horse',
+                            'athletic',
+                            'racey',
+                            'clean_correct',
+                            'needs_grow',
+                            'needs_mature',
+                            'needs_improve',
+                            'nm_ty',
                             'sickle_hock',
                             'sickle_hock_slightly',
                             'post_legged',
