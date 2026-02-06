@@ -12,7 +12,3 @@ require_once("functions.php"); // database and other functions are written in th
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
-
-define('COGNITO_USER_POOL_ID', 'us-east-1_31fN01PLK');
-define('COGNITO_APP_CLIENT_ID', '1f3nn6khu2cgvpho79u17s9kbg');
-define('COGNITO_REGION', 'us-east-1');
