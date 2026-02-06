@@ -14,5 +14,5 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 define('COGNITO_USER_POOL_ID', 'us-east-1_31fN01PLK');
-define('COGNITO_APP_CLIENT_ID', '3fi8gj875eb8octo6o7epaai7q');
+define('COGNITO_APP_CLIENT_ID', '293grrprj08ammnebo4ghjfj96');
 define('COGNITO_REGION', 'us-east-1');
