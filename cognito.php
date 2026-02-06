@@ -8,11 +8,9 @@ class CognitoAuth {
     
     public static function authenticate($username, $password) {
         try {
-            // NO CREDENTIALS NEEDED - Uses EC2 IAM Role automatically
             $client = new CognitoIdentityProviderClient([
                 'region' => COGNITO_REGION,
                 'version' => 'latest'
-                // AWS SDK automatically uses EC2 instance profile
             ]);
             
             $result = $client->adminInitiateAuth([
@@ -28,35 +26,30 @@ class CognitoAuth {
             return ['success' => true];
             
         } catch (AwsException $e) {
-            // Check if it's a credentials error
-            if (strpos($e->getMessage(), 'No credentials') !== false) {
-                return [
-                    'success' => false,
-                    'error' => 'System configuration error. Please contact administrator.'
-                ];
-            }
-            
-            $errorCode = $e->getAwsErrorCode();
-            $errorMessage = $e->getAwsErrorMessage();
-            
+            // CHANGED: Return the ACTUAL error for debugging
             return [
                 'success' => false,
-                'error' => self::getUserFriendlyError($errorCode, $errorMessage)
+                'error' => $e->getAwsErrorMessage(), // Show real error
+                'error_code' => $e->getAwsErrorCode(), // Show error code
+                'full_message' => $e->getMessage() // Full message
             ];
         }
     }
     
-    private static function getUserFriendlyError($errorCode, $errorMessage) {
-        switch ($errorCode) {
-            case 'NotAuthorizedException':
-                return 'Invalid username or password';
-            case 'UserNotFoundException':
-                return 'User not found';
-            case 'UserNotConfirmedException':
-                return 'Please verify your email address first';
-            default:
-                return 'Login failed. Please try again';
-        }
-    }
+    // Remove getUserFriendlyError for now - we need to see real errors
+
+
+    
+    // private static function getUserFriendlyError($errorCode, $errorMessage) {
+    //     switch ($errorCode) {
+    //         case 'NotAuthorizedException':
+    //             return 'Invalid username or password';
+    //         case 'UserNotFoundException':
+    //             return 'User not found';
+    //         case 'UserNotConfirmedException':
+    //             return 'Please verify your email address first';
+    //         default:
+    //             return 'Login failed. Please try again';
+    //     }
+    // }
 }
-?>
