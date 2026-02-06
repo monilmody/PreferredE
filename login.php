@@ -4,6 +4,8 @@ ob_start();
 include("./header.php");
 echo '<br>';
 echo '<br>';
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
 
 require_once("config.php"); // This now includes Cognito settings
 require_once("cognito.php"); // Our simple Cognito helper
@@ -29,47 +31,29 @@ if(!empty($_POST)) {
         $errors[] = "Enter Password";
     }
     
-    if(empty($errors)) {
-        // Try to authenticate with Cognito
-        $authResult = SimpleCognitoAuth::login($username, $password);
-        
-        if($authResult['success']) {
-            // Success! Get user info
-            $accessToken = $authResult['data']['AuthenticationResult']['AccessToken'];
-            $userInfo = SimpleCognitoAuth::getUserInfo($accessToken);
-            
-            if($userInfo) {
-                // Get email from user info
-                $userEmail = $userInfo['email'] ?? $username;
-                
-                // Try to get user details from your existing database
-                // This keeps your existing user roles if they exist
-                $dbUserDetails = fetchUserDetails($userEmail);
-                
-                // Set session variables (compatible with your existing system)
-                $_SESSION["UserActive"] = 'Y'; // Cognito users are active
-                $_SESSION["UserName"] = $userEmail;
-                $_SESSION["UserEmail"] = $userEmail;
-                $_SESSION["UserRole"] = $dbUserDetails["USERROLE"] ?? 'user'; // Keep existing role
-                
-                // Store Cognito tokens if needed
-                $_SESSION["CognitoAccessToken"] = $accessToken;
-                $_SESSION["CognitoIdToken"] = $authResult['data']['AuthenticationResult']['IdToken'] ?? '';
-                
-                // Set cookie (as in your original code)
-                setcookie("LoggedInUser", $userEmail, time() + 3600, "/");
-                
-                // Redirect
-                $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
-                header("Location: $redirect_url");
-                exit();
-            } else {
-                $errors[] = "Could not retrieve user information";
-            }
-        } else {
-            $errors[] = $authResult['error'];
-        }
-    }
+	if(count($errors) == 0) {
+		require_once("cognito.php");
+		$authResult = CognitoAuth::authenticate($username, $password);
+		
+		if($authResult['success']) {
+			// Get user details from your existing database
+			$dbUserDetails = fetchUserDetails($username);
+			
+			// Set session variables
+			$_SESSION["UserActive"] = 'Y';
+			$_SESSION["UserName"] = $username;
+			$_SESSION["UserEmail"] = $username;
+			$_SESSION["UserRole"] = $dbUserDetails["USERROLE"] ?? 'user';
+			
+			setcookie("LoggedInUser", $username, time() + 3600, "/");
+			
+			$redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
+			header("Location: $redirect_url");
+			exit();
+		} else {
+			$errors[] = $authResult['error'];
+		}
+	}
 }
 ob_end_flush();
 ?>
