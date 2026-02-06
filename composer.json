@@ -1,5 +1,8 @@
 {
     "require": {
-        "phpfastcache/phpfastcache": "^9.2"
+        "phpfastcache/phpfastcache": "^9.2",
+        "aws/aws-sdk-php": "^3.337",
+        "firebase/php-jwt": "^7.0",
+        "guzzlehttp/guzzle": "^7.10"
     }
 }
