@@ -1,5 +1,9 @@
 <?php
-// session_start();
+// FIX 1: Uncomment session_start() and add proper check
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 require_once("config.php");
 ?>
 <head>
@@ -39,8 +43,12 @@ require_once("config.php");
                         <ul class="nav">
                             <li><a href="index.php" class="active">Home</a></li>
                             <?php 
-                            if ($_SESSION["UserName"] != "") {
-                                if ($_SESSION["UserRole"] == "A" || $_SESSION["UserRole"] == "S" || $_SESSION["UserRole"] == "ST") {
+                            // FIX 2: Check if session variable exists before using it
+                            $userName = $_SESSION["UserName"] ?? "";
+                            $userRole = $_SESSION["UserRole"] ?? "";
+                            
+                            if ($userName != "") {
+                                if ($userRole == "A" || $userRole == "S" || $userRole == "ST") {
                             ?>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Standardbred</a>
@@ -61,7 +69,7 @@ require_once("config.php");
                             </li>
                             <?php 
                                 }
-                                if ($_SESSION["UserRole"] == "A" || $_SESSION["UserRole"] == "T" || $_SESSION["UserRole"] == "ST") {
+                                if ($userRole == "A" || $userRole == "T" || $userRole == "ST") {
                             ?>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Thoroughbred</a>
@@ -86,7 +94,7 @@ require_once("config.php");
                             </li>
                             <?php 
                                 }
-                                if ($_SESSION["UserRole"] == "A") {
+                                if ($userRole == "A") {
                             ?>
 <!--                             <li><a href="fleet.php">Fleet</a></li> -->
                             <li class="dropdown">
@@ -104,16 +112,13 @@ require_once("config.php");
                             
                             <?php 
                                 }
-                                if ($_SESSION["UserRole"] == "A") {
+                                if ($userRole == "A") {
                             ?>
                            <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
-                                
-                                
                                 	<a class="dropdown-item" href="user_authorization.php">AUTHORIZE USERS</a>
-                                
                                 </div>
                             </li>
                             <?php 
@@ -136,25 +141,20 @@ require_once("config.php");
 
                             
                             <?php
-                            if ($_SESSION["UserName"] == "") {
+                            if ($userName == "") {
                                 echo '<li><a href="registration.php" class="active">REGISTER</a></li>';
                                 echo '<li><a href="login.php">Login</a></li>';
-                            }else
-                            {
+                            } else {
                                 echo '<li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$_SESSION["UserName"].'</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$userName.'</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
-                                
-                                
+                                	<a class="dropdown-item" href="myaccount.php">My Account</a>
                                 	<a class="dropdown-item" href="logout.php">Logout</a>
-                                
                                 </div>
                             </li>';
                             }
                             ?>
-                            
-							
                             
                         </ul>   
                         <!-- ***** Menu End ***** -->

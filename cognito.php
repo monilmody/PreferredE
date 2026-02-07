@@ -1,4 +1,5 @@
 <?php
+// cognito.php - ADD register function to your existing file
 require_once 'vendor/autoload.php';
 
 use Aws\CognitoIdentityProvider\CognitoIdentityProviderClient;
@@ -13,10 +14,9 @@ class CognitoAuth {
                 'version' => 'latest'
             ]);
             
-            $result = $client->adminInitiateAuth([
-                'AuthFlow' => 'ADMIN_NO_SRP_AUTH',
+            $result = $client->initiateAuth([
+                'AuthFlow' => 'USER_PASSWORD_AUTH',
                 'ClientId' => COGNITO_APP_CLIENT_ID,
-                'UserPoolId' => COGNITO_USER_POOL_ID,
                 'AuthParameters' => [
                     'USERNAME' => $username,
                     'PASSWORD' => $password
@@ -26,30 +26,46 @@ class CognitoAuth {
             return ['success' => true];
             
         } catch (AwsException $e) {
-            // CHANGED: Return the ACTUAL error for debugging
             return [
                 'success' => false,
-                'error' => $e->getAwsErrorMessage(), // Show real error
-                'error_code' => $e->getAwsErrorCode(), // Show error code
-                'full_message' => $e->getMessage() // Full message
+                'error' => 'Invalid username or password'
             ];
         }
     }
     
-    // Remove getUserFriendlyError for now - we need to see real errors
-
-
-    
-    // private static function getUserFriendlyError($errorCode, $errorMessage) {
-    //     switch ($errorCode) {
-    //         case 'NotAuthorizedException':
-    //             return 'Invalid username or password';
-    //         case 'UserNotFoundException':
-    //             return 'User not found';
-    //         case 'UserNotConfirmedException':
-    //             return 'Please verify your email address first';
-    //         default:
-    //             return 'Login failed. Please try again';
-    //     }
-    // }
+    // ADD THIS NEW FUNCTION:
+    public static function register($email, $password, $first_name, $last_name, $user_role) {
+        try {
+            $client = new CognitoIdentityProviderClient([
+                'region' => COGNITO_REGION,
+                'version' => 'latest'
+            ]);
+            
+            // Create user in Cognito
+            $result = $client->signUp([
+                'ClientId' => COGNITO_APP_CLIENT_ID,
+                'Username' => $email,
+                'Password' => $password,
+                'UserAttributes' => [
+                    ['Name' => 'email', 'Value' => $email],
+                    ['Name' => 'given_name', 'Value' => $first_name],
+                    ['Name' => 'family_name', 'Value' => $last_name]
+                ]
+            ]);
+            
+            // Auto-confirm user
+            $client->adminConfirmSignUp([
+                'UserPoolId' => COGNITO_USER_POOL_ID,
+                'Username' => $email
+            ]);
+            
+            return ['success' => true];
+            
+        } catch (AwsException $e) {
+            return [
+                'success' => false,
+                'error' => 'Registration failed'
+            ];
+        }
+    }
 }

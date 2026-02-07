@@ -87,7 +87,7 @@ a {
 </head>
 
 <br>
-<form action="regitration_action.php">
+<form action="regitration_action.php" method="post">
 <div class="container">
 <h1>Register</h1>
 <p>Please fill in this form to create an account.</p>
