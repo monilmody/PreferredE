@@ -1,7 +1,9 @@
 <?php
+// Add session status check
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
+
 include("./header.php");
 
 // Get errors and form data from session
@@ -14,62 +16,300 @@ unset($_SESSION['form_data']);
 
 // Show success message if exists
 if (isset($_SESSION['registration_success'])) {
-    echo '<div style="color: green; padding: 10px; text-align: center; border: 1px solid green; margin: 10px;">' 
+    echo '<div class="alert alert-success" style="max-width: 600px; margin: 20px auto;">' 
          . $_SESSION['registration_success'] . '</div>';
     unset($_SESSION['registration_success']);
 }
 ?>
 
-<!-- Your existing HTML starts here -->
-<br>
-<form action="register_action.php" method="POST">
-<div class="container">
-<h1>Register</h1>
-<p>Please fill in this form to create an account.</p>
+<style>
+/* Custom Styles for Registration Page */
+.registration-container {
+    max-width: 600px;
+    margin: 80px auto 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
 
-<!-- Show errors if any -->
-<?php if (!empty($errors)): ?>
-    <div style="color: red; padding: 10px; border: 1px solid red; margin-bottom: 15px;">
-        <strong>Please fix the following errors:</strong>
-        <ul style="margin: 5px 0; padding-left: 20px;">
-            <?php foreach ($errors as $error): ?>
-                <li><?php echo htmlspecialchars($error); ?></li>
-            <?php endforeach; ?>
-        </ul>
+.registration-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #2E4053;
+}
+
+.registration-header h1 {
+    color: #2E4053;
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.registration-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #2E4053;
+    box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
+    outline: none;
+}
+
+.form-control-select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    background-color: white;
+    height: 46px;
+}
+
+.password-hint {
+    font-size: 13px;
+    color: #666;
+    margin-top: 5px;
+    margin-bottom: 15px;
+    padding: 8px 12px;
+    background: #f8f9fa;
+    border-radius: 4px;
+    border-left: 3px solid #2E4053;
+}
+
+.error-alert {
+    background-color: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #c53030;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+}
+
+.error-alert ul {
+    margin: 10px 0 0 0;
+    padding-left: 20px;
+}
+
+.error-alert li {
+    margin-bottom: 5px;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #3a506b 0%, #2E4053 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 64, 83, 0.2);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+}
+
+.login-link a {
+    color: #2E4053;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.login-link a:hover {
+    text-decoration: underline;
+}
+
+.password-strength {
+    height: 4px;
+    margin-top: 8px;
+    border-radius: 2px;
+    transition: all 0.3s;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .registration-container {
+        margin: 60px 20px 30px;
+        padding: 20px;
+    }
+    
+    .registration-header h1 {
+        font-size: 24px;
+    }
+}
+</style>
+
+<div class="registration-container">
+    <div class="registration-header">
+        <h1>Create Your Account</h1>
+        <p>Join Preferred Equine to access premium features</p>
     </div>
-<?php endif; ?>
-<hr>
 
-<label for="user"><b>Email Address</b></label>
-<input type="text" placeholder="Enter Email" name="user" id="user" 
-       value="<?php echo htmlspecialchars($form_data['user'] ?? ''); ?>" required>
+    <!-- Show errors if any -->
+    <?php if (!empty($errors)): ?>
+        <div class="error-alert">
+            <strong>Please fix the following errors:</strong>
+            <ul>
+                <?php foreach ($errors as $error): ?>
+                    <li><?php echo htmlspecialchars($error); ?></li>
+                <?php endforeach; ?>
+            </ul>
+        </div>
+    <?php endif; ?>
 
-<label for="fname"><b>First Name</b></label>
-<input type="text" placeholder="Enter First Name" name="fname" id="fname" 
-       value="<?php echo htmlspecialchars($form_data['fname'] ?? ''); ?>" required>
+    <form action="register_action.php" method="POST" id="registrationForm">
+        <div class="form-group">
+            <label for="user">Email Address *</label>
+            <input type="email" class="form-control" placeholder="you@example.com" name="user" id="user" 
+                   value="<?php echo htmlspecialchars($form_data['user'] ?? ''); ?>" required>
+        </div>
 
-<label for="lname"><b>Last Name</b></label>
-<input type="text" placeholder="Enter Last Name" name="lname" id="lname" 
-       value="<?php echo htmlspecialchars($form_data['lname'] ?? ''); ?>" required>
+        <div class="form-group">
+            <label for="fname">First Name *</label>
+            <input type="text" class="form-control" placeholder="Enter your first name" name="fname" id="fname" 
+                   value="<?php echo htmlspecialchars($form_data['fname'] ?? ''); ?>" required>
+        </div>
 
-<label for="password"><b>Password</b></label>
-<input type="password" placeholder="Enter Password (min 8 chars, uppercase, lowercase, number, special)" 
-       name="password" id="password" required>
+        <div class="form-group">
+            <label for="lname">Last Name *</label>
+            <input type="text" class="form-control" placeholder="Enter your last name" name="lname" id="lname" 
+                   value="<?php echo htmlspecialchars($form_data['lname'] ?? ''); ?>" required>
+        </div>
 
-<label for="userrole"><b>User Role</b></label>
-<select class="custom-select1" id="userrole" name="userrole" required>
-	<option value="N" <?php echo (($form_data['userrole'] ?? '') == 'N') ? 'selected' : ''; ?>>SELECT USER ROLE</option>
-	<option value="A" <?php echo (($form_data['userrole'] ?? '') == 'A') ? 'selected' : ''; ?>>ADMIN</option>
-	<option value="T" <?php echo (($form_data['userrole'] ?? '') == 'T') ? 'selected' : ''; ?>>THROUGHBRED</option>
-	<option value="S" <?php echo (($form_data['userrole'] ?? '') == 'S') ? 'selected' : ''; ?>>STANDARDBRED</option>
-	<option value="ST" <?php echo (($form_data['userrole'] ?? '') == 'ST') ? 'selected' : ''; ?>>STANDARDBRED & THOROUGHBRED</option>
-</select>
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" class="form-control" placeholder="Create a strong password" 
+                   name="password" id="password" required>
+            <div class="password-hint">
+                <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
+            </div>
+            <div class="password-strength" id="passwordStrength"></div>
+        </div>
 
-<hr>
-<button type="submit" class="registerbtn">Register</button>
+        <div class="form-group">
+            <label for="userrole">Account Type *</label>
+            <select class="form-control-select" id="userrole" name="userrole" required>
+                <option value="N" <?php echo (($form_data['userrole'] ?? '') == 'N') ? 'selected' : ''; ?>>SELECT USER ROLE</option>
+                <option value="A" <?php echo (($form_data['userrole'] ?? '') == 'A') ? 'selected' : ''; ?>>ADMIN (Full Access)</option>
+                <option value="T" <?php echo (($form_data['userrole'] ?? '') == 'T') ? 'selected' : ''; ?>>THOROUGHBRED Access</option>
+                <option value="S" <?php echo (($form_data['userrole'] ?? '') == 'S') ? 'selected' : ''; ?>>STANDARDBRED Access</option>
+                <option value="ST" <?php echo (($form_data['userrole'] ?? '') == 'ST') ? 'selected' : ''; ?>>STANDARDBRED & THOROUGHBRED Access</option>
+            </select>
+        </div>
+
+        <button type="submit" class="submit-btn">Create Account</button>
+
+        <div class="login-link">
+            <p>Already have an account? <a href="login.php">Sign in here</a></p>
+        </div>
+    </form>
 </div>
 
-<div class="container signin">
-<p>Already have an account? <a href="login.php">Sign in</a>.</p>
-</div>
-</form>
+<script>
+// Password strength indicator
+document.getElementById('password').addEventListener('input', function() {
+    const password = this.value;
+    const strengthBar = document.getElementById('passwordStrength');
+    
+    let strength = 0;
+    let color = '#e74c3c'; // Red
+    
+    // Check criteria
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[\W_]/.test(password)) strength++;
+    
+    // Set color and width based on strength
+    if (strength <= 1) {
+        color = '#e74c3c'; // Red
+        width = '20%';
+    } else if (strength <= 3) {
+        color = '#f39c12'; // Orange
+        width = '60%';
+    } else {
+        color = '#27ae60'; // Green
+        width = '100%';
+    }
+    
+    strengthBar.style.width = width;
+    strengthBar.style.backgroundColor = color;
+});
+
+// Form validation
+document.getElementById('registrationForm').addEventListener('submit', function(e) {
+    const password = document.getElementById('password').value;
+    const errors = [];
+    
+    // Password validation
+    if (password.length < 8) {
+        errors.push('Password must be at least 8 characters');
+    }
+    if (!/[A-Z]/.test(password)) {
+        errors.push('Password must contain at least one uppercase letter');
+    }
+    if (!/[a-z]/.test(password)) {
+        errors.push('Password must contain at least one lowercase letter');
+    }
+    if (!/[0-9]/.test(password)) {
+        errors.push('Password must contain at least one number');
+    }
+    if (!/[\W_]/.test(password)) {
+        errors.push('Password must contain at least one special character');
+    }
+    
+    // Role validation
+    if (document.getElementById('userrole').value === 'N') {
+        errors.push('Please select a user role');
+    }
+    
+    if (errors.length > 0) {
+        e.preventDefault();
+        alert('Please fix the following errors:\n\n' + errors.join('\n'));
+    }
+});
+</script>
