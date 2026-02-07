@@ -33,15 +33,14 @@ class CognitoAuth {
         }
     }
     
-    // ADD THIS NEW FUNCTION:
-    public static function register($email, $password, $first_name, $last_name, $user_role) {
+        public static function register($email, $password, $first_name, $last_name, $user_role) {
         try {
             $client = new CognitoIdentityProviderClient([
                 'region' => COGNITO_REGION,
                 'version' => 'latest'
             ]);
             
-            // Create user in Cognito
+            // 1. Sign up user (creates unconfirmed user)
             $result = $client->signUp([
                 'ClientId' => COGNITO_APP_CLIENT_ID,
                 'Username' => $email,
@@ -53,18 +52,23 @@ class CognitoAuth {
                 ]
             ]);
             
-            // Auto-confirm user
+            // 2. Immediately confirm the user (auto-confirm)
             $client->adminConfirmSignUp([
                 'UserPoolId' => COGNITO_USER_POOL_ID,
                 'Username' => $email
             ]);
             
-            return ['success' => true];
+            return [
+                'success' => true,
+                'message' => 'User created and confirmed successfully',
+                'userSub' => $result['UserSub']
+            ];
             
         } catch (AwsException $e) {
             return [
                 'success' => false,
-                'error' => 'Registration failed'
+                'error' => $e->getAwsErrorMessage(),
+                'error_code' => $e->getAwsErrorCode()
             ];
         }
     }
