@@ -92,13 +92,34 @@ include("./header.php");
 ?>
 
 <style>
-/* Account Page Styles */
-.account-container {
-    max-width: 1200px;
-    margin: 80px auto 40px;
-    padding: 0 20px;
+/* Account Page Styles - ADD THESE CRITICAL FIXES */
+body {
+    padding-top: 100px !important;
+    position: relative;
 }
 
+.account-container {
+    max-width: 1200px;
+    margin: 20px auto 40px !important;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+}
+
+/* CRITICAL: Ensure header dropdowns work */
+.header-area {
+    z-index: 9999 !important;
+}
+
+.header-area * {
+    pointer-events: auto !important;
+}
+
+.dropdown-menu {
+    z-index: 10000 !important;
+}
+
+/* Account Page Styles */
 .account-header {
     text-align: center;
     margin-bottom: 40px;
@@ -193,6 +214,7 @@ include("./header.php");
     border-left: 4px solid transparent;
     transition: all 0.3s;
     font-weight: 500;
+    cursor: pointer;
 }
 
 .menu-item:hover, .menu-item.active {
@@ -213,6 +235,16 @@ include("./header.php");
     border-radius: 10px;
     box-shadow: 0 3px 15px rgba(0,0,0,0.08);
     padding: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.account-section {
+    display: none;
+}
+
+.account-section.active {
+    display: block;
 }
 
 .section-title {
@@ -459,13 +491,13 @@ include("./header.php");
             </div>
             
             <div class="account-menu">
-                <a href="#profile" class="menu-item active">
+                <a href="javascript:void(0)" class="menu-item active" data-target="profile">
                     <i class="fa fa-user"></i> Profile Information
                 </a>
-                <a href="#password" class="menu-item">
+                <a href="javascript:void(0)" class="menu-item" data-target="password">
                     <i class="fa fa-lock"></i> Change Password
                 </a>
-                <a href="#activity" class="menu-item">
+                <a href="javascript:void(0)" class="menu-item" data-target="activity">
                     <i class="fa fa-history"></i> Recent Activity
                 </a>
                 <a href="logout.php" class="menu-item">
@@ -477,7 +509,7 @@ include("./header.php");
         <!-- Main Content -->
         <div class="account-content">
             <!-- Profile Section -->
-            <div id="profile">
+            <div id="profile" class="account-section active">
                 <h2 class="section-title">
                     <i class="fa fa-user" style="margin-right: 10px;"></i>Profile Information
                 </h2>
@@ -556,10 +588,8 @@ include("./header.php");
                 </div>
             </div>
             
-            <hr style="margin: 40px 0; border-color: #eee;">
-            
             <!-- Change Password Section -->
-            <div id="password">
+            <div id="password" class="account-section">
                 <h2 class="section-title">
                     <i class="fa fa-lock" style="margin-right: 10px;"></i>Change Password
                 </h2>
@@ -592,10 +622,8 @@ include("./header.php");
                 </form>
             </div>
             
-            <hr style="margin: 40px 0; border-color: #eee;">
-            
             <!-- Recent Activity Section -->
-            <div id="activity">
+            <div id="activity" class="account-section">
                 <h2 class="section-title">
                     <i class="fa fa-history" style="margin-right: 10px;"></i>Recent Activity
                 </h2>
@@ -637,15 +665,16 @@ include("./header.php");
 </div>
 
 <script>
-// Simple tab navigation
+// Fixed Simple tab navigation - No conflict with Bootstrap
 document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('.menu-item');
-    const sections = document.querySelectorAll('.account-content > div');
+    const menuItems = document.querySelectorAll('.account-menu .menu-item');
     
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
-            if (this.getAttribute('href').startsWith('#')) {
+            // Only handle items with data-target (not logout link)
+            if (this.hasAttribute('data-target')) {
                 e.preventDefault();
+                e.stopPropagation(); // CRITICAL: Prevent interfering with Bootstrap
                 
                 // Remove active class from all items
                 menuItems.forEach(i => i.classList.remove('active'));
@@ -653,19 +682,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 this.classList.add('active');
                 
                 // Hide all sections
-                sections.forEach(section => section.style.display = 'none');
+                document.querySelectorAll('.account-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
                 // Show target section
-                const targetId = this.getAttribute('href').substring(1);
-                document.getElementById(targetId).style.display = 'block';
+                const targetId = this.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
             }
         });
     });
     
-    // Initially hide all sections except profile
-    sections.forEach(section => {
-        if (section.id !== 'profile') {
-            section.style.display = 'none';
-        }
+    // Initialize Bootstrap dropdowns properly
+    if (typeof $ !== 'undefined') {
+        $('.dropdown-toggle').dropdown();
+    }
+});
+
+// EMERGENCY FIX: Ensure header dropdowns always work
+$(document).ready(function() {
+    // Reinitialize Bootstrap dropdowns
+    $('.dropdown-toggle').dropdown();
+    
+    // Override any click handlers that might be blocking
+    $('.dropdown-toggle').off('click').on('click', function(e) {
+        e.stopPropagation();
+        $(this).dropdown('toggle');
+        return false;
     });
+    
+    // Ensure header is fully clickable
+    $('.header-area, .header-area *').css({
+        'pointer-events': 'auto',
+        'z-index': '99999'
+    });
+    
+    // Make sure dropdowns appear above everything
+    $('.dropdown-menu').css('z-index', '100000');
 });
 </script>
