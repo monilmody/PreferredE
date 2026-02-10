@@ -1802,8 +1802,54 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
 
             // Optional: Stop camera when sidebar closes
             function closeSidebar() {
-                $('#horseDetailsSidebar').removeClass('open');
-                location.reload();
+               console.log('Nuclear close activated');
+                
+                // 1. Completely remove and recreate the sidebar
+                const sidebar = document.getElementById('horseDetailsSidebar');
+                if (sidebar) {
+                    // Store the HTML content
+                    const sidebarHTML = sidebar.innerHTML;
+                    
+                    // Remove the entire sidebar
+                    sidebar.remove();
+                    
+                    // Recreate it (hidden)
+                    const newSidebar = document.createElement('div');
+                    newSidebar.id = 'horseDetailsSidebar';
+                    newSidebar.className = 'sidebar';
+                    newSidebar.innerHTML = sidebarHTML;
+                    newSidebar.style.cssText = 'display: none !important; position: fixed; right: -600px;';
+                    
+                    // Add it back to the DOM
+                    document.body.appendChild(newSidebar);
+                }
+                
+                // 2. Clean up everything else
+                document.querySelectorAll('.modal-backdrop, .modal, #imageModal').forEach(el => {
+                    if (el && el.parentNode) {
+                        el.parentNode.removeChild(el);
+                    }
+                });
+                
+                // 3. Reset body
+                document.body.style.cssText = 'overflow: auto !important; padding-right: 0 !important;';
+                document.body.classList.remove('modal-open');
+                
+                // 4. Stop any media streams
+                if (window.videoStream) {
+                    window.videoStream.getTracks().forEach(track => track.stop());
+                    window.videoStream = null;
+                }
+                
+                console.log('Nuclear close complete - sidebar is gone');
+                
+                // Update the close button in the new sidebar
+                setTimeout(() => {
+                    const newCloseBtn = document.querySelector('#horseDetailsSidebar .closebtn');
+                    if (newCloseBtn) {
+                        newCloseBtn.onclick = closeSidebarNuclear;
+                    }
+                }, 100);
             }
 
             function sanitizeHorseId(name) {
