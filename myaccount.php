@@ -13,7 +13,7 @@ if (!isset($_SESSION['UserName']) && !in_array($current_page, $public_pages)) {
 }
 
 include("./header.php");
-
+include("./session_page.php");
 require_once("config.php");
 require_once("db-settings.php");
 
@@ -122,34 +122,7 @@ $role_names = [
 ?>
 
 <style>
-/* Account Page Styles - MINIMAL CSS FIXES ONLY */
-body {
-    overflow: auto !important;
-    position: relative !important;
-}
-
-.header-area {
-    z-index: 999999 !important;
-    pointer-events: auto !important;
-}
-
-.header-area * {
-    pointer-events: auto !important;
-}
-
-.dropdown-menu {
-    z-index: 1000000 !important;
-}
-
-/* Hide any modal backdrops */
-.modal-backdrop {
-    display: none !important;
-}
-
-/* Remove any overlay */
-body::before, body::after {
-    display: none !important;
-}
+/* Account Page Styles */
 
 body {
     padding-top: 100px !important;
@@ -630,75 +603,6 @@ document.addEventListener('click', function(e) {
         document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
             menu.classList.remove('show');
         });
-    }
-});
-
-// FIX FOR DROPDOWNS - ADD THIS
-$(document).ready(function() {
-    console.log("Fixing dropdowns on myaccount page");
-    
-    // 1. Remove any blocking modal backdrops
-    $('.modal-backdrop').remove();
-    $('body').removeClass('modal-open').css('overflow', 'auto');
-    
-    // 2. Make header SUPER clickable
-    $('.header-area').css({
-        'z-index': '999999',
-        'pointer-events': 'auto'
-    });
-    
-    // 3. Re-initialize dropdowns
-    $('.dropdown-toggle').dropdown();
-    
-    // 4. Force dropdowns to work with custom handler
-    $('.dropdown-toggle').off('click.bs.dropdown').on('click', function(e) {
-        e.preventDefault();
-        e.stopImmediatePropagation();
-        
-        var $this = $(this);
-        var $parent = $this.closest('.dropdown');
-        var isOpen = $parent.hasClass('show');
-        
-        // Close all other dropdowns
-        $('.dropdown.show').not($parent).removeClass('show');
-        $('.dropdown-menu.show').not($parent.find('.dropdown-menu')).removeClass('show');
-        
-        // Toggle this one
-        if (!isOpen) {
-            $parent.addClass('show');
-            $parent.find('.dropdown-menu').addClass('show');
-        }
-        
-        return false;
-    });
-    
-    console.log("Dropdown fix applied");
-});
-
-// Nuclear option if above doesn't work
-setTimeout(function() {
-    // Remove ANY element that might be covering the header
-    $('body > *').not('.header-area, .account-container').each(function() {
-        if ($(this).css('z-index') > 1000 || $(this).css('position') === 'fixed') {
-            $(this).hide();
-        }
-    });
-}, 100);
-
-$(document).ready(function() {
-    $('*').on('click', function(e) {
-        console.log("Clicked on:", e.target.tagName, e.target.className);
-    });
-    
-    // Check for elements covering header
-    var header = $('.header-area')[0];
-    if (header) {
-        var headerRect = header.getBoundingClientRect();
-        console.log("Header position:", headerRect.top, headerRect.left);
-        
-        // Find elements at header position
-        var elements = document.elementsFromPoint(headerRect.left + 10, headerRect.top + 10);
-        console.log("Elements at header position:", elements.map(el => el.tagName + '.' + el.className));
     }
 });
 
