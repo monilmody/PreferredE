@@ -7,7 +7,7 @@
 // Check if user is logged in - MUST be after including header.php
 // We'll move this check AFTER including header.php
 
-ob_start();
+include("./header.php");
 
 require_once("config.php");
 require_once("db-settings.php");
@@ -99,11 +99,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
-ob_end_clean();
-
-// Include header BEFORE checking session (header starts the session)
-include("./header.php");
 
 $stmt = $mysqli->prepare("SELECT * FROM users WHERE USERNAME = ? OR EMAIL = ? LIMIT 1");
 $stmt->bind_param("ss", $email, $email);
