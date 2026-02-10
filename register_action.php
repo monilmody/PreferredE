@@ -75,7 +75,7 @@ if (empty($errors)) {
                 setcookie("LoggedInUser", $username, time() + 3600, "/");
                 
                 // Redirect to home page
-                header("Location: index.php");
+                header("Location: login.php");
                 exit();
             } else {
                 $errors[] = "Database error: " . $stmt->error;
