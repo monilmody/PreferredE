@@ -1,5 +1,4 @@
 <?php
-// FIX 1: Uncomment session_start() and add proper check
 if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }

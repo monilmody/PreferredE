@@ -2,8 +2,6 @@
 session_start();
 ob_start();
 include("./header.php");
-echo '<br>';
-echo '<br>';
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
@@ -19,6 +17,8 @@ if(isset($_SESSION['UserName'])) {
 
 // Handle form submission
 $errors = [];
+$form_data = $_POST ?? [];
+
 if(!empty($_POST)) {
     $username = trim($_POST["username"]);
     $password = trim($_POST["password"]);
@@ -58,64 +58,238 @@ if(!empty($_POST)) {
 ob_end_flush();
 ?>
 
-<style type="text/css" media="screen">
-    @import url("style/css/style.css");
-    
-    .error-message {
-        color: red;
-        text-align: center;
-        margin-bottom: 10px;
-        font-weight: bold;
+<style>
+/* Custom Styles for Login Page - Matching Registration Page */
+.login-container {
+    max-width: 500px;
+    margin: 80px auto 40px;
+    padding: 30px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
+
+.login-header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #2E4053;
+}
+
+.login-header h1 {
+    color: #2E4053;
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.login-header p {
+    color: #666;
+    font-size: 16px;
+}
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 15px;
+}
+
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+}
+
+.form-control:focus {
+    border-color: #2E4053;
+    box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
+    outline: none;
+}
+
+.error-alert {
+    background-color: #fff5f5;
+    border: 1px solid #fed7d7;
+    color: #c53030;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    text-align: center;
+    font-weight: 500;
+}
+
+.submit-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
+
+.submit-btn:hover {
+    background: linear-gradient(135deg, #3a506b 0%, #2E4053 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 64, 83, 0.2);
+}
+
+.submit-btn:active {
+    transform: translateY(0);
+}
+
+.login-links {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+}
+
+.login-links a {
+    color: #2E4053;
+    font-weight: 600;
+    text-decoration: none;
+    display: block;
+    margin: 8px 0;
+}
+
+.login-links a:hover {
+    text-decoration: underline;
+}
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.remember-me {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.remember-me input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: #2E4053;
+}
+
+.forgot-password {
+    color: #2E4053;
+    font-weight: 500;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .login-container {
+        margin: 60px 20px 30px;
+        padding: 20px;
     }
+    
+    .login-header h1 {
+        font-size: 24px;
+    }
+    
+    .form-options {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+}
 </style>
 
-<body>
-    <div class="main-block">
-        <?php if(!empty($errors)): ?>
-            <div class="error-message">
-                <?php echo htmlspecialchars($errors[0]); ?>
-            </div>
-        <?php endif; ?>
-        
-        <form name="login" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?><?php echo isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : ''; ?>" method="post">
-            <hr>
-            <hr>
-            <div style="text-align:center;">
-                <input type="text" name="username" id="username" placeholder="Email or Username" required 
-                       style="padding: 10px; width: 80%; max-width: 300px;" />
-            </div>
-            <div style="text-align:center; margin-top: 15px;">
-                <input type="password" name="password" id="password" placeholder="Password" required 
-                       style="padding: 10px; width: 80%; max-width: 300px;" />
-            </div>
-            <hr>
-
-            <?php if(isset($_GET['redirect'])): ?>
-                <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET['redirect']); ?>">
-            <?php endif; ?>
-            
-            <div class="btn-block" style="text-align:center;">
-                <button type="submit" style="padding: 10px 30px; font-size: 16px;">Login</button>
-            </div>
-            
-            <div style="text-align: center; margin-top: 15px;">
-                <a href="forgot_password.php" style="color: #0066c0; text-decoration: none;">
-                    Forgot Password?
-                </a>
-            </div>
-        </form>
+<div class="login-container">
+    <div class="login-header">
+        <h1>Welcome Back</h1>
+        <p>Sign in to your Preferred Equine account</p>
     </div>
 
-    <script>
-        // Focus on username field when page loads
-        document.getElementById("username").focus();
-        
-        // Submit form when Enter is pressed in password field
-        document.getElementById("password").addEventListener("keypress", function(event) {
-            if (event.key === "Enter") {
-                event.preventDefault();
-                document.forms["login"].submit();
-            }
-        });
-    </script>
-</body>
+    <!-- Show errors if any -->
+    <?php if (!empty($errors)): ?>
+        <div class="error-alert">
+            <?php echo htmlspecialchars($errors[0]); ?>
+        </div>
+    <?php endif; ?>
+
+    <form name="login" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?><?php echo isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : ''; ?>" method="post">
+        <div class="form-group">
+            <label for="username">Email or Username *</label>
+            <input type="text" class="form-control" 
+                   id="username" 
+                   name="username" 
+                   placeholder="Enter your email or username" 
+                   value="<?php echo htmlspecialchars($form_data['username'] ?? ''); ?>" 
+                   required 
+                   autofocus>
+        </div>
+
+        <div class="form-group">
+            <label for="password">Password *</label>
+            <input type="password" class="form-control" 
+                   id="password" 
+                   name="password" 
+                   placeholder="Enter your password" 
+                   required>
+        </div>
+
+        <div class="form-options">
+            <label class="remember-me">
+                <input type="checkbox" name="remember" id="remember">
+                Remember me
+            </label>
+            <a href="forgot_password.php" class="forgot-password">Forgot Password?</a>
+        </div>
+
+        <?php if(isset($_GET['redirect'])): ?>
+            <input type="hidden" name="redirect" value="<?php echo htmlspecialchars($_GET['redirect']); ?>">
+        <?php endif; ?>
+
+        <button type="submit" class="submit-btn">Sign In</button>
+
+        <div class="login-links">
+            <p>Don't have an account? <a href="registration.php">Register here</a></p>
+            <p><a href="index.php">← Back to Home</a></p>
+        </div>
+    </form>
+</div>
+
+<script>
+// Focus on username field when page loads
+document.getElementById("username").focus();
+
+// Submit form when Enter is pressed in password field
+document.getElementById("password").addEventListener("keypress", function(event) {
+    if (event.key === "Enter") {
+        event.preventDefault();
+        document.forms["login"].submit();
+    }
+});
+
+// Add a subtle animation to the login button on hover
+const submitBtn = document.querySelector('.submit-btn');
+submitBtn.addEventListener('mouseenter', function() {
+    this.style.transition = 'all 0.3s ease';
+});
+
+submitBtn.addEventListener('mouseleave', function() {
+    this.style.transition = 'all 0.3s ease';
+});
+</script>
