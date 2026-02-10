@@ -685,4 +685,21 @@ setTimeout(function() {
     });
 }, 100);
 
+$(document).ready(function() {
+    $('*').on('click', function(e) {
+        console.log("Clicked on:", e.target.tagName, e.target.className);
+    });
+    
+    // Check for elements covering header
+    var header = $('.header-area')[0];
+    if (header) {
+        var headerRect = header.getBoundingClientRect();
+        console.log("Header position:", headerRect.top, headerRect.left);
+        
+        // Find elements at header position
+        var elements = document.elementsFromPoint(headerRect.left + 10, headerRect.top + 10);
+        console.log("Elements at header position:", elements.map(el => el.tagName + '.' + el.className));
+    }
+});
+
 </script>
