@@ -50,7 +50,7 @@ require_once("config.php");
                                 if ($userRole == "A" || $userRole == "S" || $userRole == "ST") {
                             ?>
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Standardbred</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Standardbred</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                     <a class="dropdown-item" href="dam_search.php">Horse Search Report</a>
@@ -71,7 +71,7 @@ require_once("config.php");
                                 if ($userRole == "A" || $userRole == "T" || $userRole == "ST") {
                             ?>
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">Thoroughbred</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Thoroughbred</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                     <a class="dropdown-item" href="horse_search_tb.php">Horse Search Report</a>
@@ -97,7 +97,7 @@ require_once("config.php");
                             ?>
 <!--                             <li><a href="fleet.php">Fleet</a></li> -->
                             <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">File Upload</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">File Upload</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                     <a class="dropdown-item" href="sales_file_upload.php">Standardbred</a>
@@ -114,7 +114,7 @@ require_once("config.php");
                                 if ($userRole == "A") {
                             ?>
                            <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                 	<a class="dropdown-item" href="user_authorization.php">AUTHORIZE USERS</a>
@@ -145,7 +145,7 @@ require_once("config.php");
                                 echo '<li><a href="login.php">Login</a></li>';
                             } else {
                                 echo '<li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">'.$userName.'</a>
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">'.$userName.'</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                 	<a class="dropdown-item" href="myaccount.php">My Account</a>
