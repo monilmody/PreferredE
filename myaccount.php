@@ -1,12 +1,108 @@
 <?php
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
-}
+// REMOVE this session_start() - It's already in header.php
+// if (session_status() === PHP_SESSION_NONE) {
+//     session_start();
+// }
+
+// Check if user is logged in - MUST be after including header.php
+// We'll move this check AFTER including header.php
 
 require_once("config.php");
 require_once("db-settings.php");
 
-// Get user details from database
+// Handle form submissions FIRST (before any output)
+$message = '';
+$message_type = ''; // success, error, info
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // We need session variables for form processing
+    if (session_status() === PHP_SESSION_NONE) {
+        session_start();
+    }
+    
+    if (isset($_SESSION['UserName'])) {
+        $username = $_SESSION['UserName'];
+        $email = $_SESSION['UserEmail'] ?? $username;
+        
+        // Get fresh user data for validation
+        $stmt = $mysqli->prepare("SELECT * FROM users WHERE USERNAME = ? OR EMAIL = ? LIMIT 1");
+        $stmt->bind_param("ss", $email, $email);
+        $stmt->execute();
+        $result = $stmt->get_result();
+        $user = $result->fetch_assoc();
+        $stmt->close();
+        
+        if (isset($_POST['update_profile'])) {
+            // Update profile info
+            $first_name = trim($_POST['first_name']);
+            $last_name = trim($_POST['last_name']);
+            $contact = trim($_POST['contact']);
+            
+            $update_stmt = $mysqli->prepare("UPDATE users SET FNAME = ?, LNAME = ?, CONTACT = ? WHERE USERNAME = ?");
+            $update_stmt->bind_param("ssss", $first_name, $last_name, $contact, $email);
+            
+            if ($update_stmt->execute()) {
+                // Update session
+                $_SESSION['UserFirstName'] = $first_name;
+                $_SESSION['UserName'] = !empty($first_name) ? $first_name : $email;
+                
+                $message = "Profile updated successfully!";
+                $message_type = "success";
+                
+                // Refresh user data for display
+                $user['FNAME'] = $first_name;
+                $user['LNAME'] = $last_name;
+                $user['CONTACT'] = $contact;
+            } else {
+                $message = "Error updating profile: " . $update_stmt->error;
+                $message_type = "error";
+            }
+            $update_stmt->close();
+        }
+        
+        if (isset($_POST['change_password'])) {
+            $current_password = $_POST['current_password'];
+            $new_password = $_POST['new_password'];
+            $confirm_password = $_POST['confirm_password'];
+            
+            // Validate
+            if ($new_password !== $confirm_password) {
+                $message = "New passwords do not match!";
+                $message_type = "error";
+            } elseif (strlen($new_password) < 8) {
+                $message = "Password must be at least 8 characters";
+                $message_type = "error";
+            } elseif ($user['PASSWORD'] === $current_password) {
+                // Update password in database
+                $update_stmt = $mysqli->prepare("UPDATE users SET PASSWORD = ? WHERE USERNAME = ?");
+                $update_stmt->bind_param("ss", $new_password, $email);
+                
+                if ($update_stmt->execute()) {
+                    $message = "Password changed successfully!";
+                    $message_type = "success";
+                } else {
+                    $message = "Error changing password: " . $update_stmt->error;
+                    $message_type = "error";
+                }
+                $update_stmt->close();
+            } else {
+                $message = "Current password is incorrect!";
+                $message_type = "error";
+            }
+        }
+    }
+}
+
+// Include header BEFORE checking session (header starts the session)
+include("./header.php");
+
+// NOW check if user is logged in (after header includes session_start())
+if (!isset($_SESSION['UserName'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Get user details for display
 $username = $_SESSION['UserName'];
 $email = $_SESSION['UserEmail'] ?? $username;
 
@@ -17,109 +113,28 @@ $result = $stmt->get_result();
 $user = $result->fetch_assoc();
 $stmt->close();
 
-// Handle form submissions
-$message = '';
-$message_type = ''; // success, error, info
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['update_profile'])) {
-        // Update profile info
-        $first_name = trim($_POST['first_name']);
-        $last_name = trim($_POST['last_name']);
-        $contact = trim($_POST['contact']);
-        
-        $update_stmt = $mysqli->prepare("UPDATE users SET FNAME = ?, LNAME = ?, CONTACT = ? WHERE USERNAME = ?");
-        $update_stmt->bind_param("ssss", $first_name, $last_name, $contact, $email);
-        
-        if ($update_stmt->execute()) {
-            // Update session
-            $_SESSION['UserFirstName'] = $first_name;
-            $_SESSION['UserName'] = !empty($first_name) ? $first_name : $email;
-            
-            $message = "Profile updated successfully!";
-            $message_type = "success";
-            
-            // Refresh user data
-            $user['FNAME'] = $first_name;
-            $user['LNAME'] = $last_name;
-            $user['CONTACT'] = $contact;
-        } else {
-            $message = "Error updating profile: " . $update_stmt->error;
-            $message_type = "error";
-        }
-        $update_stmt->close();
-    }
-    
-    if (isset($_POST['change_password'])) {
-        $current_password = $_POST['current_password'];
-        $new_password = $_POST['new_password'];
-        $confirm_password = $_POST['confirm_password'];
-        
-        // Validate
-        if ($new_password !== $confirm_password) {
-            $message = "New passwords do not match!";
-            $message_type = "error";
-        } elseif (strlen($new_password) < 8) {
-            $message = "Password must be at least 8 characters";
-            $message_type = "error";
-        } elseif ($user['PASSWORD'] === $current_password) { // Your system uses plain passwords
-            // Update password in database
-            $update_stmt = $mysqli->prepare("UPDATE users SET PASSWORD = ? WHERE USERNAME = ?");
-            $update_stmt->bind_param("ss", $new_password, $email);
-            
-            if ($update_stmt->execute()) {
-                $message = "Password changed successfully!";
-                $message_type = "success";
-            } else {
-                $message = "Error changing password: " . $update_stmt->error;
-                $message_type = "error";
-            }
-            $update_stmt->close();
-        } else {
-            $message = "Current password is incorrect!";
-            $message_type = "error";
-        }
-    }
-}
-
-include("./header.php");
-
-// Check if user is logged in
-if (!isset($_SESSION['UserName'])) {
-    header("Location: login.php");
-    exit();
-}
+// Define role names for display
+$role_names = [
+    'A' => 'Administrator',
+    'T' => 'Thoroughbred User',
+    'S' => 'Standardbred User',
+    'ST' => 'Full Access User',
+    'user' => 'Basic User'
+];
 ?>
 
 <style>
-/* Account Page Styles - ADD THESE CRITICAL FIXES */
+/* Account Page Styles - MINIMAL CSS FIXES ONLY */
 body {
     padding-top: 100px !important;
-    position: relative;
 }
 
 .account-container {
     max-width: 1200px;
-    margin: 20px auto 40px !important;
+    margin: 80px auto 40px;
     padding: 0 20px;
-    position: relative;
-    z-index: 1;
 }
 
-/* CRITICAL: Ensure header dropdowns work */
-.header-area {
-    z-index: 9999 !important;
-}
-
-.header-area * {
-    pointer-events: auto !important;
-}
-
-.dropdown-menu {
-    z-index: 10000 !important;
-}
-
-/* Account Page Styles */
 .account-header {
     text-align: center;
     margin-bottom: 40px;
@@ -214,7 +229,6 @@ body {
     border-left: 4px solid transparent;
     transition: all 0.3s;
     font-weight: 500;
-    cursor: pointer;
 }
 
 .menu-item:hover, .menu-item.active {
@@ -235,16 +249,6 @@ body {
     border-radius: 10px;
     box-shadow: 0 3px 15px rgba(0,0,0,0.08);
     padding: 30px;
-    position: relative;
-    z-index: 2;
-}
-
-.account-section {
-    display: none;
-}
-
-.account-section.active {
-    display: block;
 }
 
 .section-title {
@@ -409,49 +413,6 @@ body {
     font-size: 14px;
     color: #666;
 }
-
-/* Activity */
-.activity-list {
-    margin-top: 20px;
-}
-
-.activity-item {
-    display: flex;
-    align-items: center;
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
-.activity-item:last-child {
-    border-bottom: none;
-}
-
-.activity-icon {
-    width: 40px;
-    height: 40px;
-    background: #f8f9fa;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-right: 15px;
-    color: #2E4053;
-}
-
-.activity-details {
-    flex: 1;
-}
-
-.activity-title {
-    font-weight: 600;
-    color: #333;
-    margin-bottom: 3px;
-}
-
-.activity-time {
-    font-size: 13px;
-    color: #888;
-}
 </style>
 
 <div class="account-container">
@@ -477,28 +438,16 @@ body {
                 <div class="user-name"><?php echo htmlspecialchars($user['FNAME'] . ' ' . $user['LNAME']); ?></div>
                 <div class="user-email"><?php echo htmlspecialchars($user['EMAIL']); ?></div>
                 <div class="user-role">
-                    <?php 
-                    $role_names = [
-                        'A' => 'Administrator',
-                        'T' => 'Thoroughbred User',
-                        'S' => 'Standardbred User',
-                        'ST' => 'Full Access User',
-                        'user' => 'Basic User'
-                    ];
-                    echo $role_names[$user['USERROLE'] ?? 'user'];
-                    ?>
+                    <?php echo $role_names[$user['USERROLE'] ?? 'user']; ?>
                 </div>
             </div>
             
             <div class="account-menu">
-                <a href="javascript:void(0)" class="menu-item active" data-target="profile">
+                <a href="#profile" class="menu-item active">
                     <i class="fa fa-user"></i> Profile Information
                 </a>
-                <a href="javascript:void(0)" class="menu-item" data-target="password">
+                <a href="#password" class="menu-item">
                     <i class="fa fa-lock"></i> Change Password
-                </a>
-                <a href="javascript:void(0)" class="menu-item" data-target="activity">
-                    <i class="fa fa-history"></i> Recent Activity
                 </a>
                 <a href="logout.php" class="menu-item">
                     <i class="fa fa-sign-out"></i> Logout
@@ -509,7 +458,7 @@ body {
         <!-- Main Content -->
         <div class="account-content">
             <!-- Profile Section -->
-            <div id="profile" class="account-section active">
+            <div id="profile">
                 <h2 class="section-title">
                     <i class="fa fa-user" style="margin-right: 10px;"></i>Profile Information
                 </h2>
@@ -588,8 +537,10 @@ body {
                 </div>
             </div>
             
+            <hr style="margin: 40px 0; border-color: #eee;">
+            
             <!-- Change Password Section -->
-            <div id="password" class="account-section">
+            <div id="password">
                 <h2 class="section-title">
                     <i class="fa fa-lock" style="margin-right: 10px;"></i>Change Password
                 </h2>
@@ -621,106 +572,38 @@ body {
                     </button>
                 </form>
             </div>
-            
-            <!-- Recent Activity Section -->
-            <div id="activity" class="account-section">
-                <h2 class="section-title">
-                    <i class="fa fa-history" style="margin-right: 10px;"></i>Recent Activity
-                </h2>
-                
-                <div class="activity-list">
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fa fa-user-plus"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Account Created</div>
-                            <div class="activity-time"><?php echo date('F j, Y \a\t g:i A', strtotime($user['created_at'] ?? date('Y-m-d'))); ?></div>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fa fa-sign-in-alt"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Last Login</div>
-                            <div class="activity-time">Today at <?php echo date('g:i A'); ?></div>
-                        </div>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="activity-icon">
-                            <i class="fa fa-info-circle"></i>
-                        </div>
-                        <div class="activity-details">
-                            <div class="activity-title">Profile Viewed</div>
-                            <div class="activity-time">Just now</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>
 
+<!-- SIMPLE JavaScript - No tab navigation to avoid conflicts -->
 <script>
-// Fixed Simple tab navigation - No conflict with Bootstrap
-document.addEventListener('DOMContentLoaded', function() {
-    const menuItems = document.querySelectorAll('.account-menu .menu-item');
-    
-    menuItems.forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Only handle items with data-target (not logout link)
-            if (this.hasAttribute('data-target')) {
-                e.preventDefault();
-                e.stopPropagation(); // CRITICAL: Prevent interfering with Bootstrap
-                
-                // Remove active class from all items
-                menuItems.forEach(i => i.classList.remove('active'));
-                // Add active class to clicked item
-                this.classList.add('active');
-                
-                // Hide all sections
-                document.querySelectorAll('.account-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                
-                // Show target section
-                const targetId = this.getAttribute('data-target');
-                const targetSection = document.getElementById(targetId);
-                if (targetSection) {
-                    targetSection.classList.add('active');
-                }
-            }
-        });
-    });
-    
-    // Initialize Bootstrap dropdowns properly
-    if (typeof $ !== 'undefined') {
-        $('.dropdown-toggle').dropdown();
-    }
-});
+// Remove any complex JavaScript that might conflict with Bootstrap
+// Just keep it simple
 
-// EMERGENCY FIX: Ensure header dropdowns always work
-$(document).ready(function() {
-    // Reinitialize Bootstrap dropdowns
-    $('.dropdown-toggle').dropdown();
-    
-    // Override any click handlers that might be blocking
-    $('.dropdown-toggle').off('click').on('click', function(e) {
-        e.stopPropagation();
-        $(this).dropdown('toggle');
-        return false;
+// Initialize Bootstrap dropdowns if jQuery is available
+if (typeof jQuery !== 'undefined') {
+    $(document).ready(function() {
+        // Just ensure Bootstrap dropdowns work
+        $('.dropdown-toggle').dropdown();
     });
+}
+
+// If still having issues, try this pure JS fix
+document.addEventListener('click', function(e) {
+    // If clicking on a dropdown toggle, let Bootstrap handle it
+    if (e.target.classList.contains('dropdown-toggle') || e.target.closest('.dropdown-toggle')) {
+        return; // Let Bootstrap do its thing
+    }
     
-    // Ensure header is fully clickable
-    $('.header-area, .header-area *').css({
-        'pointer-events': 'auto',
-        'z-index': '99999'
-    });
-    
-    // Make sure dropdowns appear above everything
-    $('.dropdown-menu').css('z-index', '100000');
+    // Close dropdowns when clicking outside (Bootstrap should handle this)
+    if (!e.target.closest('.dropdown')) {
+        document.querySelectorAll('.dropdown').forEach(function(dropdown) {
+            dropdown.classList.remove('show');
+        });
+        document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
+            menu.classList.remove('show');
+        });
+    }
 });
 </script>
