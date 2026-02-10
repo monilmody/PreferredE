@@ -3,12 +3,6 @@ if (session_status() === PHP_SESSION_NONE) {
     session_start();
 }
 
-// Check if user is logged in
-if (!isset($_SESSION['UserName'])) {
-    header("Location: login.php");
-    exit();
-}
-
 require_once("config.php");
 require_once("db-settings.php");
 
@@ -89,40 +83,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 include("./header.php");
+
+// Check if user is logged in
+if (!isset($_SESSION['UserName'])) {
+    header("Location: login.php");
+    exit();
+}
 ?>
 
 <style>
-/* CRITICAL FIXES - Add these first */
+/* Account Page Styles - ADD THESE CRITICAL FIXES */
 body {
     padding-top: 100px !important;
     position: relative;
-    overflow-x: hidden;
 }
 
-/* Force header to be clickable */
-.header-area {
-    z-index: 99999 !important;
-    pointer-events: auto !important;
-}
-
-.header-area * {
-    pointer-events: auto !important;
-    z-index: 99999 !important;
-}
-
-.dropdown-menu {
-    z-index: 100000 !important;
-}
-
-/* Account Page Styles */
 .account-container {
-    max-width: 800px; /* Reduced from 1200px */
+    max-width: 1200px;
     margin: 20px auto 40px !important;
     padding: 0 20px;
     position: relative;
     z-index: 1;
 }
 
+/* CRITICAL: Ensure header dropdowns work */
+.header-area {
+    z-index: 9999 !important;
+}
+
+.header-area * {
+    pointer-events: auto !important;
+}
+
+.dropdown-menu {
+    z-index: 10000 !important;
+}
+
+/* Account Page Styles */
 .account-header {
     text-align: center;
     margin-bottom: 40px;
@@ -142,64 +139,128 @@ body {
     font-size: 16px;
 }
 
-/* Single column layout - simpler */
-.account-content {
+.account-grid {
+    display: grid;
+    grid-template-columns: 300px 1fr;
+    gap: 30px;
+}
+
+@media (max-width: 992px) {
+    .account-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Sidebar */
+.account-sidebar {
     background: white;
     border-radius: 10px;
     box-shadow: 0 3px 15px rgba(0,0,0,0.08);
-    padding: 40px;
+    padding: 0;
+    overflow: hidden;
 }
 
-.user-profile-header {
+.user-profile-card {
+    padding: 30px;
     text-align: center;
-    margin-bottom: 40px;
-    padding-bottom: 20px;
-    border-bottom: 1px solid #eee;
+    background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
+    color: white;
 }
 
 .user-avatar {
     width: 100px;
     height: 100px;
-    background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
+    background: white;
     border-radius: 50%;
     margin: 0 auto 20px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 40px;
-    color: white;
+    color: #2E4053;
     font-weight: bold;
 }
 
 .user-name {
-    font-size: 24px;
+    font-size: 22px;
     font-weight: 600;
     margin-bottom: 5px;
-    color: #2E4053;
 }
 
 .user-email {
-    font-size: 16px;
-    color: #666;
+    font-size: 14px;
+    opacity: 0.9;
     margin-bottom: 15px;
 }
 
 .user-role {
     display: inline-block;
-    background: #f8f9fa;
-    color: #2E4053;
+    background: rgba(255,255,255,0.2);
     padding: 5px 15px;
     border-radius: 20px;
-    font-size: 14px;
+    font-size: 13px;
     font-weight: 500;
-    border: 1px solid #ddd;
+}
+
+.account-menu {
+    padding: 20px 0;
+}
+
+.menu-item {
+    display: block;
+    padding: 15px 30px;
+    color: #555;
+    text-decoration: none;
+    border-left: 4px solid transparent;
+    transition: all 0.3s;
+    font-weight: 500;
+    cursor: pointer;
+}
+
+.menu-item:hover, .menu-item.active {
+    background: #f8f9fa;
+    color: #2E4053;
+    border-left-color: #2E4053;
+}
+
+.menu-item i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+}
+
+/* Content Area */
+.account-content {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+    padding: 30px;
+    position: relative;
+    z-index: 2;
+}
+
+.account-section {
+    display: none;
+}
+
+.account-section.active {
+    display: block;
+}
+
+.section-title {
+    color: #2E4053;
+    font-size: 22px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #eee;
+    font-weight: 600;
 }
 
 /* Message Alerts */
 .message-alert {
     padding: 15px 20px;
     border-radius: 6px;
-    margin-bottom: 30px;
+    margin-bottom: 25px;
     display: flex;
     align-items: center;
 }
@@ -214,6 +275,12 @@ body {
     background-color: #f8d7da;
     color: #721c24;
     border: 1px solid #f5c6cb;
+}
+
+.message-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
 }
 
 .message-alert i {
@@ -266,7 +333,6 @@ body {
 .readonly-field {
     background-color: #f8f9fa;
     color: #666;
-    cursor: not-allowed;
 }
 
 .password-hint {
@@ -292,7 +358,6 @@ body {
     transition: all 0.3s;
     display: inline-flex;
     align-items: center;
-    margin-top: 10px;
 }
 
 .btn-primary:hover {
@@ -305,294 +370,357 @@ body {
     margin-right: 8px;
 }
 
-/* Section titles */
-.section-title {
-    color: #2E4053;
-    font-size: 22px;
-    margin: 40px 0 25px;
-    padding-bottom: 15px;
-    border-bottom: 1px solid #eee;
-    font-weight: 600;
-}
-
-.section-title:first-child {
-    margin-top: 0;
-}
-
-/* Stats Cards - Simplified */
+/* Stats Cards */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
     margin-top: 30px;
 }
 
 .stat-card {
     background: white;
     border-radius: 8px;
-    padding: 15px;
+    padding: 20px;
     text-align: center;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.08);
     border: 1px solid #eee;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover {
+    transform: translateY(-5px);
+}
+
+.stat-icon {
+    font-size: 30px;
+    color: #2E4053;
+    margin-bottom: 15px;
 }
 
 .stat-number {
-    font-size: 20px;
+    font-size: 28px;
     font-weight: 700;
     color: #2E4053;
     margin-bottom: 5px;
 }
 
 .stat-label {
-    font-size: 13px;
+    font-size: 14px;
     color: #666;
+}
+
+/* Activity */
+.activity-list {
+    margin-top: 20px;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #eee;
+}
+
+.activity-item:last-child {
+    border-bottom: none;
+}
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    background: #f8f9fa;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    color: #2E4053;
+}
+
+.activity-details {
+    flex: 1;
+}
+
+.activity-title {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 3px;
+}
+
+.activity-time {
+    font-size: 13px;
+    color: #888;
 }
 </style>
 
 <div class="account-container">
     <div class="account-header">
         <h1>My Account</h1>
-        <p>Manage your profile and password</p>
+        <p>Manage your profile, settings, and preferences</p>
     </div>
 
     <?php if ($message): ?>
         <div class="message-alert message-<?php echo $message_type; ?>">
-            <i class="fa fa-<?php echo $message_type === 'success' ? 'check-circle' : 'exclamation-circle'; ?>"></i>
+            <i class="fa fa-<?php echo $message_type === 'success' ? 'check-circle' : ($message_type === 'error' ? 'exclamation-circle' : 'info-circle'); ?>"></i>
             <?php echo htmlspecialchars($message); ?>
         </div>
     <?php endif; ?>
 
-    <div class="account-content">
-        <!-- User Profile Header -->
-        <div class="user-profile-header">
-            <div class="user-avatar">
-                <?php echo strtoupper(substr($user['FNAME'] ?? 'U', 0, 1)); ?>
+    <div class="account-grid">
+        <!-- Sidebar -->
+        <div class="account-sidebar">
+            <div class="user-profile-card">
+                <div class="user-avatar">
+                    <?php echo strtoupper(substr($user['FNAME'] ?? 'U', 0, 1)); ?>
+                </div>
+                <div class="user-name"><?php echo htmlspecialchars($user['FNAME'] . ' ' . $user['LNAME']); ?></div>
+                <div class="user-email"><?php echo htmlspecialchars($user['EMAIL']); ?></div>
+                <div class="user-role">
+                    <?php 
+                    $role_names = [
+                        'A' => 'Administrator',
+                        'T' => 'Thoroughbred User',
+                        'S' => 'Standardbred User',
+                        'ST' => 'Full Access User',
+                        'user' => 'Basic User'
+                    ];
+                    echo $role_names[$user['USERROLE'] ?? 'user'];
+                    ?>
+                </div>
             </div>
-            <div class="user-name"><?php echo htmlspecialchars($user['FNAME'] . ' ' . $user['LNAME']); ?></div>
-            <div class="user-email"><?php echo htmlspecialchars($user['EMAIL']); ?></div>
-            <div class="user-role">
-                <?php 
-                $role_names = [
-                    'A' => 'Administrator',
-                    'T' => 'Thoroughbred User',
-                    'S' => 'Standardbred User',
-                    'ST' => 'Full Access User',
-                    'user' => 'Basic User'
-                ];
-                echo $role_names[$user['USERROLE'] ?? 'user'];
-                ?>
+            
+            <div class="account-menu">
+                <a href="javascript:void(0)" class="menu-item active" data-target="profile">
+                    <i class="fa fa-user"></i> Profile Information
+                </a>
+                <a href="javascript:void(0)" class="menu-item" data-target="password">
+                    <i class="fa fa-lock"></i> Change Password
+                </a>
+                <a href="javascript:void(0)" class="menu-item" data-target="activity">
+                    <i class="fa fa-history"></i> Recent Activity
+                </a>
+                <a href="logout.php" class="menu-item">
+                    <i class="fa fa-sign-out"></i> Logout
+                </a>
             </div>
         </div>
 
-        <!-- Profile Information Section -->
-        <h2 class="section-title">
-            <i class="fa fa-user" style="margin-right: 10px;"></i>Profile Information
-        </h2>
-        
-        <form method="POST" action="">
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="first_name">First Name</label>
-                    <input type="text" class="form-control" id="first_name" name="first_name" 
-                           value="<?php echo htmlspecialchars($user['FNAME'] ?? ''); ?>" required>
-                </div>
+        <!-- Main Content -->
+        <div class="account-content">
+            <!-- Profile Section -->
+            <div id="profile" class="account-section active">
+                <h2 class="section-title">
+                    <i class="fa fa-user" style="margin-right: 10px;"></i>Profile Information
+                </h2>
                 
-                <div class="form-group">
-                    <label for="last_name">Last Name</label>
-                    <input type="text" class="form-control" id="last_name" name="last_name" 
-                           value="<?php echo htmlspecialchars($user['LNAME'] ?? ''); ?>">
+                <form method="POST" action="">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="first_name">First Name</label>
+                            <input type="text" class="form-control" id="first_name" name="first_name" 
+                                   value="<?php echo htmlspecialchars($user['FNAME'] ?? ''); ?>" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="last_name">Last Name</label>
+                            <input type="text" class="form-control" id="last_name" name="last_name" 
+                                   value="<?php echo htmlspecialchars($user['LNAME'] ?? ''); ?>">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" class="form-control readonly-field" id="email" 
+                               value="<?php echo htmlspecialchars($user['EMAIL']); ?>" readonly>
+                        <small style="color: #666; font-size: 13px;">Email cannot be changed</small>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contact">Contact Number</label>
+                        <input type="text" class="form-control" id="contact" name="contact" 
+                               value="<?php echo htmlspecialchars($user['CONTACT'] ?? ''); ?>" 
+                               placeholder="Enter your contact number">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Account Type</label>
+                        <input type="text" class="form-control readonly-field" 
+                               value="<?php echo $role_names[$user['USERROLE'] ?? 'user']; ?>" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Account Status</label>
+                        <input type="text" class="form-control readonly-field" 
+                               value="<?php echo ($user['ACTIVE'] ?? 'N') === 'Y' ? 'Active' : 'Inactive'; ?>" readonly>
+                    </div>
+                    
+                    <button type="submit" name="update_profile" class="btn-primary">
+                        <i class="fa fa-save"></i> Update Profile
+                    </button>
+                </form>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-calendar-check"></i>
+                        </div>
+                        <div class="stat-number"><?php echo date('M j, Y', strtotime($user['created_at'] ?? date('Y-m-d'))); ?></div>
+                        <div class="stat-label">Member Since</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-user-check"></i>
+                        </div>
+                        <div class="stat-number"><?php echo ($user['ACTIVE'] ?? 'N') === 'Y' ? 'Active' : 'Inactive'; ?></div>
+                        <div class="stat-label">Account Status</div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fa fa-shield-alt"></i>
+                        </div>
+                        <div class="stat-number"><?php echo $role_names[$user['USERROLE'] ?? 'user']; ?></div>
+                        <div class="stat-label">Access Level</div>
+                    </div>
                 </div>
             </div>
             
-            <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" class="form-control readonly-field" id="email" 
-                       value="<?php echo htmlspecialchars($user['EMAIL']); ?>" readonly>
-                <small style="color: #666; font-size: 13px;">Email cannot be changed</small>
+            <!-- Change Password Section -->
+            <div id="password" class="account-section">
+                <h2 class="section-title">
+                    <i class="fa fa-lock" style="margin-right: 10px;"></i>Change Password
+                </h2>
+                
+                <form method="POST" action="">
+                    <div class="form-group">
+                        <label for="current_password">Current Password</label>
+                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                    </div>
+                    
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="new_password">New Password</label>
+                            <input type="password" class="form-control" id="new_password" name="new_password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_password">Confirm New Password</label>
+                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                        </div>
+                    </div>
+                    
+                    <div class="password-hint">
+                        <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
+                    </div>
+                    
+                    <button type="submit" name="change_password" class="btn-primary">
+                        <i class="fa fa-key"></i> Change Password
+                    </button>
+                </form>
             </div>
             
-            <div class="form-group">
-                <label for="contact">Contact Number</label>
-                <input type="text" class="form-control" id="contact" name="contact" 
-                       value="<?php echo htmlspecialchars($user['CONTACT'] ?? ''); ?>" 
-                       placeholder="Enter your contact number">
-            </div>
-            
-            <div class="form-group">
-                <label>Account Type</label>
-                <input type="text" class="form-control readonly-field" 
-                       value="<?php echo $role_names[$user['USERROLE'] ?? 'user']; ?>" readonly>
-            </div>
-            
-            <div class="form-group">
-                <label>Account Status</label>
-                <input type="text" class="form-control readonly-field" 
-                       value="<?php echo ($user['ACTIVE'] ?? 'N') === 'Y' ? 'Active' : 'Inactive'; ?>" readonly>
-            </div>
-            
-            <button type="submit" name="update_profile" class="btn-primary">
-                <i class="fa fa-save"></i> Update Profile
-            </button>
-        </form>
-        
-        <!-- Stats Cards -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-number"><?php echo date('M j, Y', strtotime($user['created_at'] ?? date('Y-m-d'))); ?></div>
-                <div class="stat-label">Member Since</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-number"><?php echo ($user['ACTIVE'] ?? 'N') === 'Y' ? 'Active' : 'Inactive'; ?></div>
-                <div class="stat-label">Account Status</div>
-            </div>
-            
-            <div class="stat-card">
-                <div class="stat-number"><?php echo $role_names[$user['USERROLE'] ?? 'user']; ?></div>
-                <div class="stat-label">Access Level</div>
+            <!-- Recent Activity Section -->
+            <div id="activity" class="account-section">
+                <h2 class="section-title">
+                    <i class="fa fa-history" style="margin-right: 10px;"></i>Recent Activity
+                </h2>
+                
+                <div class="activity-list">
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fa fa-user-plus"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Account Created</div>
+                            <div class="activity-time"><?php echo date('F j, Y \a\t g:i A', strtotime($user['created_at'] ?? date('Y-m-d'))); ?></div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fa fa-sign-in-alt"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Last Login</div>
+                            <div class="activity-time">Today at <?php echo date('g:i A'); ?></div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fa fa-info-circle"></i>
+                        </div>
+                        <div class="activity-details">
+                            <div class="activity-title">Profile Viewed</div>
+                            <div class="activity-time">Just now</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
-        <!-- Change Password Section -->
-        <h2 class="section-title">
-            <i class="fa fa-lock" style="margin-right: 10px;"></i>Change Password
-        </h2>
-        
-        <form method="POST" action="">
-            <div class="form-group">
-                <label for="current_password">Current Password</label>
-                <input type="password" class="form-control" id="current_password" name="current_password" required>
-            </div>
-            
-            <div class="form-row">
-                <div class="form-group">
-                    <label for="new_password">New Password</label>
-                    <input type="password" class="form-control" id="new_password" name="new_password" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="confirm_password">Confirm New Password</label>
-                    <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
-                </div>
-            </div>
-            
-            <div class="password-hint">
-                <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
-            </div>
-            
-            <button type="submit" name="change_password" class="btn-primary">
-                <i class="fa fa-key"></i> Change Password
-            </button>
-        </form>
     </div>
 </div>
 
-<!-- EMERGENCY FIX: Add this JavaScript to force header dropdowns to work -->
 <script>
-// Wait for everything to load
-window.addEventListener('load', function() {
-    // Force Bootstrap dropdowns to work
-    if (typeof $ !== 'undefined' && $.fn.dropdown) {
-        // Reinitialize all dropdowns
-        $('.dropdown-toggle').dropdown();
-        
-        // Remove any event handlers that might be blocking clicks
-        $('.dropdown-toggle').off('click').on('click', function(e) {
-            e.preventDefault();
-            e.stopImmediatePropagation();
-            $(this).dropdown('toggle');
-        });
-    }
+// Fixed Simple tab navigation - No conflict with Bootstrap
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.account-menu .menu-item');
     
-    // Make absolutely sure header is clickable
-    setTimeout(function() {
-        const header = document.querySelector('.header-area');
-        if (header) {
-            // Remove any inline styles that might be blocking
-            header.style.cssText = 'pointer-events: auto !important; z-index: 99999 !important; position: fixed !important;';
-            
-            // Make all children clickable too
-            const headerElements = header.querySelectorAll('*');
-            headerElements.forEach(el => {
-                el.style.pointerEvents = 'auto';
-                el.style.zIndex = '99999';
-            });
-        }
-        
-        // Remove any modal backdrops that might be blocking
-        const backdrops = document.querySelectorAll('.modal-backdrop, .fade, .in');
-        backdrops.forEach(el => {
-            if (el.parentNode) {
-                el.parentNode.removeChild(el);
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Only handle items with data-target (not logout link)
+            if (this.hasAttribute('data-target')) {
+                e.preventDefault();
+                e.stopPropagation(); // CRITICAL: Prevent interfering with Bootstrap
+                
+                // Remove active class from all items
+                menuItems.forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                this.classList.add('active');
+                
+                // Hide all sections
+                document.querySelectorAll('.account-section').forEach(section => {
+                    section.classList.remove('active');
+                });
+                
+                // Show target section
+                const targetId = this.getAttribute('data-target');
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.classList.add('active');
+                }
             }
         });
-    }, 100);
+    });
+    
+    // Initialize Bootstrap dropdowns properly
+    if (typeof $ !== 'undefined') {
+        $('.dropdown-toggle').dropdown();
+    }
 });
 
-// Nuclear option: If still not working after 1 second, force enable everything
-setTimeout(function() {
-    // Force enable ALL click events in header
-    document.querySelectorAll('.header-area a, .header-area button, .header-area .dropdown-toggle').forEach(el => {
-        el.onclick = null;
-        el.addEventListener('click', function(e) {
-            e.stopPropagation();
-            return true;
-        }, true);
+// EMERGENCY FIX: Ensure header dropdowns always work
+$(document).ready(function() {
+    // Reinitialize Bootstrap dropdowns
+    $('.dropdown-toggle').dropdown();
+    
+    // Override any click handlers that might be blocking
+    $('.dropdown-toggle').off('click').on('click', function(e) {
+        e.stopPropagation();
+        $(this).dropdown('toggle');
+        return false;
     });
     
-    // Remove any overlays
-    document.body.style.overflow = 'visible';
-    document.body.style.position = 'relative';
-    
-    // Create a debug helper
-    console.log('Header fix applied - dropdowns should now work');
-}, 1000);
-</script>
-
-<!-- SIMPLE ALTERNATIVE: If jQuery isn't working, use this pure JS fix -->
-<script>
-// Pure JavaScript fix for dropdowns
-document.addEventListener('DOMContentLoaded', function() {
-    // Find all dropdown toggles and make them work
-    const dropdownToggles = document.querySelectorAll('.dropdown-toggle');
-    
-    dropdownToggles.forEach(toggle => {
-        // Remove any existing click handlers
-        toggle.replaceWith(toggle.cloneNode(true));
-        
-        // Get the new element
-        const newToggle = document.querySelector('[data-toggle="dropdown"]');
-        
-        // Add click handler
-        newToggle.addEventListener('click', function(e) {
-            e.preventDefault();
-            e.stopPropagation();
-            
-            // Toggle dropdown manually
-            const dropdown = this.closest('.dropdown');
-            if (dropdown) {
-                dropdown.classList.toggle('show');
-                
-                // Show/hide dropdown menu
-                const menu = dropdown.querySelector('.dropdown-menu');
-                if (menu) {
-                    menu.classList.toggle('show');
-                }
-            }
-        });
+    // Ensure header is fully clickable
+    $('.header-area, .header-area *').css({
+        'pointer-events': 'auto',
+        'z-index': '99999'
     });
     
-    // Close dropdowns when clicking outside
-    document.addEventListener('click', function(e) {
-        if (!e.target.closest('.dropdown')) {
-            document.querySelectorAll('.dropdown').forEach(dropdown => {
-                dropdown.classList.remove('show');
-                const menu = dropdown.querySelector('.dropdown-menu');
-                if (menu) {
-                    menu.classList.remove('show');
-                }
-            });
-        }
-    });
+    // Make sure dropdowns appear above everything
+    $('.dropdown-menu').css('z-index', '100000');
 });
 </script>
