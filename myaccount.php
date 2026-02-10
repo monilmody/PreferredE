@@ -9,6 +9,11 @@
 
 require_once("config.php");
 require_once("db-settings.php");
+include("./session_page.php");
+
+// Get user details for display
+$username = $_SESSION['UserName'];
+$email = $_SESSION['UserEmail'] ?? $username;
 
 // Handle form submissions FIRST (before any output)
 $message = '';
@@ -95,16 +100,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Include header BEFORE checking session (header starts the session)
 include("./header.php");
-
-// NOW check if user is logged in (after header includes session_start())
-if (!isset($_SESSION['UserName'])) {
-    header("Location: login.php");
-    exit();
-}
-
-// Get user details for display
-$username = $_SESSION['UserName'];
-$email = $_SESSION['UserEmail'] ?? $username;
 
 $stmt = $mysqli->prepare("SELECT * FROM users WHERE USERNAME = ? OR EMAIL = ? LIMIT 1");
 $stmt->bind_param("ss", $email, $email);
