@@ -1850,6 +1850,8 @@ $sortList = array("Horse", "Yearfoal", "Sex", "Sire", "Dam", "Farmname", "Datefo
                         newCloseBtn.onclick = closeSidebarNuclear;
                     }
                 }, 100);
+
+                location.reload();
             }
 
             function sanitizeHorseId(name) {
