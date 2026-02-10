@@ -144,11 +144,11 @@ require_once("config.php");
                                 echo '<li><a href="registration.php" class="active">REGISTER</a></li>';
                                 echo '<li><a href="login.php">Login</a></li>';
                             } else {
-                                echo '<a class="dropdown-item" href="myaccount.php">My Account</a>';
                                 echo '<li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">'.$userName.'</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
+                                	<a class="dropdown-item" href="myaccount.php">My Account</a>
                                 	<a class="dropdown-item" href="logout.php">Logout</a>
                                 </div>
                             </li>';
