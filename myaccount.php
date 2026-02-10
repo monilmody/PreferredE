@@ -7,6 +7,8 @@
 // Check if user is logged in - MUST be after including header.php
 // We'll move this check AFTER including header.php
 
+ob_start();
+
 require_once("config.php");
 require_once("db-settings.php");
 include("./session_page.php");
@@ -97,6 +99,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
+
+ob_end_clean();
 
 // Include header BEFORE checking session (header starts the session)
 include("./header.php");
