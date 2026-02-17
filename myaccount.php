@@ -133,6 +133,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif (!preg_match('/[0-9]/', $new_password)) {
                 $message = "Password must contain at least one number";
                 $message_type = "error";
+            } elseif (!preg_match('/[\W_]/', $new_password)) {
+                $message = "Password must contain at least one special character";
+                $message_type = "error";
             } elseif ($user['PASSWORD'] === $current_password) {
                 
                 // Try to update in Cognito first (if user is verified)
@@ -223,6 +226,75 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } else {
                 $message = "Current password is incorrect!";
                 $message_type = "error";
+            }
+        }
+        
+        // Handle account deletion
+        if (isset($_POST['delete_account'])) {
+            $confirm_delete = $_POST['confirm_delete'] ?? '';
+            $delete_password = $_POST['delete_password'] ?? '';
+            
+            if ($confirm_delete !== 'DELETE') {
+                $message = "Please type 'DELETE' to confirm account deletion";
+                $message_type = "error";
+            } elseif ($delete_password !== $user['PASSWORD']) {
+                $message = "Password is incorrect!";
+                $message_type = "error";
+            } else {
+                // Start transaction
+                $mysqli->begin_transaction();
+                
+                try {
+                    // 1. Delete from Cognito if verified
+                    if ($user['cognito_verified'] == 1) {
+                        try {
+                            require_once 'vendor/autoload.php';
+                            
+                            $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
+                                'region' => COGNITO_REGION,
+                                'version' => 'latest'
+                            ]);
+                            
+                            // Delete user from Cognito
+                            $client->adminDeleteUser([
+                                'UserPoolId' => COGNITO_USER_POOL_ID,
+                                'Username' => $email
+                            ]);
+                            
+                            error_log("Cognito user deleted: $email");
+                            
+                        } catch (Exception $e) {
+                            error_log("Cognito delete failed: " . $e->getMessage());
+                            // Continue with database deletion even if Cognito fails
+                        }
+                    }
+                    
+                    // 2. Delete from database
+                    $delete_stmt = $mysqli->prepare("DELETE FROM users WHERE EMAIL = ?");
+                    $delete_stmt->bind_param("s", $email);
+                    
+                    if (!$delete_stmt->execute()) {
+                        throw new Exception("Database delete failed: " . $delete_stmt->error);
+                    }
+                    
+                    // Commit transaction
+                    $mysqli->commit();
+                    
+                    // Clear session and logout
+                    $_SESSION = array();
+                    session_destroy();
+                    setcookie("LoggedInUser", "", time() - 3600, "/");
+                    
+                    // Redirect with message
+                    header("Location: registration.php?deleted=1");
+                    exit();
+                    
+                } catch (Exception $e) {
+                    $mysqli->rollback();
+                    $message = "Error deleting account: " . $e->getMessage();
+                    $message_type = "error";
+                    error_log("Account deletion failed: " . $e->getMessage());
+                }
             }
         }
     }
@@ -505,10 +577,34 @@ body {
     margin-right: 8px;
 }
 
-/* Stats Cards */
+.btn-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+    color: white;
+    border: none;
+    padding: 12px 30px;
+    border-radius: 6px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(135deg, #c82333 0%, #bd2130 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(220, 53, 69, 0.3);
+}
+
+.btn-danger i {
+    margin-right: 8px;
+}
+
+/* Stats Cards - Removed member since */
 .stats-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
     margin-top: 30px;
 }
@@ -562,6 +658,35 @@ body {
 .badge-unverified {
     background-color: #fff3cd;
     color: #856404;
+}
+
+/* Delete Account Section */
+.delete-account-section {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 2px solid #dc3545;
+}
+
+.delete-warning {
+    background-color: #fff3cd;
+    border: 1px solid #ffeeba;
+    color: #856404;
+    padding: 15px;
+    border-radius: 6px;
+    margin-bottom: 20px;
+}
+
+.delete-warning i {
+    color: #dc3545;
+    margin-right: 10px;
+}
+
+.confirm-input {
+    border: 2px solid #dc3545 !important;
+}
+
+.confirm-input:focus {
+    box-shadow: 0 0 0 3px rgba(220, 53, 69, 0.25) !important;
 }
 </style>
 
@@ -672,16 +797,8 @@ body {
                     </button>
                 </form>
                 
-                <!-- Stats Cards -->
+                <!-- Stats Cards - Removed member since -->
                 <div class="stats-grid">
-                    <div class="stat-card">
-                        <div class="stat-icon">
-                            <i class="fa fa-calendar-check"></i>
-                        </div>
-                        <div class="stat-number"><?php echo date('M j, Y', strtotime($user['created_at'] ?? date('Y-m-d'))); ?></div>
-                        <div class="stat-label">Member Since</div>
-                    </div>
-                    
                     <div class="stat-card">
                         <div class="stat-icon">
                             <i class="fa fa-user-check"></i>
@@ -698,12 +815,42 @@ body {
                         <div class="stat-label">Access Level</div>
                     </div>
                 </div>
+
+                <!-- Delete Account Section -->
+                <div class="delete-account-section">
+                    <h3 style="color: #dc3545; margin-bottom: 20px;">
+                        <i class="fa fa-exclamation-triangle"></i> Delete Account
+                    </h3>
+                    
+                    <div class="delete-warning">
+                        <i class="fa fa-exclamation-circle"></i>
+                        <strong>Warning:</strong> This action is permanent and cannot be undone. 
+                        All your data will be permanently removed from our system.
+                    </div>
+                    
+                    <form method="POST" action="" onsubmit="return confirmDelete()">
+                        <div class="form-group">
+                            <label for="delete_password">Enter Your Password to Confirm:</label>
+                            <input type="password" class="form-control" id="delete_password" name="delete_password" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="confirm_delete">Type <strong style="color: #dc3545;">DELETE</strong> to confirm:</label>
+                            <input type="text" class="form-control confirm-input" id="confirm_delete" name="confirm_delete" 
+                                   placeholder="DELETE" required pattern="DELETE" style="text-transform: uppercase;">
+                        </div>
+                        
+                        <button type="submit" name="delete_account" class="btn-danger">
+                            <i class="fa fa-trash"></i> Permanently Delete My Account
+                        </button>
+                    </form>
+                </div>
             </div>
             
             <hr style="margin: 40px 0; border-color: #eee;">
             
             <!-- Change Password Section -->
-            <div id="password">
+            <div id="password" style="display: none;">
                 <h2 class="section-title">
                     <i class="fa fa-lock" style="margin-right: 10px;"></i>Change Password
                 </h2>
@@ -727,7 +874,7 @@ body {
                     </div>
                     
                     <div class="password-hint">
-                        <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, and number
+                        <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
                     </div>
                     
                     <?php if ($user['cognito_verified'] == 1): ?>
@@ -846,6 +993,9 @@ if (document.querySelector('form')) {
                 if (!/[0-9]/.test(newPass)) {
                     errors.push('Password must contain at least one number');
                 }
+                if (!/[\W_]/.test(newPass)) {
+                    errors.push('Password must contain at least one special character');
+                }
                 
                 if (errors.length > 0) {
                     e.preventDefault();
@@ -854,6 +1004,11 @@ if (document.querySelector('form')) {
             }
         });
     });
+}
+
+// Confirm delete function
+function confirmDelete() {
+    return confirm('Are you absolutely sure you want to delete your account? This action cannot be undone.');
 }
 
 // Prevent form resubmission on page refresh
