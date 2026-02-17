@@ -16,6 +16,7 @@ include("./header.php");
 include("./session_page.php");
 require_once("config.php");
 require_once("db-settings.php");
+require_once("cognito.php");
 
 // Get user details for display
 $username = $_SESSION['UserName'];
@@ -53,12 +54,50 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $update_stmt->bind_param("ssss", $first_name, $last_name, $contact, $email);
             
             if ($update_stmt->execute()) {
+                // Also update in Cognito if user is verified
+                if ($user['cognito_verified'] == 1) {
+                    try {
+                        require_once 'vendor/autoload.php';
+                        
+                        $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
+                            'region' => COGNITO_REGION,
+                            'version' => 'latest'
+                        ]);
+                        
+                        // Update user attributes in Cognito
+                        $client->adminUpdateUserAttributes([
+                            'UserPoolId' => COGNITO_USER_POOL_ID,
+                            'Username' => $email,
+                            'UserAttributes' => [
+                                [
+                                    'Name' => 'given_name',
+                                    'Value' => $first_name
+                                ],
+                                [
+                                    'Name' => 'family_name',
+                                    'Value' => $last_name
+                                ]
+                            ]
+                        ]);
+                        
+                        error_log("Cognito profile updated for: $email");
+                        
+                    } catch (Exception $e) {
+                        error_log("Cognito attribute update failed: " . $e->getMessage());
+                        // Don't fail the profile update if Cognito fails
+                        $message = "Profile updated in database but Cognito sync failed. Contact support if needed.";
+                        $message_type = "info";
+                    }
+                }
+                
                 // Update session
                 $_SESSION['UserFirstName'] = $first_name;
                 $_SESSION['UserName'] = !empty($first_name) ? $first_name : $email;
                 
-                $message = "Profile updated successfully!";
-                $message_type = "success";
+                if (empty($message)) {
+                    $message = "Profile updated successfully!";
+                    $message_type = "success";
+                }
                 
                 // Refresh user data for display
                 $user['FNAME'] = $first_name;
@@ -83,19 +122,102 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif (strlen($new_password) < 8) {
                 $message = "Password must be at least 8 characters";
                 $message_type = "error";
+            } elseif (!preg_match('/[A-Z]/', $new_password)) {
+                $message = "Password must contain at least one uppercase letter";
+                $message_type = "error";
+            } elseif (!preg_match('/[a-z]/', $new_password)) {
+                $message = "Password must contain at least one lowercase letter";
+                $message_type = "error";
+            } elseif (!preg_match('/[0-9]/', $new_password)) {
+                $message = "Password must contain at least one number";
+                $message_type = "error";
             } elseif ($user['PASSWORD'] === $current_password) {
-                // Update password in database
+                
+                // Try to update in Cognito first (if user is verified)
+                $cognito_success = false;
+                $cognito_error = '';
+                
+                if ($user['cognito_verified'] == 1) {
+                    try {
+                        require_once 'vendor/autoload.php';
+                        
+                        $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
+                            'region' => COGNITO_REGION,
+                            'version' => 'latest'
+                        ]);
+                        
+                        // Method 1: Using admin privileges (IAM role) - doesn't require current password
+                        // This is simpler and more reliable
+                        try {
+                            $client->adminSetUserPassword([
+                                'UserPoolId' => COGNITO_USER_POOL_ID,
+                                'Username' => $email,
+                                'Password' => $new_password,
+                                'Permanent' => true
+                            ]);
+                            
+                            $cognito_success = true;
+                            error_log("Cognito password updated via admin for: $email");
+                            
+                        } catch (Exception $adminError) {
+                            // If admin method fails, try the user authentication method
+                            error_log("Admin password set failed, trying user auth: " . $adminError->getMessage());
+                            
+                            // First authenticate to get the access token
+                            $auth_result = $client->initiateAuth([
+                                'AuthFlow' => 'USER_PASSWORD_AUTH',
+                                'ClientId' => COGNITO_APP_CLIENT_ID,
+                                'AuthParameters' => [
+                                    'USERNAME' => $email,
+                                    'PASSWORD' => $current_password
+                                ]
+                            ]);
+                            
+                            if (isset($auth_result['AuthenticationResult'])) {
+                                $access_token = $auth_result['AuthenticationResult']['AccessToken'];
+                                
+                                // Change password in Cognito
+                                $client->changePassword([
+                                    'AccessToken' => $access_token,
+                                    'PreviousPassword' => $current_password,
+                                    'ProposedPassword' => $new_password
+                                ]);
+                                
+                                $cognito_success = true;
+                                error_log("Cognito password updated via user auth for: $email");
+                            }
+                        }
+                        
+                    } catch (Exception $e) {
+                        $cognito_error = $e->getMessage();
+                        error_log("Cognito password change failed for {$email}: " . $cognito_error);
+                    }
+                } else {
+                    // User not verified in Cognito, just update database
+                    $cognito_success = true; // Treat as success since no Cognito sync needed
+                }
+                
+                // Update password in database (always do this)
                 $update_stmt = $mysqli->prepare("UPDATE users SET PASSWORD = ? WHERE USERNAME = ?");
                 $update_stmt->bind_param("ss", $new_password, $email);
                 
                 if ($update_stmt->execute()) {
-                    $message = "Password changed successfully!";
-                    $message_type = "success";
+                    if ($cognito_success) {
+                        $message = "Password changed successfully in both database and Cognito!";
+                        $message_type = "success";
+                    } elseif ($user['cognito_verified'] == 1) {
+                        $message = "Password updated in database but Cognito sync failed. Error: " . $cognito_error;
+                        $message_type = "warning";
+                    } else {
+                        $message = "Password changed successfully in database. Verify your email to enable Cognito sync.";
+                        $message_type = "success";
+                    }
                 } else {
-                    $message = "Error changing password: " . $update_stmt->error;
+                    $message = "Error changing password in database: " . $update_stmt->error;
                     $message_type = "error";
                 }
                 $update_stmt->close();
+                
             } else {
                 $message = "Current password is incorrect!";
                 $message_type = "error";
@@ -104,6 +226,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Refresh user data after any updates
 $stmt = $mysqli->prepare("SELECT * FROM users WHERE USERNAME = ? OR EMAIL = ? LIMIT 1");
 $stmt->bind_param("ss", $email, $email);
 $stmt->execute();
@@ -286,6 +409,12 @@ body {
     border: 1px solid #bee5eb;
 }
 
+.message-warning {
+    background-color: #fff3cd;
+    color: #856404;
+    border: 1px solid #ffeeba;
+}
+
 .message-alert i {
     margin-right: 10px;
     font-size: 18px;
@@ -336,6 +465,7 @@ body {
 .readonly-field {
     background-color: #f8f9fa;
     color: #666;
+    cursor: not-allowed;
 }
 
 .password-hint {
@@ -412,6 +542,25 @@ body {
     font-size: 14px;
     color: #666;
 }
+
+.verification-badge {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-left: 10px;
+}
+
+.badge-verified {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.badge-unverified {
+    background-color: #fff3cd;
+    color: #856404;
+}
 </style>
 
 <div class="account-container">
@@ -422,7 +571,11 @@ body {
 
     <?php if ($message): ?>
         <div class="message-alert message-<?php echo $message_type; ?>">
-            <i class="fa fa-<?php echo $message_type === 'success' ? 'check-circle' : ($message_type === 'error' ? 'exclamation-circle' : 'info-circle'); ?>"></i>
+            <i class="fa fa-<?php 
+                echo $message_type === 'success' ? 'check-circle' : 
+                    ($message_type === 'error' ? 'exclamation-circle' : 
+                    ($message_type === 'warning' ? 'exclamation-triangle' : 'info-circle')); 
+            ?>"></i>
             <?php echo htmlspecialchars($message); ?>
         </div>
     <?php endif; ?>
@@ -439,6 +592,15 @@ body {
                 <div class="user-role">
                     <?php echo $role_names[$user['USERROLE'] ?? 'user']; ?>
                 </div>
+                <?php if ($user['cognito_verified'] == 1): ?>
+                    <span class="verification-badge badge-verified" style="margin-top: 15px;">
+                        <i class="fa fa-check-circle"></i> Verified in Cognito
+                    </span>
+                <?php else: ?>
+                    <span class="verification-badge badge-unverified" style="margin-top: 15px;">
+                        <i class="fa fa-exclamation-triangle"></i> Email Not Verified
+                    </span>
+                <?php endif; ?>
             </div>
             
             <div class="account-menu">
@@ -563,8 +725,18 @@ body {
                     </div>
                     
                     <div class="password-hint">
-                        <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
+                        <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, and number
                     </div>
+                    
+                    <?php if ($user['cognito_verified'] == 1): ?>
+                        <div style="margin-bottom: 15px; font-size: 13px; color: #28a745;">
+                            <i class="fa fa-check-circle"></i> Your password will be synchronized with Cognito
+                        </div>
+                    <?php else: ?>
+                        <div style="margin-bottom: 15px; font-size: 13px; color: #856404;">
+                            <i class="fa fa-info-circle"></i> Verify your email to enable Cognito password sync
+                        </div>
+                    <?php endif; ?>
                     
                     <button type="submit" name="change_password" class="btn-primary">
                         <i class="fa fa-key"></i> Change Password
@@ -575,35 +747,115 @@ body {
     </div>
 </div>
 
-<!-- SIMPLE JavaScript - No tab navigation to avoid conflicts -->
 <script>
-// Remove any complex JavaScript that might conflict with Bootstrap
-// Just keep it simple
+// Simple tab switching
+document.addEventListener('DOMContentLoaded', function() {
+    const menuItems = document.querySelectorAll('.menu-item');
+    const sections = {
+        'profile': document.getElementById('profile'),
+        'password': document.getElementById('password')
+    };
+    
+    // Hide password section initially if we're on profile
+    if (window.location.hash === '#password') {
+        sections.profile.style.display = 'none';
+        sections.password.style.display = 'block';
+        
+        menuItems.forEach(item => {
+            item.classList.remove('active');
+            if (item.getAttribute('href') === '#password') {
+                item.classList.add('active');
+            }
+        });
+    } else {
+        sections.password.style.display = 'none';
+        sections.profile.style.display = 'block';
+    }
+    
+    menuItems.forEach(item => {
+        item.addEventListener('click', function(e) {
+            e.preventDefault();
+            
+            const target = this.getAttribute('href').substring(1);
+            
+            // Hide all sections
+            Object.values(sections).forEach(section => {
+                if (section) section.style.display = 'none';
+            });
+            
+            // Show target section
+            if (sections[target]) {
+                sections[target].style.display = 'block';
+            }
+            
+            // Update active class
+            menuItems.forEach(i => i.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Update URL hash
+            window.location.hash = target;
+        });
+    });
+});
 
-// Initialize Bootstrap dropdowns if jQuery is available
-if (typeof jQuery !== 'undefined') {
-    $(document).ready(function() {
-        // Just ensure Bootstrap dropdowns work
-        $('.dropdown-toggle').dropdown();
+// Password strength checker
+if (document.getElementById('new_password')) {
+    const passwordInput = document.getElementById('new_password');
+    const confirmInput = document.getElementById('confirm_password');
+    
+    function checkPasswordStrength() {
+        const password = passwordInput.value;
+        
+        // Check if passwords match
+        if (confirmInput.value) {
+            if (password === confirmInput.value) {
+                confirmInput.style.borderColor = '#27ae60';
+            } else {
+                confirmInput.style.borderColor = '#e74c3c';
+            }
+        }
+    }
+    
+    passwordInput.addEventListener('input', checkPasswordStrength);
+    confirmInput.addEventListener('input', checkPasswordStrength);
+}
+
+// Form validation
+if (document.querySelector('form')) {
+    document.querySelectorAll('form').forEach(form => {
+        form.addEventListener('submit', function(e) {
+            if (this.querySelector('[name="change_password"]')) {
+                const newPass = document.getElementById('new_password').value;
+                const confirmPass = document.getElementById('confirm_password').value;
+                const errors = [];
+                
+                if (newPass !== confirmPass) {
+                    errors.push('Passwords do not match');
+                }
+                if (newPass.length < 8) {
+                    errors.push('Password must be at least 8 characters');
+                }
+                if (!/[A-Z]/.test(newPass)) {
+                    errors.push('Password must contain at least one uppercase letter');
+                }
+                if (!/[a-z]/.test(newPass)) {
+                    errors.push('Password must contain at least one lowercase letter');
+                }
+                if (!/[0-9]/.test(newPass)) {
+                    errors.push('Password must contain at least one number');
+                }
+                
+                if (errors.length > 0) {
+                    e.preventDefault();
+                    alert('Please fix the following errors:\n\n' + errors.join('\n'));
+                }
+            }
+        });
     });
 }
 
-// If still having issues, try this pure JS fix
-document.addEventListener('click', function(e) {
-    // If clicking on a dropdown toggle, let Bootstrap handle it
-    if (e.target.classList.contains('dropdown-toggle') || e.target.closest('.dropdown-toggle')) {
-        return; // Let Bootstrap do its thing
-    }
-    
-    // Close dropdowns when clicking outside (Bootstrap should handle this)
-    if (!e.target.closest('.dropdown')) {
-        document.querySelectorAll('.dropdown').forEach(function(dropdown) {
-            dropdown.classList.remove('show');
-        });
-        document.querySelectorAll('.dropdown-menu').forEach(function(menu) {
-            menu.classList.remove('show');
-        });
-    }
-});
-
+// Prevent form resubmission on page refresh
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
 </script>
