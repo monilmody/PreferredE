@@ -34,7 +34,7 @@ if (!empty($_POST)) {
     if (count($errors) == 0) {
         require_once("cognito.php");
         require_once("db-settings.php");
-        
+
         $authResult = CognitoAuth::authenticate($username, $password);
 
         if ($authResult['success']) {
@@ -55,6 +55,9 @@ if (!empty($_POST)) {
 
             // Get user details from your existing database
             $dbUserDetails = fetchUserDetails($username);
+
+            $_SESSION["UserFirstName"] = $dbUserDetails["FNAME"] ?? '';
+            $_SESSION["UserLastName"] = $dbUserDetails["LNAME"] ?? '';
 
             // Set session variables
             $_SESSION["UserActive"] = 'Y';

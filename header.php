@@ -5,16 +5,20 @@ if (session_status() === PHP_SESSION_NONE) {
 
 require_once("config.php");
 ?>
-<head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-18763673-4"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
 
-  gtag('config', 'UA-18763673-4');
-</script>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-18763673-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-18763673-4');
+    </script>
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -28,31 +32,31 @@ require_once("config.php");
     <link rel="icon" href="assets\images\favicon.ico" type="image/x-icon">
 </head>
 
-    
-    
-    <!-- ***** Header Area Start ***** -->
-    <header class="header-area header-sticky" style="background-color:#2E4053;position: fixed;">
-    	<div style= "margin:5px 30px 30px 30px;">
-                <div class="col-12">
-                    <nav class="main-nav">
-                        <!-- ***** Logo Start ***** -->
-                        <a href="index.php" class="logo">Preferred <em> Equine - AWS</em></a>
-                        <!-- ***** Logo End ***** -->
-                        <!-- ***** Menu Start ***** -->
-                        <ul class="nav">
-                            <li><a href="index.php" class="active">Home</a></li>
-                            <?php 
-                            // FIX 2: Check if session variable exists before using it
-                            $userName = $_SESSION["UserName"] ?? "";
-                            $userRole = $_SESSION["UserRole"] ?? "";
-                            
-                            if ($userName != "") {
-                                if ($userRole == "A" || $userRole == "S" || $userRole == "ST") {
-                            ?>
+
+
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky" style="background-color:#2E4053;position: fixed;">
+    <div style="margin:5px 30px 30px 30px;">
+        <div class="col-12">
+            <nav class="main-nav">
+                <!-- ***** Logo Start ***** -->
+                <a href="index.php" class="logo">Preferred <em> Equine - AWS</em></a>
+                <!-- ***** Logo End ***** -->
+                <!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                    <li><a href="index.php" class="active">Home</a></li>
+                    <?php
+                    // FIX 2: Check if session variable exists before using it
+                    $userName = $_SESSION["UserName"] ?? "";
+                    $userRole = $_SESSION["UserRole"] ?? "";
+
+                    if ($userName != "") {
+                        if ($userRole == "A" || $userRole == "S" || $userRole == "ST") {
+                    ?>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Standardbred</a>
-                              
-                                <div class="dropdown-menu" style="background-color:black;" >
+
+                                <div class="dropdown-menu" style="background-color:black;">
                                     <a class="dropdown-item" href="dam_search.php">Horse Search Report</a>
                                     <a class="dropdown-item" href="sire_analysis.php">Sire Analysis</a>
                                     <a class="dropdown-item" href="sire_analysis_summary.php">Sire Analysis Summary</a>
@@ -66,14 +70,14 @@ require_once("config.php");
                                     <a class="dropdown-item" href="horse_list.php">Horse Inspection</a>
                                 </div>
                             </li>
-                            <?php 
-                                }
-                                if ($userRole == "A" || $userRole == "T" || $userRole == "ST") {
-                            ?>
+                        <?php
+                        }
+                        if ($userRole == "A" || $userRole == "T" || $userRole == "ST") {
+                        ?>
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Thoroughbred</a>
-                              
-                                <div class="dropdown-menu" style="background-color:black;" >
+
+                                <div class="dropdown-menu" style="background-color:black;">
                                     <a class="dropdown-item" href="horse_search_tb.php">Horse Search Report</a>
                                     <a class="dropdown-item" href="sire_analysis_tb.php">Sire Analysis</a>
                                     <a class="dropdown-item" href="sire_analysis_summary_tb.php">Sire Analysis Summary</a>
@@ -91,77 +95,111 @@ require_once("config.php");
                                     <a class="dropdown-item" href="horse_list_tb.php">Horse Inspection</a>
                                 </div>
                             </li>
-                            <?php 
-                                }
-                                if ($userRole == "A") {
-                            ?>
-<!--                             <li><a href="fleet.php">Fleet</a></li> -->
+                        <?php
+                        }
+                        if ($userRole == "A") {
+                        ?>
+                            <!--                             <li><a href="fleet.php">Fleet</a></li> -->
                             <li class="dropdown">
                                 <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">File Upload</a>
-                              
-                                <div class="dropdown-menu" style="background-color:black;" >
-                                    <a class="dropdown-item" href="sales_file_upload.php">Standardbred</a>
-                                	<a class="dropdown-item" href="sales_file_upload_tb.php">Thoroughbred</a>
-                                    <a class="dropdown-item" href="https://python.preferredequinesalesresults.com/" target="_blank">File Upload Python</a>
-                                	<a class="dropdown-item" href="manage_data.php">Manage File Upload Data</a>
-                                	<a class="dropdown-item" href="file_upload_rating_update.php">Standardbred Rating Update</a>
-                                	<a class="dropdown-item" href="file_upload_et_update.php">Standardbred ET Update</a>
-                                </div>
-                            </li>
-                            
-                            <?php 
-                                }
-                                if ($userRole == "A") {
-                            ?>
-                           <li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
-                              
-                                <div class="dropdown-menu" style="background-color:black;" >
-                                	<a class="dropdown-item" href="user_authorization.php">AUTHORIZE USERS</a>
-                                </div>
-                            </li>
-                            <?php 
-                                }
-                            }
-                                ?>
-<!--                             <li class="dropdown"> -->
-<!--                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a> -->
-                              
-<!--                                 <div class="dropdown-menu"> -->
-<!--                                     <a class="dropdown-item" href="about.php">About Us</a> -->
-<!--                                     <a class="dropdown-item" href="blog.php">Blog</a> -->
-<!--                                     <a class="dropdown-item" href="team.php">Team</a> -->
-<!--                                     <a class="dropdown-item" href="testimonials.php">Testimonials</a> -->
-<!--                                     <a class="dropdown-item" href="faq.php">FAQ</a> -->
-<!--                                     <a class="dropdown-item" href="terms.php">Terms</a> -->
-<!--                                 </div> -->
-<!--                             </li> -->
-<!--                             <li><a href="registration.php">Register</a></li>  -->  
 
-                            
-                            <?php
-                            if ($userName == "") {
-                                echo '<li><a href="registration.php" class="active">REGISTER</a></li>';
-                                echo '<li><a href="login.php">Login</a></li>';
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="sales_file_upload.php">Standardbred</a>
+                                    <a class="dropdown-item" href="sales_file_upload_tb.php">Thoroughbred</a>
+                                    <a class="dropdown-item" href="https://python.preferredequinesalesresults.com/" target="_blank">File Upload Python</a>
+                                    <a class="dropdown-item" href="manage_data.php">Manage File Upload Data</a>
+                                    <a class="dropdown-item" href="file_upload_rating_update.php">Standardbred Rating Update</a>
+                                    <a class="dropdown-item" href="file_upload_et_update.php">Standardbred ET Update</a>
+                                </div>
+                            </li>
+
+                        <?php
+                        }
+                        if ($userRole == "A") {
+                        ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
+
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="user_authorization.php">AUTHORIZE USERS</a>
+                                </div>
+                            </li>
+                    <?php
+                        }
+                    }
+                    ?>
+                    <!--                             <li class="dropdown"> -->
+                    <!--                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a> -->
+
+                    <!--                                 <div class="dropdown-menu"> -->
+                    <!--                                     <a class="dropdown-item" href="about.php">About Us</a> -->
+                    <!--                                     <a class="dropdown-item" href="blog.php">Blog</a> -->
+                    <!--                                     <a class="dropdown-item" href="team.php">Team</a> -->
+                    <!--                                     <a class="dropdown-item" href="testimonials.php">Testimonials</a> -->
+                    <!--                                     <a class="dropdown-item" href="faq.php">FAQ</a> -->
+                    <!--                                     <a class="dropdown-item" href="terms.php">Terms</a> -->
+                    <!--                                 </div> -->
+                    <!--                             </li> -->
+                    <!--                             <li><a href="registration.php">Register</a></li>  -->
+
+
+                    <?php
+                    if ($userName == "") {
+                        echo '<li><a href="registration.php" class="active">REGISTER</a></li>';
+                        echo '<li><a href="login.php">Login</a></li>';
+                    } else {
+                        // Get first and last name from session, fallback to username if not set
+                        $displayName = "";
+
+                        if (!empty($_SESSION["UserFirstName"]) && !empty($_SESSION["UserLastName"])) {
+                            $displayName = $_SESSION["UserFirstName"] . " " . $_SESSION["UserLastName"];
+                        } elseif (!empty($_SESSION["UserFirstName"])) {
+                            $displayName = $_SESSION["UserFirstName"];
+                        } else {
+                            // If first/last not in session, try to fetch from database
+                            require_once("db-settings.php");
+                            $email = $_SESSION["UserEmail"] ?? $_SESSION["UserName"];
+
+                            $stmt = $mysqli->prepare("SELECT FNAME, LNAME FROM users WHERE EMAIL = ? OR USERNAME = ? LIMIT 1");
+                            $stmt->bind_param("ss", $email, $email);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            if ($row = $result->fetch_assoc()) {
+                                $_SESSION["UserFirstName"] = $row['FNAME'];
+                                $_SESSION["UserLastName"] = $row['LNAME'];
+
+                                if (!empty($row['FNAME']) && !empty($row['LNAME'])) {
+                                    $displayName = $row['FNAME'] . " " . $row['LNAME'];
+                                } elseif (!empty($row['FNAME'])) {
+                                    $displayName = $row['FNAME'];
+                                } else {
+                                    $displayName = $userName;
+                                }
                             } else {
-                                echo '<li class="dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">'.$userName.'</a>
+                                $displayName = $userName;
+                            }
+                            $stmt->close();
+                        }
+
+                        echo '<li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">' . htmlspecialchars($displayName) . '</a>
                               
                                 <div class="dropdown-menu" style="background-color:black;" >
                                 	<a class="dropdown-item" href="myaccount.php">My Account</a>
                                 	<a class="dropdown-item" href="logout.php">Logout</a>
                                 </div>
                             </li>';
-                            }
-                            ?>
-                            
-                        </ul>   
-                        <!-- ***** Menu End ***** -->
-                    </nav>
-                </div>
-            </div>
-    </header>
-    <!-- ***** Header Area End ***** -->
-    <br>
-    <br>
-    <br>
+                    }
+                    ?>
+
+                </ul>
+                <!-- ***** Menu End ***** -->
+            </nav>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
+<br>
+<br>
+<br>

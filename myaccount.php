@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->close();
         
         if (isset($_POST['update_profile'])) {
+            
             // Update profile info
             $first_name = trim($_POST['first_name']);
             $last_name = trim($_POST['last_name']);
@@ -92,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 
                 // Update session
                 $_SESSION['UserFirstName'] = $first_name;
+                $_SESSION['UserLastName'] = $last_name;
                 $_SESSION['UserName'] = !empty($first_name) ? $first_name : $email;
                 
                 if (empty($message)) {
