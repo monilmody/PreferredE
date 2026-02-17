@@ -111,6 +111,7 @@ ob_end_flush();
 
     .form-group {
         margin-bottom: 25px;
+        position: relative;
     }
 
     .form-group label {
@@ -134,6 +135,40 @@ ob_end_flush();
     .form-control:focus {
         border-color: #2E4053;
         box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
+        outline: none;
+    }
+
+    /* Password field with toggle */
+    .password-wrapper {
+        position: relative;
+        display: flex;
+        align-items: center;
+    }
+
+    .password-wrapper .form-control {
+        padding-right: 45px;
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 12px;
+        background: none;
+        border: none;
+        color: #666;
+        cursor: pointer;
+        font-size: 18px;
+        padding: 8px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: color 0.3s;
+    }
+
+    .toggle-password:hover {
+        color: #2E4053;
+    }
+
+    .toggle-password:focus {
         outline: none;
     }
 
@@ -263,11 +298,16 @@ ob_end_flush();
 
         <div class="form-group">
             <label for="password">Password *</label>
-            <input type="password" class="form-control"
-                id="password"
-                name="password"
-                placeholder="Enter your password"
-                required>
+            <div class="password-wrapper">
+                <input type="password" class="form-control"
+                    id="password"
+                    name="password"
+                    placeholder="Enter your password"
+                    required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password', this)" tabindex="-1">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
         </div>
 
         <div class="form-options">
@@ -295,6 +335,22 @@ ob_end_flush();
     // Focus on username field when page loads
     document.getElementById("username").focus();
 
+    // Toggle password visibility
+    function togglePassword(fieldId, button) {
+        const field = document.getElementById(fieldId);
+        const icon = button.querySelector('i');
+        
+        if (field.type === 'password') {
+            field.type = 'text';
+            icon.classList.remove('fa-eye');
+            icon.classList.add('fa-eye-slash');
+        } else {
+            field.type = 'password';
+            icon.classList.remove('fa-eye-slash');
+            icon.classList.add('fa-eye');
+        }
+    }
+
     // Submit form when Enter is pressed in password field
     document.getElementById("password").addEventListener("keypress", function(event) {
         if (event.key === "Enter") {
@@ -305,11 +361,26 @@ ob_end_flush();
 
     // Add a subtle animation to the login button on hover
     const submitBtn = document.querySelector('.submit-btn');
-    submitBtn.addEventListener('mouseenter', function() {
-        this.style.transition = 'all 0.3s ease';
-    });
+    if (submitBtn) {
+        submitBtn.addEventListener('mouseenter', function() {
+            this.style.transition = 'all 0.3s ease';
+        });
 
-    submitBtn.addEventListener('mouseleave', function() {
-        this.style.transition = 'all 0.3s ease';
+        submitBtn.addEventListener('mouseleave', function() {
+            this.style.transition = 'all 0.3s ease';
+        });
+    }
+
+    // Optional: Add keyboard shortcut (Ctrl+E or Cmd+E) to toggle password visibility
+    document.addEventListener('keydown', function(e) {
+        // Check if Ctrl+E (or Cmd+E on Mac) is pressed
+        if ((e.ctrlKey || e.metaKey) && e.key === 'e') {
+            e.preventDefault();
+            const passwordField = document.getElementById('password');
+            const toggleButton = document.querySelector('.toggle-password');
+            if (passwordField && toggleButton) {
+                togglePassword('password', toggleButton);
+            }
+        }
     });
 </script>

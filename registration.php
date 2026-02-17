@@ -55,6 +55,7 @@ if (isset($_SESSION['registration_success'])) {
 
 .form-group {
     margin-bottom: 25px;
+    position: relative;
 }
 
 .form-group label {
@@ -89,6 +90,57 @@ if (isset($_SESSION['registration_success'])) {
     font-size: 15px;
     background-color: white;
     height: 46px;
+}
+
+/* Password field with toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-control {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+}
+
+.toggle-password:hover {
+    color: #2E4053;
+}
+
+.toggle-password:focus {
+    outline: none;
+}
+
+/* Password match indicator */
+.password-match {
+    font-size: 13px;
+    margin-top: 5px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.match-success {
+    color: #27ae60;
+}
+
+.match-error {
+    color: #e74c3c;
 }
 
 .password-hint {
@@ -221,12 +273,33 @@ if (isset($_SESSION['registration_success'])) {
 
         <div class="form-group">
             <label for="password">Password *</label>
-            <input type="password" class="form-control" placeholder="Create a strong password" 
-                   name="password" id="password" required>
-            <div class="password-hint">
-                <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
+            <div class="password-wrapper">
+                <input type="password" class="form-control" placeholder="Create a strong password" 
+                       name="password" id="password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('password', this)">
+                    <i class="fa fa-eye"></i>
+                </button>
             </div>
             <div class="password-strength" id="passwordStrength"></div>
+        </div>
+
+        <div class="form-group">
+            <label for="confirm_password">Confirm Password *</label>
+            <div class="password-wrapper">
+                <input type="password" class="form-control" placeholder="Confirm your password" 
+                       name="confirm_password" id="confirm_password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
+            <div class="password-match" id="passwordMatch">
+                <i class="fa fa-info-circle"></i>
+                <span>Passwords must match</span>
+            </div>
+        </div>
+
+        <div class="password-hint">
+            <strong>Password Requirements:</strong> Minimum 8 characters with uppercase, lowercase, number, and special character
         </div>
 
         <div class="form-group">
@@ -249,10 +322,30 @@ if (isset($_SESSION['registration_success'])) {
 </div>
 
 <script>
-// Password strength indicator
-document.getElementById('password').addEventListener('input', function() {
-    const password = this.value;
-    const strengthBar = document.getElementById('passwordStrength');
+// Toggle password visibility
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+    const icon = button.querySelector('i');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
+// Password strength indicator and match checker
+const passwordInput = document.getElementById('password');
+const confirmInput = document.getElementById('confirm_password');
+const strengthBar = document.getElementById('passwordStrength');
+const matchIndicator = document.getElementById('passwordMatch');
+
+function checkPasswordStrength() {
+    const password = passwordInput.value;
     
     let strength = 0;
     let color = '#e74c3c'; // Red
@@ -278,11 +371,36 @@ document.getElementById('password').addEventListener('input', function() {
     
     strengthBar.style.width = width;
     strengthBar.style.backgroundColor = color;
+}
+
+function checkPasswordMatch() {
+    const password = passwordInput.value;
+    const confirm = confirmInput.value;
+    
+    if (confirm.length === 0) {
+        matchIndicator.innerHTML = '<i class="fa fa-info-circle"></i> <span>Confirm your password</span>';
+        matchIndicator.className = 'password-match';
+    } else if (password === confirm) {
+        matchIndicator.innerHTML = '<i class="fa fa-check-circle"></i> <span>Passwords match</span>';
+        matchIndicator.className = 'password-match match-success';
+    } else {
+        matchIndicator.innerHTML = '<i class="fa fa-exclamation-circle"></i> <span>Passwords do not match</span>';
+        matchIndicator.className = 'password-match match-error';
+    }
+}
+
+// Add event listeners
+passwordInput.addEventListener('input', function() {
+    checkPasswordStrength();
+    checkPasswordMatch();
 });
+
+confirmInput.addEventListener('input', checkPasswordMatch);
 
 // Form validation
 document.getElementById('registrationForm').addEventListener('submit', function(e) {
-    const password = document.getElementById('password').value;
+    const password = passwordInput.value;
+    const confirm = confirmInput.value;
     const errors = [];
     
     // Password validation
@@ -302,6 +420,11 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         errors.push('Password must contain at least one special character');
     }
     
+    // Confirm password validation
+    if (password !== confirm) {
+        errors.push('Passwords do not match');
+    }
+    
     // Role validation
     if (document.getElementById('userrole').value === 'N') {
         errors.push('Please select a user role');
@@ -312,4 +435,7 @@ document.getElementById('registrationForm').addEventListener('submit', function(
         alert('Please fix the following errors:\n\n' + errors.join('\n'));
     }
 });
+
+// Initialize match check on page load
+checkPasswordMatch();
 </script>
