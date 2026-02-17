@@ -7,29 +7,12 @@ ini_set('display_errors', 1);
 
 require_once("config.php"); // This now includes Cognito settings
 require_once("cognito.php"); // Our simple Cognito helper
-require_once("db-settings.php"); // Add this for database queries
 
 // If user is already logged in, redirect
 if(isset($_SESSION['UserName'])) {
     $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
     header("Location: $redirect_url");
     die();
-}
-
-// Function to fetch user details from database
-function fetchUserDetails($username) {
-    global $mysqli;
-    
-    $stmt = $mysqli->prepare("SELECT USERROLE, EMAIL_VERIFIED FROM users WHERE EMAIL = ? OR USERNAME = ?");
-    $stmt->bind_param("ss", $username, $username);
-    $stmt->execute();
-    $result = $stmt->get_result();
-    
-    if ($result->num_rows > 0) {
-        return $result->fetch_assoc();
-    }
-    
-    return ['USERROLE' => 'user', 'EMAIL_VERIFIED' => 0];
 }
 
 // Handle form submission
@@ -48,42 +31,29 @@ if(!empty($_POST)) {
         $errors[] = "Enter Password";
     }
     
-    if(count($errors) == 0) {
-        require_once("cognito.php");
-        $authResult = CognitoAuth::authenticate($username, $password);
-        
-        if($authResult['success']) {
-            // Get user details from your existing database
-            $dbUserDetails = fetchUserDetails($username);
-            
-            // Check if email is verified
-            if (isset($dbUserDetails['EMAIL_VERIFIED']) && $dbUserDetails['EMAIL_VERIFIED'] == 0) {
-                // User exists but email not verified
-                $errors[] = "Please verify your email before logging in. 
-                    <a href='verify.php?email=" . urlencode($username) . "' style='color: #c53030; font-weight: bold; text-decoration: underline;'>Click here to verify</a>";
-            } else {
-                // Set session variables
-                $_SESSION["UserActive"] = 'Y';
-                $_SESSION["UserName"] = $username;
-                $_SESSION["UserEmail"] = $username;
-                $_SESSION["UserRole"] = $dbUserDetails["USERROLE"] ?? 'user';
-                
-                setcookie("LoggedInUser", $username, time() + 3600, "/");
-                
-                $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
-                header("Location: $redirect_url");
-                exit();
-            }
-        } else {
-            // Check for specific Cognito errors
-            if ($authResult['error'] === 'UserNotConfirmedException') {
-                $errors[] = "Please verify your email before logging in. 
-                    <a href='verify.php?email=" . urlencode($username) . "' style='color: #c53030; font-weight: bold; text-decoration: underline;'>Click here to verify</a>";
-            } else {
-                $errors[] = $authResult['error'] ?? "Invalid username or password";
-            }
-        }
-    }
+	if(count($errors) == 0) {
+		require_once("cognito.php");
+		$authResult = CognitoAuth::authenticate($username, $password);
+		
+		if($authResult['success']) {
+			// Get user details from your existing database
+			$dbUserDetails = fetchUserDetails($username);
+			
+			// Set session variables
+			$_SESSION["UserActive"] = 'Y';
+			$_SESSION["UserName"] = $username;
+			$_SESSION["UserEmail"] = $username;
+			$_SESSION["UserRole"] = $dbUserDetails["USERROLE"] ?? 'user';
+			
+			setcookie("LoggedInUser", $username, time() + 3600, "/");
+			
+			$redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
+			header("Location: $redirect_url");
+			exit();
+		} else {
+			$errors[] = $authResult['error'];
+		}
+	}
 }
 ob_end_flush();
 ?>
@@ -154,17 +124,8 @@ ob_end_flush();
     padding: 15px;
     border-radius: 6px;
     margin-bottom: 25px;
+    text-align: center;
     font-weight: 500;
-}
-
-.error-alert a {
-    color: #c53030;
-    font-weight: bold;
-    text-decoration: underline;
-}
-
-.error-alert a:hover {
-    text-decoration: none;
 }
 
 .submit-btn {
@@ -236,17 +197,6 @@ ob_end_flush();
     font-weight: 500;
 }
 
-/* Info alert for verification messages */
-.info-alert {
-    background-color: #d1ecf1;
-    border: 1px solid #bee5eb;
-    color: #0c5460;
-    padding: 15px;
-    border-radius: 6px;
-    margin-bottom: 25px;
-    font-weight: 500;
-}
-
 /* Responsive */
 @media (max-width: 768px) {
     .login-container {
@@ -272,42 +222,20 @@ ob_end_flush();
         <p>Sign in to your Preferred Equine account</p>
     </div>
 
-    <!-- Show any session messages (like from registration) -->
-    <?php if (isset($_SESSION['registration_success'])): ?>
-        <div class="info-alert">
-            <?php echo $_SESSION['registration_success']; ?>
-        </div>
-        <?php unset($_SESSION['registration_success']); ?>
-    <?php endif; ?>
-
-    <!-- Show login errors if any -->
+    <!-- Show errors if any -->
     <?php if (!empty($errors)): ?>
         <div class="error-alert">
-            <?php 
-            // Display errors - handle potential HTML links
-            foreach ($errors as $error) {
-                echo $error . "<br>";
-            }
-            ?>
-        </div>
-    <?php endif; ?>
-
-    <!-- Show verification reminder if email is in session -->
-    <?php if (isset($_SESSION['verification_email'])): ?>
-        <div class="info-alert">
-            <i class="fa fa-info-circle"></i> 
-            Please verify your email (<?php echo htmlspecialchars($_SESSION['verification_email']); ?>) before logging in.
-            <a href="verify.php" style="color: #0c5460; font-weight: bold; text-decoration: underline;">Click here to verify</a>
+            <?php echo htmlspecialchars($errors[0]); ?>
         </div>
     <?php endif; ?>
 
     <form name="login" action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']); ?><?php echo isset($_GET['redirect']) ? '?redirect=' . urlencode($_GET['redirect']) : ''; ?>" method="post">
         <div class="form-group">
-            <label for="username">Email Address *</label>
+            <label for="username">Email or Username *</label>
             <input type="text" class="form-control" 
                    id="username" 
                    name="username" 
-                   placeholder="Enter your email address" 
+                   placeholder="Enter your email or username" 
                    value="<?php echo htmlspecialchars($form_data['username'] ?? ''); ?>" 
                    required 
                    autofocus>
@@ -338,7 +266,6 @@ ob_end_flush();
 
         <div class="login-links">
             <p>Don't have an account? <a href="registration.php">Register here</a></p>
-            <p>Didn't receive verification email? <a href="verify.php?resend=1&email=<?php echo urlencode($form_data['username'] ?? ''); ?>">Resend code</a></p>
             <p><a href="index.php">← Back to Home</a></p>
         </div>
     </form>
@@ -358,25 +285,11 @@ document.getElementById("password").addEventListener("keypress", function(event)
 
 // Add a subtle animation to the login button on hover
 const submitBtn = document.querySelector('.submit-btn');
-if (submitBtn) {
-    submitBtn.addEventListener('mouseenter', function() {
-        this.style.transition = 'all 0.3s ease';
-    });
+submitBtn.addEventListener('mouseenter', function() {
+    this.style.transition = 'all 0.3s ease';
+});
 
-    submitBtn.addEventListener('mouseleave', function() {
-        this.style.transition = 'all 0.3s ease';
-    });
-}
-
-// Auto-hide alerts after 5 seconds
-setTimeout(function() {
-    const alerts = document.querySelectorAll('.info-alert, .error-alert');
-    alerts.forEach(function(alert) {
-        alert.style.transition = 'opacity 1s';
-        alert.style.opacity = '0';
-        setTimeout(function() {
-            alert.style.display = 'none';
-        }, 1000);
-    });
-}, 5000);
+submitBtn.addEventListener('mouseleave', function() {
+    this.style.transition = 'all 0.3s ease';
+});
 </script>
