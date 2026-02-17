@@ -36,35 +36,52 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $message = "No account found with this email address";
                     $message_type = "error";
                 } else {
-                    // Try Cognito first - IAM role provides credentials automatically
-                    require_once 'vendor/autoload.php';
+                    $user_data = $user_result->fetch_assoc();
                     
-                    // Client uses IAM role from EC2 instance - no credentials needed!
-                    $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
-                        'region' => COGNITO_REGION,
-                        'version' => 'latest'
-                        // Credentials automatically loaded from EC2 IAM role
-                    ]);
-                    
-                    try {
-                        // Attempt to send reset code via Cognito
-                        $client->forgotPassword([
-                            'ClientId' => COGNITO_APP_CLIENT_ID,
-                            'Username' => $email
+                    // Check if user is verified in Cognito
+                    if ($user_data['cognito_verified'] == 0) {
+                        $message = "Your email is not verified. Please verify your email first before resetting your password.";
+                        $message_type = "error";
+                        
+                        // Store email in session for verification redirect
+                        $_SESSION['verify_email'] = $email;
+                        
+                        // Add verification link
+                        echo '<script>
+                            setTimeout(function() {
+                                if(confirm("Your email is not verified. Would you like to go to the verification page?")) {
+                                    window.location.href = "verify.php";
+                                }
+                            }, 100);
+                        </script>';
+                    } else {
+                        // User is verified, proceed with password reset
+                        
+                        // Try Cognito first - IAM role provides credentials automatically
+                        require_once 'vendor/autoload.php';
+                        
+                        // Client uses IAM role from EC2 instance
+                        $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
+                            'region' => COGNITO_REGION,
+                            'version' => 'latest'
                         ]);
                         
-                        $_SESSION['reset_email'] = $email;
-                        $_SESSION['reset_method'] = 'cognito';
-                        $message = "Reset code sent to your email! Please check your inbox.";
-                        $message_type = "success";
-                        $show_reset_form = true;
-                        
-                    } catch (Exception $cognitoError) {
-                        $errorMessage = $cognitoError->getMessage();
-                        
-                        // Check if error is due to unverified contact
-                        if (strpos($errorMessage, 'no registered/verified email') !== false || 
-                            strpos($errorMessage, 'InvalidParameterException') !== false) {
+                        try {
+                            // Attempt to send reset code via Cognito
+                            $client->forgotPassword([
+                                'ClientId' => COGNITO_APP_CLIENT_ID,
+                                'Username' => $email
+                            ]);
+                            
+                            $_SESSION['reset_email'] = $email;
+                            $_SESSION['reset_method'] = 'cognito';
+                            $message = "Reset code sent to your email! Please check your inbox.";
+                            $message_type = "success";
+                            $show_reset_form = true;
+                            
+                        } catch (Exception $cognitoError) {
+                            $errorMessage = $cognitoError->getMessage();
+                            error_log("Cognito forgotPassword error: " . $errorMessage);
                             
                             // FALLBACK: Manual reset via database
                             
@@ -124,7 +141,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <p>If you didn't request this password reset, please ignore this email or contact support.</p>
                                         </div>
                                         <div class='footer'>
-                                            <p>&copy; " . date('Y') . " Your Company Name. All rights reserved.</p>
+                                            <p>&copy; " . date('Y') . " Preferred Equine. All rights reserved.</p>
                                         </div>
                                     </div>
                                 </body>
@@ -145,11 +162,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $message = "System error. Please try again later.";
                                 $message_type = "error";
                             }
-                            
-                        } else {
-                            // Other Cognito error
-                            $message = "Error: " . $errorMessage;
-                            $message_type = "error";
                         }
                     }
                 }
@@ -227,7 +239,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
                                     'region' => COGNITO_REGION,
                                     'version' => 'latest'
-                                    // Credentials automatically from IAM role
                                 ]);
                                 
                                 // Admin set password in Cognito
@@ -238,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     'Permanent' => true
                                 ]);
                                 
-                                // Update user attributes to mark email as verified
+                                // Mark as verified in Cognito
                                 $client->adminUpdateUserAttributes([
                                     'UserPoolId' => COGNITO_USER_POOL_ID,
                                     'Username' => $email,
@@ -249,6 +260,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         ]
                                     ]
                                 ]);
+                                
+                                // Update database cognito_verified flag
+                                $update_verified = $mysqli->prepare("UPDATE users SET cognito_verified = 1 WHERE EMAIL = ?");
+                                $update_verified->bind_param("s", $email);
+                                $update_verified->execute();
                                 
                             } catch (Exception $cogError) {
                                 // Log Cognito error but don't fail the reset
@@ -290,7 +306,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
                         'region' => COGNITO_REGION,
                         'version' => 'latest'
-                        // Credentials automatically from IAM role
                     ]);
                     
                     // Confirm password reset in Cognito
@@ -305,6 +320,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $update_stmt = $mysqli->prepare("UPDATE users SET PASSWORD = ? WHERE EMAIL = ?");
                     $update_stmt->bind_param("ss", $new_password, $email);
                     $update_stmt->execute();
+                    
+                    // Ensure cognito_verified is set to 1
+                    $update_verified = $mysqli->prepare("UPDATE users SET cognito_verified = 1 WHERE EMAIL = ?");
+                    $update_verified->bind_param("s", $email);
+                    $update_verified->execute();
                     
                     // Clear session
                     unset($_SESSION['reset_email']);
@@ -359,8 +379,48 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
             // Send email
             $to = $email;
             $subject = "New Password Reset Code";
-            $headers = "From: noreply@" . $_SERVER['HTTP_HOST'];
-            mail($to, $subject, "Your new reset code is: " . $reset_code, $headers);
+            $headers = "MIME-Version: 1.0" . "\r\n";
+            $headers .= "Content-type:text/html;charset=UTF-8" . "\r\n";
+            $headers .= "From: noreply@" . $_SERVER['HTTP_HOST'] . "\r\n";
+            
+            $email_body = "
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <style>
+                    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                    .header { background: #2E4053; color: white; padding: 20px; text-align: center; }
+                    .content { padding: 30px; background: #f9f9f9; }
+                    .code { 
+                        font-size: 32px; 
+                        font-weight: bold; 
+                        color: #2E4053; 
+                        text-align: center; 
+                        padding: 20px; 
+                        background: white; 
+                        border-radius: 5px;
+                        margin: 20px 0;
+                        letter-spacing: 5px;
+                    }
+                </style>
+            </head>
+            <body>
+                <div class='container'>
+                    <div class='header'>
+                        <h2>New Password Reset Code</h2>
+                    </div>
+                    <div class='content'>
+                        <p>Hello,</p>
+                        <p>Here is your new password reset code:</p>
+                        <div class='code'>{$reset_code}</div>
+                        <p>This code will expire in <strong>1 hour</strong>.</p>
+                    </div>
+                </div>
+            </body>
+            </html>";
+            
+            mail($to, $subject, $email_body, $headers);
             
             $message = "New reset code sent to your email!";
             $message_type = "success";
@@ -669,7 +729,7 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
             <input type="text" class="form-control" value="<?php echo htmlspecialchars($email); ?>" readonly>
             <?php if (isset($_SESSION['reset_method']) && $_SESSION['reset_method'] === 'manual'): ?>
                 <small style="color: #e67e22; font-size: 13px; display: block; margin-top: 5px;">
-                    <i class="fa fa-info-circle"></i> Using manual reset (your email isn't verified in Cognito)
+                    <i class="fa fa-info-circle"></i> Using manual reset (Cognito temporarily unavailable)
                 </small>
             <?php endif; ?>
         </div>
@@ -862,10 +922,8 @@ if (document.querySelector('.resend-link')) {
     }
     
     // Start timer when page loads with reset form
-    updateTimer();
+    if (document.querySelector('.reset-form')) {
+        updateTimer();
+    }
 }
 </script>
-
-<?php
-include("./footer.php");
-?>

@@ -1,353 +1,381 @@
 <?php
-session_start();
+// verify.php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 include("./header.php");
 
-require_once("config.php");
-require_once("db-settings.php");
-require_once("cognito.php");
+// Check if we have an email to verify
+if (!isset($_SESSION['verify_email'])) {
+    // No email in session, redirect to registration
+    header("Location: registration.php");
+    exit();
+}
 
+$email = $_SESSION['verify_email'];
+$name = $_SESSION['verify_name'] ?? 'User';
 $message = '';
 $message_type = '';
-$email = $_SESSION['verification_email'] ?? $_GET['email'] ?? '';
+$verification_success = false;
 
-// Handle verification form submission
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['verify_code'])) {
-    $email = trim($_POST['email']);
-    $code = trim($_POST['code']);
+require_once("config.php");
+require_once("cognito.php");
 
-    if (empty($email) || empty($code)) {
-        $message = "Email and verification code are required";
-        $message_type = "error";
-    } else {
-        // Verify with Cognito
-        $result = CognitoAuth::confirmSignUp($email, $code);
-
-        if ($result['success']) {
-            // Update database to mark email as verified
-            $update_stmt = $mysqli->prepare("UPDATE users SET EMAIL_VERIFIED = 1 WHERE EMAIL = ?");
-            $update_stmt->bind_param("s", $email);
-
-            if ($update_stmt->execute()) {
+// Handle form submission
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    
+    // Verify code
+    if (isset($_POST['verify_code'])) {
+        $verification_code = trim($_POST['verification_code']);
+        
+        if (empty($verification_code)) {
+            $message = "Please enter the verification code";
+            $message_type = "error";
+        } else {
+            // Verify with Cognito
+            $result = CognitoAuth::verifyEmail($email, $verification_code);
+            
+            if ($result['success']) {
+                // Update database to mark email as verified
+                require_once("db-settings.php");
+                
+                $update_sql = "UPDATE users SET cognito_verified = 1 WHERE EMAIL = ?";
+                $update_stmt = $mysqli->prepare($update_sql);
+                $update_stmt->bind_param("s", $email);
+                $update_stmt->execute();
+                
                 $message = "Email verified successfully! You can now login.";
                 $message_type = "success";
-
-                // Clear session
-                unset($_SESSION['verification_email']);
-
-                // Redirect to login after 3 seconds
+                $verification_success = true;
+                
+                // Clear session verification data
+                unset($_SESSION['verify_email']);
+                unset($_SESSION['verify_name']);
+                
+                // Auto-redirect to login after 3 seconds
                 echo '<script>
                     setTimeout(function() {
                         window.location.href = "login.php";
                     }, 3000);
                 </script>';
             } else {
-                $message = "Database update failed. Please contact support.";
+                $message = "Invalid verification code: " . $result['error'];
                 $message_type = "error";
-                error_log("Database update failed for verified user: " . $email);
             }
-        } else {
-            $message = $result['message'] ?? "Verification failed. Please try again.";
-            $message_type = "error";
         }
     }
-}
-
-// Handle resend code
-if (isset($_GET['resend']) && $email) {
-    $result = CognitoAuth::resendConfirmationCode($email);
-
-    if ($result['success']) {
-        $message = "New verification code sent to your email!";
-        $message_type = "success";
-    } else {
-        $message = $result['message'] ?? "Failed to resend code. Please try again.";
-        $message_type = "error";
+    
+    // Resend code
+    if (isset($_POST['resend_code'])) {
+        $result = CognitoAuth::resendVerificationCode($email);
+        
+        if ($result['success']) {
+            $message = "A new verification code has been sent to your email.";
+            $message_type = "success";
+        } else {
+            $message = "Failed to resend code: " . $result['error'];
+            $message_type = "error";
+        }
     }
 }
 ?>
 
 <style>
-    .verification-container {
-        max-width: 500px;
-        margin: 100px auto 50px;
-        padding: 40px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-        border: 1px solid #e0e0e0;
-    }
+.verify-container {
+    max-width: 500px;
+    margin: 100px auto 50px;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.1);
+    border: 1px solid #e0e0e0;
+}
 
-    .verification-header {
-        text-align: center;
-        margin-bottom: 30px;
-    }
+.verify-header {
+    text-align: center;
+    margin-bottom: 30px;
+}
 
-    .verification-header h1 {
-        color: #2E4053;
-        font-size: 28px;
-        margin-bottom: 10px;
-        font-weight: 600;
-    }
+.verify-header h1 {
+    color: #2E4053;
+    font-size: 28px;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
 
-    .verification-header p {
-        color: #666;
-        font-size: 16px;
-        line-height: 1.5;
-    }
+.verify-header p {
+    color: #666;
+    font-size: 16px;
+    line-height: 1.5;
+}
 
-    .form-group {
-        margin-bottom: 25px;
-    }
+.email-highlight {
+    background: #f0f7ff;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    text-align: center;
+    border-left: 4px solid #2E4053;
+}
 
-    .form-group label {
-        display: block;
-        margin-bottom: 8px;
-        font-weight: 600;
-        color: #444;
-        font-size: 15px;
-    }
+.email-highlight strong {
+    color: #2E4053;
+    font-size: 18px;
+    word-break: break-all;
+}
 
-    .form-control {
-        width: 100%;
-        padding: 12px 15px;
-        border: 1px solid #ddd;
-        border-radius: 6px;
-        font-size: 15px;
-        transition: all 0.3s;
-        box-sizing: border-box;
-    }
+.form-group {
+    margin-bottom: 25px;
+}
 
-    .form-control:focus {
-        border-color: #2E4053;
-        box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
-        outline: none;
-    }
+.form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #444;
+    font-size: 15px;
+}
 
-    .btn-primary {
-        width: 100%;
-        padding: 14px;
-        background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        margin-top: 10px;
-    }
+.form-control {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 15px;
+    transition: all 0.3s;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 24px;
+    letter-spacing: 8px;
+    font-weight: bold;
+}
 
-    .btn-primary:hover {
-        background: linear-gradient(135deg, #3a506b 0%, #2E4053 100%);
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(46, 64, 83, 0.2);
-    }
+.form-control:focus {
+    border-color: #2E4053;
+    box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
+    outline: none;
+}
 
-    .btn-secondary {
-        width: 100%;
-        padding: 14px;
-        background: #6c757d;
-        color: white;
-        border: none;
-        border-radius: 6px;
-        font-size: 16px;
-        font-weight: 600;
-        cursor: pointer;
-        transition: all 0.3s;
-        margin-top: 10px;
-    }
+.btn-primary {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
 
-    .btn-secondary:hover {
-        background: #5a6268;
-        transform: translateY(-2px);
-    }
+.btn-primary:hover {
+    background: linear-gradient(135deg, #3a506b 0%, #2E4053 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(46, 64, 83, 0.2);
+}
 
-    .message-alert {
-        padding: 15px 20px;
-        border-radius: 6px;
-        margin-bottom: 25px;
-        display: flex;
-        align-items: center;
-    }
+.btn-secondary {
+    width: 100%;
+    padding: 14px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+}
 
-    .message-success {
-        background-color: #d4edda;
-        color: #155724;
-        border: 1px solid #c3e6cb;
-    }
+.btn-secondary:hover {
+    background: #5a6268;
+}
 
-    .message-error {
-        background-color: #f8d7da;
-        color: #721c24;
-        border: 1px solid #f5c6cb;
-    }
+.message-alert {
+    padding: 15px 20px;
+    border-radius: 6px;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
-    .message-info {
-        background-color: #d1ecf1;
-        color: #0c5460;
-        border: 1px solid #bee5eb;
-    }
+.message-success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
 
-    .message-alert i {
-        margin-right: 10px;
-        font-size: 18px;
-    }
+.message-error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
 
-    .login-link {
-        text-align: center;
-        margin-top: 25px;
-        padding-top: 20px;
-        border-top: 1px solid #eee;
-        color: #666;
-    }
+.info-box {
+    background: #e8f4fd;
+    border: 1px solid #b8e1ff;
+    color: #0369a1;
+    padding: 15px;
+    border-radius: 6px;
+    margin: 20px 0;
+    font-size: 14px;
+    text-align: left;
+}
 
-    .login-link a {
-        color: #2E4053;
-        font-weight: 600;
-        text-decoration: none;
-    }
+.info-box i {
+    margin-right: 8px;
+    color: #0284c7;
+}
 
-    .login-link a:hover {
-        text-decoration: underline;
-    }
+.resend-link {
+    text-align: center;
+    margin-top: 20px;
+}
 
-    .code-input {
-        text-align: center;
-        font-size: 20px;
-        letter-spacing: 5px;
-        font-weight: bold;
-    }
+.resend-link button {
+    background: none;
+    border: none;
+    color: #2E4053;
+    text-decoration: underline;
+    cursor: pointer;
+    font-size: 14px;
+}
 
-    .resend-link {
-        text-align: center;
-        margin-top: 20px;
-    }
+.resend-link button:hover {
+    color: #1a2634;
+}
 
-    .resend-link a {
-        color: #2E4053;
-        text-decoration: none;
-        font-size: 14px;
-    }
+.login-link {
+    text-align: center;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+    color: #666;
+}
 
-    .resend-link a:hover {
-        text-decoration: underline;
-    }
+.login-link a {
+    color: #2E4053;
+    font-weight: 600;
+    text-decoration: none;
+}
 
-    .timer {
-        text-align: center;
-        color: #666;
-        font-size: 14px;
-        margin-top: 10px;
-    }
+.login-link a:hover {
+    text-decoration: underline;
+}
 
-    .verification-note {
-        background: #f8f9fa;
-        padding: 15px;
-        border-radius: 6px;
-        margin-bottom: 20px;
-        font-size: 14px;
-        color: #2E4053;
-        border-left: 3px solid #2E4053;
-    }
+.timer {
+    text-align: center;
+    color: #666;
+    font-size: 14px;
+    margin-top: 10px;
+}
 </style>
 
-<div class="verification-container">
-    <div class="verification-header">
+<div class="verify-container">
+    <div class="verify-header">
         <h1>Verify Your Email</h1>
-        <p>Enter the 6-digit verification code sent to your email</p>
+        <p>We've sent a verification code to your email address</p>
     </div>
 
-    <?php if (isset($_SESSION['verification_message'])): ?>
-        <div class="message-alert message-info">
-            <i class="fa fa-info-circle"></i>
-            <?php echo $_SESSION['verification_message']; ?>
-        </div>
-        <?php unset($_SESSION['verification_message']); ?>
-    <?php endif; ?>
+    <div class="email-highlight">
+        <strong><?php echo htmlspecialchars($email); ?></strong>
+    </div>
 
     <?php if ($message): ?>
         <div class="message-alert message-<?php echo $message_type; ?>">
-            <i class="fa fa-<?php echo $message_type === 'success' ? 'check-circle' : 'exclamation-circle'; ?>"></i>
             <?php echo $message; ?>
         </div>
     <?php endif; ?>
 
-    <div class="verification-note">
-        <i class="fa fa-envelope"></i>
-        <strong>Email:</strong> <?php echo htmlspecialchars($email); ?>
-    </div>
-
-    <form method="POST" action="" id="verificationForm">
-        <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
-
-        <div class="form-group">
-            <label for="code">Verification Code</label>
-            <input type="text" class="form-control code-input" id="code" name="code"
-                placeholder="Enter 6-digit code" required maxlength="6" pattern="[0-9]{6}" inputmode="numeric">
-            <small style="color: #666; font-size: 13px;">Check your email for the 6-digit verification code</small>
+    <?php if (!$verification_success): ?>
+        <div class="info-box">
+            <i class="fa fa-info-circle"></i> 
+            Please check your email (including spam folder) for the verification code. 
+            Enter the 6-digit code below to verify your account.
         </div>
 
-        <button type="submit" name="verify_code" class="btn-primary">
-            <i class="fa fa-check-circle"></i> Verify Email
-        </button>
-    </form>
+        <form method="POST" action="" id="verifyForm">
+            <div class="form-group">
+                <label for="verification_code">Verification Code</label>
+                <input type="text" class="form-control" id="verification_code" 
+                       name="verification_code" placeholder="000000" 
+                       maxlength="6" pattern="[0-9]{6}" inputmode="numeric" required>
+                <div style="font-size: 13px; color: #666; margin-top: 8px; text-align: center;">
+                    Enter the 6-digit code from your email
+                </div>
+            </div>
 
-    <div class="resend-link">
-        <a href="?resend=1&email=<?php echo urlencode($email); ?>" id="resendLink">
-            <i class="fa fa-refresh"></i> Resend verification code
-        </a>
-    </div>
+            <button type="submit" name="verify_code" class="btn-primary">
+                <i class="fa fa-check-circle"></i> Verify Email
+            </button>
+
+            <div class="resend-link">
+                <button type="submit" name="resend_code" class="resend-button">
+                    <i class="fa fa-refresh"></i> Resend verification code
+                </button>
+            </div>
+
+            <div class="timer" id="timer"></div>
+        </form>
+    <?php else: ?>
+        <div style="text-align: center;">
+            <i class="fa fa-check-circle" style="font-size: 60px; color: #27ae60; margin-bottom: 20px;"></i>
+            <h3 style="color: #27ae60; margin-bottom: 20px;">Verification Successful!</h3>
+            <p>You will be redirected to the login page in a few seconds...</p>
+        </div>
+    <?php endif; ?>
 
     <div class="login-link">
-        <p>Already verified? <a href="login.php">Sign in here</a></p>
+        <p><a href="login.php"><i class="fa fa-arrow-left"></i> Back to Login</a></p>
     </div>
 </div>
 
 <script>
-    // Auto-advance code input
-    if (document.getElementById('code')) {
-        const codeInput = document.getElementById('code');
-        codeInput.addEventListener('input', function() {
-            this.value = this.value.replace(/[^0-9]/g, ''); // Only numbers
-        });
-    }
-
-    // Countdown timer for resend
-    if (document.getElementById('resendLink')) {
-        let seconds = 60;
-        const resendLink = document.getElementById('resendLink');
-        const originalText = resendLink.innerHTML;
-
-        function updateTimer() {
-            if (seconds > 0) {
-                resendLink.innerHTML = `<i class="fa fa-hourglass-half"></i> Resend in ${seconds}s`;
-                resendLink.style.pointerEvents = 'none';
-                resendLink.style.opacity = '0.5';
-                seconds--;
-                setTimeout(updateTimer, 1000);
-            } else {
-                resendLink.innerHTML = originalText;
-                resendLink.style.pointerEvents = 'auto';
-                resendLink.style.opacity = '1';
-            }
+// Auto-advance code input
+const codeInput = document.getElementById('verification_code');
+if (codeInput) {
+    codeInput.addEventListener('input', function() {
+        this.value = this.value.replace(/[^0-9]/g, ''); // Only numbers
+        if (this.value.length === 6) {
+            // Optionally auto-submit
+            // document.getElementById('verifyForm').submit();
         }
+    });
+}
 
-        // Start timer when page loads
-        updateTimer();
-    }
-
-    // Form validation
-    if (document.getElementById('verificationForm')) {
-        document.getElementById('verificationForm').addEventListener('submit', function(e) {
-            const code = document.getElementById('code').value;
-            if (!code || code.length !== 6) {
-                e.preventDefault();
-                alert('Please enter the 6-digit verification code');
+// Countdown timer for resend (optional)
+function startResendTimer(seconds = 60) {
+    const timer = document.getElementById('timer');
+    const resendBtn = document.querySelector('.resend-button');
+    
+    if (resendBtn) {
+        resendBtn.disabled = true;
+        resendBtn.style.opacity = '0.5';
+        
+        const interval = setInterval(function() {
+            if (seconds <= 0) {
+                clearInterval(interval);
+                timer.innerHTML = '';
+                resendBtn.disabled = false;
+                resendBtn.style.opacity = '1';
+            } else {
+                timer.innerHTML = `You can request a new code in ${seconds} seconds`;
+                seconds--;
             }
-        });
+        }, 1000);
     }
-</script>
+}
 
-<?php
-include("./footer.php");
-?>
+// Start timer if this is a fresh verification page (not after resend)
+<?php if (!isset($_POST['resend_code']) && !$verification_success): ?>
+    startResendTimer(60);
+<?php endif; ?>
+
+// Prevent form resubmission on page refresh
+if (window.history.replaceState) {
+    window.history.replaceState(null, null, window.location.href);
+}
+</script>

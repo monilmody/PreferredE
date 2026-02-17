@@ -37,45 +37,35 @@ if (!preg_match('/[\W_]/', $password)) { // Special character
 }
 
 if (empty($errors)) {
-    // Debug: Show what we're trying
     error_log("Attempting to register user: $username");
     
-    // 1. Register in Cognito
+    // Register in Cognito (NO AUTO-CONFIRM)
     $cognito_result = CognitoAuth::register($username, $password, $first_name, $last_name, $user_role);
     
-    // Debug: Show result
     error_log("Cognito registration result: " . print_r($cognito_result, true));
     
     if ($cognito_result['success']) {
-        // 2. Store in YOUR database
+        // Store in YOUR database
         require_once("db-settings.php");
         
-        // Insert into users table
-        $sql = "INSERT INTO users (USERNAME, FNAME, LNAME, EMAIL, PASSWORD, ACTIVE, USERROLE) 
-                VALUES (?, ?, ?, ?, ?, 'Y', ?)";
+        // Insert into users table with 'N' for cognito_verified = 0 (not verified)
+        $sql = "INSERT INTO users (USERNAME, FNAME, LNAME, EMAIL, PASSWORD, ACTIVE, USERROLE, cognito_verified) 
+                VALUES (?, ?, ?, ?, ?, 'Y', ?, 0)";
         
         $stmt = $mysqli->prepare($sql);
         
         if ($stmt) {
-            // Use plain password (as your old system does)
-            $db_password = $password;
+            $db_password = $password; // Your existing password storage
             
             $stmt->bind_param("ssssss", $username, $first_name, $last_name, $username, $db_password, $user_role);
             
             if ($stmt->execute()) {
-                // Success!
-                $_SESSION['registration_success'] = "Registration successful! You can now login.";
+                // Store email in session for verification page
+                $_SESSION['verify_email'] = $username;
+                $_SESSION['verify_name'] = $first_name;
                 
-                // Auto-login the user immediately
-                $_SESSION['UserActive'] = 'Y';
-                $_SESSION['UserName'] = $username;
-                $_SESSION['UserEmail'] = $username;
-                $_SESSION['UserRole'] = $user_role;
-                
-                setcookie("LoggedInUser", $username, time() + 3600, "/");
-                
-                // Redirect to home page
-                header("Location: login.php");
+                // Redirect to verification page
+                header("Location: verify.php");
                 exit();
             } else {
                 $errors[] = "Database error: " . $stmt->error;
@@ -91,7 +81,7 @@ if (empty($errors)) {
     }
 }
 
-// If errors, show them on same page for debugging
+// If errors, show them
 echo "<h2>Registration Failed</h2>";
 echo "<ul>";
 foreach ($errors as $error) {
@@ -100,7 +90,6 @@ foreach ($errors as $error) {
 echo "</ul>";
 echo "<p><a href='registration.php'>Go back</a></p>";
 
-// Also store in session for redirect (if you want to redirect back)
 $_SESSION['registration_errors'] = $errors;
 $_SESSION['form_data'] = [
     'user' => $username,
