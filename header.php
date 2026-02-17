@@ -1,295 +1,205 @@
 <?php
-include("./header.php");
-include("./session_page.php");
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+require_once("config.php");
 ?>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="assets/css/table.css">
-  
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-18763673-4"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        gtag('js', new Date());
+
+        gtag('config', 'UA-18763673-4');
+    </script>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i&display=swap" rel="stylesheet">
+    <title>Preferred Equine</title>
+    <link rel="stylesheet" type="text/css" href="assets/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <link rel="icon" href="assets\images\favicon.ico" type="image/x-icon">
 </head>
-<?php
-
-include_once("config.php");
-$sire_param =$_GET['sire'];
-$year_param =$_GET['year'];
-$elig_param =$_GET['elig'];
-$gait_param = isset($_GET['gait']) ? $_GET['gait'] : '';
-$salecode_param = $_GET['salecode'];
-$sort1_param =$_GET['sort1'];
-$sort2_param =$_GET['sort2'];
-$sort3_param =$_GET['sort3'];
-$sort4_param =$_GET['sort4'];
-$sort5_param =$_GET['sort5'];
-
-$resultFound = fetchSireAnalysis($sire_param,$year_param,$elig_param,$gait_param, $salecode_param);
-$resultList = fetchSireList($year_param);
-$yearList = getYearsList();
-$eligList = getEligList();
-//$gaitList = getGaitList_tb();
-$salcodeList = fetchSalecodeList($year_param);
 
 
-$sortList = array("Rank","FRank","CRank","SaleDate","Day","SaleCode", "Dam","Sireofdam", 
-                  "Sex","Color","Type", "Elig", "Hip", "Price Desc", "ConsNo","Purlname","Purfname");
 
-echo "<br>";
+<!-- ***** Header Area Start ***** -->
+<header class="header-area header-sticky" style="background-color:#2E4053;position: fixed;">
+    <div style="margin:5px 30px 30px 30px;">
+        <div class="col-12">
+            <nav class="main-nav">
+                <!-- ***** Logo Start ***** -->
+                <a href="index.php" class="logo">Preferred <em> Equine - AWS</em></a>
+                <!-- ***** Logo End ***** -->
+                <!-- ***** Menu Start ***** -->
+                <ul class="nav">
+                    <li><a href="index.php" class="active">Home</a></li>
+                    <?php
+                    // FIX 2: Check if session variable exists before using it
+                    $userName = $_SESSION["UserName"] ?? "";
+                    $userRole = $_SESSION["UserRole"] ?? "";
 
-echo '<div style= "margin:5px 30px 30px 30px;">';
-echo '<h1 style="text-align:center;">SIRE ANALYSIS   
-<label style="color:5D6D7E";>'.$year_param.'</label> <label style="color:#D98880";>'.$sire_param.'</label></h1>';
-?>
-<select class="custom-select1" id="year" onchange="updateSalecode(this.value)"> <!--onchange="location = this.value;" -->
-	<option value="">Sale Year</option>
-	<option  value="">All Years</option>
-	<?php foreach($yearList as $row) {
-	    echo '<option>'.$row['Year'].'</option>';
-    } ?>
-</select>
- <select class="custom-select1" id="sire"> <!--onchange="location = this.value;" -->
-	<option value="">Sire Filter</option>
-	<option value="">All Sire</option>
-	<?php foreach($resultList as $row) {
-  	    echo '<option>'.$row['Sire'].'</option>';
-    } ?>
-</select>
-<select class="custom-select1" id="elig"> 
-	<option value="">Elig Filter</option>
-	<option  value="">All Elig</option>
-	<?php foreach($eligList as $row) {
-  	    echo '<option>'.$row['Elig'].'</option>';
-    } ?>
-</select>
+                    if ($userName != "") {
+                        if ($userRole == "A" || $userRole == "S" || $userRole == "ST") {
+                    ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Standardbred</a>
 
-<select class="custom-select1" id="salecode"> <!--onchange="location = this.value;" -->
-    <option value="">Salecode Filter</option>
-    <option value="">All Salecode</option>
-    <?php foreach ($salcodeList as $row) {
-        echo '<option>'.$row['Salecode'].'</option>';
-
-    } ?>
-</select>
-
-  <select style="background-color:#229954;" class="custom-select1" id="sort1"> 
-	<option  value="">Sort By 1st</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort2">
-	<option value="">Sort By 2nd</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort3">
-	<option value="">Sort By 3rd</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort4">
-	<option value="">Sort By 4th</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
- <select style="background-color:#229954;" class="custom-select1" id="sort5">
-	<option value="">Sort By 5th</option>
-	<?php foreach($sortList as $row) {
-  	    echo '<option>'.$row.'</option>';
-    } ?>
-</select>
-<input class="custom-select1" type="submit" onclick="getValues()" name="SUBMITBUTTON" value="Submit" style="font-size:20px; "/>
-<div style="height:810px;overflow:auto;">
-<hr>
-<?php
-        setlocale(LC_MONETARY,"en_US");
-		foreach($resultFound as $row) {
-    		    echo '<div class="sire-header">';
-    		    echo '<h4 style="color:#E74C3C";><B><u>'.$row['Sire'].'</u></B></h4>';
-    		    echo '<h5><B>Total Sold - <label style="color:#E74C3C";>'.$row['Count'].'</label> | 
-                        Total- <label style="color:#E74C3C";>$'.number_format($row['Total']).'</label> | 
-                        Average - <label style="color:#E74C3C";>$'.number_format($row['Avg']).'</label> | 
-                        Top Seller - <label style="color:#E74C3C";>$'.number_format($row['Top']).'</label></B></h5>';
-    		    echo '<h5><B>Colts Sold - <label style="color:#E74C3C";>'.$row['CCount'].'</label> | 
-                        Colts Total- <label style="color:#E74C3C";>$'.number_format($row['CTotal']).'</label> | 
-                        Colts Average - <label style="color:#E74C3C";>$'.number_format($row['CAvg']).'</label> | 
-                        Colts Top Seller - <label style="color:#E74C3C";>$'.number_format($row['CTop']).'</label>
-                        </B></h5>
-                        <h5><B>Fillies Sold - <label style="color:#E74C3C";>'.$row['FCount'].'</label> | 
-                        Fillies Total- <label style="color:#E74C3C";>$'.number_format($row['FTotal']).'</label> | 
-                        Fillies Average - <label style="color:#E74C3C";>$'.number_format($row['FAvg']).'</label> | 
-                        Fillies Top Seller - <label style="color:#E74C3C";>$'.number_format($row['FTop']).'</label></B></h5>';
-    		    echo '</div>';
-    		    
-if ($year_param != "" or $sire_param != "" or $elig_param != "") {
-?>
-       <div class="table" style="width: 100%;overflow: auto;">
-          <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-        	  <div class="cell" style="width: 2%;">
-                No.
-              </div>
-              <div class="cell" style="width: 2%;">
-                R
-              </div>
-              <div class="cell" style="width: 2%;">
-                FR
-              </div>
-              <div class="cell" style="width: 2%;">
-                CR
-              </div>
-              <div class="cell" style="width: 3%;">
-                HIP
-              </div>
-              <div class="cell" style="width: 12%;">
-                Horse
-              </div>
-              <div class="cell" style="width: 2%;">
-                S
-              </div>
-              <div class="cell" style="width: 2%;">
-                C
-              </div>
-              <div class="cell" style="width: 2%;">
-                G
-              </div>
-              <div class="cell" style="width: 2%;">
-                T
-              </div>
-              <div class="cell" style="width: 5%;">
-                DOB
-              </div>
-              <div class="cell" style="width: 3%;">
-                Elig
-              </div>
-              <div class="cell" style="width: 12%;">
-                Dam
-              </div>
-              <div class="cell" style="width: 12%;">
-                SireOfDam
-              </div>
-              <div class="cell" style="width: 10%;">
-                SaleCode
-              </div>
-              <div class="cell" style="width: 4%;">
-                Consno
-              </div>
-              <div class="cell" style="width: 5%;">
-                Saledate
-              </div>
-              <div class="cell" style="width: 2%;">
-                Day
-              </div>
-              <div class="cell" style="width: 5%;">
-                Price
-              </div>
-              <div class="cell" style="width: 3%;">
-                Curr
-              </div>
-              <div class="cell" style="width: 7%;">
-                PLastName
-              </div>
-              <div class="cell" style="width: 7%;">
-                PFirstName
-              </div>
-              <div class="cell" style="width: 1.5%;">
-                Rate
-              </div>
-          </div>
-          
-          <?php
-		    
-		    #$lastname1 =$row[Sire];
-            $number =0;
-            $sireData = fetchSireData($row['Sire'],$year_param,$elig_param,$gait_param,$sort1_param,$sort2_param,$sort3_param,$sort4_param,$sort5_param,$salecode_param);         
-
-            foreach($sireData as $row1) {
-                  $elementCount = 0;
-                  $number = $number+1;
-                  
-                  echo "<div class='row'>";
-                  echo "<div class='cell'>".$number."</div>";
-                  //echo "<div class='cell'>".$number."</div>";
-                  #echo "</a>";
-                  #echo $row[Price];
-                  foreach($row1 as $elements) {
-                      $elementCount =$elementCount+1;
-                      if($elementCount == 18){
-                          $elements = "$".number_format((float)$elements);
-                      }
-                      if ($elements == "0000-00-00") {
-                          $elements="";
-                      }
-                      if ($elementCount == 10 or $elementCount == 16) {
-                        if ($elements != "" && $elements !== "1900-01-01") {
-                          $date = DateTime::createFromFormat('Y-m-d', $elements);
-                          if ($date !== false && $date instanceof DateTime) {
-                            $elements = $date->format('Y-m-d');
-                          } else {
-                            // Handle invalid date format here
-                            error_log("Invalid date format: $elements");
-                            $elements = ""; // Default value for invalid date
-                          }
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="dam_search.php">Horse Search Report</a>
+                                    <a class="dropdown-item" href="sire_analysis.php">Sire Analysis</a>
+                                    <a class="dropdown-item" href="sire_analysis_summary.php">Sire Analysis Summary</a>
+                                    <a class="dropdown-item" href="buyers_report.php">Buyer's Report</a>
+                                    <a class="dropdown-item" href="sales_report.php">Sales Report</a>
+                                    <a class="dropdown-item" href="auction_report.php">Auction Report</a>
+                                    <a class="dropdown-item" href="top_buyers.php">Top Buyers</a>
+                                    <a class="dropdown-item" href="individual_sales_report.php">Individual Horse Sales Report</a>
+                                    <a class="dropdown-item" href="broodmares_report.php">Broodmares Report</a>
+                                    <a class="dropdown-item" href="cons_analysis.php">Consignor Analysis</a>
+                                    <a class="dropdown-item" href="horse_list.php">Horse Inspection</a>
+                                </div>
+                            </li>
+                        <?php
                         }
-                      }
+                        if ($userRole == "A" || $userRole == "T" || $userRole == "ST") {
+                        ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">Thoroughbred</a>
 
-                      if ($elementCount == 15) {
-                          $elements= substr($elements, 0,4);
-                      }
-                      
-                      echo "<div class='cell'>".$elements."</div>";
-                      
-                  }echo "</div>";
-            }
-                  echo "</div>";
-              }
-		}
-          ?>
-</div>
-</div>
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="horse_search_tb.php">Horse Search Report</a>
+                                    <a class="dropdown-item" href="sire_analysis_tb.php">Sire Analysis</a>
+                                    <a class="dropdown-item" href="sire_analysis_summary_tb.php">Sire Analysis Summary</a>
+                                    <a class="dropdown-item" href="buyers_report_tb.php">Buyer's Report</a>
+                                    <a class="dropdown-item" href="sales_report_tb.php">Sales Report</a>
+                                    <a class="dropdown-item" href="auction_report_tb.php">Auction Report</a>
+                                    <a class="dropdown-item" href="top_yearling_buyers_tb.php">Top Yearling Buyers</a>
+                                    <a class="dropdown-item" href="top_every_buyers_tb.php">All Top Buyers</a>
+                                    <a class="dropdown-item" href="top_mixed_buyers_tb.php">Top Mixed Buyers</a>
+                                    <a class="dropdown-item" href="weanling-report.php">Weanlings Report</a>
+                                    <a class="dropdown-item" href="yearling_to_breeze_report.php">Yealing To Breeze Report</a>
+                                    <a class="dropdown-item" href="breeze_to_yearling_report.php">Breeze From Yearling Report</a>
+                                    <a class="dropdown-item" href="individual_sales_report_tb.php">Individual Horse Sales Report</a>
+                                    <a class="dropdown-item" href="broodmares_report_tb.php">Broodmares Report</a>
+                                    <a class="dropdown-item" href="horse_list_tb.php">Horse Inspection</a>
+                                </div>
+                            </li>
+                        <?php
+                        }
+                        if ($userRole == "A") {
+                        ?>
+                            <!--                             <li><a href="fleet.php">Fleet</a></li> -->
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">File Upload</a>
+
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="sales_file_upload.php">Standardbred</a>
+                                    <a class="dropdown-item" href="sales_file_upload_tb.php">Thoroughbred</a>
+                                    <a class="dropdown-item" href="https://python.preferredequinesalesresults.com/" target="_blank">File Upload Python</a>
+                                    <a class="dropdown-item" href="manage_data.php">Manage File Upload Data</a>
+                                    <a class="dropdown-item" href="file_upload_rating_update.php">Standardbred Rating Update</a>
+                                    <a class="dropdown-item" href="file_upload_et_update.php">Standardbred ET Update</a>
+                                </div>
+                            </li>
+
+                        <?php
+                        }
+                        if ($userRole == "A") {
+                        ?>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">USERS</a>
+
+                                <div class="dropdown-menu" style="background-color:black;">
+                                    <a class="dropdown-item" href="user_authorization.php">AUTHORIZE USERS</a>
+                                </div>
+                            </li>
+                    <?php
+                        }
+                    }
+                    ?>
+                    <!--                             <li class="dropdown"> -->
+                    <!--                                 <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">About</a> -->
+
+                    <!--                                 <div class="dropdown-menu"> -->
+                    <!--                                     <a class="dropdown-item" href="about.php">About Us</a> -->
+                    <!--                                     <a class="dropdown-item" href="blog.php">Blog</a> -->
+                    <!--                                     <a class="dropdown-item" href="team.php">Team</a> -->
+                    <!--                                     <a class="dropdown-item" href="testimonials.php">Testimonials</a> -->
+                    <!--                                     <a class="dropdown-item" href="faq.php">FAQ</a> -->
+                    <!--                                     <a class="dropdown-item" href="terms.php">Terms</a> -->
+                    <!--                                 </div> -->
+                    <!--                             </li> -->
+                    <!--                             <li><a href="registration.php">Register</a></li>  -->
+
+
+                    <?php
+                    if ($userName == "") {
+                        echo '<li><a href="registration.php" class="active">REGISTER</a></li>';
+                        echo '<li><a href="login.php">Login</a></li>';
+                    } else {
+                        // Get first and last name from session, fallback to username if not set
+                        $displayName = "";
+
+                        if (!empty($_SESSION["UserFirstName"]) && !empty($_SESSION["UserLastName"])) {
+                            $displayName = $_SESSION["UserFirstName"] . " " . $_SESSION["UserLastName"];
+                        } elseif (!empty($_SESSION["UserFirstName"])) {
+                            $displayName = $_SESSION["UserFirstName"];
+                        } else {
+                            // If first/last not in session, try to fetch from database
+                            require_once("db-settings.php");
+                            $email = $_SESSION["UserEmail"] ?? $_SESSION["UserName"];
+
+                            $stmt = $mysqli->prepare("SELECT FNAME, LNAME FROM users WHERE EMAIL = ? OR USERNAME = ? LIMIT 1");
+                            $stmt->bind_param("ss", $email, $email);
+                            $stmt->execute();
+                            $result = $stmt->get_result();
+
+                            if ($row = $result->fetch_assoc()) {
+                                $_SESSION["UserFirstName"] = $row['FNAME'];
+                                $_SESSION["UserLastName"] = $row['LNAME'];
+
+                                if (!empty($row['FNAME']) && !empty($row['LNAME'])) {
+                                    $displayName = $row['FNAME'] . " " . $row['LNAME'];
+                                } elseif (!empty($row['FNAME'])) {
+                                    $displayName = $row['FNAME'];
+                                } else {
+                                    $displayName = $userName;
+                                }
+                            } else {
+                                $displayName = $userName;
+                            }
+                            $stmt->close();
+                        }
+
+                        echo '<li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="javascript:void(0)" role="button" aria-haspopup="true" aria-expanded="false">' . htmlspecialchars($displayName) . '</a>
+                              
+                                <div class="dropdown-menu" style="background-color:black;" >
+                                	<a class="dropdown-item" href="myaccount.php">My Account</a>
+                                	<a class="dropdown-item" href="logout.php">Logout</a>
+                                </div>
+                            </li>';
+                    }
+                    ?>
+
+                </ul>
+                <!-- ***** Menu End ***** -->
+            </nav>
+        </div>
+    </div>
+</header>
+<!-- ***** Header Area End ***** -->
 <br>
-<script>
-	document.getElementById('year').value="<?php echo $year_param;?>";
-	document.getElementById('sire').value="<?php echo $sire_param;?>";
-	document.getElementById('elig').value="<?php echo $elig_param;?>";
-  document.getElementById('salecode').value="<?php echo $salecode_param;?>";
-	document.getElementById('sort1').value="<?php echo $sort1_param;?>";
-	document.getElementById('sort2').value="<?php echo $sort2_param;?>";
-	document.getElementById('sort3').value="<?php echo $sort3_param;?>";
-	document.getElementById('sort4').value="<?php echo $sort4_param;?>";
-	document.getElementById('sort5').value="<?php echo $sort5_param;?>";
-
-</script>
-<script>
-function getValues() {
-    var year = document.getElementById('year').value;
-	var sire = document.getElementById('sire').value;
-	var elig = document.getElementById('elig').value;
-  var salecode = document.getElementById('salecode').value;
-	var sort1 = document.getElementById('sort1').value;
-	var sort2 = document.getElementById('sort2').value;
-	var sort3 = document.getElementById('sort3').value;
-	var sort4 = document.getElementById('sort4').value;
-	var sort5 = document.getElementById('sort5').value;
-
-    var link ="sire_analysis.php?year="+year
-    							+"&sire="+sire
-    							+"&elig="+elig
-                  +"&salecode="+salecode
-    							+"&sort1="+sort1
-    							+"&sort2="+sort2
-    							+"&sort3="+sort3
-    							+"&sort4="+sort4
-    							+"&sort5="+sort5;
-    //alert(link);
-    							
-  	window.open(link,"_self");
-  	
-}
-</script>
+<br>
+<br>
