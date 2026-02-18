@@ -332,9 +332,13 @@ require_once("config.php");
 <!-- Header -->
 <header class="header-area header-sticky">
     <div class="main-nav">
+
         <!-- Logo -->
         <a href="index.php" class="logo">
-            <img src="assets/images/logo.svg" alt="Preferred Equine" height="70">
+            <img src="assets/images/PEM-ONLINE.png"
+                alt="Preferred Equine Online, LLC"
+                height="60"
+                style="vertical-align: middle; max-height: 60px; width: auto;">
         </a>
 
         <!-- Mobile Toggle -->
