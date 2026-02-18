@@ -429,7 +429,6 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
 }
 ?>
 
-<!-- Rest of your HTML/CSS/JavaScript remains exactly the same as before -->
 <style>
 /* Forgot Password Styles */
 .forgot-container {
@@ -462,6 +461,7 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
 
 .form-group {
     margin-bottom: 25px;
+    position: relative;
 }
 
 .form-group label {
@@ -485,6 +485,41 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
 .form-control:focus {
     border-color: #2E4053;
     box-shadow: 0 0 0 3px rgba(46, 64, 83, 0.1);
+    outline: none;
+}
+
+/* Password field with toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-control {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #2E4053;
+}
+
+.toggle-password:focus {
     outline: none;
 }
 
@@ -743,14 +778,24 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
         
         <div class="form-group">
             <label for="new_password">New Password</label>
-            <input type="password" class="form-control" id="new_password" name="new_password" 
-                   placeholder="Enter new password" required>
+            <div class="password-wrapper">
+                <input type="password" class="form-control" id="new_password" name="new_password" 
+                       placeholder="Enter new password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('new_password', this)" tabindex="-1">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
         </div>
         
         <div class="form-group">
             <label for="confirm_password">Confirm New Password</label>
-            <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
-                   placeholder="Confirm new password" required>
+            <div class="password-wrapper">
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" 
+                       placeholder="Confirm new password" required>
+                <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)" tabindex="-1">
+                    <i class="fa fa-eye"></i>
+                </button>
+            </div>
         </div>
         
         <div class="password-hint">
@@ -781,6 +826,22 @@ if (isset($_GET['resend']) && $_GET['resend'] == 1 && isset($_SESSION['reset_ema
 </div>
 
 <script>
+// Toggle password visibility
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+    const icon = button.querySelector('i');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
 // Password strength checker
 if (document.getElementById('new_password')) {
     const passwordInput = document.getElementById('new_password');
