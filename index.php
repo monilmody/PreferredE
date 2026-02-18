@@ -344,8 +344,8 @@ session_start();
             <div class="hero-buttons">
                 <?php if (isset($_SESSION['UserName']) && $_SESSION['UserName'] != ""): ?>
                     <a href="myaccount.php" class="btn-primary">My Account</a>
-                    <a href="dam_search.php" class="btn-secondary">Standardbred</a>
-                    <a href="horse_search_tb.php" class="btn-secondary">Thoroughbred</a>
+                    <a href="dam_search.php" class="btn-secondary">Standardbred Search</a>
+                    <a href="horse_search_tb.php" class="btn-secondary">Thoroughbred Search</a>
                 <?php else: ?>
                     <a href="registration.php" class="btn-primary">Get Started</a>
                     <a href="login.php" class="btn-secondary">Sign In</a>
