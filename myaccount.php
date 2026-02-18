@@ -589,6 +589,62 @@ body {
     border-left: 3px solid #2E4053;
 }
 
+/* Password strength indicator */
+.password-strength {
+    margin-top: 10px;
+    height: 6px;
+    border-radius: 3px;
+    background: #e0e0e0;
+    overflow: hidden;
+}
+
+.strength-bar {
+    height: 100%;
+    width: 0%;
+    transition: all 0.3s ease;
+    border-radius: 3px;
+}
+
+.strength-text {
+    font-size: 12px;
+    margin-top: 5px;
+    text-align: right;
+    font-weight: 500;
+}
+
+.strength-very-weak { background-color: #e74c3c; }
+.strength-weak { background-color: #e67e22; }
+.strength-fair { background-color: #f1c40f; }
+.strength-good { background-color: #3498db; }
+.strength-strong { background-color: #27ae60; }
+
+.strength-requirements {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.requirement-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    color: #7f8c8d;
+}
+
+.requirement-item i {
+    font-size: 12px;
+}
+
+.requirement-met {
+    color: #27ae60;
+}
+
+.requirement-unmet {
+    color: #e74c3c;
+}
+
 .btn-primary {
     background: linear-gradient(135deg, #2E4053 0%, #3a506b 100%);
     color: white;
@@ -916,6 +972,30 @@ body {
                                     <i class="fa fa-eye"></i>
                                 </button>
                             </div>
+                            <!-- Password strength indicator -->
+                            <div class="password-strength">
+                                <div class="strength-bar" id="strengthBar"></div>
+                            </div>
+                            <div class="strength-text" id="strengthText"></div>
+                            
+                            <!-- Password requirements checklist -->
+                            <div class="strength-requirements">
+                                <div class="requirement-item" id="req-length">
+                                    <i class="fa fa-times-circle"></i> <span>8+ characters</span>
+                                </div>
+                                <div class="requirement-item" id="req-uppercase">
+                                    <i class="fa fa-times-circle"></i> <span>Uppercase</span>
+                                </div>
+                                <div class="requirement-item" id="req-lowercase">
+                                    <i class="fa fa-times-circle"></i> <span>Lowercase</span>
+                                </div>
+                                <div class="requirement-item" id="req-number">
+                                    <i class="fa fa-times-circle"></i> <span>Number</span>
+                                </div>
+                                <div class="requirement-item" id="req-special">
+                                    <i class="fa fa-times-circle"></i> <span>Special character</span>
+                                </div>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -966,6 +1046,79 @@ function togglePassword(fieldId, button) {
         field.type = 'password';
         icon.classList.remove('fa-eye-slash');
         icon.classList.add('fa-eye');
+    }
+}
+
+// Password strength checker
+function checkPasswordStrength(password) {
+    let strength = 0;
+    let requirements = {
+        length: password.length >= 8,
+        uppercase: /[A-Z]/.test(password),
+        lowercase: /[a-z]/.test(password),
+        number: /[0-9]/.test(password),
+        special: /[\W_]/.test(password)
+    };
+    
+    // Update requirement icons
+    updateRequirement('req-length', requirements.length);
+    updateRequirement('req-uppercase', requirements.uppercase);
+    updateRequirement('req-lowercase', requirements.lowercase);
+    updateRequirement('req-number', requirements.number);
+    updateRequirement('req-special', requirements.special);
+    
+    // Calculate strength
+    if (requirements.length) strength += 1;
+    if (requirements.uppercase) strength += 1;
+    if (requirements.lowercase) strength += 1;
+    if (requirements.number) strength += 1;
+    if (requirements.special) strength += 1;
+    
+    return strength;
+}
+
+function updateRequirement(elementId, isMet) {
+    const element = document.getElementById(elementId);
+    const icon = element.querySelector('i');
+    
+    if (isMet) {
+        icon.className = 'fa fa-check-circle';
+        element.classList.add('requirement-met');
+        element.classList.remove('requirement-unmet');
+    } else {
+        icon.className = 'fa fa-times-circle';
+        element.classList.add('requirement-unmet');
+        element.classList.remove('requirement-met');
+    }
+}
+
+function updateStrengthBar(strength) {
+    const bar = document.getElementById('strengthBar');
+    const text = document.getElementById('strengthText');
+    
+    let percentage = (strength / 5) * 100;
+    bar.style.width = percentage + '%';
+    
+    if (strength <= 1) {
+        bar.className = 'strength-bar strength-very-weak';
+        text.innerHTML = 'Very Weak';
+        text.style.color = '#e74c3c';
+    } else if (strength === 2) {
+        bar.className = 'strength-bar strength-weak';
+        text.innerHTML = 'Weak';
+        text.style.color = '#e67e22';
+    } else if (strength === 3) {
+        bar.className = 'strength-bar strength-fair';
+        text.innerHTML = 'Fair';
+        text.style.color = '#f1c40f';
+    } else if (strength === 4) {
+        bar.className = 'strength-bar strength-good';
+        text.innerHTML = 'Good';
+        text.style.color = '#3498db';
+    } else {
+        bar.className = 'strength-bar strength-strong';
+        text.innerHTML = 'Strong';
+        text.style.color = '#27ae60';
     }
 }
 
@@ -1028,26 +1181,32 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-// Password strength checker
+// Password strength checker event listener
 if (document.getElementById('new_password')) {
     const passwordInput = document.getElementById('new_password');
     const confirmInput = document.getElementById('confirm_password');
     
-    function checkPasswordStrength() {
-        const password = passwordInput.value;
+    passwordInput.addEventListener('input', function() {
+        const strength = checkPasswordStrength(this.value);
+        updateStrengthBar(strength);
         
         // Check if passwords match
         if (confirmInput.value) {
-            if (password === confirmInput.value) {
+            if (this.value === confirmInput.value) {
                 confirmInput.style.borderColor = '#27ae60';
             } else {
                 confirmInput.style.borderColor = '#e74c3c';
             }
         }
-    }
+    });
     
-    passwordInput.addEventListener('input', checkPasswordStrength);
-    confirmInput.addEventListener('input', checkPasswordStrength);
+    confirmInput.addEventListener('input', function() {
+        if (passwordInput.value === this.value) {
+            this.style.borderColor = '#27ae60';
+        } else {
+            this.style.borderColor = '#e74c3c';
+        }
+    });
 }
 
 // Form validation
