@@ -350,7 +350,6 @@ require_once("config.php");
 
         <!-- Menu -->
         <ul class="nav" id="mainNav">
-            <li><a href="index.php">Home</a></li>
             <?php
             $userName = $_SESSION["UserName"] ?? "";
             $userRole = $_SESSION["UserRole"] ?? "";
