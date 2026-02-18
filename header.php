@@ -30,7 +30,7 @@ require_once("config.php");
     <link rel="stylesheet" type="text/css" href="assets/css/font-awesome.css">
     <link rel="stylesheet" href="assets/css/style.css">
     <link rel="icon" href="assets/images/favicon.ico" type="image/x-icon">
-    
+
     <style>
         /* RESET - Remove ALL extra spacing */
         * {
@@ -55,7 +55,7 @@ require_once("config.php");
             width: 100% !important;
             height: 70px !important;
             z-index: 9999 !important;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
         }
 
         .header-area .main-nav {
@@ -90,12 +90,12 @@ require_once("config.php");
             gap: 2px !important;
         }
 
-        .header-area .nav > li {
+        .header-area .nav>li {
             list-style: none !important;
             position: relative !important;
         }
 
-        .header-area .nav > li > a {
+        .header-area .nav>li>a {
             display: flex !important;
             align-items: center !important;
             padding: 8px 16px !important;
@@ -110,13 +110,13 @@ require_once("config.php");
             cursor: pointer !important;
         }
 
-        .header-area .nav > li > a:hover {
+        .header-area .nav>li>a:hover {
             background: rgba(255, 255, 255, 0.1) !important;
             color: white !important;
         }
 
         /* Dropdown toggle arrow - using CSS instead of ::after for better control */
-        .header-area .nav > li.dropdown > a .arrow {
+        .header-area .nav>li.dropdown>a .arrow {
             display: inline-block !important;
             margin-left: 6px !important;
             font-size: 0.7rem !important;
@@ -124,12 +124,12 @@ require_once("config.php");
             transition: transform 0.2s ease !important;
         }
 
-        .header-area .nav > li.dropdown:hover > a .arrow {
+        .header-area .nav>li.dropdown:hover>a .arrow {
             transform: rotate(180deg) !important;
         }
 
         /* Dropdown menu */
-        .header-area .nav > li.dropdown .dropdown-menu {
+        .header-area .nav>li.dropdown .dropdown-menu {
             position: absolute !important;
             top: 100% !important;
             left: 0 !important;
@@ -144,10 +144,11 @@ require_once("config.php");
             transition: all 0.2s ease !important;
             border: none !important;
             z-index: 10000 !important;
-            display: block !important; /* Override Bootstrap */
+            display: block !important;
+            /* Override Bootstrap */
         }
 
-        .header-area .nav > li.dropdown:hover .dropdown-menu {
+        .header-area .nav>li.dropdown:hover .dropdown-menu {
             opacity: 1 !important;
             visibility: visible !important;
             transform: translateY(0) !important;
@@ -185,31 +186,31 @@ require_once("config.php");
         }
 
         /* User menu (last dropdown) */
-        .header-area .nav > li:last-child.dropdown {
+        .header-area .nav>li:last-child.dropdown {
             margin-left: 10px !important;
         }
 
-        .header-area .nav > li:last-child.dropdown > a {
+        .header-area .nav>li:last-child.dropdown>a {
             background: rgba(255, 255, 255, 0.1) !important;
             border-radius: 30px !important;
             padding: 6px 6px 6px 16px !important;
             border: 1px solid rgba(255, 255, 255, 0.1) !important;
         }
 
-        .header-area .nav > li:last-child.dropdown .dropdown-menu {
+        .header-area .nav>li:last-child.dropdown .dropdown-menu {
             left: auto !important;
             right: 0 !important;
         }
 
         /* Auth buttons */
-        .header-area .nav > li > a[href="registration.php"] {
+        .header-area .nav>li>a[href="registration.php"] {
             background: #FFD700 !important;
             color: #2E4053 !important;
             font-weight: 600 !important;
             margin-left: 8px !important;
         }
 
-        .header-area .nav > li > a[href="login.php"] {
+        .header-area .nav>li>a[href="login.php"] {
             border: 2px solid rgba(255, 255, 255, 0.3) !important;
         }
 
@@ -260,7 +261,7 @@ require_once("config.php");
                 transform: translateY(-150%) !important;
                 opacity: 0 !important;
                 transition: all 0.3s ease !important;
-                box-shadow: 0 10px 20px rgba(0,0,0,0.2) !important;
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2) !important;
                 max-height: calc(100vh - 60px) !important;
                 overflow-y: auto !important;
             }
@@ -270,17 +271,17 @@ require_once("config.php");
                 opacity: 1 !important;
             }
 
-            .header-area .nav > li {
+            .header-area .nav>li {
                 width: 100% !important;
             }
 
-            .header-area .nav > li > a {
+            .header-area .nav>li>a {
                 width: 100% !important;
                 justify-content: space-between !important;
             }
 
             /* Mobile dropdown handling */
-            .header-area .nav > li.dropdown .dropdown-menu {
+            .header-area .nav>li.dropdown .dropdown-menu {
                 position: static !important;
                 opacity: 1 !important;
                 visibility: visible !important;
@@ -292,7 +293,7 @@ require_once("config.php");
                 width: 100% !important;
             }
 
-            .header-area .nav > li.dropdown.active .dropdown-menu {
+            .header-area .nav>li.dropdown.active .dropdown-menu {
                 display: block !important;
             }
 
@@ -305,11 +306,11 @@ require_once("config.php");
                 color: rgba(255, 255, 255, 0.7) !important;
             }
 
-            .header-area .nav > li:last-child.dropdown {
+            .header-area .nav>li:last-child.dropdown {
                 margin-left: 0 !important;
             }
 
-            .header-area .nav > li:last-child.dropdown > a {
+            .header-area .nav>li:last-child.dropdown>a {
                 background: rgba(255, 255, 255, 0.1) !important;
                 margin-top: 5px !important;
             }
@@ -332,8 +333,10 @@ require_once("config.php");
 <header class="header-area header-sticky">
     <div class="main-nav">
         <!-- Logo -->
-        <a href="index.php" class="logo">Preferred <em>Equine - AWS</em></a>
-        
+        <a href="index.php" class="logo">
+            <img src="assets/images/logo.svg" alt="Preferred Equine" height="70">
+        </a>
+
         <!-- Mobile Toggle -->
         <div class="mobile-toggle" id="mobileToggle">
             <span></span>
@@ -459,12 +462,12 @@ require_once("config.php");
     // Mobile menu toggle
     const mobileToggle = document.getElementById('mobileToggle');
     const mainNav = document.getElementById('mainNav');
-    
+
     if (mobileToggle) {
         mobileToggle.addEventListener('click', function(e) {
             e.stopPropagation();
             mainNav.classList.toggle('active');
-            
+
             // Close all dropdowns when closing mobile menu
             if (!mainNav.classList.contains('active')) {
                 document.querySelectorAll('.dropdown').forEach(d => {
@@ -473,14 +476,14 @@ require_once("config.php");
             }
         });
     }
-    
+
     // Handle dropdowns on mobile
     if (window.innerWidth <= 1024) {
         document.querySelectorAll('.dropdown > .dropdown-toggle').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 // Close other dropdowns
                 const currentDropdown = this.parentElement;
                 document.querySelectorAll('.dropdown').forEach(d => {
@@ -488,13 +491,13 @@ require_once("config.php");
                         d.classList.remove('active');
                     }
                 });
-                
+
                 // Toggle current dropdown
                 currentDropdown.classList.toggle('active');
             });
         });
     }
-    
+
     // Close menu when clicking outside
     document.addEventListener('click', function(e) {
         if (mainNav && mobileToggle) {
@@ -506,7 +509,7 @@ require_once("config.php");
             }
         }
     });
-    
+
     // Handle window resize
     window.addEventListener('resize', function() {
         if (window.innerWidth > 1024) {
