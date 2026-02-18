@@ -773,7 +773,7 @@ body {
                 <a href="#password" class="menu-item">
                     <i class="fa fa-lock"></i> Change Password
                 </a>
-                <a href="logout.php" class="menu-item">
+                <a class="menu-item" href="logout.php">
                     <i class="fa fa-sign-out"></i> Logout
                 </a>
             </div>
