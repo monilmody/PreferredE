@@ -995,9 +995,18 @@ document.addEventListener('DOMContentLoaded', function() {
     
     menuItems.forEach(item => {
         item.addEventListener('click', function(e) {
+            const href = this.getAttribute('href');
+            
+            // Check if this is the logout link (actual page, not anchor)
+            if (href === 'logout.php') {
+                // Let the logout happen normally - don't prevent default
+                return true;
+            }
+            
+            // For anchor links (#profile, #password), handle the tab switching
             e.preventDefault();
             
-            const target = this.getAttribute('href').substring(1);
+            const target = href.substring(1);
             
             // Hide all sections
             Object.values(sections).forEach(section => {
