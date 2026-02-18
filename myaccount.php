@@ -872,18 +872,6 @@ body {
                                placeholder="Enter your contact number">
                     </div>
                     
-                    <div class="form-group">
-                        <label>Account Type</label>
-                        <input type="text" class="form-control readonly-field" 
-                               value="<?php echo $role_names[$user['USERROLE'] ?? 'user']; ?>" readonly>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label>Account Status</label>
-                        <input type="text" class="form-control readonly-field" 
-                               value="<?php echo ($user['ACTIVE'] ?? 'N') === 'Y' ? 'Active' : 'Inactive'; ?>" readonly>
-                    </div>
-                    
                     <button type="submit" name="update_profile" class="btn-primary">
                         <i class="fa fa-save"></i> Update Profile
                     </button>
