@@ -510,6 +510,7 @@ body {
 
 .form-group {
     margin-bottom: 25px;
+    position: relative;
 }
 
 .form-group label {
@@ -540,6 +541,41 @@ body {
     background-color: #f8f9fa;
     color: #666;
     cursor: not-allowed;
+}
+
+/* Password field with toggle */
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.password-wrapper .form-control {
+    padding-right: 45px;
+}
+
+.toggle-password {
+    position: absolute;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #666;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: color 0.3s;
+    z-index: 10;
+}
+
+.toggle-password:hover {
+    color: #2E4053;
+}
+
+.toggle-password:focus {
+    outline: none;
 }
 
 .password-hint {
@@ -831,7 +867,12 @@ body {
                     <form method="POST" action="" onsubmit="return confirmDelete()">
                         <div class="form-group">
                             <label for="delete_password">Enter Your Password to Confirm:</label>
-                            <input type="password" class="form-control" id="delete_password" name="delete_password" required>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-control" id="delete_password" name="delete_password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('delete_password', this)" tabindex="-1">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="form-group">
@@ -858,18 +899,33 @@ body {
                 <form method="POST" action="">
                     <div class="form-group">
                         <label for="current_password">Current Password</label>
-                        <input type="password" class="form-control" id="current_password" name="current_password" required>
+                        <div class="password-wrapper">
+                            <input type="password" class="form-control" id="current_password" name="current_password" required>
+                            <button type="button" class="toggle-password" onclick="togglePassword('current_password', this)" tabindex="-1">
+                                <i class="fa fa-eye"></i>
+                            </button>
+                        </div>
                     </div>
                     
                     <div class="form-row">
                         <div class="form-group">
                             <label for="new_password">New Password</label>
-                            <input type="password" class="form-control" id="new_password" name="new_password" required>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-control" id="new_password" name="new_password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('new_password', this)" tabindex="-1">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
                         
                         <div class="form-group">
                             <label for="confirm_password">Confirm New Password</label>
-                            <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                            <div class="password-wrapper">
+                                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('confirm_password', this)" tabindex="-1">
+                                    <i class="fa fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
                     </div>
                     
@@ -897,6 +953,22 @@ body {
 </div>
 
 <script>
+// Toggle password visibility function
+function togglePassword(fieldId, button) {
+    const field = document.getElementById(fieldId);
+    const icon = button.querySelector('i');
+    
+    if (field.type === 'password') {
+        field.type = 'text';
+        icon.classList.remove('fa-eye');
+        icon.classList.add('fa-eye-slash');
+    } else {
+        field.type = 'password';
+        icon.classList.remove('fa-eye-slash');
+        icon.classList.add('fa-eye');
+    }
+}
+
 // Simple tab switching
 document.addEventListener('DOMContentLoaded', function() {
     const menuItems = document.querySelectorAll('.menu-item');
