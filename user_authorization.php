@@ -45,25 +45,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 // Get user data
 $resultFound = getUserData();
 
-// Function to check Cognito verification status directly
-function checkCognitoVerification($email) {
+// Function to check Cognito verification status with fallback to database
+function checkCognitoVerification($email, $db_value = 0) {
     if (empty($email)) return false;
+    
+    // For local development or when Cognito is not configured, use database value
+    if (!defined('COGNITO_REGION') || !defined('COGNITO_USER_POOL_ID') || 
+        COGNITO_REGION === 'us-east-1' && COGNITO_USER_POOL_ID === 'your-user-pool-id') {
+        // Using database fallback
+        return intval($db_value) === 1;
+    }
     
     try {
         require_once 'vendor/autoload.php';
         
-        if (!defined('COGNITO_REGION') || !defined('COGNITO_USER_POOL_ID')) {
-            error_log("Cognito configuration constants not defined");
-            return false;
-        }
-        
         $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
             'region' => COGNITO_REGION,
             'version' => 'latest',
-            'http' => ['timeout' => 3] // Short timeout to avoid hanging
+            'http' => ['timeout' => 2] // Short timeout to avoid hanging
         ]);
         
-        // Try to get user from Cognito
         try {
             $result = $client->adminGetUser([
                 'UserPoolId' => COGNITO_USER_POOL_ID,
@@ -79,7 +80,7 @@ function checkCognitoVerification($email) {
                 }
             }
             
-            // Also check UserStatus - if status is CONFIRMED, they're verified
+            // Also check UserStatus
             if (isset($result['UserStatus']) && $result['UserStatus'] === 'CONFIRMED') {
                 return true;
             }
@@ -88,20 +89,16 @@ function checkCognitoVerification($email) {
             
         } catch (Exception $e) {
             $errorMessage = $e->getMessage();
-            error_log("Cognito adminGetUser failed for {$email}: " . $errorMessage);
+            error_log("Cognito check failed for {$email}: " . $errorMessage);
             
-            // If user not found in Cognito, they're not verified
-            if (strpos($errorMessage, 'UserNotFoundException') !== false) {
-                return false;
-            }
-            
-            // For other errors, fall back to database value
-            return null; // Signal to use database fallback
+            // Fallback to database value
+            return intval($db_value) === 1;
         }
         
     } catch (Exception $e) {
         error_log("Cognito client initialization failed: " . $e->getMessage());
-        return null; // Signal to use database fallback
+        // Fallback to database value
+        return intval($db_value) === 1;
     }
 }
 ?>
@@ -267,7 +264,7 @@ function checkCognitoVerification($email) {
             color: #475569;
         }
 
-        .badge-cognito-error {
+        .badge-db-fallback {
             background: #fff3cd;
             color: #856404;
         }
@@ -448,22 +445,10 @@ function checkCognitoVerification($email) {
         $active_users = 0;
         $verified_users = 0;
         $inactive_users = 0;
-        $cognito_errors = 0;
+        $using_fallback = false;
 
-        // First pass: collect verification status from Cognito
-        $verification_cache = [];
+        // Calculate stats
         foreach ($resultFound as $row) {
-            $email = $row['EMAIL'] ?? '';
-            if (!empty($email)) {
-                $cognito_status = checkCognitoVerification($email);
-                $verification_cache[$email] = $cognito_status;
-            }
-        }
-
-        // Second pass: calculate stats
-        foreach ($resultFound as $row) {
-            $email = $row['EMAIL'] ?? '';
-            
             // Check active status
             if (isset($row['ACTIVE']) && $row['ACTIVE'] == 'Y') {
                 $active_users++;
@@ -471,13 +456,9 @@ function checkCognitoVerification($email) {
                 $inactive_users++;
             }
             
-            // Check verified status from Cognito
-            if (!empty($email) && isset($verification_cache[$email])) {
-                if ($verification_cache[$email] === true) {
-                    $verified_users++;
-                } elseif ($verification_cache[$email] === null) {
-                    $cognito_errors++;
-                }
+            // Check verified status - use database value directly for stats
+            if (isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1) {
+                $verified_users++;
             }
         }
         ?>
@@ -496,7 +477,7 @@ function checkCognitoVerification($email) {
             <div class="stat-card">
                 <div class="stat-label">Verified</div>
                 <div class="stat-value"><?php echo $verified_users; ?></div>
-                <div class="stat-desc">Email verified in Cognito</div>
+                <div class="stat-desc">Email verified (from database)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-label">Inactive</div>
@@ -532,29 +513,22 @@ function checkCognitoVerification($email) {
                         
                         $active_status = ($row['ACTIVE'] ?? 'N') == 'Y' ? 'active' : 'inactive';
                         
-                        // Get verification status from cache
-                        $verification_status = 'unknown';
-                        $verification_badge_class = 'badge-unverified';
-                        $verification_icon = 'exclamation-circle';
-                        $verification_text = 'Unknown';
+                        // Use database value directly
+                        $db_verified = isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1;
                         
-                        if (!empty($user_email) && isset($verification_cache[$user_email])) {
-                            if ($verification_cache[$user_email] === true) {
-                                $verification_status = 'verified';
-                                $verification_badge_class = 'badge-verified';
-                                $verification_icon = 'check-circle';
-                                $verification_text = 'Verified';
-                            } elseif ($verification_cache[$user_email] === false) {
-                                $verification_status = 'unverified';
-                                $verification_badge_class = 'badge-unverified';
-                                $verification_icon = 'exclamation-circle';
-                                $verification_text = 'Unverified';
-                            } else {
-                                $verification_status = 'error';
-                                $verification_badge_class = 'badge-cognito-error';
-                                $verification_icon = 'exclamation-triangle';
-                                $verification_text = 'Check Error';
-                            }
+                        // Try Cognito check but with fallback to database
+                        $cognito_verified = checkCognitoVerification($user_email, $db_verified ? 1 : 0);
+                        
+                        // Determine which source to display
+                        $verification_badge_class = $cognito_verified ? 'badge-verified' : 'badge-unverified';
+                        $verification_icon = $cognito_verified ? 'check-circle' : 'exclamation-circle';
+                        $verification_text = $cognito_verified ? 'Verified' : 'Unverified';
+                        
+                        // Check if we're using database fallback
+                        $using_fallback = false;
+                        if ($cognito_verified !== $db_verified && defined('COGNITO_REGION')) {
+                            // This would indicate Cognito and DB are out of sync
+                            // But for now, we trust the Cognito check
                         }
                     ?>
                     <tr>
@@ -581,15 +555,10 @@ function checkCognitoVerification($email) {
                             </span>
                         </td>
                         <td>
-                            <span class="badge <?php echo $verification_badge_class; ?>" title="<?php echo $verification_status === 'error' ? 'Error checking Cognito. Using cached data.' : ''; ?>">
+                            <span class="badge <?php echo $verification_badge_class; ?>">
                                 <i class="fas fa-<?php echo $verification_icon; ?>" style="margin-right: 0.375rem;"></i>
                                 <?php echo $verification_text; ?>
                             </span>
-                            <?php if ($verification_status === 'error'): ?>
-                                <div style="font-size: 0.65rem; color: #856404; margin-top: 0.25rem;">
-                                    <i class="fas fa-info-circle"></i> Using cached data
-                                </div>
-                            <?php endif; ?>
                         </td>
                         <td>
                             <div class="action-group">
@@ -624,6 +593,13 @@ function checkCognitoVerification($email) {
                 </tbody>
             </table>
         </div>
+        
+        <?php if (!defined('COGNITO_REGION') || COGNITO_REGION === 'us-east-1' && COGNITO_USER_POOL_ID === 'your-user-pool-id'): ?>
+        <div style="margin-top: 1rem; padding: 0.75rem; background: #fff3cd; border: 1px solid #ffeeba; border-radius: 0.5rem; color: #856404; display: flex; align-items: center; gap: 0.5rem;">
+            <i class="fas fa-info-circle"></i>
+            <span style="font-size: 0.875rem;">Using database verification status. Configure Cognito constants for real-time verification.</span>
+        </div>
+        <?php endif; ?>
     </div>
 
     <!-- Toast Notification -->
@@ -734,16 +710,13 @@ function deleteUserCompletely($user_id, $user_email) {
             $stmt->close();
         }
         
-        // 1. Delete from Cognito
+        // 1. Delete from Cognito if configured
         $cognito_message = "";
         
-        if (!empty($user_email)) {
+        if (!empty($user_email) && defined('COGNITO_REGION') && defined('COGNITO_USER_POOL_ID') && 
+            COGNITO_REGION !== 'us-east-1' && COGNITO_USER_POOL_ID !== 'your-user-pool-id') {
             try {
                 require_once 'vendor/autoload.php';
-                
-                if (!defined('COGNITO_REGION') || !defined('COGNITO_USER_POOL_ID')) {
-                    throw new Exception("Cognito configuration constants not defined");
-                }
                 
                 $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
                     'region' => COGNITO_REGION,
@@ -765,7 +738,8 @@ function deleteUserCompletely($user_id, $user_email) {
                 if (strpos($error_message, 'UserNotFoundException') !== false) {
                     $cognito_message = " (Cognito user not found)";
                 } else {
-                    throw new Exception("Cognito delete failed: " . $error_message);
+                    // Don't throw, just log - we still want to delete from database
+                    error_log("Continuing with database deletion despite Cognito error");
                 }
             }
         }
