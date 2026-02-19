@@ -306,7 +306,6 @@ if (isset($_SESSION['registration_success'])) {
             <label for="userrole">Account Type *</label>
             <select class="form-control-select" id="userrole" name="userrole" required>
                 <option value="N" <?php echo (($form_data['userrole'] ?? '') == 'N') ? 'selected' : ''; ?>>SELECT USER ROLE</option>
-                <option value="A" <?php echo (($form_data['userrole'] ?? '') == 'A') ? 'selected' : ''; ?>>ADMIN (Full Access)</option>
                 <option value="T" <?php echo (($form_data['userrole'] ?? '') == 'T') ? 'selected' : ''; ?>>THOROUGHBRED Access</option>
                 <option value="S" <?php echo (($form_data['userrole'] ?? '') == 'S') ? 'selected' : ''; ?>>STANDARDBRED Access</option>
                 <option value="ST" <?php echo (($form_data['userrole'] ?? '') == 'ST') ? 'selected' : ''; ?>>STANDARDBRED & THOROUGHBRED Access</option>
