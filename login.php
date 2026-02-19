@@ -1,12 +1,14 @@
 <?php
 session_start();
 ob_start();
-include("./header.php");
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-require_once("config.php"); // This now includes Cognito settings
-require_once("cognito.php"); // Our simple Cognito helper
+include("./header.php");
+
+require_once("config.php");
+require_once("cognito.php");
+require_once("db-settings.php");
 
 // If user is already logged in, redirect
 if (isset($_SESSION['UserName'])) {
@@ -32,60 +34,52 @@ if (!empty($_POST)) {
     }
 
     if (count($errors) == 0) {
-        require_once("cognito.php");
-        require_once("db-settings.php");
-
+        
+        // Authenticate with Cognito
         $authResult = CognitoAuth::authenticate($username, $password);
 
         if ($authResult['success']) {
 
             // Get COMPLETE user data including ACTIVE status
-            $user_check = $mysqli->prepare("SELECT * FROM users WHERE EMAIL = ?");
-            $user_check->bind_param("s", $username);
-            $user_check->execute();
-            $user_result = $user_check->get_result();
-            $user_data = $user_result->fetch_assoc();
-            $user_check->close();
+            $stmt = $mysqli->prepare("SELECT * FROM users WHERE EMAIL = ? OR USERNAME = ?");
+            $stmt->bind_param("ss", $username, $username);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $user_data = $result->fetch_assoc();
+            $stmt->close();
 
-            // Check if user exists
+            // Check if user exists in database
             if (!$user_data) {
-                $errors[] = "User account not found";
-                return;
-            }
-
+                $errors[] = "User account not found in database";
+            } 
             // Check if user is ACTIVE (authorized)
-            if ($user_data['ACTIVE'] != 'Y') {
+            elseif (!isset($user_data['ACTIVE']) || $user_data['ACTIVE'] != 'Y') {
                 $errors[] = "Your account has been deactivated. Please contact administrator.";
-                $message = "Account deactivated";
-                $message_type = "error";
-                // Don't proceed with login
-                return;
             }
-
             // Check if user is verified in Cognito
-            if ($user_data['cognito_verified'] == 0) {
+            elseif (!isset($user_data['cognito_verified']) || $user_data['cognito_verified'] == 0) {
                 $_SESSION['verify_email'] = $username;
                 header("Location: verify.php");
                 exit();
             }
+            // All checks passed - log the user in
+            else {
+                // Set session variables
+                $_SESSION["UserActive"] = 'Y';
+                $_SESSION["UserName"] = $username;
+                $_SESSION["UserEmail"] = $username;
+                $_SESSION["UserRole"] = $user_data['USERROLE'] ?? 'user';
+                $_SESSION["UserFirstName"] = $user_data['FNAME'] ?? '';
+                $_SESSION["UserLastName"] = $user_data['LNAME'] ?? '';
 
-            // Get user details from your existing database
-            $dbUserDetails = fetchUserDetails($username);
+                setcookie("LoggedInUser", $username, time() + 3600, "/");
 
-            $_SESSION["UserFirstName"] = $dbUserDetails["FNAME"] ?? '';
-            $_SESSION["UserLastName"] = $dbUserDetails["LNAME"] ?? '';
-
-            // Set session variables
-            $_SESSION["UserActive"] = 'Y';
-            $_SESSION["UserName"] = $username;
-            $_SESSION["UserEmail"] = $username;
-            $_SESSION["UserRole"] = $dbUserDetails["USERROLE"] ?? 'user';
-
-            setcookie("LoggedInUser", $username, time() + 3600, "/");
-
-            $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
-            header("Location: $redirect_url");
-            exit();
+                $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
+                header("Location: $redirect_url");
+                exit();
+            }
+        } else {
+            $errors[] = $authResult['error'] ?? 'Invalid username or password';
         }
     }
 }
