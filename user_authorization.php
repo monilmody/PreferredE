@@ -125,6 +125,12 @@ $resultFound = getUserData();
             color: #0f172a;
         }
 
+        .stat-desc {
+            font-size: 0.7rem;
+            color: #94a3b8;
+            margin-top: 0.25rem;
+        }
+
         /* Table Container */
         .table-container {
             background: white;
@@ -327,6 +333,14 @@ $resultFound = getUserData();
         .toast-error {
             border-left: 4px solid #ef4444;
         }
+
+        code {
+            background: #f1f5f9;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-family: 'Inter', monospace;
+            font-size: 0.8125rem;
+        }
     </style>
 </head>
 
@@ -343,29 +357,47 @@ $resultFound = getUserData();
         $total_users = count($resultFound);
         $active_users = 0;
         $verified_users = 0;
-        
+        $inactive_users = 0;
+
         foreach ($resultFound as $row) {
-            if (isset($row['ACTIVE']) && $row['ACTIVE'] == 'Y') $active_users++;
-            if (isset($row['cognito_verified']) && $row['cognito_verified'] == 1) $verified_users++;
+            // Check active status
+            if (isset($row['ACTIVE']) && $row['ACTIVE'] == 'Y') {
+                $active_users++;
+            } else {
+                $inactive_users++;
+            }
+            
+            // Check verified status (using intval for tinyint)
+            if (isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1) {
+                $verified_users++;
+            }
         }
+
+        // Pending = Active but Not Verified
+        $pending_users = $active_users - $verified_users;
+        if ($pending_users < 0) $pending_users = 0;
         ?>
 
         <div class="stats-cards">
             <div class="stat-card">
                 <div class="stat-label">Total Users</div>
                 <div class="stat-value"><?php echo $total_users; ?></div>
+                <div class="stat-desc">All registered users</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Active Users</div>
+                <div class="stat-label">Active</div>
                 <div class="stat-value"><?php echo $active_users; ?></div>
+                <div class="stat-desc">Can access the system</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Verified Users</div>
+                <div class="stat-label">Verified</div>
                 <div class="stat-value"><?php echo $verified_users; ?></div>
+                <div class="stat-desc">Email verified in Cognito</div>
             </div>
             <div class="stat-card">
-                <div class="stat-label">Pending Actions</div>
-                <div class="stat-value"><?php echo $total_users - $active_users; ?></div>
+                <div class="stat-label">Inactive</div>
+                <div class="stat-value"><?php echo $inactive_users; ?></div>
+                <div class="stat-desc">Cannot access system</div>
             </div>
         </div>
 
@@ -395,11 +427,12 @@ $resultFound = getUserData();
                         $full_name = $full_name ?: $row['USERNAME'] ?? 'N/A';
                         
                         $active_status = ($row['ACTIVE'] ?? 'N') == 'Y' ? 'active' : 'inactive';
-                        $verified_status = isset($row['cognito_verified']) && $row['cognito_verified'] == 1;
+                        // Fix: Use intval for tinyint comparison
+                        $verified_status = isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1;
                     ?>
                     <tr>
                         <td><?php echo $number; ?></td>
-                        <td><code style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 0.375rem;"><?php echo htmlspecialchars($user_id); ?></code></td>
+                        <td><code><?php echo htmlspecialchars($user_id); ?></code></td>
                         <td>
                             <div style="font-weight: 500;"><?php echo htmlspecialchars($full_name); ?></div>
                             <div class="user-email"><?php echo htmlspecialchars($row['USERNAME'] ?? ''); ?></div>
@@ -553,7 +586,7 @@ function deleteUserCompletely($user_id, $user_email) {
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
             $user_email = $user['EMAIL'] ?? '';
-            $cognito_verified = $user['cognito_verified'] ?? 0;
+            $cognito_verified = isset($user['cognito_verified']) ? intval($user['cognito_verified']) : 0;
             $stmt->close();
         } else {
             // Get cognito_verified status
@@ -562,7 +595,7 @@ function deleteUserCompletely($user_id, $user_email) {
             $stmt->execute();
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
-            $cognito_verified = $user['cognito_verified'] ?? 0;
+            $cognito_verified = isset($user['cognito_verified']) ? intval($user['cognito_verified']) : 0;
             $stmt->close();
         }
         
@@ -631,5 +664,4 @@ function deleteUserCompletely($user_id, $user_email) {
     }
 }
 ?>
-</body>
 </html>
