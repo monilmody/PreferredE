@@ -150,14 +150,6 @@ include("./header.php");
             <div class="contact-info">
                 <h3>Need assistance?</h3>
                 <p>
-                    <i class="fas fa-envelope"></i>
-                    <span>support@preferredequine.com</span>
-                </p>
-                <p>
-                    <i class="fas fa-phone"></i>
-                    <span>(555) 123-4567</span>
-                </p>
-                <p>
                     <i class="fas fa-clock"></i>
                     <span>Mon-Fri, 9am - 5pm EST</span>
                 </p>
