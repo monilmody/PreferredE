@@ -80,16 +80,276 @@ if (empty($errors)) {
         error_log("Cognito error: " . $cognito_result['error']);
     }
 }
+?>
 
-// If errors, show them
-echo "<h2>Registration Failed</h2>";
-echo "<ul>";
-foreach ($errors as $error) {
-    echo "<li style='color: red;'>" . htmlspecialchars($error) . "</li>";
-}
-echo "</ul>";
-echo "<p><a href='registration.php'>Go back</a></p>";
+<?php
+// If errors, show them in a clean modern page
+session_start();
+include("./header.php");
+?>
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registration Failed | Preferred Equine</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .error-container {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .error-card {
+            background: white;
+            border-radius: 1.5rem;
+            padding: 3rem;
+            max-width: 500px;
+            width: 100%;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e2e8f0;
+            text-align: center;
+        }
+
+        .icon-wrapper {
+            width: 90px;
+            height: 90px;
+            background: #fee2e2;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem;
+        }
+
+        .icon-wrapper i {
+            font-size: 2.5rem;
+            color: #dc2626;
+        }
+
+        h1 {
+            font-size: 1.8rem;
+            color: #1e293b;
+            margin-bottom: 0.75rem;
+            font-weight: 700;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .error-list {
+            background: #fef2f2;
+            border: 1px solid #fee2e2;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+
+        .error-list h3 {
+            color: #991b1b;
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .error-list ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .error-list li {
+            color: #991b1b;
+            font-size: 0.95rem;
+            padding: 0.5rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            border-bottom: 1px solid rgba(220, 38, 38, 0.1);
+        }
+
+        .error-list li:last-child {
+            border-bottom: none;
+        }
+
+        .error-list li i {
+            color: #dc2626;
+            font-size: 0.8rem;
+            width: 16px;
+        }
+
+        .form-data {
+            background: #f8fafc;
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            margin-bottom: 2rem;
+            text-align: left;
+            border: 1px solid #e2e8f0;
+        }
+
+        .form-data p {
+            color: #475569;
+            font-size: 0.9rem;
+            margin: 0.5rem 0;
+            display: flex;
+            gap: 1rem;
+        }
+
+        .form-data strong {
+            min-width: 100px;
+            color: #1e293b;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: #2E4053;
+            color: white;
+            text-decoration: none;
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .btn-primary:hover {
+            background: #1e2b36;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(46, 64, 83, 0.2);
+        }
+
+        .btn-secondary {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: white;
+            color: #2E4053;
+            text-decoration: none;
+            padding: 0.875rem 2rem;
+            border-radius: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: 1px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #f8fafc;
+            border-color: #2E4053;
+            transform: translateY(-2px);
+        }
+
+        @media (max-width: 640px) {
+            .error-card {
+                padding: 2rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .action-buttons {
+                flex-direction: column;
+            }
+            
+            .btn-primary, .btn-secondary {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="error-container">
+        <div class="error-card">
+            <div class="icon-wrapper">
+                <i class="fas fa-exclamation-circle"></i>
+            </div>
+            
+            <h1>Registration Failed</h1>
+            <p class="subtitle">We couldn't complete your registration</p>
+            
+            <div class="error-list">
+                <h3>
+                    <i class="fas fa-exclamation-triangle"></i>
+                    Please fix the following errors:
+                </h3>
+                <ul>
+                    <?php foreach ($errors as $error): ?>
+                        <li>
+                            <i class="fas fa-times-circle"></i>
+                            <?php echo htmlspecialchars($error); ?>
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            </div>
+            
+            <?php if (!empty($_SESSION['form_data'])): ?>
+            <div class="form-data">
+                <p><strong>Email:</strong> <?php echo htmlspecialchars($_SESSION['form_data']['user'] ?? 'N/A'); ?></p>
+                <p><strong>Name:</strong> <?php echo htmlspecialchars(($_SESSION['form_data']['fname'] ?? '') . ' ' . ($_SESSION['form_data']['lname'] ?? '')); ?></p>
+                <p><strong>Role:</strong> 
+                    <?php 
+                    $role = $_SESSION['form_data']['userrole'] ?? 'N';
+                    $role_names = ['A' => 'Admin', 'T' => 'Thoroughbred', 'S' => 'Standardbred', 'ST' => 'Full Access', 'N' => 'Not Selected'];
+                    echo $role_names[$role] ?? $role;
+                    ?>
+                </p>
+            </div>
+            <?php endif; ?>
+            
+            <div class="action-buttons">
+                <a href="registration.php" class="btn-primary">
+                    <i class="fas fa-arrow-left"></i>
+                    Try Again
+                </a>
+                <a href="index.php" class="btn-secondary">
+                    <i class="fas fa-home"></i>
+                    Go Home
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
+
+<?php
+// Store in session for next time
 $_SESSION['registration_errors'] = $errors;
 $_SESSION['form_data'] = [
     'user' => $username,
@@ -97,3 +357,4 @@ $_SESSION['form_data'] = [
     'lname' => $last_name,
     'userrole' => $user_role
 ];
+?>
