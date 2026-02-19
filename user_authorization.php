@@ -47,147 +47,496 @@ $resultFound = getUserData();
 ?>
 
 <head>
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-  <link rel="stylesheet" href="assets/css/table.css">
-  
-  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.10.24/css/jquery.dataTables.css">
-  <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.24/js/jquery.dataTables.js"></script>
-  <script src="assets/js/script.js"></script>
-  
-  <style>
-    .action-buttons {
-        display: flex;
-        gap: 5px;
-        flex-wrap: wrap;
-    }
-    .btn-auth {
-        background-color: #28a745;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-    .btn-unauth {
-        background-color: #ffc107;
-        color: black;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-    .btn-delete {
-        background-color: #dc3545;
-        color: white;
-        border: none;
-        padding: 5px 10px;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-    .btn-auth:hover, .btn-unauth:hover, .btn-delete:hover {
-        opacity: 0.8;
-    }
-    .user-email {
-        font-size: 11px;
-        color: #666;
-        margin-top: 2px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Authorization | Preferred Equine</title>
+    
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- DataTables -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/responsive/2.2.9/css/responsive.dataTables.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            color: #1e293b;
+        }
+
+        .auth-container {
+            max-width: 1400px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Header Section */
+        .auth-header {
+            margin-bottom: 2rem;
+        }
+
+        .auth-header h1 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: #0f172a;
+            letter-spacing: -0.025em;
+            margin-bottom: 0.5rem;
+        }
+
+        .auth-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+
+        .stats-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.25rem;
+            border-radius: 1rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            border: 1px solid #e2e8f0;
+        }
+
+        .stat-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        /* Table Container */
+        .table-container {
+            background: white;
+            border-radius: 1rem;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+        }
+
+        /* Custom Table Styles */
+        .modern-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.875rem;
+        }
+
+        .modern-table thead tr {
+            background: #f8fafc;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .modern-table th {
+            padding: 1rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            color: #475569;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .modern-table tbody tr {
+            border-bottom: 1px solid #f1f5f9;
+            transition: background-color 0.2s;
+        }
+
+        .modern-table tbody tr:hover {
+            background-color: #f8fafc;
+        }
+
+        .modern-table td {
+            padding: 1rem 1rem;
+            color: #334155;
+        }
+
+        /* Status Badges */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            line-height: 1.5;
+        }
+
+        .badge-active {
+            background: #dcfce7;
+            color: #166534;
+        }
+
+        .badge-inactive {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+
+        .badge-verified {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .badge-unverified {
+            background: #f1f5f9;
+            color: #475569;
+        }
+
+        /* Action Buttons */
+        .action-group {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .btn-icon {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.375rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.5rem;
+            font-size: 0.75rem;
+            font-weight: 500;
+            border: 1px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .btn-icon i {
+            font-size: 0.875rem;
+        }
+
+        .btn-auth {
+            background: #f0fdf4;
+            color: #166534;
+            border-color: #86efac;
+        }
+
+        .btn-auth:hover {
+            background: #dcfce7;
+        }
+
+        .btn-unauth {
+            background: #fffbeb;
+            color: #854d0e;
+            border-color: #fde047;
+        }
+
+        .btn-unauth:hover {
+            background: #fef3c7;
+        }
+
+        .btn-delete {
+            background: #fef2f2;
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
+        .btn-delete:hover {
+            background: #fee2e2;
+        }
+
+        /* User Email Cell */
+        .user-email-cell {
+            max-width: 200px;
+        }
+
+        .user-email {
+            font-size: 0.8125rem;
+            color: #64748b;
+            margin-top: 0.25rem;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .auth-container {
+                padding: 0 1rem;
+            }
+
+            .modern-table {
+                font-size: 0.8125rem;
+            }
+
+            .modern-table th,
+            .modern-table td {
+                padding: 0.75rem;
+            }
+
+            .action-group {
+                flex-direction: column;
+            }
+
+            .btn-icon {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+
+        /* Toast Notifications */
+        .toast {
+            position: fixed;
+            bottom: 2rem;
+            right: 2rem;
+            background: white;
+            border-radius: 0.75rem;
+            padding: 1rem 1.5rem;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            border: 1px solid #e2e8f0;
+            transform: translateY(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+        }
+
+        .toast.show {
+            transform: translateY(0);
+        }
+
+        .toast-content {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .toast-success {
+            border-left: 4px solid #22c55e;
+        }
+
+        .toast-error {
+            border-left: 4px solid #ef4444;
+        }
+    </style>
 </head>
 
-<br>
+<body>
+    <div class="auth-container">
+        <!-- Header -->
+        <div class="auth-header">
+            <h1>User Authorization</h1>
+            <p>Manage user access and permissions across the platform</p>
+        </div>
 
-<div style="margin:5px 30px 30px 30px;">
-    <h1 style="text-align:center;color:#D98880;">User Authorization</h1>
-    <hr>
-    
-    <div style="max-height: calc(96.2vh - 96.2px);overflow:auto;">
-        <div class="table" style="width: device-width;">
-            <div class="row header blue" style="line-height: 25px;font-size: 12px;position: sticky;top: 0;">
-                <div class="cell" style="width: device-width;">No.</div>
-                <div class="cell" style="width: device-width;">USER_ID</div>
-                <div class="cell" style="width: device-width;">USERNAME</div>
-                <div class="cell" style="width: device-width;">FIRST NAME</div>
-                <div class="cell" style="width: device-width;">LAST NAME</div>
-                <div class="cell" style="width: device-width;">EMAIL</div>
-                <div class="cell" style="width: device-width;">ACTIVE</div>
-                <div class="cell" style="width: device-width;">USER ROLE</div>
-                <div class="cell" style="width: device-width;">COGNITO VERIFIED</div>
-                <div class="cell" style="width: device-width;">ACTIONS</div>
+        <!-- Stats Cards -->
+        <?php
+        $total_users = count($resultFound);
+        $active_users = 0;
+        $verified_users = 0;
+        
+        foreach ($resultFound as $row) {
+            if (isset($row['ACTIVE']) && $row['ACTIVE'] == 'Y') $active_users++;
+            if (isset($row['cognito_verified']) && $row['cognito_verified'] == 1) $verified_users++;
+        }
+        ?>
+
+        <div class="stats-cards">
+            <div class="stat-card">
+                <div class="stat-label">Total Users</div>
+                <div class="stat-value"><?php echo $total_users; ?></div>
             </div>
-          
-            <?php
-            setlocale(LC_MONETARY,"en_US");
-            $number = 0;  
-            foreach($resultFound as $row) {
-                $number++;
-                echo "<div class='row'>";
-                echo "<div class='cell'>".$number."</div>";
-                
-                // Display user data
-                $user_id = '';
-                $user_email = '';
-                foreach($row as $key => $value) {
-                    if ($key === 'USER_ID') $user_id = $value;
-                    if ($key === 'EMAIL') $user_email = $value;
-                    echo "<div class='cell'>".htmlspecialchars($value)."</div>";
-                }
-            ?>
-            
-            <div class='cell'>
-                <div class="action-buttons">
-                    <!-- Authorize Button -->
-                    <form method="POST" style="display:inline;" onsubmit="return confirmAuthorize('<?php echo $user_id; ?>')">
-                        <input type="hidden" name="USER_ID_AUTH" value="<?php echo $user_id; ?>">
-                        <button type="submit" class="btn-auth">Authorize</button>
-                    </form>
-                    
-                    <!-- Unauthorize Button -->
-                    <form method="POST" style="display:inline;" onsubmit="return confirmUnauthorize('<?php echo $user_id; ?>')">
-                        <input type="hidden" name="USER_ID_UNAUTH" value="<?php echo $user_id; ?>">
-                        <button type="submit" class="btn-unauth">Unauthorize</button>
-                    </form>
-                    
-                    <!-- Delete Button (from both DB and Cognito) -->
-                    <form method="POST" style="display:inline;" onsubmit="return confirmDelete('<?php echo $user_id; ?>', '<?php echo htmlspecialchars($user_email); ?>')">
-                        <input type="hidden" name="USER_ID_DELETE" value="<?php echo $user_id; ?>">
-                        <input type="hidden" name="USER_EMAIL" value="<?php echo htmlspecialchars($user_email); ?>">
-                        <button type="submit" class="btn-delete">Delete</button>
-                    </form>
-                </div>
-                <div class="user-email"><?php echo htmlspecialchars($user_email); ?></div>
+            <div class="stat-card">
+                <div class="stat-label">Active Users</div>
+                <div class="stat-value"><?php echo $active_users; ?></div>
             </div>
+            <div class="stat-card">
+                <div class="stat-label">Verified Users</div>
+                <div class="stat-value"><?php echo $verified_users; ?></div>
             </div>
-            <?php } ?>
+            <div class="stat-card">
+                <div class="stat-label">Pending Actions</div>
+                <div class="stat-value"><?php echo $total_users - $active_users; ?></div>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="table-container">
+            <table class="modern-table" id="userTable">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>User ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Role</th>
+                        <th>Verification</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $number = 0;
+                    foreach ($resultFound as $row) {
+                        $number++;
+                        $user_id = $row['USER_ID'] ?? '';
+                        $user_email = $row['EMAIL'] ?? '';
+                        $full_name = trim(($row['FNAME'] ?? '') . ' ' . ($row['LNAME'] ?? ''));
+                        $full_name = $full_name ?: $row['USERNAME'] ?? 'N/A';
+                        
+                        $active_status = ($row['ACTIVE'] ?? 'N') == 'Y' ? 'active' : 'inactive';
+                        $verified_status = isset($row['cognito_verified']) && $row['cognito_verified'] == 1;
+                    ?>
+                    <tr>
+                        <td><?php echo $number; ?></td>
+                        <td><code style="background: #f1f5f9; padding: 0.25rem 0.5rem; border-radius: 0.375rem;"><?php echo htmlspecialchars($user_id); ?></code></td>
+                        <td>
+                            <div style="font-weight: 500;"><?php echo htmlspecialchars($full_name); ?></div>
+                            <div class="user-email"><?php echo htmlspecialchars($row['USERNAME'] ?? ''); ?></div>
+                        </td>
+                        <td><?php echo htmlspecialchars($user_email); ?></td>
+                        <td>
+                            <span class="badge <?php echo $active_status === 'active' ? 'badge-active' : 'badge-inactive'; ?>">
+                                <i class="fas fa-<?php echo $active_status === 'active' ? 'check-circle' : 'times-circle'; ?>" style="margin-right: 0.375rem;"></i>
+                                <?php echo $active_status === 'active' ? 'Active' : 'Inactive'; ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span style="background: #f1f5f9; padding: 0.25rem 0.75rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 500;">
+                                <?php 
+                                $role = $row['USERROLE'] ?? 'user';
+                                $role_names = ['A' => 'Admin', 'T' => 'Thoroughbred', 'S' => 'Standardbred', 'ST' => 'Full Access', 'user' => 'User'];
+                                echo $role_names[$role] ?? $role;
+                                ?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="badge <?php echo $verified_status ? 'badge-verified' : 'badge-unverified'; ?>">
+                                <i class="fas fa-<?php echo $verified_status ? 'check-circle' : 'exclamation-circle'; ?>" style="margin-right: 0.375rem;"></i>
+                                <?php echo $verified_status ? 'Verified' : 'Unverified'; ?>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-group">
+                                <form method="POST" style="display: inline;" onsubmit="return confirmAction('authorize', '<?php echo $user_id; ?>')">
+                                    <input type="hidden" name="USER_ID_AUTH" value="<?php echo $user_id; ?>">
+                                    <button type="submit" class="btn-icon btn-auth" title="Authorize User">
+                                        <i class="fas fa-check-circle"></i>
+                                        <span>Authorize</span>
+                                    </button>
+                                </form>
+                                
+                                <form method="POST" style="display: inline;" onsubmit="return confirmAction('unauthorize', '<?php echo $user_id; ?>')">
+                                    <input type="hidden" name="USER_ID_UNAUTH" value="<?php echo $user_id; ?>">
+                                    <button type="submit" class="btn-icon btn-unauth" title="Unauthorize User">
+                                        <i class="fas fa-ban"></i>
+                                        <span>Unauthorize</span>
+                                    </button>
+                                </form>
+                                
+                                <form method="POST" style="display: inline;" onsubmit="return confirmDelete('<?php echo $user_id; ?>', '<?php echo htmlspecialchars($user_email); ?>')">
+                                    <input type="hidden" name="USER_ID_DELETE" value="<?php echo $user_id; ?>">
+                                    <input type="hidden" name="USER_EMAIL" value="<?php echo htmlspecialchars($user_email); ?>">
+                                    <button type="submit" class="btn-icon btn-delete" title="Delete User">
+                                        <i class="fas fa-trash"></i>
+                                        <span>Delete</span>
+                                    </button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
         </div>
     </div>
-</div>
 
-<script>
-// Confirmation dialogs
-function confirmAuthorize(userId) {
-    return confirm("Are you sure you want to AUTHORIZE user: " + userId + "?");
-}
+    <!-- Toast Notification -->
+    <div id="toast" class="toast">
+        <div class="toast-content" id="toastContent">
+            <i id="toastIcon" class="fas"></i>
+            <span id="toastMessage"></span>
+        </div>
+    </div>
 
-function confirmUnauthorize(userId) {
-    return confirm("Are you sure you want to UNAUTHORIZE user: " + userId + "?");
-}
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/responsive/2.2.9/js/dataTables.responsive.min.js"></script>
 
-function confirmDelete(userId, email) {
-    return confirm("⚠️ WARNING: Are you sure you want to PERMANENTLY DELETE user: " + userId + " (" + email + ")?\n\nThis will delete the user from BOTH the database AND Cognito. This action CANNOT be undone!");
-}
-</script>
+    <script>
+        // Initialize DataTable
+        $(document).ready(function() {
+            $('#userTable').DataTable({
+                responsive: true,
+                pageLength: 25,
+                order: [[0, 'asc']],
+                language: {
+                    search: "<i class='fas fa-search' style='margin-right: 0.5rem;'></i>Search:",
+                    lengthMenu: "Show _MENU_ entries",
+                    info: "Showing _START_ to _END_ of _TOTAL_ users",
+                    paginate: {
+                        first: "First",
+                        last: "Last",
+                        next: "→",
+                        previous: "←"
+                    }
+                },
+                initComplete: function() {
+                    $('.dataTables_filter input').attr('placeholder', 'Search users...');
+                }
+            });
+        });
+
+        // Confirmation dialogs
+        function confirmAction(action, userId) {
+            const messages = {
+                'authorize': 'authorize',
+                'unauthorize': 'unauthorize'
+            };
+            return confirm(`Are you sure you want to ${messages[action]} user: ${userId}?`);
+        }
+
+        function confirmDelete(userId, email) {
+            return confirm(`⚠️ WARNING: Are you sure you want to PERMANENTLY DELETE user ${userId} (${email})?\n\nThis will delete the user from BOTH the database AND Cognito. This action CANNOT be undone!`);
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'success') {
+            const toast = document.getElementById('toast');
+            const icon = document.getElementById('toastIcon');
+            const messageEl = document.getElementById('toastMessage');
+            
+            toast.className = 'toast show toast-' + type;
+            icon.className = 'fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle');
+            messageEl.textContent = message;
+            
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // Check for URL parameters for notifications
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('deleted')) {
+            showToast('User deleted successfully', 'success');
+        } else if (urlParams.has('error')) {
+            showToast('An error occurred', 'error');
+        }
+    </script>
+</body>
 
 <?php
-// ONLY keep the deleteUserCompletely function here
-// REMOVE unauthorizeUser and authorizeUser functions since they're in functions.php
-
 // Function to completely delete user from both database and Cognito
 function deleteUserCompletely($user_id, $user_email) {
     global $mysqli;
@@ -218,14 +567,12 @@ function deleteUserCompletely($user_id, $user_email) {
         }
         
         // 1. Delete from Cognito if user was verified
-        $cognito_delete_success = true;
         $cognito_message = "";
         
         if ($cognito_verified == 1 && !empty($user_email)) {
             try {
                 require_once 'vendor/autoload.php';
                 
-                // Check if constants are defined
                 if (!defined('COGNITO_REGION') || !defined('COGNITO_USER_POOL_ID')) {
                     throw new Exception("Cognito configuration constants not defined");
                 }
@@ -235,7 +582,6 @@ function deleteUserCompletely($user_id, $user_email) {
                     'version' => 'latest'
                 ]);
                 
-                // Delete user from Cognito
                 $client->adminDeleteUser([
                     'UserPoolId' => COGNITO_USER_POOL_ID,
                     'Username' => $user_email
@@ -248,11 +594,9 @@ function deleteUserCompletely($user_id, $user_email) {
                 $error_message = $e->getMessage();
                 error_log("Cognito delete failed for user {$user_email}: " . $error_message);
                 
-                // Check if user doesn't exist in Cognito (already deleted)
                 if (strpos($error_message, 'UserNotFoundException') !== false) {
                     $cognito_message = " (Cognito user not found)";
                 } else {
-                    $cognito_delete_success = false;
                     throw new Exception("Cognito delete failed: " . $error_message);
                 }
             }
@@ -287,3 +631,5 @@ function deleteUserCompletely($user_id, $user_email) {
     }
 }
 ?>
+</body>
+</html>
