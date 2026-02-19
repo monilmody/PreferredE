@@ -39,15 +39,31 @@ if (!empty($_POST)) {
 
         if ($authResult['success']) {
 
-            // Check if user is verified in Cognito
-            $check_verified = $mysqli->prepare("SELECT cognito_verified FROM users WHERE EMAIL = ?");
-            $check_verified->bind_param("s", $username);
-            $check_verified->execute();
-            $verified_result = $check_verified->get_result();
-            $user_data = $verified_result->fetch_assoc();
+            // Get COMPLETE user data including ACTIVE status
+            $user_check = $mysqli->prepare("SELECT * FROM users WHERE EMAIL = ?");
+            $user_check->bind_param("s", $username);
+            $user_check->execute();
+            $user_result = $user_check->get_result();
+            $user_data = $user_result->fetch_assoc();
+            $user_check->close();
 
-            // If not verified in Cognito, redirect to verification page
-            if ($user_data && $user_data['cognito_verified'] == 0) {
+            // Check if user exists
+            if (!$user_data) {
+                $errors[] = "User account not found";
+                return;
+            }
+
+            // Check if user is ACTIVE (authorized)
+            if ($user_data['ACTIVE'] != 'Y') {
+                $errors[] = "Your account has been deactivated. Please contact administrator.";
+                $message = "Account deactivated";
+                $message_type = "error";
+                // Don't proceed with login
+                return;
+            }
+
+            // Check if user is verified in Cognito
+            if ($user_data['cognito_verified'] == 0) {
                 $_SESSION['verify_email'] = $username;
                 header("Location: verify.php");
                 exit();
@@ -70,8 +86,6 @@ if (!empty($_POST)) {
             $redirect_url = isset($_GET['redirect']) ? urldecode($_GET['redirect']) : "index.php";
             header("Location: $redirect_url");
             exit();
-        } else {
-            $errors[] = $authResult['error'];
         }
     }
 }
@@ -339,7 +353,7 @@ ob_end_flush();
     function togglePassword(fieldId, button) {
         const field = document.getElementById(fieldId);
         const icon = button.querySelector('i');
-        
+
         if (field.type === 'password') {
             field.type = 'text';
             icon.classList.remove('fa-eye');
