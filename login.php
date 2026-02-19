@@ -54,7 +54,9 @@ if (!empty($_POST)) {
             } 
             // Check if user is ACTIVE (authorized)
             elseif (!isset($user_data['ACTIVE']) || $user_data['ACTIVE'] != 'Y') {
-                $errors[] = "Your account has been deactivated. Please contact administrator.";
+                // Redirect to inactive account page
+                header("Location: inactive_account.php");
+                exit();
             }
             // Check if user is verified in Cognito
             elseif (!isset($user_data['cognito_verified']) || $user_data['cognito_verified'] == 0) {
