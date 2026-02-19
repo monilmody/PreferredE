@@ -44,6 +44,66 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 // Get user data
 $resultFound = getUserData();
+
+// Function to check Cognito verification status directly
+function checkCognitoVerification($email) {
+    if (empty($email)) return false;
+    
+    try {
+        require_once 'vendor/autoload.php';
+        
+        if (!defined('COGNITO_REGION') || !defined('COGNITO_USER_POOL_ID')) {
+            error_log("Cognito configuration constants not defined");
+            return false;
+        }
+        
+        $client = new Aws\CognitoIdentityProvider\CognitoIdentityProviderClient([
+            'region' => COGNITO_REGION,
+            'version' => 'latest',
+            'http' => ['timeout' => 3] // Short timeout to avoid hanging
+        ]);
+        
+        // Try to get user from Cognito
+        try {
+            $result = $client->adminGetUser([
+                'UserPoolId' => COGNITO_USER_POOL_ID,
+                'Username' => $email
+            ]);
+            
+            // Check if email is verified
+            if (isset($result['UserAttributes'])) {
+                foreach ($result['UserAttributes'] as $attribute) {
+                    if ($attribute['Name'] === 'email_verified' && $attribute['Value'] === 'true') {
+                        return true;
+                    }
+                }
+            }
+            
+            // Also check UserStatus - if status is CONFIRMED, they're verified
+            if (isset($result['UserStatus']) && $result['UserStatus'] === 'CONFIRMED') {
+                return true;
+            }
+            
+            return false;
+            
+        } catch (Exception $e) {
+            $errorMessage = $e->getMessage();
+            error_log("Cognito adminGetUser failed for {$email}: " . $errorMessage);
+            
+            // If user not found in Cognito, they're not verified
+            if (strpos($errorMessage, 'UserNotFoundException') !== false) {
+                return false;
+            }
+            
+            // For other errors, fall back to database value
+            return null; // Signal to use database fallback
+        }
+        
+    } catch (Exception $e) {
+        error_log("Cognito client initialization failed: " . $e->getMessage());
+        return null; // Signal to use database fallback
+    }
+}
 ?>
 
 <head>
@@ -207,6 +267,11 @@ $resultFound = getUserData();
             color: #475569;
         }
 
+        .badge-cognito-error {
+            background: #fff3cd;
+            color: #856404;
+        }
+
         /* Action Buttons */
         .action-group {
             display: flex;
@@ -262,6 +327,16 @@ $resultFound = getUserData();
             background: #fee2e2;
         }
 
+        .btn-refresh {
+            background: #f1f5f9;
+            color: #475569;
+            border-color: #cbd5e1;
+        }
+
+        .btn-refresh:hover {
+            background: #e2e8f0;
+        }
+
         /* User Email Cell */
         .user-email-cell {
             max-width: 200px;
@@ -274,6 +349,13 @@ $resultFound = getUserData();
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+        }
+
+        /* Refresh button container */
+        .refresh-container {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 1rem;
         }
 
         /* Responsive */
@@ -352,14 +434,36 @@ $resultFound = getUserData();
             <p>Manage user access and permissions across the platform</p>
         </div>
 
+        <!-- Refresh Button -->
+        <div class="refresh-container">
+            <button onclick="refreshVerificationStatus()" class="btn-icon btn-refresh">
+                <i class="fas fa-sync-alt"></i>
+                <span>Refresh Verification Status</span>
+            </button>
+        </div>
+
         <!-- Stats Cards -->
         <?php
         $total_users = count($resultFound);
         $active_users = 0;
         $verified_users = 0;
         $inactive_users = 0;
+        $cognito_errors = 0;
 
+        // First pass: collect verification status from Cognito
+        $verification_cache = [];
         foreach ($resultFound as $row) {
+            $email = $row['EMAIL'] ?? '';
+            if (!empty($email)) {
+                $cognito_status = checkCognitoVerification($email);
+                $verification_cache[$email] = $cognito_status;
+            }
+        }
+
+        // Second pass: calculate stats
+        foreach ($resultFound as $row) {
+            $email = $row['EMAIL'] ?? '';
+            
             // Check active status
             if (isset($row['ACTIVE']) && $row['ACTIVE'] == 'Y') {
                 $active_users++;
@@ -367,15 +471,15 @@ $resultFound = getUserData();
                 $inactive_users++;
             }
             
-            // Check verified status (using intval for tinyint)
-            if (isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1) {
-                $verified_users++;
+            // Check verified status from Cognito
+            if (!empty($email) && isset($verification_cache[$email])) {
+                if ($verification_cache[$email] === true) {
+                    $verified_users++;
+                } elseif ($verification_cache[$email] === null) {
+                    $cognito_errors++;
+                }
             }
         }
-
-        // Pending = Active but Not Verified
-        $pending_users = $active_users - $verified_users;
-        if ($pending_users < 0) $pending_users = 0;
         ?>
 
         <div class="stats-cards">
@@ -427,8 +531,31 @@ $resultFound = getUserData();
                         $full_name = $full_name ?: $row['USERNAME'] ?? 'N/A';
                         
                         $active_status = ($row['ACTIVE'] ?? 'N') == 'Y' ? 'active' : 'inactive';
-                        // Fix: Use intval for tinyint comparison
-                        $verified_status = isset($row['cognito_verified']) && intval($row['cognito_verified']) === 1;
+                        
+                        // Get verification status from cache
+                        $verification_status = 'unknown';
+                        $verification_badge_class = 'badge-unverified';
+                        $verification_icon = 'exclamation-circle';
+                        $verification_text = 'Unknown';
+                        
+                        if (!empty($user_email) && isset($verification_cache[$user_email])) {
+                            if ($verification_cache[$user_email] === true) {
+                                $verification_status = 'verified';
+                                $verification_badge_class = 'badge-verified';
+                                $verification_icon = 'check-circle';
+                                $verification_text = 'Verified';
+                            } elseif ($verification_cache[$user_email] === false) {
+                                $verification_status = 'unverified';
+                                $verification_badge_class = 'badge-unverified';
+                                $verification_icon = 'exclamation-circle';
+                                $verification_text = 'Unverified';
+                            } else {
+                                $verification_status = 'error';
+                                $verification_badge_class = 'badge-cognito-error';
+                                $verification_icon = 'exclamation-triangle';
+                                $verification_text = 'Check Error';
+                            }
+                        }
                     ?>
                     <tr>
                         <td><?php echo $number; ?></td>
@@ -454,10 +581,15 @@ $resultFound = getUserData();
                             </span>
                         </td>
                         <td>
-                            <span class="badge <?php echo $verified_status ? 'badge-verified' : 'badge-unverified'; ?>">
-                                <i class="fas fa-<?php echo $verified_status ? 'check-circle' : 'exclamation-circle'; ?>" style="margin-right: 0.375rem;"></i>
-                                <?php echo $verified_status ? 'Verified' : 'Unverified'; ?>
+                            <span class="badge <?php echo $verification_badge_class; ?>" title="<?php echo $verification_status === 'error' ? 'Error checking Cognito. Using cached data.' : ''; ?>">
+                                <i class="fas fa-<?php echo $verification_icon; ?>" style="margin-right: 0.375rem;"></i>
+                                <?php echo $verification_text; ?>
                             </span>
+                            <?php if ($verification_status === 'error'): ?>
+                                <div style="font-size: 0.65rem; color: #856404; margin-top: 0.25rem;">
+                                    <i class="fas fa-info-circle"></i> Using cached data
+                                </div>
+                            <?php endif; ?>
                         </td>
                         <td>
                             <div class="action-group">
@@ -544,6 +676,14 @@ $resultFound = getUserData();
             return confirm(`⚠️ WARNING: Are you sure you want to PERMANENTLY DELETE user ${userId} (${email})?\n\nThis will delete the user from BOTH the database AND Cognito. This action CANNOT be undone!`);
         }
 
+        // Refresh verification status
+        function refreshVerificationStatus() {
+            showToast('Refreshing verification status...', 'info');
+            setTimeout(() => {
+                window.location.reload();
+            }, 1000);
+        }
+
         // Show toast notification
         function showToast(message, type = 'success') {
             const toast = document.getElementById('toast');
@@ -551,7 +691,12 @@ $resultFound = getUserData();
             const messageEl = document.getElementById('toastMessage');
             
             toast.className = 'toast show toast-' + type;
-            icon.className = 'fas fa-' + (type === 'success' ? 'check-circle' : 'exclamation-circle');
+            
+            let iconName = 'info-circle';
+            if (type === 'success') iconName = 'check-circle';
+            if (type === 'error') iconName = 'exclamation-circle';
+            
+            icon.className = 'fas fa-' + iconName;
             messageEl.textContent = message;
             
             setTimeout(() => {
@@ -580,29 +725,19 @@ function deleteUserCompletely($user_id, $user_email) {
     try {
         // First, get user details if email not provided
         if (empty($user_email)) {
-            $stmt = $mysqli->prepare("SELECT EMAIL, cognito_verified FROM users WHERE USER_ID = ?");
+            $stmt = $mysqli->prepare("SELECT EMAIL FROM users WHERE USER_ID = ?");
             $stmt->bind_param("s", $user_id);
             $stmt->execute();
             $result = $stmt->get_result();
             $user = $result->fetch_assoc();
             $user_email = $user['EMAIL'] ?? '';
-            $cognito_verified = isset($user['cognito_verified']) ? intval($user['cognito_verified']) : 0;
-            $stmt->close();
-        } else {
-            // Get cognito_verified status
-            $stmt = $mysqli->prepare("SELECT cognito_verified FROM users WHERE USER_ID = ?");
-            $stmt->bind_param("s", $user_id);
-            $stmt->execute();
-            $result = $stmt->get_result();
-            $user = $result->fetch_assoc();
-            $cognito_verified = isset($user['cognito_verified']) ? intval($user['cognito_verified']) : 0;
             $stmt->close();
         }
         
-        // 1. Delete from Cognito if user was verified
+        // 1. Delete from Cognito
         $cognito_message = "";
         
-        if ($cognito_verified == 1 && !empty($user_email)) {
+        if (!empty($user_email)) {
             try {
                 require_once 'vendor/autoload.php';
                 
@@ -633,8 +768,6 @@ function deleteUserCompletely($user_id, $user_email) {
                     throw new Exception("Cognito delete failed: " . $error_message);
                 }
             }
-        } else {
-            $cognito_message = " (not in Cognito)";
         }
         
         // 2. Delete from database
